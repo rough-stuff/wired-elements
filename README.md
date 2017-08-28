@@ -1,6 +1,8 @@
 # wired-elements
 Wired Elements is a series of basic UI Elements that have a hand drawn look. These can be used for wireframes, mockups, or just the fun hand-drawn look. 
 
+![alt Preview](http://i.imgur.com/MwlJBwZ.png)
+
 The elements are drawn with enough randomness, that now two renderings will be exactly the same - just like two separate hand drawn shapes. 
 
 [wiredjs.com](http://wiredjs.com)
