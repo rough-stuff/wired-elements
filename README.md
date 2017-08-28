@@ -57,8 +57,8 @@ The elements are drawn with enough randomness, that now two renderings will be e
     <wired-radio name="female" text="female"></wired-radio>
   </wired-radio-group>
   <div>
-    <wired-button text="Cancel">
-    <wired-button text="Save">
+    <wired-button text="Cancel"></wired-button>
+    <wired-button text="Save"></wired-button>
   </div>
 </wired-card>
 ```
