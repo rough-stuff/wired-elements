@@ -26,17 +26,23 @@
   ],
   "dependencies": {
     "wired-lib": "wiredjs/wired-lib#^0.1.1",
-    "wired-button": "wiredjs/wired-button#^0.1.2",
-    "wired-checkbox": "wiredjs/wired-checkbox#^0.1.2",
-    "wired-radio": "wiredjs/wired-radio#^0.1.1",
+    "wired-button": "wiredjs/wired-button#^0.2.0",
+    "wired-checkbox": "wiredjs/wired-checkbox#^0.2.0",
+    "wired-radio": "wiredjs/wired-radio#^0.2.0",
     "wired-radio-group": "wiredjs/wired-radio-group#^0.1.0",
-    "wired-toggle": "wiredjs/wired-toggle#^0.1.2",
+    "wired-toggle": "wiredjs/wired-toggle#^0.2.0",
     "wired-item": "wiredjs/wired-item#^0.1.1",
-    "wired-listbox": "wiredjs/wired-listbox#^0.1.2",
+    "wired-listbox": "wiredjs/wired-listbox#^0.2.0",
     "wired-progress": "wiredjs/wired-progress#^0.1.0",
-    "wired-input": "wiredjs/wired-input#^0.1.1",
-    "wired-textarea": "wiredjs/wired-textarea#^0.1.0",
+    "wired-input": "wiredjs/wired-input#^0.2.0",
+    "wired-textarea": "wiredjs/wired-textarea#^0.2.0",
     "wired-card": "wiredjs/wired-card#^0.1.1",
-    "wired-combo": "wiredjs/wired-combo#^0.1.0"
+    "wired-combo": "wiredjs/wired-combo#^0.2.0",
+    "wired-icon-button": "wiredjs/wired-icon-button#^0.1.1",
+    "wired-menu-item": "wiredjs/wired-menu-item#^0.1.1",
+    "wired-menu-bar": "wiredjs/wired-menu-bar#^0.1.0",
+    "wired-slider": "wiredjs/wired-slider#^0.1.0",
+    "wired-tooltip": "wiredjs/wired-tooltip#^0.1.2",
+    "wired-spinner": "wiredjs/wired-spinner#^0.1.0"
   }
 }
