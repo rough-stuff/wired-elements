@@ -59,3 +59,10 @@ Learn about web components [here](https://www.webcomponents.org/introduction).
 [wired-toggle](https://github.com/wiredjs/wired-toggle)
 
 [wired-tooltip](https://github.com/wiredjs/wired-tooltip)
+
+### Demo
+
+Demo of all components is avaialable at [wiredjs.com](https://wiredjs.com)
+
+### License
+[MIT License](https://github.com/wiredjs/wired-elements/blob/master/LICENSE) (c) [Preet Shihn](https://twitter.com/preetster)
