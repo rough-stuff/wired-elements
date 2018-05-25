@@ -7,7 +7,7 @@ The elements are drawn with enough randomness that no two renderings will be exa
 
 ## Usage
 
-This package (wired-elements) exports all components in the **_wired_** category. Links to individual repositories are provided [here](#Components).
+This package (wired-elements) exports all components in the **_wired_** category. Links to individual repositories are provided [here](#components).
 
 Add wired-elements to your project:
 ```
