@@ -6,7 +6,7 @@ Wired Elements is a series of basic UI Elements that have a hand drawn look. The
 The elements are drawn with enough randomness that no two renderings will be exactly the same - just like two separate hand drawn shapes. 
 
 ## Try now
-Play with wired-elements live on StackBlitz
+Play with wired-elements live on StackBlitz playground:
 
 [Wired Elements](https://stackblitz.com/edit/wired-elements?file=index.html)
 
