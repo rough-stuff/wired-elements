@@ -7,7 +7,7 @@ The elements are drawn with enough randomness that no two renderings will be exa
 
 ## Usage
 
-This package (wired-elements) exports all components in the **_wired_** category. Links to individual repositories are provided [here](#Components).
+This package (wired-elements) exports all components in the **_wired_** category. Links to individual repositories are provided [here](#components).
 
 Add wired-elements to your project:
 ```
@@ -62,7 +62,7 @@ Learn about web components [here](https://www.webcomponents.org/introduction).
 
 ### Demo
 
-Demo of all components is avaialable at [wiredjs.com](https://wiredjs.com)
+Demo of all components is avaialable at [wiredjs.com](https://wiredjs.com/showcase.html)
 
 ### License
 [MIT License](https://github.com/wiredjs/wired-elements/blob/master/LICENSE) (c) [Preet Shihn](https://twitter.com/preetster)
