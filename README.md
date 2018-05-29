@@ -70,7 +70,7 @@ Learn about web components [here](https://www.webcomponents.org/introduction).
 
 ### Demo
 
-Demo of all components is avaialable at [wiredjs.com](https://wiredjs.com/showcase.html)
+Demo of all components is available at [wiredjs.com](https://wiredjs.com/showcase.html).
 
 ### License
 [MIT License](https://github.com/wiredjs/wired-elements/blob/master/LICENSE) (c) [Preet Shihn](https://twitter.com/preetster)
