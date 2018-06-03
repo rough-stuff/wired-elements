@@ -38,36 +38,6 @@ Use it in your web page:
 
 Learn about web components [here](https://www.webcomponents.org/introduction).
 
-## Components
-
-[wired-button](https://github.com/wiredjs/wired-button)
-
-[wired-card](https://github.com/wiredjs/wired-card)
-
-[wired-checkbox](https://github.com/wiredjs/wired-checkbox)
-
-[wired-combo](https://github.com/wiredjs/wired-combo)
-
-[wired-icon-button](https://github.com/wiredjs/wired-icon-button)
-
-[wired-input](https://github.com/wiredjs/wired-input)
-
-[wired-listbox](https://github.com/wiredjs/wired-listbox)
-
-[wired-progress](https://github.com/wiredjs/wired-progress)
-
-[wired-radio](https://github.com/wiredjs/wired-radio)
-
-[wired-radio-group](https://github.com/wiredjs/wired-radio-group)
-
-[wired-slider](https://github.com/wiredjs/wired-slider)
-
-[wired-textarea](https://github.com/wiredjs/wired-textarea)
-
-[wired-toggle](https://github.com/wiredjs/wired-toggle)
-
-[wired-tooltip](https://github.com/wiredjs/wired-tooltip)
-
 ### Demo
 
 Demo of all components is available at [wiredjs.com](https://wiredjs.com/showcase.html).
