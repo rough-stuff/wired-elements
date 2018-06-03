@@ -25,6 +25,6 @@
   "dependencies": {
     "@material/mwc-icon": "^0.1.1",
     "@polymer/lit-element": "^0.5.1",
-    "wired-lib": "^0.5.1"
+    "wired-lib": "^0.6.0"
   }
 }

@@ -26,6 +26,6 @@
   "license": "MIT",
   "dependencies": {
     "@polymer/lit-element": "^0.5.1",
-    "wired-lib": "^0.5.1"
+    "wired-lib": "^0.6.0"
   }
 }

@@ -27,6 +27,6 @@
   "dependencies": {
     "@polymer/lit-element": "^0.5.1",
     "@polymer/polymer": "^3.0.2",
-    "wired-lib": "^0.5.1"
+    "wired-lib": "^0.6.0"
   }
 }
