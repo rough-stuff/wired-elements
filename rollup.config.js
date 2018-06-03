@@ -22,21 +22,3 @@ export default [
     plugins: [resolve(), minify({ comments: false })]
   }
 ];
-
-
-
-
-
-// let includePathOptions = {
-//     include: {},
-//     paths: ['src/lib', 'src/other'],
-//     external: [],
-//     extensions: ['.js', '.json', '.html']
-// };
-
-// export default {
-//     entry: './app.js',
-//     format: 'cjs',
-//     dest: 'public/app.min.js',
-//     plugins: [ includePaths(includePathOptions) ],
-// };
