@@ -1,0 +1,32 @@
+{
+  "name": "wired-slider",
+  "version": "0.6.0",
+  "description": "Hand-drawn sketchy slider web component",
+  "main": "wired-slider.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wiredjs/wired-elements.git"
+  },
+  "keywords": [
+    "slider",
+    "range input",
+    "range",
+    "webcomponent",
+    "web component",
+    "rough",
+    "sketchy",
+    "hand-drawn",
+    "hand drawn",
+    "wireframe"
+  ],
+  "author": "Preet Shihn <preetshihn@gmail.com> (https://twitter.com/preetster)",
+  "license": "MIT",
+  "dependencies": {
+    "@polymer/lit-element": "^0.5.1",
+    "@polymer/polymer": "^3.0.2",
+    "wired-lib": "^0.6.0"
+  }
+}

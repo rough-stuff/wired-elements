@@ -1,0 +1,18 @@
+{
+  "name": "wired-item",
+  "version": "0.6.0",
+  "description": "wired-item is a list item used by Wired components like wired-combo and wired-list-box",
+  "main": "wired-item.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wiredjs/wired-elements.git"
+  },
+  "author": "Preet Shihn",
+  "license": "MIT",
+  "dependencies": {
+    "@polymer/lit-element": "^0.5.1"
+  }
+}
