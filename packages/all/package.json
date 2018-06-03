@@ -1,14 +1,12 @@
 {
-  "name": "wired-elements-repo",
+  "name": "wired-elements",
   "version": "0.6.0",
   "description": "Collection of hand-drawn sketchy web components",
   "main": "wired-elements.js",
-  "private": true,
   "directories": {
     "lib": "lib"
   },
   "scripts": {
-    "build": "rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -30,12 +28,22 @@
     "url": "https://github.com/wiredjs/wired-elements/issues"
   },
   "homepage": "https://github.com/wiredjs/wired-elements#readme",
-  "devDependencies": {
-    "@polymer/lit-element": "^0.5.1",
-    "@polymer/polymer": "^3.0.2",
-    "lerna": "^2.11.0",
-    "rollup": "^0.59.4",
-    "rollup-plugin-babel-minify": "^5.0.0",
-    "rollup-plugin-node-resolve": "^3.3.0"
+  "dependencies": {
+    "wired-button": "^0.6.0",
+    "wired-card": "^0.6.0",
+    "wired-checkbox": "^0.6.0",
+    "wired-combo": "^0.6.0",
+    "wired-icon-button": "^0.6.0",
+    "wired-input": "^0.6.0",
+    "wired-item": "^0.6.0",
+    "wired-lib": "^0.6.0",
+    "wired-listbox": "^0.6.0",
+    "wired-progress": "^0.6.0",
+    "wired-radio": "^0.6.0",
+    "wired-radio-group": "^0.6.0",
+    "wired-slider": "^0.6.0",
+    "wired-textarea": "^0.6.0",
+    "wired-toggle": "^0.6.0",
+    "wired-tooltip": "^0.6.0"
   }
 }
