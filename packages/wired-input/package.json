@@ -1,0 +1,31 @@
+{
+  "name": "wired-input",
+  "version": "0.6.0",
+  "description": "Hand-drawn sketchy text input - web component",
+  "main": "wired-input.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wiredjs/wired-elements.git"
+  },
+  "keywords": [
+    "input",
+    "text input",
+    "text field",
+    "webcomponent",
+    "web component",
+    "rough",
+    "sketchy",
+    "hand-drawn",
+    "hand drawn",
+    "wireframe"
+  ],
+  "author": "Preet Shihn <preetshihn@gmail.com> (https://twitter.com/preetster)",
+  "license": "MIT",
+  "dependencies": {
+    "@polymer/lit-element": "^0.5.1",
+    "wired-lib": "^0.5.1"
+  }
+}
