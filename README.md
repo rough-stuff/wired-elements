@@ -13,24 +13,33 @@ Play with wired-elements live on StackBlitz playground:
 [Wired Elements in React](https://stackblitz.com/edit/wired-elements-react?file=index.js)
 
 
-## Usage
+## Install
 
-This package (wired-elements) exports all components in the **_wired_** category. Links to individual repositories are provided [here](#components).
+The package (wired-elements) exports all components in the **_wired_** category. Links to individual repositories are provided [here](https://github.com/wiredjs/wired-elements/tree/master/packages).
 
 Add wired-elements to your project:
 ```
 npm i wired-elements
 ```
-Import wired-elements definition into your HTML page:
-```html
-<script type="module" src="wired-elements/wired-elements.js"></script>
+or individual controls
 ```
-Or into your module script:
+npm i wired-button
+```
+
+## Usage
+
+Import into your module script:
 ```javascript
 import { WiredButton, WiredInput } from "wired-elements"
 ```
 
-Use it in your web page:
+or import a bundled version in the [dist folder](https://github.com/wiredjs/wired-elements/tree/master/packages/all/dist) or from CDN:
+
+```html
+<script src="https://unpkg.com/wired-elements@latest/dist/wired-elements.bundled.min.js"></script>
+```
+
+#### Use it in your web page:
 ```html
 <wired-input placeholder="Enter name"></wired-input>
 <wired-button>Click Me</wired-button>
