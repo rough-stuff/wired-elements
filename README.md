@@ -15,7 +15,7 @@ Play with wired-elements live on StackBlitz playground:
 
 ## Install
 
-The package (wired-elements) exports all components in the **_wired_** category. Links to individual repositories are provided [here](https://github.com/wiredjs/wired-elements/tree/master/packages).
+The package (wired-elements) exports all components in the **_wired_** category. List of all wired elements can be found [here](https://github.com/wiredjs/wired-elements/tree/master/packages).
 
 Add wired-elements to your project:
 ```
