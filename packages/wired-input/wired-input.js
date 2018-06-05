@@ -18,7 +18,8 @@ export class WiredInput extends LitElement {
       readonly: Boolean,
       size: Number,
       autocapitalize: String,
-      autocorrect: String
+      autocorrect: String,
+      value: String
     };
   }
 
@@ -110,9 +111,13 @@ export class WiredInput extends LitElement {
   }
 
   set value(v) {
-    const input = this.input;
-    if (input) {
-      input.value = v;
+    if (this.shadowRoot) {
+      const input = this.input;
+      if (input) {
+        input.value = v;
+      }
+    } else {
+      this._value = v;
     }
   }
 
@@ -144,6 +149,10 @@ export class WiredInput extends LitElement {
     svg.setAttribute("height", s.height);
     wired.rectangle(svg, 0, 0, s.width, s.height);
     this.classList.remove('pending');
+    if (typeof this._value !== 'undefined') {
+      this.input.value = this._value;
+      delete this._value;
+    }
   }
 }
 customElements.define('wired-input', WiredInput);

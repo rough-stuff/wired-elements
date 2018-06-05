@@ -40,9 +40,13 @@ export class WiredRadioGroup extends LitElement {
   _handleChecked(event) {
     const checked = event.detail.checked;
     const name = event.target.name;
-    this.selected = (checked && name) || '';
-    const ce = new CustomEvent('selected', { bubbles: true, composed: true, checked: this.checked, detail: { selected: this.selected } });
-    this.dispatchEvent(ce);
+    if (!checked) {
+      event.target.checked = true;
+    } else {
+      this.selected = (checked && name) || '';
+      const ce = new CustomEvent('selected', { bubbles: true, composed: true, checked: this.checked, detail: { selected: this.selected } });
+      this.dispatchEvent(ce);
+    }
   }
 
   slotChange() {
