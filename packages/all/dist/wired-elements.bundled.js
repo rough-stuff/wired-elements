@@ -3852,7 +3852,8 @@ var WiredElements = (function (exports) {
         readonly: Boolean,
         size: Number,
         autocapitalize: String,
-        autocorrect: String
+        autocorrect: String,
+        value: String
       };
     }
 
@@ -3944,9 +3945,13 @@ var WiredElements = (function (exports) {
     }
 
     set value(v) {
-      const input = this.input;
-      if (input) {
-        input.value = v;
+      if (this.shadowRoot) {
+        const input = this.input;
+        if (input) {
+          input.value = v;
+        }
+      } else {
+        this._value = v;
       }
     }
 
@@ -3978,6 +3983,10 @@ var WiredElements = (function (exports) {
       svg.setAttribute("height", s.height);
       wired.rectangle(svg, 0, 0, s.width, s.height);
       this.classList.remove('pending');
+      if (typeof this._value !== 'undefined') {
+        this.input.value = this._value;
+        delete this._value;
+      }
     }
   }
   customElements.define('wired-input', WiredInput);
@@ -4441,9 +4450,13 @@ var WiredElements = (function (exports) {
     _handleChecked(event) {
       const checked = event.detail.checked;
       const name = event.target.name;
-      this.selected = (checked && name) || '';
-      const ce = new CustomEvent('selected', { bubbles: true, composed: true, checked: this.checked, detail: { selected: this.selected } });
-      this.dispatchEvent(ce);
+      if (!checked) {
+        event.target.checked = true;
+      } else {
+        this.selected = (checked && name) || '';
+        const ce = new CustomEvent('selected', { bubbles: true, composed: true, checked: this.checked, detail: { selected: this.selected } });
+        this.dispatchEvent(ce);
+      }
     }
 
     slotChange() {
