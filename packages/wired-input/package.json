@@ -1,6 +1,6 @@
 {
   "name": "wired-input",
-  "version": "0.6.0",
+  "version": "0.6.3",
   "description": "Hand-drawn sketchy text input - web component",
   "main": "wired-input.js",
   "scripts": {
