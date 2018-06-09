@@ -55,5 +55,5 @@ Demo of all components is available at [wiredjs.com](https://wiredjs.com/showcas
 
 View the [Dev environment page](https://github.com/wiredjs/wired-elements/wiki/Dev-Environment) for instructions.
 
-### License
+## License
 [MIT License](https://github.com/wiredjs/wired-elements/blob/master/LICENSE) (c) [Preet Shihn](https://twitter.com/preetster)
