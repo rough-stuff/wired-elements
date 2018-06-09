@@ -13,7 +13,12 @@ export class WiredButton extends LitElement {
     super();
     this.elevation = 1;
     this.disabled = false;
-
+    this.addEventListener('keydown', (event) => {
+      if ((event.keyCode === 13) || (event.keyCode === 32)) {
+        event.preventDefault();
+        this.click();
+      }
+    });
   }
 
   _createRoot() {
@@ -43,22 +48,22 @@ export class WiredButton extends LitElement {
         display: inline-flex;
         outline: none;
       }
-    
+
       :host(.pending) {
         opacity: 0;
       }
-    
+
       :host(:active) path {
         transform: scale(0.97) translate(1.5%, 1.5%);
       }
-    
+
       :host(.disabled) {
         opacity: 0.6 !important;
         background: rgba(0, 0, 0, 0.07);
         cursor: default;
         pointer-events: none;
       }
-    
+
       .overlay {
         position: absolute;
         top: 0;
@@ -67,11 +72,11 @@ export class WiredButton extends LitElement {
         bottom: 0;
         pointer-events: none;
       }
-    
+
       svg {
         display: block;
       }
-    
+
       path {
         stroke: currentColor;
         stroke-width: 0.7;
@@ -80,10 +85,14 @@ export class WiredButton extends LitElement {
       }
     </style>
     <slot></slot>
-    <div class="overlay">
+    <div class="overlay" tabIndex="${this._getIndex()}" role="button">
       <svg id="svg"></svg>
     </div>
     `;
+  }
+
+  _getIndex() {
+    return this.disabled ? -1 : 0;
   }
 
   _onDisableChange() {
@@ -122,6 +131,9 @@ export class WiredButton extends LitElement {
       (wired.line(svg, s.width + (i * 2), s.height + (i * 2), s.width + (i * 2), i * 2)).style.opacity = (75 - (i * 10)) / 100;
     }
     this.classList.remove('pending');
+
+    const overlay = this.shadowRoot.querySelector('.overlay');
+    overlay.setAttribute('aria-label', this.innerHTML);
   }
 }
 
