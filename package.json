@@ -8,7 +8,8 @@
     "lib": "lib"
   },
   "scripts": {
-    "bootstrap": "npm install && lerna bootstrap --hoist",
+    "bootstrap": "npm install && npm run hoist",
+    "hoist": "lerna bootstrap --hoist",
     "dev": "polyserve --npm --module-resolution=node",
     "build": "rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1"
