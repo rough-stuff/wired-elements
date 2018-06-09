@@ -51,5 +51,9 @@ Learn about web components [here](https://www.webcomponents.org/introduction).
 
 Demo of all components is available at [wiredjs.com](https://wiredjs.com/showcase.html).
 
+## Dev Environment
+
+View the [Dev environment page](https://github.com/wiredjs/wired-elements/wiki/Dev-Environment) for instructions.
+
 ### License
 [MIT License](https://github.com/wiredjs/wired-elements/blob/master/LICENSE) (c) [Preet Shihn](https://twitter.com/preetster)
