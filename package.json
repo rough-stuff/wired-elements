@@ -8,6 +8,7 @@
     "lib": "lib"
   },
   "scripts": {
+    "hoist": "lerna bootstrap --hoist",
     "build": "rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
