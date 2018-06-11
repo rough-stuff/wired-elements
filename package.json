@@ -8,6 +8,9 @@
     "lib": "lib"
   },
   "scripts": {
+    "bootstrap": "npm install && npm run hoist",
+    "hoist": "lerna bootstrap --hoist",
+    "dev": "polyserve --npm --module-resolution=node",
     "build": "rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -34,6 +37,7 @@
     "@polymer/lit-element": "^0.5.1",
     "@polymer/polymer": "^3.0.2",
     "lerna": "^2.11.0",
+    "polyserve": "^0.27.11",
     "rollup": "^0.59.4",
     "rollup-plugin-babel-minify": "^5.0.0",
     "rollup-plugin-node-resolve": "^3.3.0"

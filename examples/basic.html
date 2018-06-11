@@ -1,0 +1,39 @@
+<html>
+
+<head>
+  <script type="module" src="../packages/wired-input/wired-input.js"></script>
+  <script type="module" src="../packages/wired-button/wired-button.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 10px;
+      font-family: sans-serif;
+      line-height: 1.5;
+    }
+
+    wired-button {
+      background: yellow;
+    }
+
+    #label {
+      padding: 10px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <wired-input id="name" placeholder="Enter name"></wired-input>
+  <wired-button id="btn">Submit</wired-button>
+  <div id="label"></div>
+
+  <script>
+    const input = document.getElementById('name');
+    const label = document.getElementById('label');
+    document.getElementById('btn').addEventListener('click', () => {
+      label.textContent = 'Hello ' + input.value;
+    });
+  </script>
+</body>
+
+</html>
