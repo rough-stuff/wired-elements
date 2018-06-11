@@ -13,12 +13,6 @@ export class WiredButton extends LitElement {
     super();
     this.elevation = 1;
     this.disabled = false;
-    this.addEventListener('keydown', (event) => {
-      if ((event.keyCode === 13) || (event.keyCode === 32)) {
-        event.preventDefault();
-        this.click();
-      }
-    });
   }
 
   _createRoot() {
@@ -85,14 +79,10 @@ export class WiredButton extends LitElement {
       }
     </style>
     <slot></slot>
-    <div class="overlay" tabIndex="${this._getIndex()}" role="button">
+    <div class="overlay">
       <svg id="svg"></svg>
     </div>
     `;
-  }
-
-  _getIndex() {
-    return this.disabled ? -1 : 0;
   }
 
   _onDisableChange() {
@@ -112,6 +102,14 @@ export class WiredButton extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     setTimeout(() => this._didRender());
+    this.addEventListener('keydown', (event) => {
+      if ((event.keyCode === 13) || (event.keyCode === 32)) {
+        event.preventDefault();
+        this.click();
+      }
+    });
+    this.setAttribute('role', 'button');
+    this.setAttribute('aria-label', this.innerHTML);
   }
 
   _didRender() {
@@ -132,8 +130,7 @@ export class WiredButton extends LitElement {
     }
     this.classList.remove('pending');
 
-    const overlay = this.shadowRoot.querySelector('.overlay');
-    overlay.setAttribute('aria-label', this.innerHTML);
+    this.tabIndex = this.disabled ? -1 : (this.tabIndex || 0);
   }
 }
 
