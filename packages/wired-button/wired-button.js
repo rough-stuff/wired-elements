@@ -129,7 +129,7 @@ export class WiredButton extends LitElement {
     }
     this.classList.remove('pending');
 
-    this.tabIndex = this.disabled ? -1 : (this.getAttribute('tabIndex') || 0);
+    this.tabIndex = this.disabled ? -1 : (this.getAttribute('tabindex') || 0);
   }
 }
 
