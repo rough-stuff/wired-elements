@@ -16,7 +16,7 @@ export class WiredButton extends LitElement {
   }
 
   _createRoot() {
-    const root = this.attachShadow({ mode: 'open', delegatesFocus: true });
+    const root = this.attachShadow({ mode: 'open' });
     this.classList.add('pending');
     return root;
   }
@@ -40,7 +40,6 @@ export class WiredButton extends LitElement {
         flex-direction: column;
         text-align: center;
         display: inline-flex;
-        outline: none;
       }
 
       :host(.pending) {
@@ -130,7 +129,7 @@ export class WiredButton extends LitElement {
     }
     this.classList.remove('pending');
 
-    this.tabIndex = this.disabled ? -1 : (this.tabIndex || 0);
+    this.tabIndex = this.disabled ? -1 : (this.getAttribute('tabIndex') || 0);
   }
 }
 
