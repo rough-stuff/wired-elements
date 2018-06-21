@@ -50,7 +50,7 @@ export class WiredRadioGroup extends LitElement {
   }
 
   slotChange() {
-    this._requestRender();
+    this.requestRender();
   }
 
   _didRender() {

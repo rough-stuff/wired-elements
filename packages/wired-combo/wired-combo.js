@@ -194,7 +194,7 @@ export class WiredCombo extends LitElement {
     card.style.display = showing ? "" : "none";
     if (showing) {
       setTimeout(() => {
-        card._requestRender();
+        card.requestRender();
       }, 10);
     }
   }
