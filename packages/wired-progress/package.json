@@ -1,6 +1,6 @@
 {
   "name": "wired-progress",
-  "version": "0.6.0",
+  "version": "0.6.5",
   "description": "Hand-drawn sketchy progress bar - web component",
   "main": "wired-progress.js",
   "scripts": {

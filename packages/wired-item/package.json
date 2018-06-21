@@ -1,6 +1,6 @@
 {
   "name": "wired-item",
-  "version": "0.6.0",
+  "version": "0.6.5",
   "description": "wired-item is a list item used by Wired components like wired-combo and wired-list-box",
   "main": "wired-item.js",
   "scripts": {
