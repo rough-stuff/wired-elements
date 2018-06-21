@@ -143,7 +143,7 @@ export class WiredTextarea extends LitElement {
       textarea.value = !(v || v === 0) ? '' : v;
     }
     this.mirror.innerHTML = this._valueForMirror();
-    this._requestRender();
+    this.requestRender();
   }
 
   _constrain(tokens) {
@@ -194,7 +194,7 @@ export class WiredTextarea extends LitElement {
   _needsLayout() {
     var s = this.getBoundingClientRect();
     if (s.height != this._prevHeight) {
-      this._requestRender();
+      this.requestRender();
     }
   }
 

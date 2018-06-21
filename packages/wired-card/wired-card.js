@@ -52,7 +52,7 @@ export class WiredCard extends LitElement {
       }
     </style>
     <div>
-      <slot on-slotchange="${() => this._requestRender()}"></slot>
+      <slot on-slotchange="${() => this.requestRender()}"></slot>
     </div>
     <div class="overlay">
       <svg id="svg"></svg>

@@ -34,7 +34,7 @@
   },
   "homepage": "https://github.com/wiredjs/wired-elements#readme",
   "devDependencies": {
-    "@polymer/lit-element": "^0.5.1",
+    "@polymer/lit-element": "^0.5.2",
     "@polymer/polymer": "^3.0.2",
     "lerna": "^2.11.0",
     "polyserve": "^0.27.11",
