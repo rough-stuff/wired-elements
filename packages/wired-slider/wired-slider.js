@@ -23,7 +23,7 @@ export class WiredSlider extends LitElement {
   }
 
   _createRoot() {
-    const root = this.attachShadow({ mode: 'open', delegatesFocus: true });
+    const root = this.attachShadow({ mode: 'open' });
     this.classList.add('pending');
     return root;
   }
@@ -37,7 +37,6 @@ export class WiredSlider extends LitElement {
         position: relative;
         width: 300px;
         height: 40px;
-        outline: none;
         box-sizing: border-box;
       }
     
@@ -133,7 +132,26 @@ export class WiredSlider extends LitElement {
     this._knob.classList.add("knob");
     this._onValueChange();
     this.classList.remove('pending');
+    this._setAria();
+    this._attachEvents();
+  }
 
+  _setAria() {
+    this.tabIndex = this.disabled ? -1 : (this.getAttribute('tabindex') || 0);
+    this.setAttribute('role', 'slider');
+    this.setAttribute('aria-valuemax', this.max);
+    this.setAttribute('aria-valuemin', this.min);
+    this._setAriaValue();
+  }
+
+  _setAriaValue() {
+    this.setAttribute('aria-valuenow', this.value);
+  }
+
+  _attachEvents() {
+    if (this._eventsAttached) {
+      return;
+    }
     addListener(this._knob, 'down', (event) => {
       if (!this.disabled) {
         this._knobdown(event);
@@ -149,6 +167,7 @@ export class WiredSlider extends LitElement {
         this._onTrack(event);
       }
     });
+    this._eventsAttached = true;
   }
 
   _onValueChange() {
@@ -230,6 +249,7 @@ export class WiredSlider extends LitElement {
     this.value = this._intermediateValue;
     this._pct = (this.value - this.min) / (this.max - this.min);
     const event = new CustomEvent('change', { bubbles: true, composed: true, detail: { value: this._intermediateValue } });
+    this._setAriaValue();
     this.dispatchEvent(event);
   }
 }

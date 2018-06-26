@@ -36,6 +36,7 @@
   "devDependencies": {
     "@polymer/lit-element": "^0.5.2",
     "@polymer/polymer": "^3.0.2",
+    "@webcomponents/webcomponentsjs": "^2.0.2",
     "lerna": "^2.11.0",
     "polyserve": "^0.27.11",
     "rollup": "^0.59.4",
