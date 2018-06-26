@@ -162,6 +162,8 @@ export class WiredSlider extends LitElement {
     this.value = v;
     this._setAriaValue();
     this._onValueChange();
+    const event = new CustomEvent('change', { bubbles: true, composed: true, detail: { value: this._intermediateValue } });
+    this.dispatchEvent(event);
   }
 
   _incremenent() {
@@ -298,8 +300,6 @@ export class WiredSlider extends LitElement {
     this._resetKnob();
     this._setValue(this._intermediateValue);
     this._pct = (this.value - this.min) / (this.max - this.min);
-    const event = new CustomEvent('change', { bubbles: true, composed: true, detail: { value: this._intermediateValue } });
-    this.dispatchEvent(event);
   }
 }
 customElements.define('wired-slider', WiredSlider);
