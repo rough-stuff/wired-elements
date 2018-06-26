@@ -3098,6 +3098,7 @@ var WiredElements = (function (exports) {
     static get properties() {
       return {
         placeholder: String,
+        name: String,
         disabled: Boolean,
         type: String,
         required: Boolean,
@@ -3127,7 +3128,7 @@ var WiredElements = (function (exports) {
       return root;
     }
 
-    _render({ type, placeholder, disabled, required, autocomplete, autofocus, minlength, maxlength, min, max, step, readonly, size, autocapitalize, autocorrect }) {
+    _render({ type, placeholder, disabled, required, autocomplete, autofocus, minlength, maxlength, min, max, step, readonly, size, autocapitalize, autocorrect, name }) {
       this._onDisableChange();
       return html$1`
     <style>
@@ -3185,9 +3186,10 @@ var WiredElements = (function (exports) {
         color: inherit;
       }
     </style>
-    <input id="txt" type$="${type}" placeholder$="${placeholder}" disabled?="${disabled}" required?="${required}" autocomplete$="${autocomplete}"
-      autofocus?="${autofocus}" minlength$="${minlength}" maxlength$="${maxlength}" min$="${min}" max$="${max}" step$="${step}"
-      readonly?="${readonly}" size$="${size}" autocapitalize$="${autocapitalize}" autocorrect$="${autocorrect}" on-change="${(e) => this._onChange(e)}">
+    <input id="txt" name$="${name}" type$="${type}" placeholder$="${placeholder}" disabled?="${disabled}" required?="${required}"
+      autocomplete$="${autocomplete}" autofocus?="${autofocus}" minlength$="${minlength}" maxlength$="${maxlength}" min$="${min}"
+      max$="${max}" step$="${step}" readonly?="${readonly}" size$="${size}" autocapitalize$="${autocapitalize}" autocorrect$="${autocorrect}"
+      on-change="${(e) => this._onChange(e)}">
     <div class="overlay">
       <svg id="svg"></svg>
     </div>
