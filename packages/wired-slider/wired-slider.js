@@ -5,7 +5,7 @@ import { addListener, removeListener } from '@polymer/polymer/lib/utils/gestures
 export class WiredSlider extends LitElement {
   static get properties() {
     return {
-      value: Number,
+      _value: Number,
       min: Number,
       max: Number,
       knobradius: Number,
@@ -16,7 +16,7 @@ export class WiredSlider extends LitElement {
   constructor() {
     super();
     this.disabled = false;
-    this.value = 0;
+    this._value = 0;
     this.min = 0;
     this.max = 100;
     this.knobradius = 10;
@@ -105,6 +105,14 @@ export class WiredSlider extends LitElement {
     `;
   }
 
+  get value() {
+    return this._value;
+  }
+
+  set value(v) {
+    this._setValue(v, true);
+  }
+
   _onDisableChange() {
     if (this.disabled) {
       this.classList.add("disabled");
@@ -158,12 +166,14 @@ export class WiredSlider extends LitElement {
     this.setAttribute('aria-valuenow', this.value);
   }
 
-  _setValue(v) {
-    this.value = v;
+  _setValue(v, skipEvent) {
+    this._value = v;
     this._setAriaValue();
     this._onValueChange();
-    const event = new CustomEvent('change', { bubbles: true, composed: true, detail: { value: this._intermediateValue } });
-    this.dispatchEvent(event);
+    if (!skipEvent) {
+      const event = new CustomEvent('change', { bubbles: true, composed: true, detail: { value: this._intermediateValue } });
+      this.dispatchEvent(event);
+    }
   }
 
   _incremenent() {
