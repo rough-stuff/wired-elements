@@ -46,8 +46,8 @@ export class WiredCheckbox extends LitElement {
         opacity: 0;
       }
     
-      :host(:focus) #container {
-        outline: 1px solid rgba(0, 0, 255, 0.5);
+      :host(:focus) #checkPanel {
+        outline: 3px solid var(--wired-focused-background, rgba(0, 0, 255, 0.2));
       }
     
       #container {
