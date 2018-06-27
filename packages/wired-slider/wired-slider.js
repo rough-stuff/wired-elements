@@ -119,6 +119,7 @@ export class WiredSlider extends LitElement {
     } else {
       this.classList.remove("disabled");
     }
+    this._refreshTabIndex();
   }
 
   _clearNode(node) {
@@ -155,11 +156,15 @@ export class WiredSlider extends LitElement {
   }
 
   _setAria() {
-    this.tabIndex = this.disabled ? -1 : (this.getAttribute('tabindex') || 0);
     this.setAttribute('role', 'slider');
     this.setAttribute('aria-valuemax', this.max);
     this.setAttribute('aria-valuemin', this.min);
     this._setAriaValue();
+    this._refreshTabIndex();
+  }
+
+  _refreshTabIndex() {
+    this.tabIndex = this.disabled ? -1 : (this.getAttribute('tabindex') || 0);
   }
 
   _setAriaValue() {

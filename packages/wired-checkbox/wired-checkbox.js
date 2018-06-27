@@ -17,12 +17,12 @@ export class WiredCheckbox extends LitElement {
   }
 
   _createRoot() {
-    const root = this.attachShadow({ mode: 'open', delegatesFocus: true });
+    const root = this.attachShadow({ mode: 'open' });
     this.classList.add('pending');
     return root;
   }
 
-  _render({ text, iconsize }) {
+  _render({ text }) {
     this._onDisableChange();
     return html`
     <style>
@@ -44,6 +44,10 @@ export class WiredCheckbox extends LitElement {
     
       :host(.pending) {
         opacity: 0;
+      }
+    
+      :host(:focus) #container {
+        outline: 1px solid rgba(0, 0, 255, 0.5);
       }
     
       #container {
@@ -84,6 +88,17 @@ export class WiredCheckbox extends LitElement {
     } else {
       this.classList.remove("disabled");
     }
+    this._refreshTabIndex();
+  }
+
+  _refreshTabIndex() {
+    this.tabIndex = this.disabled ? -1 : (this.getAttribute('tabindex') || 0);
+  }
+
+  _setAria() {
+    this.setAttribute('role', 'checkbox');
+    this.setAttribute('aria-checked', this.checked);
+    this.setAttribute('aria-label', this.text);
   }
 
   _toggleCheck() {
@@ -121,6 +136,22 @@ export class WiredCheckbox extends LitElement {
       });
     }
     this.classList.remove('pending');
+
+    this._setAria();
+    this._attachEvents();
+  }
+
+
+  _attachEvents() {
+    if (!this._keyboardAttached) {
+      this.addEventListener('keydown', (event) => {
+        if ((event.keyCode === 13) || (event.keyCode === 32)) {
+          event.preventDefault();
+          this._toggleCheck();
+        }
+      });
+      this._keyboardAttached = true;
+    }
   }
 
 }
