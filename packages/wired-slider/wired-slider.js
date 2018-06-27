@@ -5,7 +5,7 @@ import { addListener, removeListener } from '@polymer/polymer/lib/utils/gestures
 export class WiredSlider extends LitElement {
   static get properties() {
     return {
-      value: Number,
+      _value: Number,
       min: Number,
       max: Number,
       knobradius: Number,
@@ -16,14 +16,15 @@ export class WiredSlider extends LitElement {
   constructor() {
     super();
     this.disabled = false;
-    this.value = 0;
+    this._value = 0;
     this.min = 0;
     this.max = 100;
     this.knobradius = 10;
+    this.step = 1;
   }
 
   _createRoot() {
-    const root = this.attachShadow({ mode: 'open', delegatesFocus: true });
+    const root = this.attachShadow({ mode: 'open' });
     this.classList.add('pending');
     return root;
   }
@@ -51,6 +52,12 @@ export class WiredSlider extends LitElement {
     
       :host(.disabled) .knob {
         pointer-events: none !important;
+      }
+    
+      :host(:focus) .knob {
+        cursor: move;
+        stroke: var(--wired-slider-knob-outline-color, #000);
+        fill-opacity: 0.8;
       }
     
       .overlay {
@@ -98,6 +105,14 @@ export class WiredSlider extends LitElement {
     `;
   }
 
+  get value() {
+    return this._value;
+  }
+
+  set value(v) {
+    this._setValue(v, true);
+  }
+
   _onDisableChange() {
     if (this.disabled) {
       this.classList.add("disabled");
@@ -133,22 +148,88 @@ export class WiredSlider extends LitElement {
     this._knob.classList.add("knob");
     this._onValueChange();
     this.classList.remove('pending');
+    this._knobAttached = false;
 
-    addListener(this._knob, 'down', (event) => {
-      if (!this.disabled) {
-        this._knobdown(event);
-      }
-    });
-    addListener(this._knob, 'up', (event) => {
-      if (!this.disabled) {
-        this._resetKnob(event);
-      }
-    });
-    addListener(this._knob, 'track', (event) => {
-      if (!this.disabled) {
-        this._onTrack(event);
-      }
-    });
+    this._setAria();
+    this._attachEvents();
+  }
+
+  _setAria() {
+    this.tabIndex = this.disabled ? -1 : (this.getAttribute('tabindex') || 0);
+    this.setAttribute('role', 'slider');
+    this.setAttribute('aria-valuemax', this.max);
+    this.setAttribute('aria-valuemin', this.min);
+    this._setAriaValue();
+  }
+
+  _setAriaValue() {
+    this.setAttribute('aria-valuenow', this.value);
+  }
+
+  _setValue(v, skipEvent) {
+    this._value = v;
+    this._setAriaValue();
+    this._onValueChange();
+    if (!skipEvent) {
+      const event = new CustomEvent('change', { bubbles: true, composed: true, detail: { value: this._intermediateValue } });
+      this.dispatchEvent(event);
+    }
+  }
+
+  _incremenent() {
+    const newValue = Math.min(this.max, Math.round(this.value + this.step));
+    if (newValue != this.value) {
+      this._setValue(newValue);
+    }
+  }
+
+  _decrement() {
+    const newValue = Math.max(this.min, Math.round(this.value - this.step));
+    if (newValue != this.value) {
+      this._setValue(newValue);
+    }
+  }
+
+  _attachEvents() {
+    if (!this._knobAttached) {
+      addListener(this._knob, 'down', (event) => {
+        if (!this.disabled) {
+          this._knobdown(event);
+        }
+      });
+      addListener(this._knob, 'up', (event) => {
+        if (!this.disabled) {
+          this._resetKnob(event);
+        }
+      });
+      addListener(this._knob, 'track', (event) => {
+        if (!this.disabled) {
+          this._onTrack(event);
+        }
+      });
+      this._knobAttached = true;
+    }
+    if (!this._keyboardAttached) {
+      this.addEventListener('keydown', (event) => {
+        switch (event.keyCode) {
+          case 38:
+          case 39:
+            this._incremenent();
+            break;
+          case 37:
+          case 40:
+            this._decrement();
+            break;
+          case 36:
+            this._setValue(this.min);
+            break;
+          case 35:
+            this._setValue(this.max);
+            break;
+        }
+      });
+      this._keyboardAttached = true;
+    }
   }
 
   _onValueChange() {
@@ -227,10 +308,8 @@ export class WiredSlider extends LitElement {
   _trackEnd() {
     this._dragging = false;
     this._resetKnob();
-    this.value = this._intermediateValue;
+    this._setValue(this._intermediateValue);
     this._pct = (this.value - this.min) / (this.max - this.min);
-    const event = new CustomEvent('change', { bubbles: true, composed: true, detail: { value: this._intermediateValue } });
-    this.dispatchEvent(event);
   }
 }
 customElements.define('wired-slider', WiredSlider);
