@@ -1,6 +1,6 @@
 {
   "name": "wired-icon-button",
-  "version": "0.6.5",
+  "version": "0.7.0",
   "description": "Round hand-drawn sketchy button with an icon placed at the cente.",
   "main": "wired-icon-button.js",
   "scripts": {
