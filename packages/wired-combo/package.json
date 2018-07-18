@@ -1,6 +1,6 @@
 {
   "name": "wired-combo",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Hand-drawn sketchy selector/combo-box web component",
   "main": "wired-combo.js",
   "scripts": {
