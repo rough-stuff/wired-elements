@@ -24,6 +24,7 @@ export class WiredRadioGroup extends LitElement {
 
   constructor() {
     super();
+    this._radioNodes = [];
     this._checkListener = this._handleChecked.bind(this);
   }
 
@@ -56,9 +57,11 @@ export class WiredRadioGroup extends LitElement {
   _didRender() {
     const slot = this.shadowRoot.getElementById('slot');
     const nodes = slot.assignedNodes();
+    this._radioNodes = [];
     if (nodes && nodes.length) {
       for (let i = 0; i < nodes.length; i++) {
         if (nodes[i].tagName === "WIRED-RADIO") {
+          this._radioNodes.push(nodes[i]);
           const name = nodes[i].name || '';
           if (this.selected && (name === this.selected)) {
             nodes[i].checked = true;
@@ -66,6 +69,93 @@ export class WiredRadioGroup extends LitElement {
             nodes[i].checked = false;
           }
         }
+      }
+    }
+    this.setAttribute('role', 'radiogroup');
+    this.tabIndex = this.getAttribute('tabindex') || 0;
+    this._attachEvents();
+  }
+
+  _attachEvents() {
+    if (!this._keyboardAttached) {
+      this.addEventListener('keydown', (event) => {
+        switch (event.keyCode) {
+          case 37:
+          case 38:
+            event.preventDefault();
+            this._selectPrevious();
+            break;
+          case 39:
+          case 40:
+            event.preventDefault();
+            this._selectNext();
+            break;
+        }
+      });
+      this._keyboardAttached = true;
+    }
+  }
+
+  _selectPrevious() {
+    const list = this._radioNodes;
+    if (list.length) {
+      let radio = null;
+      let index = -1;
+      if (this.selected) {
+        for (let i = 0; i < list.length; i++) {
+          const n = list[i];
+          if (n.name === this.selected) {
+            index = i;
+            break;
+          }
+        }
+        if (index < 0) {
+          radio = list[0];
+        } else {
+          index--;
+          if (index < 0) {
+            index = list.length - 1;
+          }
+          radio = list[index];
+        }
+      } else {
+        radio = list[0];
+      }
+      if (radio) {
+        radio.focus();
+        this.selected = radio.name;
+      }
+    }
+  }
+
+  _selectNext() {
+    const list = this._radioNodes;
+    if (list.length) {
+      let radio = null;
+      let index = -1;
+      if (this.selected) {
+        for (let i = 0; i < list.length; i++) {
+          const n = list[i];
+          if (n.name === this.selected) {
+            index = i;
+            break;
+          }
+        }
+        if (index < 0) {
+          radio = list[0];
+        } else {
+          index++;
+          if (index >= list.length) {
+            index = 0;
+          }
+          radio = list[index];
+        }
+      } else {
+        radio = list[0];
+      }
+      if (radio) {
+        radio.focus();
+        this.selected = radio.name;
       }
     }
   }
