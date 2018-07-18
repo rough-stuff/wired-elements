@@ -1,0 +1,41 @@
+<html>
+
+<head>
+  <script type="module" src="../node_modules/@material/mwc-icon/mwc-icon.js"></script>
+  <script type="module" src="../packages/wired-icon-button/wired-icon-button.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 10px;
+      font-family: sans-serif;
+      line-height: 1.5;
+    }
+
+    wired-button {
+      background: yellow;
+    }
+
+    #label {
+      padding: 10px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <wired-icon-button id="btn1">favorite</wired-icon-button>
+  <wired-icon-button id="btn2" class="red">close</wired-icon-button>
+  <div id="label"></div>
+
+  <script>
+    const label = document.getElementById('label');
+    document.getElementById('btn1').addEventListener('click', () => {
+      label.textContent = 'Favorite button click';
+    });
+    document.getElementById('btn2').addEventListener('click', () => {
+      label.textContent = 'Close button click';
+    });
+  </script>
+</body>
+
+</html>

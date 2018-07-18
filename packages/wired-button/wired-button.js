@@ -90,6 +90,7 @@ export class WiredButton extends LitElement {
     } else {
       this.classList.remove("disabled");
     }
+    this.tabIndex = this.disabled ? -1 : (this.getAttribute('tabindex') || 0);
   }
 
   _clearNode(node) {
@@ -128,8 +129,6 @@ export class WiredButton extends LitElement {
       (wired.line(svg, s.width + (i * 2), s.height + (i * 2), s.width + (i * 2), i * 2)).style.opacity = (75 - (i * 10)) / 100;
     }
     this.classList.remove('pending');
-
-    this.tabIndex = this.disabled ? -1 : (this.getAttribute('tabindex') || 0);
   }
 }
 
