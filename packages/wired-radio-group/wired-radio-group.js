@@ -45,9 +45,13 @@ export class WiredRadioGroup extends LitElement {
       event.target.checked = true;
     } else {
       this.selected = (checked && name) || '';
-      const ce = new CustomEvent('selected', { bubbles: true, composed: true, checked: this.checked, detail: { selected: this.selected } });
-      this.dispatchEvent(ce);
+      this._fireSelected();
     }
+  }
+
+  _fireSelected() {
+    const ce = new CustomEvent('selected', { bubbles: true, composed: true, checked: this.checked, detail: { selected: this.selected } });
+    this.dispatchEvent(ce);
   }
 
   slotChange() {
@@ -124,6 +128,7 @@ export class WiredRadioGroup extends LitElement {
       if (radio) {
         radio.focus();
         this.selected = radio.name;
+        this._fireSelected();
       }
     }
   }
@@ -156,6 +161,7 @@ export class WiredRadioGroup extends LitElement {
       if (radio) {
         radio.focus();
         this.selected = radio.name;
+        this._fireSelected();
       }
     }
   }

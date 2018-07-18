@@ -243,6 +243,10 @@ export class WiredCombo extends LitElement {
     this._setCardShowing(false);
     this.selected = event.detail.value;
     this._refreshSelection();
+    this._fireSelected();
+  }
+
+  _fireSelected() {
     const selectedEvent = new CustomEvent('selected', { bubbles: true, composed: true, checked: this.checked, detail: { selected: this.selected } });
     this.dispatchEvent(selectedEvent);
   }
@@ -307,6 +311,7 @@ export class WiredCombo extends LitElement {
       }
       this.selected = list[index].value || '';
       this._refreshSelection();
+      this._fireSelected();
     }
   }
 
@@ -329,6 +334,7 @@ export class WiredCombo extends LitElement {
       }
       this.selected = list[index].value || '';
       this._refreshSelection();
+      this._fireSelected();
     }
   }
 }

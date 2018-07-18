@@ -2955,6 +2955,10 @@ var WiredElements = (function (exports) {
       this._setCardShowing(false);
       this.selected = event.detail.value;
       this._refreshSelection();
+      this._fireSelected();
+    }
+
+    _fireSelected() {
       const selectedEvent = new CustomEvent('selected', { bubbles: true, composed: true, checked: this.checked, detail: { selected: this.selected } });
       this.dispatchEvent(selectedEvent);
     }
@@ -3019,6 +3023,7 @@ var WiredElements = (function (exports) {
         }
         this.selected = list[index].value || '';
         this._refreshSelection();
+        this._fireSelected();
       }
     }
 
@@ -3041,6 +3046,7 @@ var WiredElements = (function (exports) {
         }
         this.selected = list[index].value || '';
         this._refreshSelection();
+        this._fireSelected();
       }
     }
   }
@@ -3603,6 +3609,10 @@ var WiredElements = (function (exports) {
       event.stopPropagation();
       this.selected = event.detail.value;
       this._refreshSelection();
+      this._fireSelected();
+    }
+
+    _fireSelected() {
       const selectedEvent = new CustomEvent('selected', { bubbles: true, composed: true, checked: this.checked, detail: { selected: this.selected } });
       this.dispatchEvent(selectedEvent);
     }
@@ -3646,6 +3656,7 @@ var WiredElements = (function (exports) {
         }
         this.selected = list[index].value || '';
         this._refreshSelection();
+        this._fireSelected();
       }
     }
 
@@ -3668,6 +3679,7 @@ var WiredElements = (function (exports) {
         }
         this.selected = list[index].value || '';
         this._refreshSelection();
+        this._fireSelected();
       }
     }
   }
@@ -4000,9 +4012,13 @@ var WiredElements = (function (exports) {
         event.target.checked = true;
       } else {
         this.selected = (checked && name) || '';
-        const ce = new CustomEvent('selected', { bubbles: true, composed: true, checked: this.checked, detail: { selected: this.selected } });
-        this.dispatchEvent(ce);
+        this._fireSelected();
       }
+    }
+
+    _fireSelected() {
+      const ce = new CustomEvent('selected', { bubbles: true, composed: true, checked: this.checked, detail: { selected: this.selected } });
+      this.dispatchEvent(ce);
     }
 
     slotChange() {
@@ -4079,6 +4095,7 @@ var WiredElements = (function (exports) {
         if (radio) {
           radio.focus();
           this.selected = radio.name;
+          this._fireSelected();
         }
       }
     }
@@ -4111,6 +4128,7 @@ var WiredElements = (function (exports) {
         if (radio) {
           radio.focus();
           this.selected = radio.name;
+          this._fireSelected();
         }
       }
     }

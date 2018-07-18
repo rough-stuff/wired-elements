@@ -177,6 +177,10 @@ export class WiredListbox extends LitElement {
     event.stopPropagation();
     this.selected = event.detail.value;
     this._refreshSelection();
+    this._fireSelected();
+  }
+
+  _fireSelected() {
     const selectedEvent = new CustomEvent('selected', { bubbles: true, composed: true, checked: this.checked, detail: { selected: this.selected } });
     this.dispatchEvent(selectedEvent);
   }
@@ -220,6 +224,7 @@ export class WiredListbox extends LitElement {
       }
       this.selected = list[index].value || '';
       this._refreshSelection();
+      this._fireSelected();
     }
   }
 
@@ -242,6 +247,7 @@ export class WiredListbox extends LitElement {
       }
       this.selected = list[index].value || '';
       this._refreshSelection();
+      this._fireSelected();
     }
   }
 }
