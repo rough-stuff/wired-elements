@@ -15,7 +15,7 @@ export class WiredIconButton extends LitElement {
   }
 
   _createRoot() {
-    const root = this.attachShadow({ mode: 'open', delegatesFocus: true });
+    const root = this.attachShadow({ mode: 'open' });
     this.classList.add('pending');
     return root;
   }
@@ -37,7 +37,6 @@ export class WiredIconButton extends LitElement {
         position: relative;
         vertical-align: middle;
         padding: 8px;
-        outline: none;
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
@@ -106,6 +105,16 @@ export class WiredIconButton extends LitElement {
     } else {
       this.classList.remove("disabled");
     }
+    this._refreshTabIndex();
+  }
+
+  _refreshTabIndex() {
+    this.tabIndex = this.disabled ? -1 : (this.getAttribute('tabindex') || 0);
+  }
+
+  _setAria() {
+    this.setAttribute('role', 'button');
+    this.setAttribute('aria-label', this.textContent);
   }
 
   _clearNode(node) {
@@ -123,6 +132,20 @@ export class WiredIconButton extends LitElement {
     svg.setAttribute("height", min);
     wired.ellipse(svg, min / 2, min / 2, min, min);
     this.classList.remove('pending');
+    this._setAria();
+    this._attachEvents();
+  }
+
+  _attachEvents() {
+    if (!this._keyboardAttached) {
+      this.addEventListener('keydown', (event) => {
+        if ((event.keyCode === 13) || (event.keyCode === 32)) {
+          event.preventDefault();
+          this.click();
+        }
+      });
+      this._keyboardAttached = true;
+    }
   }
 
   connectedCallback() {

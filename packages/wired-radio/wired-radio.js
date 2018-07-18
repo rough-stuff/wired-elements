@@ -20,12 +20,12 @@ export class WiredRadio extends LitElement {
   }
 
   _createRoot() {
-    const root = this.attachShadow({ mode: 'open', delegatesFocus: true });
+    const root = this.attachShadow({ mode: 'open' });
     this.classList.add('pending');
     return root;
   }
 
-  _render({ text, iconsize }) {
+  _render({ text }) {
     this._onDisableChange();
     return html`
     <style>
@@ -46,6 +46,10 @@ export class WiredRadio extends LitElement {
         opacity: 0.45 !important;
         cursor: default;
         pointer-events: none;
+      }
+    
+      :host(:focus) #checkPanel {
+        outline: 3px solid var(--wired-focused-background, rgba(0, 0, 255, 0.2));
       }
     
       #container {
@@ -91,6 +95,17 @@ export class WiredRadio extends LitElement {
     } else {
       this.classList.remove("disabled");
     }
+    this._refreshTabIndex();
+  }
+
+  _refreshTabIndex() {
+    this.tabIndex = this.disabled ? -1 : (this.getAttribute('tabindex') || 0);
+  }
+
+  _setAria() {
+    this.setAttribute('role', 'radio');
+    this.setAttribute('aria-checked', this.checked);
+    this.setAttribute('aria-label', this.text);
   }
 
   _toggleCheck() {
@@ -120,6 +135,21 @@ export class WiredRadio extends LitElement {
     this._dot.classList.add("filledPath");
     this._dot.style.display = this.checked ? "" : "none";
     this.classList.remove('pending');
+
+    this._setAria();
+    this._attachEvents();
+  }
+
+  _attachEvents() {
+    if (!this._keyboardAttached) {
+      this.addEventListener('keydown', (event) => {
+        if ((event.keyCode === 13) || (event.keyCode === 32)) {
+          event.preventDefault();
+          this._toggleCheck();
+        }
+      });
+      this._keyboardAttached = true;
+    }
   }
 }
 customElements.define('wired-radio', WiredRadio);

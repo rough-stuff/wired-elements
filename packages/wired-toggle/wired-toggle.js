@@ -16,7 +16,7 @@ export class WiredToggle extends LitElement {
   }
 
   _createRoot() {
-    const root = this.attachShadow({ mode: 'open', delegatesFocus: true });
+    const root = this.attachShadow({ mode: 'open' });
     this.classList.add('pending');
     return root;
   }
@@ -87,6 +87,16 @@ export class WiredToggle extends LitElement {
     } else {
       this.classList.remove("disabled");
     }
+    this._refreshTabIndex();
+  }
+
+  _refreshTabIndex() {
+    this.tabIndex = this.disabled ? -1 : (this.getAttribute('tabindex') || 0);
+  }
+
+  _setAria() {
+    this.setAttribute('role', 'switch');
+    this.setAttribute('aria-checked', this.checked);
   }
 
   _didRender() {
@@ -109,6 +119,20 @@ export class WiredToggle extends LitElement {
       cl.add("unchecked");
     }
     this.classList.remove('pending');
+    this._setAria();
+    this._attachEvents();
+  }
+
+  _attachEvents() {
+    if (!this._keyboardAttached) {
+      this.addEventListener('keydown', (event) => {
+        if ((event.keyCode === 13) || (event.keyCode === 32)) {
+          event.preventDefault();
+          this._toggleCheck();
+        }
+      });
+      this._keyboardAttached = true;
+    }
   }
 }
 customElements.define('wired-toggle', WiredToggle);

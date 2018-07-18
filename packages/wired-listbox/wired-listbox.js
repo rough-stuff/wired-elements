@@ -14,10 +14,11 @@ export class WiredListbox extends LitElement {
   constructor() {
     super();
     this.horizontal = false;
+    this._itemNodes = [];
   }
 
   _createRoot() {
-    const root = this.attachShadow({ mode: 'open', delegatesFocus: true });
+    const root = this.attachShadow({ mode: 'open' });
     this.classList.add('pending');
     return root;
   }
@@ -28,7 +29,7 @@ export class WiredListbox extends LitElement {
     } else {
       this.classList.remove('horizontal');
     }
-    this._onDisableChange();
+    this.tabIndex = (this.getAttribute('tabindex') || 0);
     return html`
       <style>
         :host {
@@ -36,7 +37,6 @@ export class WiredListbox extends LitElement {
           font-family: inherit;
           position: relative;
           padding: 5px;
-          outline: none;
         }
       
         :host(.pending) {
@@ -102,14 +102,6 @@ export class WiredListbox extends LitElement {
     }
   }
 
-  _onDisableChange() {
-    if (this.disabled) {
-      this.classList.add("disabled");
-    } else {
-      this.classList.remove("disabled");
-    }
-  }
-
   _clearNode(node) {
     while (node.hasChildNodes()) {
       node.removeChild(node.lastChild);
@@ -128,11 +120,30 @@ export class WiredListbox extends LitElement {
     svg.setAttribute("height", s.height);
     wired.rectangle(svg, 0, 0, s.width, s.height);
     this.classList.remove('pending');
+    this._setAria();
+    this._attachEvents();
+  }
+
+  _setAria() {
+    this.setAttribute('role', 'listbox');
+    if (!this._itemNodes.length) {
+      this._itemNodes = [];
+      const nodes = this.shadowRoot.getElementById('slot').assignedNodes();
+      if (nodes && nodes.length) {
+        for (let i = 0; i < nodes.length; i++) {
+          if (nodes[i].tagName === "WIRED-ITEM") {
+            nodes[i].setAttribute('role', 'option');
+            this._itemNodes.push(nodes[i]);
+          }
+        }
+      }
+    }
   }
 
   _refreshSelection() {
     if (this.lastSelectedItem) {
       this.lastSelectedItem.classList.remove("selected-item");
+      this.lastSelectedItem.removeAttribute('aria-selected');
     }
     const nodes = this.shadowRoot.getElementById('slot').assignedNodes();
     if (nodes) {
@@ -147,6 +158,9 @@ export class WiredListbox extends LitElement {
         }
       }
       this.lastSelectedItem = selectedItem;
+      if (this.lastSelectedItem) {
+        this.lastSelectedItem.setAttribute('aria-selected', 'true');
+      }
       if (selectedItem) {
         this.lastSelectedItem.classList.add("selected-item");
         this.value = {
@@ -165,6 +179,70 @@ export class WiredListbox extends LitElement {
     this._refreshSelection();
     const selectedEvent = new CustomEvent('selected', { bubbles: true, composed: true, checked: this.checked, detail: { selected: this.selected } });
     this.dispatchEvent(selectedEvent);
+  }
+
+  _attachEvents() {
+    if (!this._keyboardAttached) {
+      this.addEventListener('keydown', (event) => {
+        switch (event.keyCode) {
+          case 37:
+          case 38:
+            event.preventDefault();
+            this._selectPrevious();
+            break;
+          case 39:
+          case 40:
+            event.preventDefault();
+            this._selectNext();
+            break;
+        }
+      });
+      this._keyboardAttached = true;
+    }
+  }
+
+  _selectPrevious() {
+    const list = this._itemNodes;
+    if (list.length) {
+      let index = -1;
+      for (let i = 0; i < list.length; i++) {
+        if (list[i] === this.lastSelectedItem) {
+          index = i;
+          break;
+        }
+      }
+      if (index < 0) {
+        index = 0
+      } else if (index === 0) {
+        index = list.length - 1;
+      } else {
+        index--;
+      }
+      this.selected = list[index].value || '';
+      this._refreshSelection();
+    }
+  }
+
+  _selectNext() {
+    const list = this._itemNodes;
+    if (list.length) {
+      let index = -1;
+      for (let i = 0; i < list.length; i++) {
+        if (list[i] === this.lastSelectedItem) {
+          index = i;
+          break;
+        }
+      }
+      if (index < 0) {
+        index = 0
+      } else if (index >= (list.length - 1)) {
+        index = 0;
+      } else {
+        index++;
+      }
+      this.selected = list[index].value || '';
+      this._refreshSelection();
+    }
   }
 }
 

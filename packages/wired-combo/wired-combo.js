@@ -16,10 +16,11 @@ export class WiredCombo extends LitElement {
     super();
     this.disabled = false;
     this._cardShowing = false;
+    this._itemNodes = [];
   }
 
   _createRoot() {
-    const root = this.attachShadow({ mode: 'open', delegatesFocus: true });
+    const root = this.attachShadow({ mode: 'open' });
     this.classList.add('pending');
     return root;
   }
@@ -32,7 +33,6 @@ export class WiredCombo extends LitElement {
         display: inline-block;
         font-family: inherit;
         position: relative;
-        outline: none;
       }
     
       :host(.disabled) {
@@ -92,6 +92,10 @@ export class WiredCombo extends LitElement {
         z-index: 1;
         box-shadow: 1px 5px 15px -6px rgba(0, 0, 0, 0.8);
       }
+
+      ::slotted(.selected-item) {
+        background: var(--wired-combo-item-selected-bg, rgba(0, 0, 200, 0.1));
+      }
     
       ::slotted(wired-item) {
         cursor: pointer;
@@ -111,7 +115,7 @@ export class WiredCombo extends LitElement {
         <svg id="svg"></svg>
       </div>
     </div>
-    <wired-card id="card" on-item-click="${(e) => this._onItemClick(e)}" style="display: none;">
+    <wired-card id="card" role="listbox" on-item-click="${(e) => this._onItemClick(e)}" style="display: none;">
       <slot id="slot"></slot>
     </wired-card>
     `;
@@ -122,6 +126,29 @@ export class WiredCombo extends LitElement {
       this.classList.add("disabled");
     } else {
       this.classList.remove("disabled");
+    }
+    this._refreshTabIndex();
+  }
+
+  _refreshTabIndex() {
+    this.tabIndex = this.disabled ? -1 : (this.getAttribute('tabindex') || 0);
+  }
+
+  _setAria() {
+    this.setAttribute('role', 'combobox');
+    this.setAttribute('aria-haspopup', 'listbox');
+    this.setAttribute('aria-expanded', this._cardShowing);
+    if (!this._itemNodes.length) {
+      this._itemNodes = [];
+      const nodes = this.shadowRoot.getElementById('slot').assignedNodes();
+      if (nodes && nodes.length) {
+        for (let i = 0; i < nodes.length; i++) {
+          if (nodes[i].tagName === "WIRED-ITEM") {
+            nodes[i].setAttribute('role', 'option');
+            this._itemNodes.push(nodes[i]);
+          }
+        }
+      }
     }
   }
 
@@ -156,9 +183,15 @@ export class WiredCombo extends LitElement {
     poly.style.pointerEvents = this.disabled ? 'none' : 'auto';
     poly.style.cursor = "pointer";
     this.classList.remove('pending');
+    this._setAria();
+    this._attachEvents();
   }
 
   _refreshSelection() {
+    if (this.lastSelectedItem) {
+      this.lastSelectedItem.classList.remove("selected-item");
+      this.lastSelectedItem.removeAttribute('aria-selected');
+    }
     const slot = this.shadowRoot.getElementById('slot');
     const nodes = slot.assignedNodes();
     if (nodes) {
@@ -171,6 +204,11 @@ export class WiredCombo extends LitElement {
             break;
           }
         }
+      }
+      this.lastSelectedItem = selectedItem;
+      if (this.lastSelectedItem) {
+        this.lastSelectedItem.classList.add("selected-item");
+        this.lastSelectedItem.setAttribute('aria-selected', 'true');
       }
       if (selectedItem) {
         this.value = {
@@ -197,6 +235,7 @@ export class WiredCombo extends LitElement {
         card.requestRender();
       }, 10);
     }
+    this.setAttribute('aria-expanded', this._cardShowing);
   }
 
   _onItemClick(event) {
@@ -208,5 +247,89 @@ export class WiredCombo extends LitElement {
     this.dispatchEvent(selectedEvent);
   }
 
+  _attachEvents() {
+    if (!this._keyboardAttached) {
+      this.addEventListener('blur', () => {
+        if (this._cardShowing) {
+          this._setCardShowing(false);
+        }
+      });
+      this.addEventListener('keydown', (event) => {
+        switch (event.keyCode) {
+          case 37:
+          case 38:
+            event.preventDefault();
+            this._selectPrevious();
+            break;
+          case 39:
+          case 40:
+            event.preventDefault();
+            this._selectNext();
+            break;
+          case 27:
+            event.preventDefault();
+            if (this._cardShowing) {
+              this._setCardShowing(false);
+            }
+            break;
+          case 13:
+            event.preventDefault();
+            this._setCardShowing(!this._cardShowing);
+            break;
+          case 32:
+            event.preventDefault();
+            if (!this._cardShowing) {
+              this._setCardShowing(true);
+            }
+            break;
+        }
+      });
+      this._keyboardAttached = true;
+    }
+  }
+
+  _selectPrevious() {
+    const list = this._itemNodes;
+    if (list.length) {
+      let index = -1;
+      for (let i = 0; i < list.length; i++) {
+        if (list[i] === this.lastSelectedItem) {
+          index = i;
+          break;
+        }
+      }
+      if (index < 0) {
+        index = 0
+      } else if (index === 0) {
+        index = list.length - 1;
+      } else {
+        index--;
+      }
+      this.selected = list[index].value || '';
+      this._refreshSelection();
+    }
+  }
+
+  _selectNext() {
+    const list = this._itemNodes;
+    if (list.length) {
+      let index = -1;
+      for (let i = 0; i < list.length; i++) {
+        if (list[i] === this.lastSelectedItem) {
+          index = i;
+          break;
+        }
+      }
+      if (index < 0) {
+        index = 0
+      } else if (index >= (list.length - 1)) {
+        index = 0;
+      } else {
+        index++;
+      }
+      this.selected = list[index].value || '';
+      this._refreshSelection();
+    }
+  }
 }
 customElements.define('wired-combo', WiredCombo);
