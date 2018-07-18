@@ -2380,6 +2380,7 @@ var WiredElements = (function (exports) {
       } else {
         this.classList.remove("disabled");
       }
+      this.tabIndex = this.disabled ? -1 : (this.getAttribute('tabindex') || 0);
     }
 
     _clearNode(node) {
@@ -2418,8 +2419,6 @@ var WiredElements = (function (exports) {
         (wired.line(svg, s.width + (i * 2), s.height + (i * 2), s.width + (i * 2), i * 2)).style.opacity = (75 - (i * 10)) / 100;
       }
       this.classList.remove('pending');
-
-      this.tabIndex = this.disabled ? -1 : (this.getAttribute('tabindex') || 0);
     }
   }
 
@@ -2532,12 +2531,12 @@ var WiredElements = (function (exports) {
     }
 
     _createRoot() {
-      const root = this.attachShadow({ mode: 'open', delegatesFocus: true });
+      const root = this.attachShadow({ mode: 'open' });
       this.classList.add('pending');
       return root;
     }
 
-    _render({ text, iconsize }) {
+    _render({ text }) {
       this._onDisableChange();
       return html$1`
     <style>
@@ -2559,6 +2558,10 @@ var WiredElements = (function (exports) {
     
       :host(.pending) {
         opacity: 0;
+      }
+    
+      :host(:focus) #checkPanel {
+        outline: 3px solid var(--wired-focused-background, rgba(0, 0, 255, 0.2));
       }
     
       #container {
@@ -2599,6 +2602,17 @@ var WiredElements = (function (exports) {
       } else {
         this.classList.remove("disabled");
       }
+      this._refreshTabIndex();
+    }
+
+    _refreshTabIndex() {
+      this.tabIndex = this.disabled ? -1 : (this.getAttribute('tabindex') || 0);
+    }
+
+    _setAria() {
+      this.setAttribute('role', 'checkbox');
+      this.setAttribute('aria-checked', this.checked);
+      this.setAttribute('aria-label', this.text);
     }
 
     _toggleCheck() {
@@ -2636,6 +2650,22 @@ var WiredElements = (function (exports) {
         });
       }
       this.classList.remove('pending');
+
+      this._setAria();
+      this._attachEvents();
+    }
+
+
+    _attachEvents() {
+      if (!this._keyboardAttached) {
+        this.addEventListener('keydown', (event) => {
+          if ((event.keyCode === 13) || (event.keyCode === 32)) {
+            event.preventDefault();
+            this._toggleCheck();
+          }
+        });
+        this._keyboardAttached = true;
+      }
     }
 
   }
@@ -2698,10 +2728,11 @@ var WiredElements = (function (exports) {
       super();
       this.disabled = false;
       this._cardShowing = false;
+      this._itemNodes = [];
     }
 
     _createRoot() {
-      const root = this.attachShadow({ mode: 'open', delegatesFocus: true });
+      const root = this.attachShadow({ mode: 'open' });
       this.classList.add('pending');
       return root;
     }
@@ -2714,7 +2745,6 @@ var WiredElements = (function (exports) {
         display: inline-block;
         font-family: inherit;
         position: relative;
-        outline: none;
       }
     
       :host(.disabled) {
@@ -2774,6 +2804,10 @@ var WiredElements = (function (exports) {
         z-index: 1;
         box-shadow: 1px 5px 15px -6px rgba(0, 0, 0, 0.8);
       }
+
+      ::slotted(.selected-item) {
+        background: var(--wired-combo-item-selected-bg, rgba(0, 0, 200, 0.1));
+      }
     
       ::slotted(wired-item) {
         cursor: pointer;
@@ -2793,7 +2827,7 @@ var WiredElements = (function (exports) {
         <svg id="svg"></svg>
       </div>
     </div>
-    <wired-card id="card" on-item-click="${(e) => this._onItemClick(e)}" style="display: none;">
+    <wired-card id="card" role="listbox" on-item-click="${(e) => this._onItemClick(e)}" style="display: none;">
       <slot id="slot"></slot>
     </wired-card>
     `;
@@ -2804,6 +2838,29 @@ var WiredElements = (function (exports) {
         this.classList.add("disabled");
       } else {
         this.classList.remove("disabled");
+      }
+      this._refreshTabIndex();
+    }
+
+    _refreshTabIndex() {
+      this.tabIndex = this.disabled ? -1 : (this.getAttribute('tabindex') || 0);
+    }
+
+    _setAria() {
+      this.setAttribute('role', 'combobox');
+      this.setAttribute('aria-haspopup', 'listbox');
+      this.setAttribute('aria-expanded', this._cardShowing);
+      if (!this._itemNodes.length) {
+        this._itemNodes = [];
+        const nodes = this.shadowRoot.getElementById('slot').assignedNodes();
+        if (nodes && nodes.length) {
+          for (let i = 0; i < nodes.length; i++) {
+            if (nodes[i].tagName === "WIRED-ITEM") {
+              nodes[i].setAttribute('role', 'option');
+              this._itemNodes.push(nodes[i]);
+            }
+          }
+        }
       }
     }
 
@@ -2838,9 +2895,15 @@ var WiredElements = (function (exports) {
       poly.style.pointerEvents = this.disabled ? 'none' : 'auto';
       poly.style.cursor = "pointer";
       this.classList.remove('pending');
+      this._setAria();
+      this._attachEvents();
     }
 
     _refreshSelection() {
+      if (this.lastSelectedItem) {
+        this.lastSelectedItem.classList.remove("selected-item");
+        this.lastSelectedItem.removeAttribute('aria-selected');
+      }
       const slot = this.shadowRoot.getElementById('slot');
       const nodes = slot.assignedNodes();
       if (nodes) {
@@ -2853,6 +2916,11 @@ var WiredElements = (function (exports) {
               break;
             }
           }
+        }
+        this.lastSelectedItem = selectedItem;
+        if (this.lastSelectedItem) {
+          this.lastSelectedItem.classList.add("selected-item");
+          this.lastSelectedItem.setAttribute('aria-selected', 'true');
         }
         if (selectedItem) {
           this.value = {
@@ -2879,6 +2947,7 @@ var WiredElements = (function (exports) {
           card.requestRender();
         }, 10);
       }
+      this.setAttribute('aria-expanded', this._cardShowing);
     }
 
     _onItemClick(event) {
@@ -2890,6 +2959,90 @@ var WiredElements = (function (exports) {
       this.dispatchEvent(selectedEvent);
     }
 
+    _attachEvents() {
+      if (!this._keyboardAttached) {
+        this.addEventListener('blur', () => {
+          if (this._cardShowing) {
+            this._setCardShowing(false);
+          }
+        });
+        this.addEventListener('keydown', (event) => {
+          switch (event.keyCode) {
+            case 37:
+            case 38:
+              event.preventDefault();
+              this._selectPrevious();
+              break;
+            case 39:
+            case 40:
+              event.preventDefault();
+              this._selectNext();
+              break;
+            case 27:
+              event.preventDefault();
+              if (this._cardShowing) {
+                this._setCardShowing(false);
+              }
+              break;
+            case 13:
+              event.preventDefault();
+              this._setCardShowing(!this._cardShowing);
+              break;
+            case 32:
+              event.preventDefault();
+              if (!this._cardShowing) {
+                this._setCardShowing(true);
+              }
+              break;
+          }
+        });
+        this._keyboardAttached = true;
+      }
+    }
+
+    _selectPrevious() {
+      const list = this._itemNodes;
+      if (list.length) {
+        let index = -1;
+        for (let i = 0; i < list.length; i++) {
+          if (list[i] === this.lastSelectedItem) {
+            index = i;
+            break;
+          }
+        }
+        if (index < 0) {
+          index = 0;
+        } else if (index === 0) {
+          index = list.length - 1;
+        } else {
+          index--;
+        }
+        this.selected = list[index].value || '';
+        this._refreshSelection();
+      }
+    }
+
+    _selectNext() {
+      const list = this._itemNodes;
+      if (list.length) {
+        let index = -1;
+        for (let i = 0; i < list.length; i++) {
+          if (list[i] === this.lastSelectedItem) {
+            index = i;
+            break;
+          }
+        }
+        if (index < 0) {
+          index = 0;
+        } else if (index >= (list.length - 1)) {
+          index = 0;
+        } else {
+          index++;
+        }
+        this.selected = list[index].value || '';
+        this._refreshSelection();
+      }
+    }
   }
   customElements.define('wired-combo', WiredCombo);
 
@@ -2977,7 +3130,7 @@ var WiredElements = (function (exports) {
     }
 
     _createRoot() {
-      const root = this.attachShadow({ mode: 'open', delegatesFocus: true });
+      const root = this.attachShadow({ mode: 'open' });
       this.classList.add('pending');
       return root;
     }
@@ -2999,7 +3152,6 @@ var WiredElements = (function (exports) {
         position: relative;
         vertical-align: middle;
         padding: 8px;
-        outline: none;
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
@@ -3068,6 +3220,16 @@ var WiredElements = (function (exports) {
       } else {
         this.classList.remove("disabled");
       }
+      this._refreshTabIndex();
+    }
+
+    _refreshTabIndex() {
+      this.tabIndex = this.disabled ? -1 : (this.getAttribute('tabindex') || 0);
+    }
+
+    _setAria() {
+      this.setAttribute('role', 'button');
+      this.setAttribute('aria-label', this.textContent);
     }
 
     _clearNode(node) {
@@ -3085,6 +3247,20 @@ var WiredElements = (function (exports) {
       svg.setAttribute("height", min);
       wired.ellipse(svg, min / 2, min / 2, min, min);
       this.classList.remove('pending');
+      this._setAria();
+      this._attachEvents();
+    }
+
+    _attachEvents() {
+      if (!this._keyboardAttached) {
+        this.addEventListener('keydown', (event) => {
+          if ((event.keyCode === 13) || (event.keyCode === 32)) {
+            event.preventDefault();
+            this.click();
+          }
+        });
+        this._keyboardAttached = true;
+      }
     }
 
     connectedCallback() {
@@ -3264,10 +3440,11 @@ var WiredElements = (function (exports) {
     constructor() {
       super();
       this.horizontal = false;
+      this._itemNodes = [];
     }
 
     _createRoot() {
-      const root = this.attachShadow({ mode: 'open', delegatesFocus: true });
+      const root = this.attachShadow({ mode: 'open' });
       this.classList.add('pending');
       return root;
     }
@@ -3278,7 +3455,7 @@ var WiredElements = (function (exports) {
       } else {
         this.classList.remove('horizontal');
       }
-      this._onDisableChange();
+      this.tabIndex = (this.getAttribute('tabindex') || 0);
       return html$1`
       <style>
         :host {
@@ -3286,7 +3463,6 @@ var WiredElements = (function (exports) {
           font-family: inherit;
           position: relative;
           padding: 5px;
-          outline: none;
         }
       
         :host(.pending) {
@@ -3352,14 +3528,6 @@ var WiredElements = (function (exports) {
       }
     }
 
-    _onDisableChange() {
-      if (this.disabled) {
-        this.classList.add("disabled");
-      } else {
-        this.classList.remove("disabled");
-      }
-    }
-
     _clearNode(node) {
       while (node.hasChildNodes()) {
         node.removeChild(node.lastChild);
@@ -3378,11 +3546,30 @@ var WiredElements = (function (exports) {
       svg.setAttribute("height", s.height);
       wired.rectangle(svg, 0, 0, s.width, s.height);
       this.classList.remove('pending');
+      this._setAria();
+      this._attachEvents();
+    }
+
+    _setAria() {
+      this.setAttribute('role', 'listbox');
+      if (!this._itemNodes.length) {
+        this._itemNodes = [];
+        const nodes = this.shadowRoot.getElementById('slot').assignedNodes();
+        if (nodes && nodes.length) {
+          for (let i = 0; i < nodes.length; i++) {
+            if (nodes[i].tagName === "WIRED-ITEM") {
+              nodes[i].setAttribute('role', 'option');
+              this._itemNodes.push(nodes[i]);
+            }
+          }
+        }
+      }
     }
 
     _refreshSelection() {
       if (this.lastSelectedItem) {
         this.lastSelectedItem.classList.remove("selected-item");
+        this.lastSelectedItem.removeAttribute('aria-selected');
       }
       const nodes = this.shadowRoot.getElementById('slot').assignedNodes();
       if (nodes) {
@@ -3397,6 +3584,9 @@ var WiredElements = (function (exports) {
           }
         }
         this.lastSelectedItem = selectedItem;
+        if (this.lastSelectedItem) {
+          this.lastSelectedItem.setAttribute('aria-selected', 'true');
+        }
         if (selectedItem) {
           this.lastSelectedItem.classList.add("selected-item");
           this.value = {
@@ -3415,6 +3605,70 @@ var WiredElements = (function (exports) {
       this._refreshSelection();
       const selectedEvent = new CustomEvent('selected', { bubbles: true, composed: true, checked: this.checked, detail: { selected: this.selected } });
       this.dispatchEvent(selectedEvent);
+    }
+
+    _attachEvents() {
+      if (!this._keyboardAttached) {
+        this.addEventListener('keydown', (event) => {
+          switch (event.keyCode) {
+            case 37:
+            case 38:
+              event.preventDefault();
+              this._selectPrevious();
+              break;
+            case 39:
+            case 40:
+              event.preventDefault();
+              this._selectNext();
+              break;
+          }
+        });
+        this._keyboardAttached = true;
+      }
+    }
+
+    _selectPrevious() {
+      const list = this._itemNodes;
+      if (list.length) {
+        let index = -1;
+        for (let i = 0; i < list.length; i++) {
+          if (list[i] === this.lastSelectedItem) {
+            index = i;
+            break;
+          }
+        }
+        if (index < 0) {
+          index = 0;
+        } else if (index === 0) {
+          index = list.length - 1;
+        } else {
+          index--;
+        }
+        this.selected = list[index].value || '';
+        this._refreshSelection();
+      }
+    }
+
+    _selectNext() {
+      const list = this._itemNodes;
+      if (list.length) {
+        let index = -1;
+        for (let i = 0; i < list.length; i++) {
+          if (list[i] === this.lastSelectedItem) {
+            index = i;
+            break;
+          }
+        }
+        if (index < 0) {
+          index = 0;
+        } else if (index >= (list.length - 1)) {
+          index = 0;
+        } else {
+          index++;
+        }
+        this.selected = list[index].value || '';
+        this._refreshSelection();
+      }
     }
   }
 
@@ -3567,12 +3821,12 @@ var WiredElements = (function (exports) {
     }
 
     _createRoot() {
-      const root = this.attachShadow({ mode: 'open', delegatesFocus: true });
+      const root = this.attachShadow({ mode: 'open' });
       this.classList.add('pending');
       return root;
     }
 
-    _render({ text, iconsize }) {
+    _render({ text }) {
       this._onDisableChange();
       return html$1`
     <style>
@@ -3593,6 +3847,10 @@ var WiredElements = (function (exports) {
         opacity: 0.45 !important;
         cursor: default;
         pointer-events: none;
+      }
+    
+      :host(:focus) #checkPanel {
+        outline: 3px solid var(--wired-focused-background, rgba(0, 0, 255, 0.2));
       }
     
       #container {
@@ -3638,6 +3896,17 @@ var WiredElements = (function (exports) {
       } else {
         this.classList.remove("disabled");
       }
+      this._refreshTabIndex();
+    }
+
+    _refreshTabIndex() {
+      this.tabIndex = this.disabled ? -1 : (this.getAttribute('tabindex') || 0);
+    }
+
+    _setAria() {
+      this.setAttribute('role', 'radio');
+      this.setAttribute('aria-checked', this.checked);
+      this.setAttribute('aria-label', this.text);
     }
 
     _toggleCheck() {
@@ -3667,6 +3936,21 @@ var WiredElements = (function (exports) {
       this._dot.classList.add("filledPath");
       this._dot.style.display = this.checked ? "" : "none";
       this.classList.remove('pending');
+
+      this._setAria();
+      this._attachEvents();
+    }
+
+    _attachEvents() {
+      if (!this._keyboardAttached) {
+        this.addEventListener('keydown', (event) => {
+          if ((event.keyCode === 13) || (event.keyCode === 32)) {
+            event.preventDefault();
+            this._toggleCheck();
+          }
+        });
+        this._keyboardAttached = true;
+      }
     }
   }
   customElements.define('wired-radio', WiredRadio);
@@ -3695,6 +3979,7 @@ var WiredElements = (function (exports) {
 
     constructor() {
       super();
+      this._radioNodes = [];
       this._checkListener = this._handleChecked.bind(this);
     }
 
@@ -3727,9 +4012,11 @@ var WiredElements = (function (exports) {
     _didRender() {
       const slot = this.shadowRoot.getElementById('slot');
       const nodes = slot.assignedNodes();
+      this._radioNodes = [];
       if (nodes && nodes.length) {
         for (let i = 0; i < nodes.length; i++) {
           if (nodes[i].tagName === "WIRED-RADIO") {
+            this._radioNodes.push(nodes[i]);
             const name = nodes[i].name || '';
             if (this.selected && (name === this.selected)) {
               nodes[i].checked = true;
@@ -3737,6 +4024,93 @@ var WiredElements = (function (exports) {
               nodes[i].checked = false;
             }
           }
+        }
+      }
+      this.setAttribute('role', 'radiogroup');
+      this.tabIndex = this.getAttribute('tabindex') || 0;
+      this._attachEvents();
+    }
+
+    _attachEvents() {
+      if (!this._keyboardAttached) {
+        this.addEventListener('keydown', (event) => {
+          switch (event.keyCode) {
+            case 37:
+            case 38:
+              event.preventDefault();
+              this._selectPrevious();
+              break;
+            case 39:
+            case 40:
+              event.preventDefault();
+              this._selectNext();
+              break;
+          }
+        });
+        this._keyboardAttached = true;
+      }
+    }
+
+    _selectPrevious() {
+      const list = this._radioNodes;
+      if (list.length) {
+        let radio = null;
+        let index = -1;
+        if (this.selected) {
+          for (let i = 0; i < list.length; i++) {
+            const n = list[i];
+            if (n.name === this.selected) {
+              index = i;
+              break;
+            }
+          }
+          if (index < 0) {
+            radio = list[0];
+          } else {
+            index--;
+            if (index < 0) {
+              index = list.length - 1;
+            }
+            radio = list[index];
+          }
+        } else {
+          radio = list[0];
+        }
+        if (radio) {
+          radio.focus();
+          this.selected = radio.name;
+        }
+      }
+    }
+
+    _selectNext() {
+      const list = this._radioNodes;
+      if (list.length) {
+        let radio = null;
+        let index = -1;
+        if (this.selected) {
+          for (let i = 0; i < list.length; i++) {
+            const n = list[i];
+            if (n.name === this.selected) {
+              index = i;
+              break;
+            }
+          }
+          if (index < 0) {
+            radio = list[0];
+          } else {
+            index++;
+            if (index >= list.length) {
+              index = 0;
+            }
+            radio = list[index];
+          }
+        } else {
+          radio = list[0];
+        }
+        if (radio) {
+          radio.focus();
+          this.selected = radio.name;
         }
       }
     }
@@ -4879,7 +5253,7 @@ var WiredElements = (function (exports) {
   class WiredSlider extends LitElement {
     static get properties() {
       return {
-        value: Number,
+        _value: Number,
         min: Number,
         max: Number,
         knobradius: Number,
@@ -4890,14 +5264,15 @@ var WiredElements = (function (exports) {
     constructor() {
       super();
       this.disabled = false;
-      this.value = 0;
+      this._value = 0;
       this.min = 0;
       this.max = 100;
       this.knobradius = 10;
+      this.step = 1;
     }
 
     _createRoot() {
-      const root = this.attachShadow({ mode: 'open', delegatesFocus: true });
+      const root = this.attachShadow({ mode: 'open' });
       this.classList.add('pending');
       return root;
     }
@@ -4925,6 +5300,12 @@ var WiredElements = (function (exports) {
     
       :host(.disabled) .knob {
         pointer-events: none !important;
+      }
+    
+      :host(:focus) .knob {
+        cursor: move;
+        stroke: var(--wired-slider-knob-outline-color, #000);
+        fill-opacity: 0.8;
       }
     
       .overlay {
@@ -4972,12 +5353,21 @@ var WiredElements = (function (exports) {
     `;
     }
 
+    get value() {
+      return this._value;
+    }
+
+    set value(v) {
+      this._setValue(v, true);
+    }
+
     _onDisableChange() {
       if (this.disabled) {
         this.classList.add("disabled");
       } else {
         this.classList.remove("disabled");
       }
+      this._refreshTabIndex();
     }
 
     _clearNode(node) {
@@ -5007,22 +5397,92 @@ var WiredElements = (function (exports) {
       this._knob.classList.add("knob");
       this._onValueChange();
       this.classList.remove('pending');
+      this._knobAttached = false;
 
-      addListener(this._knob, 'down', (event) => {
-        if (!this.disabled) {
-          this._knobdown(event);
-        }
-      });
-      addListener(this._knob, 'up', (event) => {
-        if (!this.disabled) {
-          this._resetKnob(event);
-        }
-      });
-      addListener(this._knob, 'track', (event) => {
-        if (!this.disabled) {
-          this._onTrack(event);
-        }
-      });
+      this._setAria();
+      this._attachEvents();
+    }
+
+    _setAria() {
+      this.setAttribute('role', 'slider');
+      this.setAttribute('aria-valuemax', this.max);
+      this.setAttribute('aria-valuemin', this.min);
+      this._setAriaValue();
+      this._refreshTabIndex();
+    }
+
+    _refreshTabIndex() {
+      this.tabIndex = this.disabled ? -1 : (this.getAttribute('tabindex') || 0);
+    }
+
+    _setAriaValue() {
+      this.setAttribute('aria-valuenow', this.value);
+    }
+
+    _setValue(v, skipEvent) {
+      this._value = v;
+      this._setAriaValue();
+      this._onValueChange();
+      if (!skipEvent) {
+        const event = new CustomEvent('change', { bubbles: true, composed: true, detail: { value: this._intermediateValue } });
+        this.dispatchEvent(event);
+      }
+    }
+
+    _incremenent() {
+      const newValue = Math.min(this.max, Math.round(this.value + this.step));
+      if (newValue != this.value) {
+        this._setValue(newValue);
+      }
+    }
+
+    _decrement() {
+      const newValue = Math.max(this.min, Math.round(this.value - this.step));
+      if (newValue != this.value) {
+        this._setValue(newValue);
+      }
+    }
+
+    _attachEvents() {
+      if (!this._knobAttached) {
+        addListener(this._knob, 'down', (event) => {
+          if (!this.disabled) {
+            this._knobdown(event);
+          }
+        });
+        addListener(this._knob, 'up', (event) => {
+          if (!this.disabled) {
+            this._resetKnob(event);
+          }
+        });
+        addListener(this._knob, 'track', (event) => {
+          if (!this.disabled) {
+            this._onTrack(event);
+          }
+        });
+        this._knobAttached = true;
+      }
+      if (!this._keyboardAttached) {
+        this.addEventListener('keydown', (event) => {
+          switch (event.keyCode) {
+            case 38:
+            case 39:
+              this._incremenent();
+              break;
+            case 37:
+            case 40:
+              this._decrement();
+              break;
+            case 36:
+              this._setValue(this.min);
+              break;
+            case 35:
+              this._setValue(this.max);
+              break;
+          }
+        });
+        this._keyboardAttached = true;
+      }
     }
 
     _onValueChange() {
@@ -5101,10 +5561,8 @@ var WiredElements = (function (exports) {
     _trackEnd() {
       this._dragging = false;
       this._resetKnob();
-      this.value = this._intermediateValue;
+      this._setValue(this._intermediateValue);
       this._pct = (this.value - this.min) / (this.max - this.min);
-      const event = new CustomEvent('change', { bubbles: true, composed: true, detail: { value: this._intermediateValue } });
-      this.dispatchEvent(event);
     }
   }
   customElements.define('wired-slider', WiredSlider);
@@ -5340,7 +5798,7 @@ var WiredElements = (function (exports) {
     }
 
     _createRoot() {
-      const root = this.attachShadow({ mode: 'open', delegatesFocus: true });
+      const root = this.attachShadow({ mode: 'open' });
       this.classList.add('pending');
       return root;
     }
@@ -5411,6 +5869,16 @@ var WiredElements = (function (exports) {
       } else {
         this.classList.remove("disabled");
       }
+      this._refreshTabIndex();
+    }
+
+    _refreshTabIndex() {
+      this.tabIndex = this.disabled ? -1 : (this.getAttribute('tabindex') || 0);
+    }
+
+    _setAria() {
+      this.setAttribute('role', 'switch');
+      this.setAttribute('aria-checked', this.checked);
     }
 
     _didRender() {
@@ -5433,6 +5901,20 @@ var WiredElements = (function (exports) {
         cl.add("unchecked");
       }
       this.classList.remove('pending');
+      this._setAria();
+      this._attachEvents();
+    }
+
+    _attachEvents() {
+      if (!this._keyboardAttached) {
+        this.addEventListener('keydown', (event) => {
+          if ((event.keyCode === 13) || (event.keyCode === 32)) {
+            event.preventDefault();
+            this._toggleCheck();
+          }
+        });
+        this._keyboardAttached = true;
+      }
     }
   }
   customElements.define('wired-toggle', WiredToggle);
