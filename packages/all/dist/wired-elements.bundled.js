@@ -3512,7 +3512,7 @@ var WiredElements = (function (exports) {
           background: var(--wired-combo-item-hover-bg, rgba(0, 0, 0, 0.1));
         }
       </style>
-      <slot id="slot"></slot>
+      <slot id="slot" on-slotchange="${() => this.requestRender()}"></slot>
       <div class="overlay">
         <svg id="svg"></svg>
       </div>`;
@@ -3524,6 +3524,7 @@ var WiredElements = (function (exports) {
         this._onItemClick(event);
       };
       this.addEventListener("item-click", this._itemClickHandler);
+      setTimeout(() => this._didRender());
     }
 
     disconnectedCallback() {
