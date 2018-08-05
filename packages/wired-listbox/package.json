@@ -1,6 +1,6 @@
 {
   "name": "wired-listbox",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "A listbox control with Wired hand-drawn styling. The selected item is highlighted. Can be vertical (default) or horizontal.",
   "main": "wired-listbox.js",
   "scripts": {
