@@ -1,5 +1,5 @@
-[![Published on Vaadin  Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)]()
-[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/wiredjswired-checkbox.svg)]()
+[![Published on Vaadin  Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/wiredjswired-checkbox)
+[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/wiredjswired-checkbox.svg)](https://vaadin.com/directory/component/wiredjswired-checkbox)
 
 ![wired checkbox](https://wiredjs.github.io/wired-elements/images/checkbox.png)
 
