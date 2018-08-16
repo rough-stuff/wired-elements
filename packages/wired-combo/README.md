@@ -1,5 +1,5 @@
-[![Published on Vaadin  Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)]()
-[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/wiredjswired-combo.svg)]()
+[![Published on Vaadin  Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/wiredjswired-combo)
+[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/wiredjswired-combo.svg)](https://vaadin.com/directory/component/wiredjswired-combo)
 
 ![wired combo](https://wiredjs.github.io/wired-elements/images/combo.png)
 
