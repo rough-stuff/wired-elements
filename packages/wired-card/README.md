@@ -1,3 +1,6 @@
+[![Published on Vaadin  Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)]()
+[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/wiredjswired-card.svg)]()
+
 # wired-card
 
 wired-card is s a container for other web elements - with a hand-drawn, wireframe like, look.
