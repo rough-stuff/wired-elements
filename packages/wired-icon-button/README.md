@@ -1,3 +1,6 @@
+[![Published on Vaadin  Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)]()
+[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/wiredjswired-icon-button.svg)]()
+
 ![wired icon](https://wiredjs.github.io/wired-elements/images/icon-button.png)
 
 # wired-icon-button
