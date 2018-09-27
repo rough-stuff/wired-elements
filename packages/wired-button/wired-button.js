@@ -4,8 +4,8 @@ import { wired } from 'wired-lib/wired-lib.js';
 export class WiredButton extends LitElement {
   static get properties() {
     return {
-      elevation: Number,
-      disabled: Boolean
+      elevation: { type: Number },
+      disabled: { type: Boolean }
     };
   }
 
@@ -15,13 +15,13 @@ export class WiredButton extends LitElement {
     this.disabled = false;
   }
 
-  _createRoot() {
-    const root = this.attachShadow({ mode: 'open' });
+  createRenderRoot() {
+    const root = super.createRenderRoot();
     this.classList.add('pending');
     return root;
   }
 
-  _render({ text, elevation, disabled }) {
+  render() {
     this._onDisableChange();
     return html`
     <style>
@@ -40,6 +40,7 @@ export class WiredButton extends LitElement {
         flex-direction: column;
         text-align: center;
         display: inline-flex;
+        outline: none;
       }
 
       :host(.pending) {
@@ -55,6 +56,10 @@ export class WiredButton extends LitElement {
         background: rgba(0, 0, 0, 0.07);
         cursor: default;
         pointer-events: none;
+      }
+
+      :host(:focus) {
+        text-shadow: 0 1px 1px rgba(0,0,0,0.3);
       }
 
       .overlay {
@@ -101,7 +106,7 @@ export class WiredButton extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    setTimeout(() => this._didRender());
+    setTimeout(() => this.updated());
     this.addEventListener('keydown', (event) => {
       if ((event.keyCode === 13) || (event.keyCode === 32)) {
         event.preventDefault();
@@ -112,7 +117,7 @@ export class WiredButton extends LitElement {
     this.setAttribute('aria-label', this.innerHTML);
   }
 
-  _didRender() {
+  updated() {
     const svg = this.shadowRoot.getElementById('svg');
     this._clearNode(svg);
     const s = this.getBoundingClientRect();
