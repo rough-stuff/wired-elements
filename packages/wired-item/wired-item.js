@@ -30,7 +30,7 @@ export class WiredItem extends LitElement {
   }
 
   disconnectedCallback() {
-    super.disconnectedCallback();
+    if (super.disconnectedCallback) super.disconnectedCallback();
     if (this._itemClickHandler) {
       this.removeEventListener("click", this._itemClickHandler);
       this._itemClickHandler = null;
