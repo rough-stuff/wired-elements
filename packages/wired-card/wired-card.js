@@ -68,7 +68,19 @@ export class WiredCard extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
+    if (!this.resizeHandler) {
+      this.resizeHandler = this._debounce(this.updated.bind(this), 200, false, this);
+      window.addEventListener('resize', this.resizeHandler);
+    }
     setTimeout(() => this.updated());
+  }
+
+  disconnectedCallback() {
+    if (super.disconnectedCallback) super.disconnectedCallback();
+    if (this.resizeHandler) {
+      window.removeEventListener('resize', this.resizeHandler);
+      delete this.resizeHandler;
+    }
   }
 
   updated() {
@@ -88,6 +100,25 @@ export class WiredCard extends LitElement {
       (wired.line(svg, s.width + (i * 2), s.height + (i * 2), s.width + (i * 2), i * 2)).style.opacity = (85 - (i * 10)) / 100;
     }
     this.classList.remove('pending');
+  }
+
+  _debounce(func, wait, immediate, context) {
+    let timeout = 0;
+    return () => {
+      const args = arguments;
+      const later = () => {
+        timeout = 0;
+        if (!immediate) {
+          func.apply(context, args);
+        }
+      };
+      const callNow = immediate && !timeout;
+      clearTimeout(timeout);
+      timeout = window.setTimeout(later, wait);
+      if (callNow) {
+        func.apply(context, args);
+      }
+    };
   }
 }
 customElements.define('wired-card', WiredCard);
