@@ -1,6 +1,6 @@
 {
   "name": "wired-tooltip",
-  "version": "0.6.5",
+  "version": "0.8.0-0",
   "description": "Hand-drawn sketchy tooltip with text that appears on hover over an element.",
   "main": "wired-tooltip.js",
   "scripts": {

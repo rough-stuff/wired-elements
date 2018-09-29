@@ -1,6 +1,6 @@
 {
   "name": "wired-slider",
-  "version": "0.7.0",
+  "version": "0.8.0-0",
   "description": "Hand-drawn sketchy slider web component",
   "main": "wired-slider.js",
   "scripts": {

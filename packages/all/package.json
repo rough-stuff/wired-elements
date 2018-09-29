@@ -1,6 +1,6 @@
 {
   "name": "wired-elements",
-  "version": "0.7.2",
+  "version": "0.8.0-0",
   "description": "Collection of hand-drawn sketchy web components",
   "main": "wired-elements.js",
   "directories": {
@@ -29,21 +29,21 @@
   },
   "homepage": "https://github.com/wiredjs/wired-elements#readme",
   "dependencies": {
-    "wired-button": "^0.7.0",
-    "wired-card": "^0.6.5",
-    "wired-checkbox": "^0.7.0",
-    "wired-combo": "^0.7.1",
-    "wired-icon-button": "^0.7.0",
-    "wired-input": "^0.6.6",
-    "wired-item": "^0.6.5",
+    "wired-button": "^0.8.0-0",
+    "wired-card": "^0.8.0-0",
+    "wired-checkbox": "^0.8.0-0",
+    "wired-combo": "^0.8.0-0",
+    "wired-icon-button": "^0.8.0-0",
+    "wired-input": "^0.8.0-0",
+    "wired-item": "^0.8.0-0",
     "wired-lib": "^0.6.0",
-    "wired-listbox": "^0.7.2",
-    "wired-progress": "^0.6.5",
-    "wired-radio": "^0.7.0",
-    "wired-radio-group": "^0.7.1",
-    "wired-slider": "^0.7.0",
-    "wired-textarea": "^0.6.5",
-    "wired-toggle": "^0.7.0",
-    "wired-tooltip": "^0.6.5"
+    "wired-listbox": "^0.8.0-0",
+    "wired-progress": "^0.8.0-0",
+    "wired-radio": "^0.8.0-0",
+    "wired-radio-group": "^0.8.0-0",
+    "wired-slider": "^0.8.0-0",
+    "wired-textarea": "^0.8.0-0",
+    "wired-toggle": "^0.8.0-0",
+    "wired-tooltip": "^0.8.0-0"
   }
 }
