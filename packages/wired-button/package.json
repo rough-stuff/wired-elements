@@ -1,6 +1,6 @@
 {
   "name": "wired-button",
-  "version": "0.8.0-0",
+  "version": "0.8.0",
   "description": "Hand-drawn sketchy button - web component",
   "main": "wired-button.js",
   "scripts": {

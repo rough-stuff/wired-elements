@@ -1,6 +1,6 @@
 {
   "name": "wired-textarea",
-  "version": "0.8.0-0",
+  "version": "0.8.0",
   "description": "Hand-drawn sketchy textarea - web component",
   "main": "wired-textarea.js",
   "scripts": {

@@ -1,6 +1,6 @@
 {
   "name": "wired-checkbox",
-  "version": "0.8.0-0",
+  "version": "0.8.0",
   "description": "Hand-drawn sketchy checkbox",
   "main": "wired-checkbox.js",
   "scripts": {

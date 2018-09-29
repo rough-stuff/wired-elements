@@ -1,6 +1,6 @@
 {
   "name": "wired-card",
-  "version": "0.8.0-0",
+  "version": "0.8.0",
   "description": "Hand-drawn sketchy card web component",
   "main": "wired-card.js",
   "scripts": {
