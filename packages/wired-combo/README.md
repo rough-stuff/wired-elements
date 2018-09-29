@@ -49,8 +49,6 @@ Use it in your web page:
 
 **--wired-combo-item-hover-bg** Color of item in the dropdown on hover. 
 
-**--wired-focus-outline-color** Color of sketchy outline when in focus.
-
 
 ### Events
 **selected** event fired when an item is selected by the user. 
