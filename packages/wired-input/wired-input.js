@@ -4,23 +4,22 @@ import { wired } from 'wired-lib/wired-lib.js';
 export class WiredInput extends LitElement {
   static get properties() {
     return {
-      placeholder: String,
-      name: String,
-      disabled: Boolean,
-      type: String,
-      required: Boolean,
-      autocomplete: String,
-      autofocus: Boolean,
-      minlength: Number,
-      maxlength: Number,
-      min: String,
-      max: String,
-      step: String,
-      readonly: Boolean,
-      size: Number,
-      autocapitalize: String,
-      autocorrect: String,
-      value: String
+      placeholder: { type: String },
+      name: { type: String },
+      disabled: { type: Boolean },
+      type: { type: String },
+      required: { type: Boolean },
+      autocomplete: { type: String },
+      autofocus: { type: Boolean },
+      minlength: { type: Number },
+      maxlength: { type: Number },
+      min: { type: String },
+      max: { type: String },
+      step: { type: String },
+      readonly: { type: Boolean },
+      size: { type: Number },
+      autocapitalize: { type: String },
+      autocorrect: { type: String }
     };
   }
 
@@ -29,13 +28,13 @@ export class WiredInput extends LitElement {
     this.disabled = false;
   }
 
-  _createRoot() {
+  createRenderRoot() {
     const root = this.attachShadow({ mode: 'open', delegatesFocus: true });
     this.classList.add('pending');
     return root;
   }
 
-  _render({ type, placeholder, disabled, required, autocomplete, autofocus, minlength, maxlength, min, max, step, readonly, size, autocapitalize, autocorrect, name }) {
+  render() {
     this._onDisableChange();
     return html`
     <style>
@@ -93,10 +92,10 @@ export class WiredInput extends LitElement {
         color: inherit;
       }
     </style>
-    <input id="txt" name$="${name}" type$="${type}" placeholder$="${placeholder}" disabled?="${disabled}" required?="${required}"
-      autocomplete$="${autocomplete}" autofocus?="${autofocus}" minlength$="${minlength}" maxlength$="${maxlength}" min$="${min}"
-      max$="${max}" step$="${step}" readonly?="${readonly}" size$="${size}" autocapitalize$="${autocapitalize}" autocorrect$="${autocorrect}"
-      on-change="${(e) => this._onChange(e)}">
+    <input id="txt" name="${this.name}" type="${this.type}" placeholder="${this.placeholder}" ?disabled="${this.disabled}" ?required="${this.required}"
+      autocomplete="${this.autocomplete}" ?autofocus="${this.autofocus}" minlength="${this.minlength}" maxlength="${this.maxlength}" min="${this.min}"
+      max="${this.max}" step="${this.step}" ?readonly="${this.readonly}" size="${this.size}" autocapitalize="${this.autocapitalize}" autocorrect="${this.autocorrect}"
+      @change="${(e) => this._onChange(e)}">
     <div class="overlay">
       <svg id="svg"></svg>
     </div>
@@ -143,7 +142,7 @@ export class WiredInput extends LitElement {
     }
   }
 
-  _didRender() {
+  updated() {
     const svg = this.shadowRoot.getElementById('svg');
     this._clearNode(svg);
     const s = this.getBoundingClientRect();

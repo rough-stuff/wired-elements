@@ -5,11 +5,11 @@ import { addListener, removeListener } from '@polymer/polymer/lib/utils/gestures
 export class WiredSlider extends LitElement {
   static get properties() {
     return {
-      _value: Number,
-      min: Number,
-      max: Number,
-      knobradius: Number,
-      disabled: Boolean
+      _value: { type: Number },
+      min: { type: Number },
+      max: { type: Number },
+      knobradius: { type: Number },
+      disabled: { type: Boolean }
     };
   }
 
@@ -23,13 +23,13 @@ export class WiredSlider extends LitElement {
     this.step = 1;
   }
 
-  _createRoot() {
-    const root = this.attachShadow({ mode: 'open' });
+  createRenderRoot() {
+    const root = super.createRenderRoot();
     this.classList.add('pending');
     return root;
   }
 
-  _render() {
+  render() {
     this._onDisableChange();
     return html`
     <style>
@@ -130,10 +130,10 @@ export class WiredSlider extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    setTimeout(() => this._firstRendered(), 100);
+    setTimeout(() => this.firstUpdated(), 100);
   }
 
-  _firstRendered() {
+  firstUpdated() {
     const svg = this.shadowRoot.getElementById('svg');
     this._clearNode(svg);
     const s = this.getBoundingClientRect();

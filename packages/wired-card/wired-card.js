@@ -4,7 +4,7 @@ import { wired } from 'wired-lib/wired-lib.js';
 export class WiredCard extends LitElement {
   static get properties() {
     return {
-      elevation: Number
+      elevation: { type: Number }
     };
   }
 
@@ -13,13 +13,13 @@ export class WiredCard extends LitElement {
     this.elevation = 1;
   }
 
-  _createRoot() {
-    const root = this.attachShadow({ mode: 'open' });
+  createRenderRoot() {
+    const root = super.createRenderRoot();
     this.classList.add('pending');
     return root;
   }
 
-  _render() {
+  render() {
     return html`
     <style>
       :host {
@@ -52,7 +52,7 @@ export class WiredCard extends LitElement {
       }
     </style>
     <div>
-      <slot on-slotchange="${() => this.requestRender()}"></slot>
+      <slot @slotchange="${() => this.requestUpdate()}"></slot>
     </div>
     <div class="overlay">
       <svg id="svg"></svg>
@@ -68,10 +68,10 @@ export class WiredCard extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    setTimeout(() => this._didRender());
+    setTimeout(() => this.updated());
   }
 
-  _didRender() {
+  updated() {
     const svg = this.shadowRoot.getElementById('svg');
     this._clearNode(svg);
     var s = this.getBoundingClientRect();

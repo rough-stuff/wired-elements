@@ -25,8 +25,8 @@
   "author": "Preet Shihn <preetshihn@gmail.com> (https://twitter.com/preetster)",
   "license": "MIT",
   "dependencies": {
-    "@polymer/lit-element": "^0.5.2",
-    "@polymer/polymer": "^3.0.2",
+    "@polymer/lit-element": "^0.6.1",
+    "@polymer/polymer": "^3.0.5",
     "wired-lib": "^0.6.0"
   }
 }

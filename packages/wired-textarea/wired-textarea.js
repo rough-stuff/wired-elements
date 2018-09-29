@@ -4,17 +4,17 @@ import { wired } from 'wired-lib/wired-lib.js';
 export class WiredTextarea extends LitElement {
   static get properties() {
     return {
-      rows: Number,
-      maxrows: Number,
-      autocomplete: String,
-      autofocus: Boolean,
-      inputmode: String,
-      placeholder: String,
-      readonly: Boolean,
-      required: Boolean,
-      minlength: Number,
-      maxlength: Number,
-      disabled: Boolean
+      rows: { type: Number },
+      maxrows: { type: Number },
+      autocomplete: { type: String },
+      autofocus: { type: Boolean },
+      inputmode: { type: String },
+      placeholder: { type: String },
+      readonly: { type: Boolean },
+      required: { type: Boolean },
+      minlength: { type: Number },
+      maxlength: { type: Number },
+      disabled: { type: Boolean }
     };
   }
 
@@ -25,13 +25,13 @@ export class WiredTextarea extends LitElement {
     this.maxrows = 0;
   }
 
-  _createRoot() {
+  createRenderRoot() {
     const root = this.attachShadow({ mode: 'open', delegatesFocus: true });
     this.classList.add('pending');
     return root;
   }
 
-  _render({ rows, maxrows, autocomplete, autofocus, inputmode, placeholder, readonly, required, minlength, maxlength, disabled }) {
+  render() {
     this._onDisableChange();
     return html`
     <style>
@@ -106,9 +106,9 @@ export class WiredTextarea extends LitElement {
     </style>
     <div id="mirror" class="mirror-text">&#160;</div>
     <div class="fit">
-      <textarea id="textarea" autocomplete$="${autocomplete}" autofocus?="${autofocus}" inputmode$="${inputmode}" placeholder$="${placeholder}"
-        readonly?="${readonly}" required?="${required}" disabled?="${disabled}" rows$="${rows}" minlength$="${minlength}" maxlength$="${maxlength}"
-        on-input="${() => this._onInput()}"></textarea>
+      <textarea id="textarea" autocomplete="${this.autocomplete}" ?autofocus="${this.autofocus}" inputmode="${this.inputmode}" placeholder="${this.placeholder}"
+        ?readonly="${this.readonly}" ?required="${this.required}" ?disabled="${this.disabled}" rows="${this.rows}" minlength="${this.minlength}" maxlength="${this.maxlength}"
+        @input="${() => this._onInput()}"></textarea>
     </div>
     <div class="fit overlay">
       <svg id="svg"></svg>
@@ -143,7 +143,7 @@ export class WiredTextarea extends LitElement {
       textarea.value = !(v || v === 0) ? '' : v;
     }
     this.mirror.innerHTML = this._valueForMirror();
-    this.requestRender();
+    this.requestUpdate();
   }
 
   _constrain(tokens) {
@@ -194,11 +194,11 @@ export class WiredTextarea extends LitElement {
   _needsLayout() {
     var s = this.getBoundingClientRect();
     if (s.height != this._prevHeight) {
-      this.requestRender();
+      this.requestUpdate();
     }
   }
 
-  _didRender() {
+  updated() {
     const s = this.getBoundingClientRect();
     const svg = this.shadowRoot.getElementById('svg');
 

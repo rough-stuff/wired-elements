@@ -3,12 +3,12 @@ import { LitElement, html } from '@polymer/lit-element/lit-element.js';
 export class WiredItem extends LitElement {
   static get properties() {
     return {
-      text: String,
-      value: String
+      text: { type: String },
+      value: { type: String }
     };
   }
 
-  _render({ text }) {
+  render() {
     return html`
     <style>
       :host {
@@ -17,7 +17,7 @@ export class WiredItem extends LitElement {
         font-family: inherit;
       }
     </style>
-    <span>${text}</span>
+    <span>${this.text}</span>
     `;
   }
 

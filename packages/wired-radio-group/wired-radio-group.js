@@ -3,11 +3,11 @@ import { LitElement, html } from '@polymer/lit-element/lit-element.js';
 export class WiredRadioGroup extends LitElement {
   static get properties() {
     return {
-      selected: String
+      selected: { type: String }
     };
   }
 
-  _render({ selected }) {
+  render() {
     return html`
     <style>
       :host {
@@ -18,7 +18,7 @@ export class WiredRadioGroup extends LitElement {
         padding: var(--wired-radio-group-item-padding, 5px);
       }
     </style>
-    <slot id="slot" on-slotchange="${() => this.slotChange()}"></slot>
+    <slot id="slot" @slotchange="${() => this.slotChange()}"></slot>
     `;
   }
 
@@ -55,10 +55,10 @@ export class WiredRadioGroup extends LitElement {
   }
 
   slotChange() {
-    this.requestRender();
+    this.requestUpdate();
   }
 
-  _didRender() {
+  updated() {
     const slot = this.shadowRoot.getElementById('slot');
     const nodes = slot.assignedNodes();
     this._radioNodes = [];

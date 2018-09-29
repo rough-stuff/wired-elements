@@ -4,9 +4,9 @@ import { wired } from 'wired-lib/wired-lib.js';
 export class WiredCheckbox extends LitElement {
   static get properties() {
     return {
-      checked: Boolean,
-      text: String,
-      disabled: Boolean
+      checked: { type: Boolean },
+      text: { type: String },
+      disabled: { type: Boolean }
     };
   }
 
@@ -16,13 +16,13 @@ export class WiredCheckbox extends LitElement {
     this.checked = false;
   }
 
-  _createRoot() {
-    const root = this.attachShadow({ mode: 'open' });
+  createRenderRoot() {
+    const root = super.createRenderRoot();
     this.classList.add('pending');
     return root;
   }
 
-  _render({ text }) {
+  render() {
     this._onDisableChange();
     return html`
     <style>
@@ -46,8 +46,8 @@ export class WiredCheckbox extends LitElement {
         opacity: 0;
       }
     
-      :host(:focus) #checkPanel {
-        outline: 3px solid var(--wired-focused-background, rgba(0, 0, 255, 0.2));
+      :host(:focus) path {
+        stroke-width: 1.5;
       }
     
       #container {
@@ -73,11 +73,11 @@ export class WiredCheckbox extends LitElement {
         stroke-width: 0.7;
       }
     </style>
-    <div id="container" on-click="${() => this._toggleCheck()}">
+    <div id="container" @click="${() => this._toggleCheck()}">
       <div id="checkPanel" class="inline">
         <svg id="svg" width="0" height="0"></svg>
       </div>
-      <div class="inline">${text}</div>
+      <div class="inline">${this.text}</div>
     </div>
     `;
   }
@@ -113,7 +113,7 @@ export class WiredCheckbox extends LitElement {
     }
   }
 
-  _didRender() {
+  updated() {
     const svg = this.shadowRoot.getElementById('svg');
     this._clearNode(svg);
     const s = { width: 24, height: 24 };

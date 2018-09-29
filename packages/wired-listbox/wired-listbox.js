@@ -5,9 +5,9 @@ import 'wired-item';
 export class WiredListbox extends LitElement {
   static get properties() {
     return {
-      value: Object,
-      selected: String,
-      horizontal: Boolean
+      value: { type: Object },
+      selected: { type: String },
+      horizontal: { type: Boolean }
     }
   }
 
@@ -17,14 +17,14 @@ export class WiredListbox extends LitElement {
     this._itemNodes = [];
   }
 
-  _createRoot() {
-    const root = this.attachShadow({ mode: 'open' });
+  createRenderRoot() {
+    const root = super.createRenderRoot();
     this.classList.add('pending');
     return root;
   }
 
-  _render({ horizontal }) {
-    if (horizontal) {
+  render() {
+    if (this.horizontal) {
       this.classList.add('horizontal');
     } else {
       this.classList.remove('horizontal');
@@ -37,10 +37,15 @@ export class WiredListbox extends LitElement {
           font-family: inherit;
           position: relative;
           padding: 5px;
+          outline: none;
         }
       
         :host(.pending) {
           opacity: 0;
+        }
+
+        :host(:focus) path {
+          stroke-width: 1.5;
         }
       
         .overlay {
@@ -80,7 +85,7 @@ export class WiredListbox extends LitElement {
           background: var(--wired-combo-item-hover-bg, rgba(0, 0, 0, 0.1));
         }
       </style>
-      <slot id="slot" on-slotchange="${() => this.requestRender()}"></slot>
+      <slot id="slot" @slotchange="${() => this.requestUpdate()}"></slot>
       <div class="overlay">
         <svg id="svg"></svg>
       </div>`;
@@ -92,7 +97,7 @@ export class WiredListbox extends LitElement {
       this._onItemClick(event)
     };
     this.addEventListener("item-click", this._itemClickHandler);
-    setTimeout(() => this._didRender());
+    setTimeout(() => this.updated());
   }
 
   disconnectedCallback() {
@@ -109,11 +114,11 @@ export class WiredListbox extends LitElement {
     }
   }
 
-  _firstRendered() {
+  firstUpdated() {
     this._refreshSelection();
   }
 
-  _didRender() {
+  updated() {
     const svg = this.shadowRoot.getElementById('svg');
     this._clearNode(svg);
     const s = this.getBoundingClientRect();
