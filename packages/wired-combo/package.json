@@ -1,6 +1,6 @@
 {
   "name": "wired-combo",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Hand-drawn sketchy selector/combo-box web component",
   "main": "wired-combo.js",
   "scripts": {
@@ -30,8 +30,8 @@
   "license": "MIT",
   "dependencies": {
     "@polymer/lit-element": "^0.6.1",
-    "wired-card": "^0.8.0",
-    "wired-item": "^0.8.0",
+    "wired-card": "^0.8.1",
+    "wired-item": "^0.8.1",
     "wired-lib": "^0.6.0"
   }
 }
