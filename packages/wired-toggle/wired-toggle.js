@@ -4,8 +4,8 @@ import { wired } from 'wired-lib/wired-lib.js';
 export class WiredToggle extends LitElement {
   static get properties() {
     return {
-      checked: Boolean,
-      disabled: Boolean
+      checked: { type: Boolean },
+      disabled: { type: Boolean }
     };
   }
 
@@ -15,13 +15,13 @@ export class WiredToggle extends LitElement {
     this.checked = false;
   }
 
-  _createRoot() {
-    const root = this.attachShadow({ mode: 'open' });
+  createRenderRoot() {
+    const root = super.createRenderRoot();
     this.classList.add('pending');
     return root;
   }
 
-  _render() {
+  render() {
     this._onDisableChange();
     return html`
     <style>
@@ -29,6 +29,7 @@ export class WiredToggle extends LitElement {
         display: inline-block;
         cursor: pointer;
         position: relative;
+        outline: none;
       }
     
       :host(.pending) {
@@ -43,6 +44,10 @@ export class WiredToggle extends LitElement {
     
       :host(.disabled) svg {
         background: rgba(0, 0, 0, 0.07);
+      }
+
+      :host(:focus) path {
+        stroke-width: 1.5;
       }
     
       svg {
@@ -63,7 +68,7 @@ export class WiredToggle extends LitElement {
         fill: var(--wired-toggle-on-color, rgb(63, 81, 181));
       }
     </style>
-    <div on-click="${() => this._toggleCheck()}">
+    <div @click="${() => this._toggleCheck()}">
       <svg id="svg"></svg>
     </div>
     `;
@@ -99,7 +104,7 @@ export class WiredToggle extends LitElement {
     this.setAttribute('aria-checked', this.checked);
   }
 
-  _didRender() {
+  updated() {
     const svg = this.shadowRoot.getElementById('svg');
     this._clearNode(svg);
     const s = { width: (this.height || 32) * 2.5, height: this.height || 32 };

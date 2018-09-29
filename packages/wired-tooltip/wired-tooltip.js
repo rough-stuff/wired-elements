@@ -4,10 +4,10 @@ import { wired } from 'wired-lib/wired-lib.js';
 export class WiredTooltip extends LitElement {
   static get properties() {
     return {
-      for: String,
-      position: String,
-      text: String,
-      offset: Number
+      for: { type: String },
+      position: { type: String },
+      text: { type: String },
+      offset: { type: Number }
     };
   }
 
@@ -20,13 +20,7 @@ export class WiredTooltip extends LitElement {
     this.position = 'bottom';
   }
 
-  _render({ text }, changedProps) {
-    if (changedProps && (changedProps.position || changedProps.text)) {
-      this._dirty = true;
-    }
-    if ((!this._target) || (changedProps && changedProps.for)) {
-      this._refreshTarget();
-    }
+  render() {
     return html`
     <style>
       :host {
@@ -72,7 +66,7 @@ export class WiredTooltip extends LitElement {
       <div class="overlay">
         <svg id="svg"></svg>
       </div>
-      <span style="position: relative;">${text}</span>
+      <span style="position: relative;">${this.text}</span>
     </div>
     `;
   }
@@ -188,11 +182,17 @@ export class WiredTooltip extends LitElement {
     this._dirty = false;
   }
 
-  _firstRendered() {
+  firstUpdated() {
     this._layout();
   }
 
-  _didRender() {
+  updated(changedProps) {
+    if (changedProps && (changedProps.position || changedProps.text)) {
+      this._dirty = true;
+    }
+    if ((!this._target) || (changedProps && changedProps.for)) {
+      this._refreshTarget();
+    }
     if (this._dirty) {
       this._layout();
     }

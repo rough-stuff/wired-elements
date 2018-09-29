@@ -6,9 +6,9 @@ import 'wired-item';
 export class WiredCombo extends LitElement {
   static get properties() {
     return {
-      value: Object,
-      selected: String,
-      disabled: Boolean
+      value: { type: Object },
+      selected: { type: String },
+      disabled: { type: Boolean }
     };
   }
 
@@ -19,13 +19,13 @@ export class WiredCombo extends LitElement {
     this._itemNodes = [];
   }
 
-  _createRoot() {
-    const root = this.attachShadow({ mode: 'open' });
+  createRenderRoot() {
+    const root = super.createRenderRoot();
     this.classList.add('pending');
     return root;
   }
 
-  _render({ value }) {
+  render() {
     this._onDisableChange();
     return html`
     <style>
@@ -33,6 +33,7 @@ export class WiredCombo extends LitElement {
         display: inline-block;
         font-family: inherit;
         position: relative;
+        outline: none;
       }
     
       :host(.disabled) {
@@ -44,6 +45,10 @@ export class WiredCombo extends LitElement {
     
       :host(.pending) {
         opacity: 0;
+      }
+
+      :host(:focus) path {
+        stroke-width: 1.5;
       }
     
       #container {
@@ -106,16 +111,16 @@ export class WiredCombo extends LitElement {
         background: var(--wired-combo-item-hover-bg, rgba(0, 0, 0, 0.1));
       }
     </style>
-    <div id="container" on-click="${(e) => this._onCombo(e)}">
+    <div id="container" @click="${(e) => this._onCombo(e)}">
       <div id="textPanel" class="inline">
-        <span>${value && value.text}</span>
+        <span>${this.value && this.value.text}</span>
       </div>
       <div id="dropPanel" class="inline"></div>
       <div class="overlay">
         <svg id="svg"></svg>
       </div>
     </div>
-    <wired-card id="card" role="listbox" on-item-click="${(e) => this._onItemClick(e)}" style="display: none;">
+    <wired-card id="card" role="listbox" @item-click="${(e) => this._onItemClick(e)}" style="display: none;">
       <slot id="slot"></slot>
     </wired-card>
     `;
@@ -158,11 +163,11 @@ export class WiredCombo extends LitElement {
     }
   }
 
-  _firstRendered() {
+  firstUpdated() {
     this._refreshSelection();
   }
 
-  _didRender() {
+  updated() {
     const svg = this.shadowRoot.getElementById('svg');
     this._clearNode(svg);
     const s = this.shadowRoot.getElementById('container').getBoundingClientRect();
@@ -232,7 +237,7 @@ export class WiredCombo extends LitElement {
     card.style.display = showing ? "" : "none";
     if (showing) {
       setTimeout(() => {
-        card.requestRender();
+        card.requestUpdate();
       }, 10);
     }
     this.setAttribute('aria-expanded', this._cardShowing);

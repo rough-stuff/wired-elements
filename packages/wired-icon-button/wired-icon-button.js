@@ -5,7 +5,7 @@ import '@material/mwc-icon';
 export class WiredIconButton extends LitElement {
   static get properties() {
     return {
-      disabled: Boolean
+      disabled: { type: Boolean }
     };
   }
 
@@ -14,13 +14,13 @@ export class WiredIconButton extends LitElement {
     this.disabled = false;
   }
 
-  _createRoot() {
-    const root = this.attachShadow({ mode: 'open' });
+  createRenderRoot() {
+    const root = super.createRenderRoot();
     this.classList.add('pending');
     return root;
   }
 
-  _render() {
+  render() {
     this._onDisableChange();
     return html`
     <style>
@@ -47,6 +47,7 @@ export class WiredIconButton extends LitElement {
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
         -webkit-tap-highlight-color: transparent;
         box-sizing: border-box !important;
+        outline: none;
       }
     
       :host(.pending) {
@@ -63,6 +64,10 @@ export class WiredIconButton extends LitElement {
     
       :host(:active) path {
         transform: scale(0.96) translate(2%, 2%);
+      }
+
+      :host(:focus) path {
+        stroke-width: 1.5;
       }
     
       .overlay {
@@ -123,7 +128,7 @@ export class WiredIconButton extends LitElement {
     }
   }
 
-  _didRender() {
+  updated() {
     const svg = this.shadowRoot.getElementById('svg');
     this._clearNode(svg);
     const s = this.getBoundingClientRect();
@@ -150,7 +155,7 @@ export class WiredIconButton extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    setTimeout(() => this._didRender());
+    setTimeout(() => this.updated());
   }
 }
 customElements.define('wired-icon-button', WiredIconButton);

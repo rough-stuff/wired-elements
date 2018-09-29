@@ -1,6 +1,6 @@
 {
   "name": "wired-icon-button",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Round hand-drawn sketchy button with an icon placed at the cente.",
   "main": "wired-icon-button.js",
   "scripts": {
@@ -23,8 +23,8 @@
   "author": "Preet Shihn <preetshihn@gmail.com> (https://twitter.com/preetster)",
   "license": "MIT",
   "dependencies": {
-    "@material/mwc-icon": "^0.1.1",
-    "@polymer/lit-element": "^0.5.2",
+    "@material/mwc-icon": "^0.2.1",
+    "@polymer/lit-element": "^0.6.1",
     "wired-lib": "^0.6.0"
   }
 }

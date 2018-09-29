@@ -1,6 +1,6 @@
 {
   "name": "wired-toggle",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Hand-drawn sketchy toggle button - web component",
   "main": "wired-toggle.js",
   "scripts": {
@@ -26,7 +26,7 @@
   "author": "Preet Shihn <preetshihn@gmail.com> (https://twitter.com/preetster)",
   "license": "MIT",
   "dependencies": {
-    "@polymer/lit-element": "^0.5.2",
+    "@polymer/lit-element": "^0.6.1",
     "wired-lib": "^0.6.0"
   }
 }

@@ -4,10 +4,10 @@ import { wired } from 'wired-lib/wired-lib.js';
 export class WiredProgress extends LitElement {
   static get properties() {
     return {
-      value: Number,
-      min: Number,
-      max: Number,
-      percentage: Boolean
+      value: { type: Number },
+      min: { type: Number },
+      max: { type: Number },
+      percentage: { type: Boolean }
     };
   }
 
@@ -19,13 +19,13 @@ export class WiredProgress extends LitElement {
     this.value = 0;
   }
 
-  _createRoot() {
-    const root = this.attachShadow({ mode: 'open' });
+  createRenderRoot() {
+    const root = super.createRenderRoot();
     this.classList.add('pending');
     return root;
   }
 
-  _render() {
+  render() {
     return html`
     <style>
       :host {
@@ -104,7 +104,7 @@ export class WiredProgress extends LitElement {
     }
   }
 
-  _didRender() {
+  updated() {
     const svg = this.shadowRoot.getElementById('svg');
     this._clearNode(svg);
     var s = this.getBoundingClientRect();

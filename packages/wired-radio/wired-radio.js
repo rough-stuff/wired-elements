@@ -4,11 +4,11 @@ import { wired } from 'wired-lib/wired-lib.js';
 export class WiredRadio extends LitElement {
   static get properties() {
     return {
-      checked: Boolean,
-      name: String,
-      text: String,
-      iconsize: Number,
-      disabled: Boolean
+      checked: { type: Boolean },
+      name: { type: String },
+      text: { type: String },
+      iconsize: { type: Number },
+      disabled: { type: Boolean }
     };
   }
 
@@ -19,13 +19,13 @@ export class WiredRadio extends LitElement {
     this.iconsize = 24;
   }
 
-  _createRoot() {
-    const root = this.attachShadow({ mode: 'open' });
+  createRenderRoot() {
+    const root = super.createRenderRoot();
     this.classList.add('pending');
     return root;
   }
 
-  _render({ text }) {
+  render() {
     this._onDisableChange();
     return html`
     <style>
@@ -47,9 +47,9 @@ export class WiredRadio extends LitElement {
         cursor: default;
         pointer-events: none;
       }
-    
-      :host(:focus) #checkPanel {
-        outline: 3px solid var(--wired-focused-background, rgba(0, 0, 255, 0.2));
+
+      :host(:focus) path {
+        stroke-width: 1.5;
       }
     
       #container {
@@ -80,11 +80,11 @@ export class WiredRadio extends LitElement {
         fill: var(--wired-radio-icon-color, currentColor);
       }
     </style>
-    <div id="container" on-click="${() => this._toggleCheck()}">
+    <div id="container" @click="${() => this._toggleCheck()}">
       <div id="checkPanel" class="inline">
         <svg id="svg" width="0" height="0"></svg>
       </div>
-      <div class="inline">${text}</div>
+      <div class="inline">${this.text}</div>
     </div>
     `;
   }
@@ -120,7 +120,7 @@ export class WiredRadio extends LitElement {
     }
   }
 
-  _didRender() {
+  updated() {
     const svg = this.shadowRoot.getElementById('svg');
     this._clearNode(svg);
     this._dot = null;
