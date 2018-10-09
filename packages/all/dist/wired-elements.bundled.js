@@ -14,6 +14,56 @@ var WiredElements = (function (exports) {
      * subject to an additional IP rights grant found at
      * http://polymer.github.io/PATENTS.txt
      */
+    const directives = new WeakMap();
+    const isDirective = (o) => typeof o === 'function' && directives.has(o);
+
+    /**
+     * @license
+     * Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
+     * This code may only be used under the BSD style license found at
+     * http://polymer.github.io/LICENSE.txt
+     * The complete set of authors may be found at
+     * http://polymer.github.io/AUTHORS.txt
+     * The complete set of contributors may be found at
+     * http://polymer.github.io/CONTRIBUTORS.txt
+     * Code distributed by Google as part of the polymer project is also
+     * subject to an additional IP rights grant found at
+     * http://polymer.github.io/PATENTS.txt
+     */
+    const isCEPolyfill = window.customElements !== undefined &&
+        window.customElements.polyfillWrapFlushCallback !== undefined;
+    /**
+     * Removes nodes, starting from `startNode` (inclusive) to `endNode`
+     * (exclusive), from `container`.
+     */
+    const removeNodes = (container, startNode, endNode = null) => {
+        let node = startNode;
+        while (node !== endNode) {
+            const n = node.nextSibling;
+            container.removeChild(node);
+            node = n;
+        }
+    };
+
+    /**
+     * A sentinel value that signals that a value was handled by a directive and
+     * should not be written to the DOM.
+     */
+    const noChange = {};
+
+    /**
+     * @license
+     * Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
+     * This code may only be used under the BSD style license found at
+     * http://polymer.github.io/LICENSE.txt
+     * The complete set of authors may be found at
+     * http://polymer.github.io/AUTHORS.txt
+     * The complete set of contributors may be found at
+     * http://polymer.github.io/CONTRIBUTORS.txt
+     * Code distributed by Google as part of the polymer project is also
+     * subject to an additional IP rights grant found at
+     * http://polymer.github.io/PATENTS.txt
+     */
     /**
      * An expression marker with embedded unique key to avoid collision with
      * possible text in templates.
@@ -220,190 +270,16 @@ var WiredElements = (function (exports) {
      * subject to an additional IP rights grant found at
      * http://polymer.github.io/PATENTS.txt
      */
-    const walkerNodeFilter = NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_COMMENT | NodeFilter.SHOW_TEXT;
-    /**
-     * Removes the list of nodes from a Template safely. In addition to removing
-     * nodes from the Template, the Template part indices are updated to match
-     * the mutated Template DOM.
-     *
-     * As the template is walked the removal state is tracked and
-     * part indices are adjusted as needed.
-     *
-     * div
-     *   div#1 (remove) <-- start removing (removing node is div#1)
-     *     div
-     *       div#2 (remove)  <-- continue removing (removing node is still div#1)
-     *         div
-     * div <-- stop removing since previous sibling is the removing node (div#1,
-     * removed 4 nodes)
-     */
-    function removeNodesFromTemplate(template, nodesToRemove) {
-        const { element: { content }, parts } = template;
-        const walker = document.createTreeWalker(content, walkerNodeFilter, null, false);
-        let partIndex = nextActiveIndexInTemplateParts(parts);
-        let part = parts[partIndex];
-        let nodeIndex = -1;
-        let removeCount = 0;
-        const nodesToRemoveInTemplate = [];
-        let currentRemovingNode = null;
-        while (walker.nextNode()) {
-            nodeIndex++;
-            const node = walker.currentNode;
-            // End removal if stepped past the removing node
-            if (node.previousSibling === currentRemovingNode) {
-                currentRemovingNode = null;
-            }
-            // A node to remove was found in the template
-            if (nodesToRemove.has(node)) {
-                nodesToRemoveInTemplate.push(node);
-                // Track node we're removing
-                if (currentRemovingNode === null) {
-                    currentRemovingNode = node;
-                }
-            }
-            // When removing, increment count by which to adjust subsequent part indices
-            if (currentRemovingNode !== null) {
-                removeCount++;
-            }
-            while (part !== undefined && part.index === nodeIndex) {
-                // If part is in a removed node deactivate it by setting index to -1 or
-                // adjust the index as needed.
-                part.index = currentRemovingNode !== null ? -1 : part.index - removeCount;
-                // go to the next active part.
-                partIndex = nextActiveIndexInTemplateParts(parts, partIndex);
-                part = parts[partIndex];
-            }
-        }
-        nodesToRemoveInTemplate.forEach((n) => n.parentNode.removeChild(n));
-    }
-    const countNodes = (node) => {
-        let count = (node.nodeType === Node.DOCUMENT_FRAGMENT_NODE) ? 0 : 1;
-        const walker = document.createTreeWalker(node, walkerNodeFilter, null, false);
-        while (walker.nextNode()) {
-            count++;
-        }
-        return count;
-    };
-    const nextActiveIndexInTemplateParts = (parts, startIndex = -1) => {
-        for (let i = startIndex + 1; i < parts.length; i++) {
-            const part = parts[i];
-            if (isTemplatePartActive(part)) {
-                return i;
-            }
-        }
-        return -1;
-    };
-    /**
-     * Inserts the given node into the Template, optionally before the given
-     * refNode. In addition to inserting the node into the Template, the Template
-     * part indices are updated to match the mutated Template DOM.
-     */
-    function insertNodeIntoTemplate(template, node, refNode = null) {
-        const { element: { content }, parts } = template;
-        // If there's no refNode, then put node at end of template.
-        // No part indices need to be shifted in this case.
-        if (refNode === null || refNode === undefined) {
-            content.appendChild(node);
-            return;
-        }
-        const walker = document.createTreeWalker(content, walkerNodeFilter, null, false);
-        let partIndex = nextActiveIndexInTemplateParts(parts);
-        let insertCount = 0;
-        let walkerIndex = -1;
-        while (walker.nextNode()) {
-            walkerIndex++;
-            const walkerNode = walker.currentNode;
-            if (walkerNode === refNode) {
-                insertCount = countNodes(node);
-                refNode.parentNode.insertBefore(node, refNode);
-            }
-            while (partIndex !== -1 && parts[partIndex].index === walkerIndex) {
-                // If we've inserted the node, simply adjust all subsequent parts
-                if (insertCount > 0) {
-                    while (partIndex !== -1) {
-                        parts[partIndex].index += insertCount;
-                        partIndex = nextActiveIndexInTemplateParts(parts, partIndex);
-                    }
-                    return;
-                }
-                partIndex = nextActiveIndexInTemplateParts(parts, partIndex);
-            }
-        }
-    }
-
-    /**
-     * @license
-     * Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
-     * This code may only be used under the BSD style license found at
-     * http://polymer.github.io/LICENSE.txt
-     * The complete set of authors may be found at
-     * http://polymer.github.io/AUTHORS.txt
-     * The complete set of contributors may be found at
-     * http://polymer.github.io/CONTRIBUTORS.txt
-     * Code distributed by Google as part of the polymer project is also
-     * subject to an additional IP rights grant found at
-     * http://polymer.github.io/PATENTS.txt
-     */
-    const isCEPolyfill = window.customElements !== undefined &&
-        window.customElements.polyfillWrapFlushCallback !== undefined;
-    /**
-     * Removes nodes, starting from `startNode` (inclusive) to `endNode`
-     * (exclusive), from `container`.
-     */
-    const removeNodes = (container, startNode, endNode = null) => {
-        let node = startNode;
-        while (node !== endNode) {
-            const n = node.nextSibling;
-            container.removeChild(node);
-            node = n;
-        }
-    };
-
-    /**
-     * @license
-     * Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
-     * This code may only be used under the BSD style license found at
-     * http://polymer.github.io/LICENSE.txt
-     * The complete set of authors may be found at
-     * http://polymer.github.io/AUTHORS.txt
-     * The complete set of contributors may be found at
-     * http://polymer.github.io/CONTRIBUTORS.txt
-     * Code distributed by Google as part of the polymer project is also
-     * subject to an additional IP rights grant found at
-     * http://polymer.github.io/PATENTS.txt
-     */
-    const directives = new WeakMap();
-    const isDirective = (o) => typeof o === 'function' && directives.has(o);
-
-    /**
-     * A sentinel value that signals that a value was handled by a directive and
-     * should not be written to the DOM.
-     */
-    const noChange = {};
-
-    /**
-     * @license
-     * Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
-     * This code may only be used under the BSD style license found at
-     * http://polymer.github.io/LICENSE.txt
-     * The complete set of authors may be found at
-     * http://polymer.github.io/AUTHORS.txt
-     * The complete set of contributors may be found at
-     * http://polymer.github.io/CONTRIBUTORS.txt
-     * Code distributed by Google as part of the polymer project is also
-     * subject to an additional IP rights grant found at
-     * http://polymer.github.io/PATENTS.txt
-     */
     /**
      * An instance of a `Template` that can be attached to the DOM and updated
      * with new values.
      */
     class TemplateInstance {
-        constructor(template, processor, getTemplate) {
+        constructor(template, processor, options) {
             this._parts = [];
             this.template = template;
             this.processor = processor;
-            this._getTemplate = getTemplate;
+            this.options = options;
         }
         update(values) {
             let i = 0;
@@ -451,12 +327,12 @@ var WiredElements = (function (exports) {
                     }
                     else if (nodeIndex === part.index) {
                         if (part.type === 'node') {
-                            const part = this.processor.handleTextExpression(this._getTemplate);
+                            const part = this.processor.handleTextExpression(this.options);
                             part.insertAfterNode(node);
                             this._parts.push(part);
                         }
                         else {
-                            this._parts.push(...this.processor.handleAttributeExpressions(node, part.name, part.strings));
+                            this._parts.push(...this.processor.handleAttributeExpressions(node, part.name, part.strings, this.options));
                         }
                         partIndex++;
                     }
@@ -503,7 +379,7 @@ var WiredElements = (function (exports) {
             this.processor = processor;
         }
         /**
-         * Returns a string of HTML used to create a <template> element.
+         * Returns a string of HTML used to create a `<template>` element.
          */
         getHTML() {
             const l = this.strings.length - 1;
@@ -634,10 +510,10 @@ var WiredElements = (function (exports) {
         }
     }
     class NodePart {
-        constructor(templateFactory) {
+        constructor(options) {
             this.value = undefined;
             this._pendingValue = undefined;
-            this.templateFactory = templateFactory;
+            this.options = options;
         }
         /**
          * Inserts this part into a container.
@@ -740,15 +616,16 @@ var WiredElements = (function (exports) {
             this.value = value;
         }
         _commitTemplateResult(value) {
-            const template = this.templateFactory(value);
+            const template = this.options.templateFactory(value);
             if (this.value && this.value.template === template) {
                 this.value.update(value.values);
             }
             else {
                 // Make sure we propagate the template processor from the TemplateResult
-                // so that we use it's syntax extension, etc. The template factory comes
-                // from the render function so that it can control caching.
-                const instance = new TemplateInstance(template, value.processor, this.templateFactory);
+                // so that we use its syntax extension, etc. The template factory comes
+                // from the render function options so that it can control template
+                // caching and preprocessing.
+                const instance = new TemplateInstance(template, value.processor, this.options);
                 const fragment = instance._clone();
                 instance.update(value.values);
                 this._commitNode(fragment);
@@ -779,7 +656,7 @@ var WiredElements = (function (exports) {
                 itemPart = itemParts[partIndex];
                 // If no existing part, create a new one
                 if (itemPart === undefined) {
-                    itemPart = new NodePart(this.templateFactory);
+                    itemPart = new NodePart(this.options);
                     itemParts.push(itemPart);
                     if (partIndex === 0) {
                         itemPart.appendIntoPart(this);
@@ -887,12 +764,30 @@ var WiredElements = (function (exports) {
     }
     class PropertyPart extends AttributePart {
     }
+    // Detect event listener options support. If the `capture` property is read
+    // from the options object, then options are supported. If not, then the thrid
+    // argument to add/removeEventListener is interpreted as the boolean capture
+    // value so we should only pass the `capture` property.
+    let eventOptionsSupported = false;
+    try {
+        const options = {
+            get capture() {
+                eventOptionsSupported = true;
+                return false;
+            }
+        };
+        window.addEventListener('test', options, options);
+        window.removeEventListener('test', options, options);
+    }
+    catch (_e) {
+    }
     class EventPart {
-        constructor(element, eventName) {
+        constructor(element, eventName, eventContext) {
             this.value = undefined;
             this._pendingValue = undefined;
             this.element = element;
             this.eventName = eventName;
+            this.eventContext = eventContext;
         }
         setValue(value) {
             this._pendingValue = value;
@@ -906,26 +801,91 @@ var WiredElements = (function (exports) {
             if (this._pendingValue === noChange) {
                 return;
             }
-            if ((this._pendingValue == null) !== (this.value == null)) {
-                if (this._pendingValue == null) {
-                    this.element.removeEventListener(this.eventName, this);
-                }
-                else {
-                    this.element.addEventListener(this.eventName, this);
-                }
+            const newListener = this._pendingValue;
+            const oldListener = this.value;
+            const shouldRemoveListener = newListener == null ||
+                oldListener != null &&
+                    (newListener.capture !== oldListener.capture ||
+                        newListener.once !== oldListener.once ||
+                        newListener.passive !== oldListener.passive);
+            const shouldAddListener = newListener != null && (oldListener == null || shouldRemoveListener);
+            if (shouldRemoveListener) {
+                this.element.removeEventListener(this.eventName, this, this._options);
             }
-            this.value = this._pendingValue;
+            this._options = getOptions(newListener);
+            if (shouldAddListener) {
+                this.element.addEventListener(this.eventName, this, this._options);
+            }
+            this.value = newListener;
             this._pendingValue = noChange;
         }
         handleEvent(event) {
-            if (typeof this.value === 'function') {
-                this.value.call(this.element, event);
-            }
-            else if (typeof this.value.handleEvent === 'function') {
-                this.value.handleEvent(event);
-            }
+            const listener = (typeof this.value === 'function') ?
+                this.value :
+                (typeof this.value.handleEvent === 'function') ?
+                    this.value.handleEvent :
+                    () => null;
+            listener.call(this.eventContext || this.element, event);
         }
     }
+    // We copy options because of the inconsistent behavior of browsers when reading
+    // the third argument of add/removeEventListener. IE11 doesn't support options
+    // at all. Chrome 41 only reads `capture` if the argument is an object.
+    const getOptions = (o) => o &&
+        (eventOptionsSupported ?
+            { capture: o.capture, passive: o.passive, once: o.once } :
+            o.capture);
+
+    /**
+     * @license
+     * Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
+     * This code may only be used under the BSD style license found at
+     * http://polymer.github.io/LICENSE.txt
+     * The complete set of authors may be found at
+     * http://polymer.github.io/AUTHORS.txt
+     * The complete set of contributors may be found at
+     * http://polymer.github.io/CONTRIBUTORS.txt
+     * Code distributed by Google as part of the polymer project is also
+     * subject to an additional IP rights grant found at
+     * http://polymer.github.io/PATENTS.txt
+     */
+    /**
+     * Creates Parts when a template is instantiated.
+     */
+    class DefaultTemplateProcessor {
+        /**
+         * Create parts for an attribute-position binding, given the event, attribute
+         * name, and string literals.
+         *
+         * @param element The element containing the binding
+         * @param name  The attribute name
+         * @param strings The string literals. There are always at least two strings,
+         *   event for fully-controlled bindings with a single expression.
+         */
+        handleAttributeExpressions(element, name, strings, options) {
+            const prefix = name[0];
+            if (prefix === '.') {
+                const comitter = new PropertyCommitter(element, name.slice(1), strings);
+                return comitter.parts;
+            }
+            if (prefix === '@') {
+                return [new EventPart(element, name.slice(1), options.eventContext)];
+            }
+            if (prefix === '?') {
+                return [new BooleanAttributePart(element, name.slice(1), strings)];
+            }
+            const comitter = new AttributeCommitter(element, name, strings);
+            return comitter.parts;
+        }
+        /**
+         * Create parts for a text-position binding.
+         * @param templateFactory
+         */
+        handleTextExpression(options) {
+            return new NodePart(options);
+        }
+    }
+    const defaultTemplateProcessor = new DefaultTemplateProcessor();
 
     /**
      * @license
@@ -987,70 +947,20 @@ var WiredElements = (function (exports) {
      * @param container A DOM parent to render to. The entire contents are either
      *     replaced, or efficiently updated if the same result type was previous
      *     rendered there.
-     * @param templateFactory a function to create a Template or retreive one from
-     *     cache.
+     * @param options RenderOptions for the entire render tree rendered to this
+     *     container. Render options must *not* change between renders to the same
+     *     container, as those changes will not effect previously rendered DOM.
      */
-    function render(result, container, templateFactory$$1 = templateFactory) {
+    const render = (result, container, options) => {
         let part = parts.get(container);
         if (part === undefined) {
             removeNodes(container, container.firstChild);
-            parts.set(container, part = new NodePart(templateFactory$$1));
+            parts.set(container, part = new NodePart(Object.assign({ templateFactory }, options)));
             part.appendInto(container);
         }
         part.setValue(result);
         part.commit();
-    }
-
-    /**
-     * @license
-     * Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
-     * This code may only be used under the BSD style license found at
-     * http://polymer.github.io/LICENSE.txt
-     * The complete set of authors may be found at
-     * http://polymer.github.io/AUTHORS.txt
-     * The complete set of contributors may be found at
-     * http://polymer.github.io/CONTRIBUTORS.txt
-     * Code distributed by Google as part of the polymer project is also
-     * subject to an additional IP rights grant found at
-     * http://polymer.github.io/PATENTS.txt
-     */
-    /**
-     * Creates Parts when a template is instantiated.
-     */
-    class DefaultTemplateProcessor {
-        /**
-         * Create parts for an attribute-position binding, given the event, attribute
-         * name, and string literals.
-         *
-         * @param element The element containing the binding
-         * @param name  The attribute name
-         * @param strings The string literals. There are always at least two strings,
-         *   event for fully-controlled bindings with a single expression.
-         */
-        handleAttributeExpressions(element, name, strings) {
-            const prefix = name[0];
-            if (prefix === '.') {
-                const comitter = new PropertyCommitter(element, name.slice(1), strings);
-                return comitter.parts;
-            }
-            if (prefix === '@') {
-                return [new EventPart(element, name.slice(1))];
-            }
-            if (prefix === '?') {
-                return [new BooleanAttributePart(element, name.slice(1), strings)];
-            }
-            const comitter = new AttributeCommitter(element, name, strings);
-            return comitter.parts;
-        }
-        /**
-         * Create parts for a text-position binding.
-         * @param templateFactory
-         */
-        handleTextExpression(templateFactory) {
-            return new NodePart(templateFactory);
-        }
-    }
-    const defaultTemplateProcessor = new DefaultTemplateProcessor();
+    };
 
     /**
      * @license
@@ -1070,6 +980,130 @@ var WiredElements = (function (exports) {
      * render to and update a container.
      */
     const html = (strings, ...values) => new TemplateResult(strings, values, 'html', defaultTemplateProcessor);
+
+    /**
+     * @license
+     * Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
+     * This code may only be used under the BSD style license found at
+     * http://polymer.github.io/LICENSE.txt
+     * The complete set of authors may be found at
+     * http://polymer.github.io/AUTHORS.txt
+     * The complete set of contributors may be found at
+     * http://polymer.github.io/CONTRIBUTORS.txt
+     * Code distributed by Google as part of the polymer project is also
+     * subject to an additional IP rights grant found at
+     * http://polymer.github.io/PATENTS.txt
+     */
+    const walkerNodeFilter = NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_COMMENT | NodeFilter.SHOW_TEXT;
+    /**
+     * Removes the list of nodes from a Template safely. In addition to removing
+     * nodes from the Template, the Template part indices are updated to match
+     * the mutated Template DOM.
+     *
+     * As the template is walked the removal state is tracked and
+     * part indices are adjusted as needed.
+     *
+     * div
+     *   div#1 (remove) <-- start removing (removing node is div#1)
+     *     div
+     *       div#2 (remove)  <-- continue removing (removing node is still div#1)
+     *         div
+     * div <-- stop removing since previous sibling is the removing node (div#1,
+     * removed 4 nodes)
+     */
+    function removeNodesFromTemplate(template, nodesToRemove) {
+        const { element: { content }, parts } = template;
+        const walker = document.createTreeWalker(content, walkerNodeFilter, null, false);
+        let partIndex = nextActiveIndexInTemplateParts(parts);
+        let part = parts[partIndex];
+        let nodeIndex = -1;
+        let removeCount = 0;
+        const nodesToRemoveInTemplate = [];
+        let currentRemovingNode = null;
+        while (walker.nextNode()) {
+            nodeIndex++;
+            const node = walker.currentNode;
+            // End removal if stepped past the removing node
+            if (node.previousSibling === currentRemovingNode) {
+                currentRemovingNode = null;
+            }
+            // A node to remove was found in the template
+            if (nodesToRemove.has(node)) {
+                nodesToRemoveInTemplate.push(node);
+                // Track node we're removing
+                if (currentRemovingNode === null) {
+                    currentRemovingNode = node;
+                }
+            }
+            // When removing, increment count by which to adjust subsequent part indices
+            if (currentRemovingNode !== null) {
+                removeCount++;
+            }
+            while (part !== undefined && part.index === nodeIndex) {
+                // If part is in a removed node deactivate it by setting index to -1 or
+                // adjust the index as needed.
+                part.index = currentRemovingNode !== null ? -1 : part.index - removeCount;
+                // go to the next active part.
+                partIndex = nextActiveIndexInTemplateParts(parts, partIndex);
+                part = parts[partIndex];
+            }
+        }
+        nodesToRemoveInTemplate.forEach((n) => n.parentNode.removeChild(n));
+    }
+    const countNodes = (node) => {
+        let count = (node.nodeType === Node.DOCUMENT_FRAGMENT_NODE) ? 0 : 1;
+        const walker = document.createTreeWalker(node, walkerNodeFilter, null, false);
+        while (walker.nextNode()) {
+            count++;
+        }
+        return count;
+    };
+    const nextActiveIndexInTemplateParts = (parts, startIndex = -1) => {
+        for (let i = startIndex + 1; i < parts.length; i++) {
+            const part = parts[i];
+            if (isTemplatePartActive(part)) {
+                return i;
+            }
+        }
+        return -1;
+    };
+    /**
+     * Inserts the given node into the Template, optionally before the given
+     * refNode. In addition to inserting the node into the Template, the Template
+     * part indices are updated to match the mutated Template DOM.
+     */
+    function insertNodeIntoTemplate(template, node, refNode = null) {
+        const { element: { content }, parts } = template;
+        // If there's no refNode, then put node at end of template.
+        // No part indices need to be shifted in this case.
+        if (refNode === null || refNode === undefined) {
+            content.appendChild(node);
+            return;
+        }
+        const walker = document.createTreeWalker(content, walkerNodeFilter, null, false);
+        let partIndex = nextActiveIndexInTemplateParts(parts);
+        let insertCount = 0;
+        let walkerIndex = -1;
+        while (walker.nextNode()) {
+            walkerIndex++;
+            const walkerNode = walker.currentNode;
+            if (walkerNode === refNode) {
+                insertCount = countNodes(node);
+                refNode.parentNode.insertBefore(node, refNode);
+            }
+            while (partIndex !== -1 && parts[partIndex].index === walkerIndex) {
+                // If we've inserted the node, simply adjust all subsequent parts
+                if (insertCount > 0) {
+                    while (partIndex !== -1) {
+                        parts[partIndex].index += insertCount;
+                        partIndex = nextActiveIndexInTemplateParts(parts, partIndex);
+                    }
+                    return;
+                }
+                partIndex = nextActiveIndexInTemplateParts(parts, partIndex);
+            }
+        }
+    }
 
     /**
      * @license
@@ -1122,7 +1156,7 @@ var WiredElements = (function (exports) {
     /**
      * Removes all style elements from Templates for the given scopeName.
      */
-    function removeStylesFromLitTemplates(scopeName) {
+    const removeStylesFromLitTemplates = (scopeName) => {
         TEMPLATE_TYPES.forEach((type) => {
             const templates = templateCaches.get(getTemplateCacheKey(type, scopeName));
             if (templates !== undefined) {
@@ -1137,7 +1171,7 @@ var WiredElements = (function (exports) {
                 });
             }
         });
-    }
+    };
     const shadyRenderSet = new Set();
     /**
      * For the given scope name, ensures that ShadyCSS style scoping is performed.
@@ -1200,9 +1234,10 @@ var WiredElements = (function (exports) {
             removeNodesFromTemplate(template, removes);
         }
     };
-    function render$1(result, container, scopeName) {
+    const render$1 = (result, container, options) => {
+        const scopeName = options.scopeName;
         const hasRendered = parts.has(container);
-        render(result, container, shadyTemplateFactory(scopeName));
+        render(result, container, Object.assign({ templateFactory: shadyTemplateFactory(scopeName) }, options));
         // When rendering a TemplateResult, scope the template with ShadyCSS
         if (container instanceof ShadowRoot && compatibleShadyCSSVersion &&
             result instanceof TemplateResult) {
@@ -1217,7 +1252,7 @@ var WiredElements = (function (exports) {
                 window.ShadyCSS.styleElement(container.host);
             }
         }
-    }
+    };
 
     /**
      * @license
@@ -1478,6 +1513,12 @@ var WiredElements = (function (exports) {
             }
         }
         /**
+         * Allows for `super.disconnectedCallback()` in extensions while
+         * reserving the possibility of making non-breaking feature additions
+         * when disconnecting at some point in the future.
+         */
+        disconnectedCallback() { }
+        /**
          * Synchronizes property values when attributes change.
          */
         attributeChangedCallback(name, old, value) {
@@ -1707,6 +1748,19 @@ var WiredElements = (function (exports) {
      * http://polymer.github.io/PATENTS.txt
      */
 
+    /**
+     * @license
+     * Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
+     * This code may only be used under the BSD style license found at
+     * http://polymer.github.io/LICENSE.txt
+     * The complete set of authors may be found at
+     * http://polymer.github.io/AUTHORS.txt
+     * The complete set of contributors may be found at
+     * http://polymer.github.io/CONTRIBUTORS.txt
+     * Code distributed by Google as part of the polymer project is also
+     * subject to an additional IP rights grant found at
+     * http://polymer.github.io/PATENTS.txt
+     */
     class LitElement extends UpdatingElement {
         /**
          * Updates the element. This method reflects property values to attributes
@@ -1716,14 +1770,19 @@ var WiredElements = (function (exports) {
          */
         update(changedProperties) {
             super.update(changedProperties);
-            if (typeof this.render === 'function') {
+            const templateResult = this.render();
+            if (templateResult instanceof TemplateResult) {
                 this.constructor
-                    .render(this.render(), this.renderRoot, this.localName);
-            }
-            else {
-                throw new Error('render() not implemented');
+                    .render(templateResult, this.renderRoot, { scopeName: this.localName, eventContext: this });
             }
         }
+        /**
+         * Invoked on each update to perform rendering tasks. This method must return
+         * a lit-html TemplateResult. Setting properties inside this method will *not*
+         * trigger the element to update.
+         * @returns {TemplateResult} Must return a lit-html TemplateResult.
+         */
+        render() { }
     }
     /**
      * Render method used to render the lit-html TemplateResult to the element's

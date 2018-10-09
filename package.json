@@ -42,7 +42,7 @@
     "rollup-plugin-node-resolve": "^3.4.0"
   },
   "dependencies": {
-    "@polymer/lit-element": "^0.6.1",
+    "@polymer/lit-element": "^0.6.2",
     "@polymer/polymer": "^3.0.5"
   }
 }

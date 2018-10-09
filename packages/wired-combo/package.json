@@ -29,7 +29,7 @@
   "author": "Preet Shihn <preetshihn@gmail.com> (https://twitter.com/preetster)",
   "license": "MIT",
   "dependencies": {
-    "@polymer/lit-element": "^0.6.1",
+    "@polymer/lit-element": "^0.6.2",
     "wired-card": "^0.8.1",
     "wired-item": "^0.8.1",
     "wired-lib": "^0.6.0"

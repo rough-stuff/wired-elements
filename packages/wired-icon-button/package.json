@@ -24,7 +24,7 @@
   "license": "MIT",
   "dependencies": {
     "@material/mwc-icon": "^0.2.1",
-    "@polymer/lit-element": "^0.6.1",
+    "@polymer/lit-element": "^0.6.2",
     "wired-lib": "^0.6.0"
   }
 }
