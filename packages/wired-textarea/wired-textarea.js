@@ -23,6 +23,12 @@ export class WiredTextarea extends LitElement {
     this.disabled = false;
     this.rows = 1;
     this.maxrows = 0;
+    this.placeholder = '';
+    this.autocomplete = '';
+    this.autofocus = false;
+    this.inputmode = '';
+    this.readonly = false;
+    this.required = false;
   }
 
   createRenderRoot() {
@@ -116,9 +122,8 @@ export class WiredTextarea extends LitElement {
     `;
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-    this.value = this.value || '';
+  firstUpdated() {
+    this.value = this.value || this.getAttribute('value') || '';
   }
 
   get textarea() {

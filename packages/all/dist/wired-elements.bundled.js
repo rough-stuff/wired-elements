@@ -3016,6 +3016,14 @@ var WiredElements = (function (exports) {
       constructor() {
         super();
         this.disabled = false;
+        this.placeholder = '';
+        this.type = 'text';
+        this.required = false;
+        this.autocomplete = '';
+        this.autofocus = false;
+        this.readonly = false;
+        this.autocorrect = '';
+        this.autocapitalize = '';
       }
 
       createRenderRoot() {
@@ -3130,6 +3138,10 @@ var WiredElements = (function (exports) {
         while (node.hasChildNodes()) {
           node.removeChild(node.lastChild);
         }
+      }
+
+      firstUpdated() {
+        this.value = this.value || this.getAttribute('value') || '';
       }
 
       updated() {
@@ -5489,6 +5501,12 @@ var WiredElements = (function (exports) {
         this.disabled = false;
         this.rows = 1;
         this.maxrows = 0;
+        this.placeholder = '';
+        this.autocomplete = '';
+        this.autofocus = false;
+        this.inputmode = '';
+        this.readonly = false;
+        this.required = false;
       }
 
       createRenderRoot() {
@@ -5582,9 +5600,8 @@ var WiredElements = (function (exports) {
     `;
       }
 
-      connectedCallback() {
-        super.connectedCallback();
-        this.value = this.value || '';
+      firstUpdated() {
+        this.value = this.value || this.getAttribute('value') || '';
       }
 
       get textarea() {

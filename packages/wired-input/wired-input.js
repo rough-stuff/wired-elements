@@ -26,6 +26,14 @@ export class WiredInput extends LitElement {
   constructor() {
     super();
     this.disabled = false;
+    this.placeholder = '';
+    this.type = 'text';
+    this.required = false;
+    this.autocomplete = '';
+    this.autofocus = false;
+    this.readonly = false;
+    this.autocorrect = '';
+    this.autocapitalize = '';
   }
 
   createRenderRoot() {
@@ -140,6 +148,10 @@ export class WiredInput extends LitElement {
     while (node.hasChildNodes()) {
       node.removeChild(node.lastChild);
     }
+  }
+
+  firstUpdated() {
+    this.value = this.value || this.getAttribute('value') || '';
   }
 
   updated() {
