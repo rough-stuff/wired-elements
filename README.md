@@ -45,8 +45,7 @@ Alternatively, load a bundled version from the [dist folder](https://github.com/
 ```html
 <wired-input placeholder="Enter name"></wired-input>
 <wired-button>Click Me</wired-button>
-```
-
+`
 Learn about web components [here](https://www.webcomponents.org/introduction).
 
 ### Demo
