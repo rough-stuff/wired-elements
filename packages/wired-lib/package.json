@@ -17,5 +17,8 @@
     "hand drawn"
   ],
   "author": "Preet Shihn <preetshihn@gmail.com> (https://twitter.com/preetster)",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "roughjs": "^3.0.0"
+  }
 }
