@@ -2,8 +2,11 @@
   "name": "wired-lib",
   "version": "0.6.0",
   "description": "Core sketchy rendering lib used by wired components",
-  "main": "wired-lib.js",
+  "main": "lib/wired-lib.js",
+  "module": "lib/wired-lib.js",
+  "types": "lib/wired-lib.d.ts",
   "scripts": {
+    "tsc": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,8 +20,5 @@
     "hand drawn"
   ],
   "author": "Preet Shihn <preetshihn@gmail.com> (https://twitter.com/preetster)",
-  "license": "MIT",
-  "dependencies": {
-    "roughjs": "^3.0.0"
-  }
+  "license": "MIT"
 }
