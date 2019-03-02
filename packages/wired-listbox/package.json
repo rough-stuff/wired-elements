@@ -2,8 +2,11 @@
   "name": "wired-listbox",
   "version": "0.8.1",
   "description": "A listbox control with Wired hand-drawn styling. The selected item is highlighted. Can be vertical (default) or horizontal.",
-  "main": "wired-listbox.js",
+  "main": "lib/wired-listbox.js",
+  "module": "lib/wired-listbox.js",
+  "types": "lib/wired-listbox.d.ts",
   "scripts": {
+    "tsc": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
