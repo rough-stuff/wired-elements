@@ -1,6 +1,6 @@
 {
   "name": "wired-lib",
-  "version": "0.9.0-0",
+  "version": "0.9.0-1",
   "description": "Core sketchy rendering lib used by wired components",
   "main": "lib/wired-lib.js",
   "module": "lib/wired-lib.js",
