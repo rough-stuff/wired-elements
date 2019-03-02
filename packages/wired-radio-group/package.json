@@ -2,8 +2,11 @@
   "name": "wired-radio-group",
   "version": "0.8.1",
   "description": "Allows user to select at most one radio button from a set. Works with wired-radio.",
-  "main": "wired-radio-group.js",
+  "main": "lib/wired-radio-group.js",
+  "module": "lib/wired-radio-group.js",
+  "types": "lib/wired-radio-group.d.ts",
   "scripts": {
+    "tsc": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
