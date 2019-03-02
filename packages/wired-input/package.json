@@ -2,8 +2,11 @@
   "name": "wired-input",
   "version": "0.8.2",
   "description": "Hand-drawn sketchy text input - web component",
-  "main": "wired-input.js",
+  "main": "lib/wired-input.js",
+  "module": "lib/wired-input.js",
+  "types": "lib/wired-input.d.ts",
   "scripts": {
+    "tsc": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
