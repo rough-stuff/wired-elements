@@ -2,8 +2,11 @@
   "name": "wired-radio",
   "version": "0.8.0",
   "description": "Hand-drawn sketchy radio button - web component",
-  "main": "wired-radio.js",
+  "main": "lib/wired-radio.js",
+  "module": "lib/wired-radio.js",
+  "types": "lib/wired-radio.d.ts",
   "scripts": {
+    "tsc": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
