@@ -2,8 +2,11 @@
   "name": "wired-progress",
   "version": "0.8.0",
   "description": "Hand-drawn sketchy progress bar - web component",
-  "main": "wired-progress.js",
+  "main": "lib/wired-progress.js",
+  "module": "lib/wired-progress.js",
+  "types": "lib/wired-progress.d.ts",
   "scripts": {
+    "tsc": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
