@@ -11,6 +11,7 @@
     "bootstrap": "npm install && npm run hoist",
     "hoist": "lerna bootstrap --hoist",
     "dev": "polyserve --npm --module-resolution=node",
+    "tsc": "lerna run tsc",
     "build": "rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -38,8 +39,8 @@
     "lerna": "^3.13.1",
     "polyserve": "^0.27.15",
     "rollup": "^0.66.6",
-    "rollup-plugin-babel-minify": "^6.2.0",
     "rollup-plugin-node-resolve": "^3.4.0",
+    "rollup-plugin-terser": "^4.0.1",
     "tslint": "^5.13.1",
     "typescript": "^3.3.3333"
   },
