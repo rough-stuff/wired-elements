@@ -2,8 +2,11 @@
   "name": "wired-checkbox",
   "version": "0.8.0",
   "description": "Hand-drawn sketchy checkbox",
-  "main": "wired-checkbox.js",
+  "main": "lib/wired-checkbox.js",
+  "module": "lib/wired-checkbox.js",
+  "types": "lib/wired-checkbox.d.ts",
   "scripts": {
+    "tsc": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
