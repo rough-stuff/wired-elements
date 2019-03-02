@@ -2,8 +2,11 @@
   "name": "wired-tooltip",
   "version": "0.8.0",
   "description": "Hand-drawn sketchy tooltip with text that appears on hover over an element.",
-  "main": "wired-tooltip.js",
+  "main": "lib/wired-tooltip.js",
+  "module": "lib/wired-tooltip.js",
+  "types": "lib/wired-tooltip.d.ts",
   "scripts": {
+    "tsc": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
