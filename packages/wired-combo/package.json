@@ -2,8 +2,11 @@
   "name": "wired-combo",
   "version": "0.8.1",
   "description": "Hand-drawn sketchy selector/combo-box web component",
-  "main": "wired-combo.js",
+  "main": "lib/wired-combo.js",
+  "module": "lib/wired-combo.js",
+  "types": "lib/wired-combo.d.ts",
   "scripts": {
+    "tsc": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

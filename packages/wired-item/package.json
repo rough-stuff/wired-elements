@@ -2,8 +2,11 @@
   "name": "wired-item",
   "version": "0.8.1",
   "description": "wired-item is a list item used by Wired components like wired-combo and wired-list-box",
-  "main": "wired-item.js",
+  "main": "lib/wired-item.js",
+  "module": "lib/wired-item.js",
+  "types": "lib/wired-item.d.ts",
   "scripts": {
+    "tsc": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
