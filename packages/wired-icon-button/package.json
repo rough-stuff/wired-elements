@@ -1,6 +1,6 @@
 {
   "name": "wired-icon-button",
-  "version": "0.8.0",
+  "version": "0.9.0-0",
   "description": "Round hand-drawn sketchy button with an icon placed at the cente.",
   "main": "lib/wired-icon-button.js",
   "module": "lib/wired-icon-button.js",
@@ -28,6 +28,6 @@
   "dependencies": {
     "@material/mwc-icon": "^0.3.6",
     "lit-element": "^2.0.1",
-    "wired-lib": "^0.6.0"
+    "wired-lib": "^0.9.0-0"
   }
 }
