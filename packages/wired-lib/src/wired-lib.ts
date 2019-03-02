@@ -23,7 +23,7 @@ class WiresPath {
   }
 }
 
-function _svgNode(tagName: string, attributes?: Params): SVGElement {
+export function svgNode(tagName: string, attributes?: Params): SVGElement {
   const n = document.createElementNS('http://www.w3.org/2000/svg', tagName);
   if (attributes) {
     for (const p in attributes) {
@@ -162,7 +162,7 @@ function _ellipse(ellipseInc: number, cx: number, cy: number, rx: number, ry: nu
 
 export function line(parent: SVGElement, x1: number, y1: number, x2: number, y2: number): SVGElement {
   const path = _line(x1, y1, x2, y2);
-  const node = _svgNode('path', { d: path.value });
+  const node = svgNode('path', { d: path.value });
   parent.appendChild(node);
   return node;
 }
@@ -176,7 +176,7 @@ export function rectangle(parent: SVGElement, x: number, y: number, width: numbe
   path = _line(x + width, y, x + width, y + height, path);
   path = _line(x + width, y + height, x, y + height, path);
   path = _line(x, y + height, x, y, path);
-  const node = _svgNode('path', { d: path.value });
+  const node = svgNode('path', { d: path.value });
   parent.appendChild(node);
   return node;
 }
@@ -199,7 +199,7 @@ export function polygon(parent: SVGElement, vertices: Point[]): SVGElement {
     path = new WiresPath();
   }
 
-  const node = _svgNode('path', { d: path!.value });
+  const node = svgNode('path', { d: path!.value });
   parent.appendChild(node);
   return node;
 }
@@ -214,7 +214,7 @@ export function ellipse(parent: SVGElement, x: number, y: number, width: number,
   ry += _getOffset(-ry * 0.05, ry * 0.05);
   let path = _ellipse(ellipseInc, x, y, rx, ry, 1, ellipseInc * _getOffset(0.1, _getOffset(0.4, 1)));
   path = _ellipse(ellipseInc, x, y, rx, ry, 1.5, 0, path);
-  const node = _svgNode('path', { d: path.value });
+  const node = svgNode('path', { d: path.value });
   parent.appendChild(node);
   return node;
 }

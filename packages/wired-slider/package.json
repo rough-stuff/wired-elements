@@ -2,8 +2,11 @@
   "name": "wired-slider",
   "version": "0.8.0",
   "description": "Hand-drawn sketchy slider web component",
-  "main": "wired-slider.js",
+  "main": "lib/wired-slider.js",
+  "module": "lib/wired-slider.js",
+  "types": "lib/wired-slider.d.ts",
   "scripts": {
+    "tsc": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -26,7 +29,7 @@
   "license": "MIT",
   "dependencies": {
     "lit-element": "^2.0.1",
-    "@polymer/polymer": "^3.0.5",
+    "@polymer/polymer": "^3.1.0",
     "wired-lib": "^0.6.0"
   }
 }
