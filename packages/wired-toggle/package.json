@@ -2,8 +2,11 @@
   "name": "wired-toggle",
   "version": "0.8.0",
   "description": "Hand-drawn sketchy toggle button - web component",
-  "main": "wired-toggle.js",
+  "main": "lib/wired-toggle.js",
+  "module": "lib/wired-toggle.js",
+  "types": "lib/wired-toggle.d.ts",
   "scripts": {
+    "tsc": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

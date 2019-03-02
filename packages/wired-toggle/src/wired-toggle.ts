@@ -1,22 +1,28 @@
 import { LitElement, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'lit-element';
-import { rectangle, line } from 'wired-lib';
+import { rectangle, ellipse } from 'wired-lib';
 
-@customElement('wired-checkbox')
-export class WiredCheckbox extends LitElement {
+@customElement('wired-toggle')
+export class WiredToggle extends LitElement {
   @property({ type: Boolean }) checked = false;
   @property({ type: Boolean, reflect: true }) disabled = false;
-  @property({ type: String }) text = '';
+
+  private height = 0;
 
   static get styles(): CSSResult {
     return css`
     :host {
-      display: block;
-      font-family: inherit;
+      display: inline-block;
+      cursor: pointer;
+      position: relative;
       outline: none;
     }
   
+    :host(.wired-pending) {
+      opacity: 0;
+    }
+  
     :host(.wired-disabled) {
-      opacity: 0.6 !important;
+      opacity: 0.4 !important;
       cursor: default;
       pointer-events: none;
     }
@@ -24,27 +30,9 @@ export class WiredCheckbox extends LitElement {
     :host(.wired-disabled) svg {
       background: rgba(0, 0, 0, 0.07);
     }
-  
-    :host(.wired-pending) {
-      opacity: 0;
-    }
-  
+
     :host(:focus) path {
       stroke-width: 1.5;
-    }
-  
-    #container {
-      display: inline-block;
-      white-space: nowrap;
-    }
-  
-    .inline {
-      display: inline-block;
-      vertical-align: middle;
-    }
-  
-    #checkPanel {
-      cursor: pointer;
     }
   
     svg {
@@ -52,19 +40,25 @@ export class WiredCheckbox extends LitElement {
     }
   
     path {
-      stroke: var(--wired-checkbox-icon-color, currentColor);
+      stroke: currentColor;
       stroke-width: 0.7;
+      fill: transparent;
+    }
+  
+    .unchecked {
+      fill: var(--wired-toggle-off-color, gray);
+    }
+  
+    .checked {
+      fill: var(--wired-toggle-on-color, rgb(63, 81, 181));
     }
     `;
   }
 
   render(): TemplateResult {
     return html`
-    <div id="container" @click="${this.toggleCheck}">
-      <div id="checkPanel" class="inline">
-        <svg id="svg" width="0" height="0"></svg>
-      </div>
-      <div class="inline">${this.text}</div>
+    <div @click="${this.toggleCheck}">
+      <svg id="svg"></svg>
     </div>
     `;
   }
@@ -91,7 +85,7 @@ export class WiredCheckbox extends LitElement {
   }
 
   firstUpdated() {
-    this.setAttribute('role', 'checkbox');
+    this.setAttribute('role', 'switch');
     this.addEventListener('keydown', (event) => {
       if ((event.keyCode === 13) || (event.keyCode === 32)) {
         event.preventDefault();
@@ -108,25 +102,23 @@ export class WiredCheckbox extends LitElement {
     while (svg.hasChildNodes()) {
       svg.removeChild(svg.lastChild!);
     }
-    const s = { width: 24, height: 24 };
+    const s = { width: (this.height || 32) * 2.5, height: this.height || 32 };
     svg.setAttribute('width', `${s.width}`);
     svg.setAttribute('height', `${s.height}`);
     rectangle(svg, 0, 0, s.width, s.height);
-    const checkpaths = [];
-    checkpaths.push(line(svg, s.width * 0.3, s.height * 0.4, s.width * 0.5, s.height * 0.7));
-    checkpaths.push(line(svg, s.width * 0.5, s.height * 0.7, s.width + 5, -5));
-    checkpaths.forEach((d) => {
-      d.style.strokeWidth = `${2.5}`;
-    });
+    const knob = ellipse(svg, s.height / 2, s.height / 2, s.height, s.height);
+    const knobOffset = s.width - s.height;
+    knob.style.transition = 'all 0.3s ease';
+    knob.style.transform = this.checked ? ('translateX(' + knobOffset + 'px)') : '';
+    const cl = knob.classList;
     if (this.checked) {
-      checkpaths.forEach((d) => {
-        d.style.display = '';
-      });
+      cl.remove('unchecked');
+      cl.add('checked');
     } else {
-      checkpaths.forEach((d) => {
-        d.style.display = 'none';
-      });
+      cl.remove('checked');
+      cl.add('unchecked');
     }
+    this.setAttribute('aria-checked', `${this.checked}`);
     this.classList.remove('wired-pending');
   }
 }

@@ -26,8 +26,6 @@ export class WiredTextarea extends LitElement {
       padding: 5px;
       font-family: sans-serif;
       width: 400px;
-      -moz-appearance: textarea;
-      -webkit-appearance: textarea;
       outline: none;
     }
   
