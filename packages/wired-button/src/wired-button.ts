@@ -91,6 +91,7 @@ export class WiredButton extends LitElement {
     });
     this.setAttribute('role', 'button');
     this.setAttribute('aria-label', this.textContent || this.innerText);
+    setTimeout(() => this.requestUpdate());
   }
 
   updated(changed: PropertyValues) {
