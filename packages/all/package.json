@@ -2,11 +2,14 @@
   "name": "wired-elements",
   "version": "0.8.2",
   "description": "Collection of hand-drawn sketchy web components",
-  "main": "wired-elements.js",
+  "main": "lib/wired-elements.js",
+  "module": "lib/wired-elements.js",
+  "types": "lib/wired-elements.d.ts",
   "directories": {
     "lib": "lib"
   },
   "scripts": {
+    "tsc": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

@@ -9,7 +9,7 @@ interface ListboxValue {
 }
 
 @customElement('wired-listbox')
-export class WiredCombo extends LitElement {
+export class WiredListbox extends LitElement {
   @property({ type: Object }) value?: ListboxValue;
   @property({ type: String }) selected?: string;
   @property({ type: Boolean }) horizontal = false;
