@@ -1,0 +1,45 @@
+<html>
+
+<head>
+  <style>
+    body {
+      margin: 0;
+      padding: 10px;
+      font-family: sans-serif;
+      line-height: 1.5;
+      box-sizing: border-box;
+    }
+
+    section {
+      margin: 16px 0;
+    }
+
+    wired-button {
+      margin-right: 8px;
+    }
+  </style>
+</head>
+
+<body>
+  <script type="module">
+    import '../packages/wired-button/lib/wired-button.js';
+  </script>
+
+  <section>
+    <h4>Buttons</h4>
+    <div>
+      <wired-button>Submit</wired-button>
+      <wired-button elevation="3">Elevated</wired-button>
+      <wired-button style="background: yellow; color: red;">Colored Button</wired-button>
+      <wired-button disabled>Disabled</wired-button>
+    </div>
+  </section>
+
+  <script>
+    document.querySelector('wired-button').addEventListener('click', () => {
+      console.log('submit click');
+    });
+  </script>
+</body>
+
+</html>
