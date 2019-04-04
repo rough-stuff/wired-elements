@@ -15,6 +15,7 @@ export class WiredButton extends WiredBase {
       display: inline-block;
       font-size: 14px;
       text-transform: uppercase;
+      outline: none;
     }
     :host(.wired-pending) {
       opacity: 0;

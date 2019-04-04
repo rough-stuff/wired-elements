@@ -1,8 +1,8 @@
-import { LitElement, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'lit-element';
+import { WiredBase, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'wired-lib/lib/wired-base';
 import { rectangle } from 'wired-lib';
 
 @customElement('wired-input')
-export class WiredInput extends LitElement {
+export class WiredInput extends WiredBase {
   @property({ type: String }) placeholder = '';
   @property({ type: String }) name?: string;
   @property({ type: String }) min?: string;
@@ -76,6 +76,7 @@ export class WiredInput extends LitElement {
       font-size: inherit;
       font-weight: inherit;
       color: inherit;
+      padding: 6px;
     }
     `;
   }
@@ -154,7 +155,6 @@ export class WiredInput extends LitElement {
 
   private onChange(event: Event) {
     event.stopPropagation();
-    const newEvent = new CustomEvent(event.type, { bubbles: true, composed: true, cancelable: event.cancelable, detail: { sourceEvent: event } });
-    this.dispatchEvent(newEvent);
+    this.fireEvent(event.type, { sourceEvent: event });
   }
 }

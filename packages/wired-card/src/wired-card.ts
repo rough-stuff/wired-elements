@@ -1,8 +1,8 @@
-import { LitElement, customElement, property, TemplateResult, html, css, CSSResult } from 'lit-element';
+import { WiredBase, customElement, property, TemplateResult, html, css, CSSResult } from 'wired-lib/lib/wired-base';
 import { rectangle, line } from 'wired-lib';
 
 @customElement('wired-card')
-export class WiredCard extends LitElement {
+export class WiredCard extends WiredBase {
   @property({ type: Number }) elevation = 1;
 
   private resizeHandler?: EventListenerOrEventListenerObject;
@@ -12,7 +12,7 @@ export class WiredCard extends LitElement {
     :host {
       display: inline-block;
       position: relative;
-      padding: 5px;
+      padding: 10px;
     }
   
     :host(.wired-pending) {
@@ -104,7 +104,7 @@ export class WiredCard extends LitElement {
     const h = s.height + ((elev - 1) * 2);
     svg.setAttribute('width', `${w}`);
     svg.setAttribute('height', `${h}`);
-    rectangle(svg, 0, 0, s.width, s.height);
+    rectangle(svg, 2, 2, s.width - 2, s.height - 2);
     for (let i = 1; i < elev; i++) {
       (line(svg, (i * 2), s.height + (i * 2), s.width + (i * 2), s.height + (i * 2))).style.opacity = `${(85 - (i * 10)) / 100}`;
       (line(svg, s.width + (i * 2), s.height + (i * 2), s.width + (i * 2), i * 2)).style.opacity = `${(85 - (i * 10)) / 100}`;
