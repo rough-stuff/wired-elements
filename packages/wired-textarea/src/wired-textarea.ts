@@ -1,8 +1,8 @@
-import { LitElement, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'lit-element';
+import { WiredBase, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'wired-lib/lib/wired-base';
 import { rectangle } from 'wired-lib';
 
 @customElement('wired-textarea')
-export class WiredTextarea extends LitElement {
+export class WiredTextarea extends WiredBase {
   @property({ type: Number }) rows = 1;
   @property({ type: Number }) maxrows = 0;
   @property({ type: String }) autocomplete = '';

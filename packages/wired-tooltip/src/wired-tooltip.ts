@@ -1,10 +1,10 @@
-import { LitElement, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'lit-element';
+import { WiredBase, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'wired-lib/lib/wired-base';
 import { polygon, Point } from 'wired-lib';
 
 export type WiredTooltipPosition = 'bottom' | 'top' | 'left' | 'right';
 
 @customElement('wired-tooltip')
-export class WiredTooltip extends LitElement {
+export class WiredTooltip extends WiredBase {
   @property({ type: String }) for?: string;
   @property({ type: String }) text?: string;
   @property({ type: Number }) offset = 14;

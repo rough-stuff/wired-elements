@@ -1,8 +1,8 @@
-import { LitElement, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'lit-element';
+import { WiredBase, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'wired-lib/lib/wired-base';
 import { ellipse } from 'wired-lib';
 
 @customElement('wired-radio')
-export class WiredRadio extends LitElement {
+export class WiredRadio extends WiredBase {
   @property({ type: Boolean }) checked = false;
   @property({ type: Boolean, reflect: true }) disabled = false;
   @property({ type: String }) text = '';

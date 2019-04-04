@@ -1,7 +1,7 @@
-import { LitElement, customElement, property, TemplateResult, html } from 'lit-element';
+import { WiredBase, customElement, property, TemplateResult, html } from 'wired-lib/lib/wired-base';
 
 @customElement('wired-item')
-export class WiredItem extends LitElement {
+export class WiredItem extends WiredBase {
   @property({ type: String }) text?: string;
   @property({ type: String }) value?: string;
 

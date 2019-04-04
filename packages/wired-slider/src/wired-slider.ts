@@ -1,9 +1,9 @@
-import { LitElement, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'lit-element';
+import { WiredBase, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'wired-lib/lib/wired-base';
 import { line, svgNode, ellipse } from 'wired-lib';
 import { addListener } from '@polymer/polymer/lib/utils/gestures.js';
 
 @customElement('wired-slider')
-export class WiredSlider extends LitElement {
+export class WiredSlider extends WiredBase {
   @property({ type: Number }) _value = 0;
   @property({ type: Number }) min = 0;
   @property({ type: Number }) max = 100;

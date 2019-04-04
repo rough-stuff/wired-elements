@@ -1,4 +1,4 @@
-import { LitElement, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'lit-element';
+import { WiredBase, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'wired-lib/lib/wired-base';
 import { rectangle, polygon } from 'wired-lib';
 import { WiredItem } from 'wired-item';
 import { WiredCard } from 'wired-card';
@@ -11,7 +11,7 @@ interface ComboValue {
 }
 
 @customElement('wired-combo')
-export class WiredCombo extends LitElement {
+export class WiredCombo extends WiredBase {
   @property({ type: Object }) value?: ComboValue;
   @property({ type: String }) selected?: string;
   @property({ type: Boolean, reflect: true }) disabled = false;

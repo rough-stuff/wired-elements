@@ -1,4 +1,4 @@
-import { LitElement, customElement, property, TemplateResult, html, css, CSSResult } from 'lit-element';
+import { WiredBase, customElement, property, TemplateResult, html, css, CSSResult } from 'wired-lib/lib/wired-base';
 import { rectangle } from 'wired-lib';
 import { WiredItem } from 'wired-item';
 import 'wired-item';
@@ -9,7 +9,7 @@ interface ListboxValue {
 }
 
 @customElement('wired-listbox')
-export class WiredListbox extends LitElement {
+export class WiredListbox extends WiredBase {
   @property({ type: Object }) value?: ListboxValue;
   @property({ type: String }) selected?: string;
   @property({ type: Boolean }) horizontal = false;

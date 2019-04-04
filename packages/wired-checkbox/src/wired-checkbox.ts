@@ -1,8 +1,8 @@
-import { LitElement, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'lit-element';
+import { WiredBase, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'wired-lib/lib/wired-base';
 import { rectangle, line } from 'wired-lib';
 
 @customElement('wired-checkbox')
-export class WiredCheckbox extends LitElement {
+export class WiredCheckbox extends WiredBase {
   @property({ type: Boolean }) checked = false;
   @property({ type: Boolean, reflect: true }) disabled = false;
   @property({ type: String }) text = '';
