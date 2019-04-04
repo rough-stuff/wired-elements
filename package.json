@@ -43,10 +43,5 @@
     "rollup-plugin-terser": "^4.0.1",
     "tslint": "^5.13.1",
     "typescript": "^3.3.3333"
-  },
-  "dependencies": {
-    "@polymer/polymer": "^3.1.0",
-    "lit-element": "^2.0.1",
-    "roughjs": "^3.0.0"
   }
 }
