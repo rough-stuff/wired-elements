@@ -20,5 +20,8 @@
     "hand drawn"
   ],
   "author": "Preet Shihn <preetshihn@gmail.com> (https://twitter.com/preetster)",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "lit-element": "^2.1.0"
+  }
 }
