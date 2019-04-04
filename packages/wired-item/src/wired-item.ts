@@ -31,7 +31,6 @@ export class WiredItem extends WiredBase {
   }
 
   private onClick() {
-    const event = new CustomEvent('item-click', { bubbles: true, composed: true, detail: { text: this.text, value: this.value } });
-    this.dispatchEvent(event);
+    this.fireEvent('item-click', { text: this.text, value: this.value });
   }
 }

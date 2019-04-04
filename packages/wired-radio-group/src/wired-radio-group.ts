@@ -53,8 +53,7 @@ export class WiredRadioGroup extends WiredBase {
   }
 
   private fireSelected() {
-    const ce = new CustomEvent('selected', { bubbles: true, composed: true, detail: { selected: this.selected } });
-    this.dispatchEvent(ce);
+    this.fireEvent('selected', { selected: this.selected });
   }
 
   slotChange() {

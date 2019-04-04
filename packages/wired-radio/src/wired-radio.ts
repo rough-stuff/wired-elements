@@ -94,8 +94,7 @@ export class WiredRadio extends WiredBase {
 
   toggleCheck() {
     this.checked = !(this.checked || false);
-    const event = new CustomEvent('change', { bubbles: true, composed: true, detail: { checked: this.checked } });
-    this.dispatchEvent(event);
+    this.fireEvent('change', { checked: this.checked });
   }
 
   firstUpdated() {

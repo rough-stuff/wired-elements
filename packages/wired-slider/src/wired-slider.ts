@@ -197,8 +197,7 @@ export class WiredSlider extends WiredBase {
     this.setAriaValue();
     this.onValueChange();
     if (!skipEvent) {
-      const event = new CustomEvent('change', { bubbles: true, composed: true, detail: { value: this.intermediateValue } });
-      this.dispatchEvent(event);
+      this.fireEvent('change', { value: this.intermediateValue });
     }
   }
 

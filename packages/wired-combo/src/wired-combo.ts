@@ -280,8 +280,7 @@ export class WiredCombo extends WiredBase {
   }
 
   private fireSelected() {
-    const selectedEvent = new CustomEvent('selected', { bubbles: true, composed: true, detail: { selected: this.selected } });
-    this.dispatchEvent(selectedEvent);
+    this.fireEvent('selected', { selected: this.selected });
   }
 
   private selectPrevious() {
