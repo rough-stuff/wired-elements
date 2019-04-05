@@ -91,17 +91,8 @@ export class WiredCombo extends WiredBase {
       box-shadow: 1px 5px 15px -6px rgba(0, 0, 0, 0.8);
     }
 
-    ::slotted(.selected-item) {
-      background: var(--wired-combo-item-selected-bg, rgba(0, 0, 200, 0.1));
-    }
-  
     ::slotted(wired-item) {
-      cursor: pointer;
-      white-space: nowrap;
-    }
-  
-    ::slotted(wired-item:hover) {
-      background: var(--wired-combo-item-hover-bg, rgba(0, 0, 0, 0.1));
+      display: block;
     }
     `;
   }
@@ -117,7 +108,8 @@ export class WiredCombo extends WiredBase {
         <svg id="svg"></svg>
       </div>
     </div>
-    <wired-card id="card" role="listbox" @item-click="${this.onItemClick}" style="display: none;">
+    <wired-card id="card" tabindex="-1" role="listbox" @mousedown="${this.onItemClick}" @touchstart="${this.onItemClick}"
+      style="display: none;">
       <slot id="slot"></slot>
     </wired-card>
     `;
@@ -226,7 +218,7 @@ export class WiredCombo extends WiredBase {
 
   private refreshSelection() {
     if (this.lastSelectedItem) {
-      this.lastSelectedItem.classList.remove('selected-item');
+      this.lastSelectedItem.selected = false;
       this.lastSelectedItem.removeAttribute('aria-selected');
     }
     const slot = this.shadowRoot!.getElementById('slot') as HTMLSlotElement;
@@ -245,13 +237,13 @@ export class WiredCombo extends WiredBase {
       }
       this.lastSelectedItem = selectedItem || undefined;
       if (this.lastSelectedItem) {
-        this.lastSelectedItem.classList.add('selected-item');
+        this.lastSelectedItem.selected = true;
         this.lastSelectedItem.setAttribute('aria-selected', 'true');
       }
       if (selectedItem) {
         this.value = {
           value: selectedItem.value || '',
-          text: selectedItem.text || ''
+          text: selectedItem.textContent || ''
         };
       } else {
         this.value = undefined;
@@ -266,6 +258,15 @@ export class WiredCombo extends WiredBase {
     if (showing) {
       setTimeout(() => {
         card.requestUpdate();
+        const nodes = (this.shadowRoot!.getElementById('slot') as HTMLSlotElement).assignedNodes().filter((d) => {
+          return d.nodeType === Node.ELEMENT_NODE;
+        });
+        nodes.forEach((n) => {
+          const e = n as WiredBase;
+          if (e.requestUpdate) {
+            e.requestUpdate();
+          }
+        });
       }, 10);
     }
     this.setAttribute('aria-expanded', `${this.cardShowing}`);
@@ -274,7 +275,7 @@ export class WiredCombo extends WiredBase {
   private onItemClick(event: CustomEvent) {
     event.stopPropagation();
     this.setCardShowing(false);
-    this.selected = event.detail.value;
+    this.selected = (event.target as WiredItem).value;
     this.refreshSelection();
     this.fireSelected();
   }

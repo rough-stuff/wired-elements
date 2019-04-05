@@ -54,23 +54,13 @@ export class WiredListbox extends WiredBase {
       stroke-width: 0.7;
       fill: transparent;
     }
-  
-    ::slotted(.selected-item) {
-      background: var(--wired-combo-item-selected-bg, rgba(0, 0, 200, 0.1));
-    }
-  
+
     ::slotted(wired-item) {
-      cursor: pointer;
-      white-space: nowrap;
       display: block;
     }
-  
+
     :host(.wired-horizontal) ::slotted(wired-item) {
       display: inline-block;
-    }
-  
-    ::slotted(wired-item:hover) {
-      background: var(--wired-combo-item-hover-bg, rgba(0, 0, 0, 0.1));
     }
     `;
   }
@@ -94,7 +84,7 @@ export class WiredListbox extends WiredBase {
     this.setAttribute('role', 'listbox');
     this.tabIndex = +((this.getAttribute('tabindex') || 0));
     this.refreshSelection();
-    this.addEventListener('item-click', this.itemClickHandler);
+    this.addEventListener('click', this.itemClickHandler);
     this.addEventListener('keydown', (event) => {
       switch (event.keyCode) {
         case 37:
@@ -145,14 +135,14 @@ export class WiredListbox extends WiredBase {
 
   private onItemClick(event: Event) {
     event.stopPropagation();
-    this.selected = (event as CustomEvent).detail.value;
+    this.selected = (event.target as WiredItem).value;
     this.refreshSelection();
     this.fireSelected();
   }
 
   private refreshSelection() {
     if (this.lastSelectedItem) {
-      this.lastSelectedItem.classList.remove('selected-item');
+      this.lastSelectedItem.selected = false;
       this.lastSelectedItem.removeAttribute('aria-selected');
     }
     const slot = this.shadowRoot!.getElementById('slot') as HTMLSlotElement;
@@ -171,13 +161,13 @@ export class WiredListbox extends WiredBase {
       }
       this.lastSelectedItem = selectedItem || undefined;
       if (this.lastSelectedItem) {
-        this.lastSelectedItem.classList.add('selected-item');
+        this.lastSelectedItem.selected = true;
         this.lastSelectedItem.setAttribute('aria-selected', 'true');
       }
       if (selectedItem) {
         this.value = {
           value: selectedItem.value || '',
-          text: selectedItem.text || ''
+          text: selectedItem.textContent || ''
         };
       } else {
         this.value = undefined;

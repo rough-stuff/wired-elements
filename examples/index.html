@@ -34,7 +34,7 @@
   <script type="module">
     import '../packages/wired-button/lib/wired-button.js';
     import '../packages/wired-input/lib/wired-input.js';
-    import '../packages/wired-card/lib/wired-card.js';
+    import '../packages/wired-combo/lib/wired-combo.js';
   </script>
 
   <section>
@@ -73,6 +73,36 @@
           Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
         </p>
       </wired-card>
+    </div>
+  </section>
+
+  <!-- <section>
+    <h4>Listbox</h4>
+    <div>
+      <wired-listbox selected="two">
+        <wired-item value="one">Number One</wired-item>
+        <wired-item value="two">Number Two</wired-item>
+        <wired-item value="three">Number Three</wired-item>
+      </wired-listbox>
+    </div>
+    <div style="margin-top: 10px;">
+      <wired-listbox horizontal selected="two"
+        style="--wired-item-selected-color: darkred; --wired-item-selected-bg: pink;">
+        <wired-item value="one">Number One</wired-item>
+        <wired-item value="two">Number Two</wired-item>
+        <wired-item value="three">Number Three</wired-item>
+      </wired-listbox>
+    </div>
+  </section> -->
+
+  <section>
+    <h4>Combo</h4>
+    <div>
+      <wired-combo id="combo" selected="two">
+        <wired-item value="one">Number One</wired-item>
+        <wired-item value="two">Number Two</wired-item>
+        <wired-item value="three">Number Three</wired-item>
+      </wired-combo>
     </div>
   </section>
 
