@@ -24,6 +24,9 @@ export class WiredButton extends WiredBase {
       text-align: center;
       display: inline-flex;
       outline: none;
+      letter-spacing: 1.25px;
+      font-size: 14px;
+      text-transform: uppercase;
     }
 
     :host(.wired-pending) {
