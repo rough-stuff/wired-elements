@@ -274,10 +274,12 @@ export class WiredCombo extends WiredBase {
 
   private onItemClick(event: CustomEvent) {
     event.stopPropagation();
-    this.setCardShowing(false);
     this.selected = (event.target as WiredItem).value;
     this.refreshSelection();
     this.fireSelected();
+    setTimeout(() => {
+      this.setCardShowing(false);
+    });
   }
 
   private fireSelected() {
