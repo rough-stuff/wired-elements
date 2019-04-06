@@ -23,7 +23,6 @@ export class WiredTextarea extends WiredBase {
     :host {
       display: inline-block;
       position: relative;
-      padding: 5px;
       font-family: sans-serif;
       width: 400px;
       outline: none;
@@ -69,6 +68,10 @@ export class WiredTextarea extends WiredBase {
       visibility: hidden;
       word-wrap: break-word;
     }
+
+    #mirror {
+      padding: 10px;
+    }
   
     textarea {
       position: relative;
@@ -83,7 +86,7 @@ export class WiredTextarea extends WiredBase {
       font-family: inherit;
       line-height: inherit;
       text-align: inherit;
-      padding: 5px;
+      padding: 10px;
       box-sizing: border-box;
     }
     `;
