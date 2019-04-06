@@ -104,12 +104,12 @@ export class WiredCard extends WiredBase {
     const h = s.height + ((elev - 1) * 2);
     svg.setAttribute('width', `${w}`);
     svg.setAttribute('height', `${h}`);
-    rectangle(svg, 2, 2, s.width - 2, s.height - 2);
+    rectangle(svg, 2, 2, s.width - 4, s.height - 4);
     for (let i = 1; i < elev; i++) {
-      (line(svg, (i * 2), s.height + (i * 2), s.width + (i * 2), s.height + (i * 2))).style.opacity = `${(85 - (i * 10)) / 100}`;
-      (line(svg, s.width + (i * 2), s.height + (i * 2), s.width + (i * 2), i * 2)).style.opacity = `${(85 - (i * 10)) / 100}`;
-      (line(svg, (i * 2), s.height + (i * 2), s.width + (i * 2), s.height + (i * 2))).style.opacity = `${(85 - (i * 10)) / 100}`;
-      (line(svg, s.width + (i * 2), s.height + (i * 2), s.width + (i * 2), i * 2)).style.opacity = `${(85 - (i * 10)) / 100}`;
+      (line(svg, (i * 2), s.height - 4 + (i * 2), s.width - 4 + (i * 2), s.height - 4 + (i * 2))).style.opacity = `${(85 - (i * 10)) / 100}`;
+      (line(svg, s.width - 4 + (i * 2), s.height - 4 + (i * 2), s.width - 4 + (i * 2), i * 2)).style.opacity = `${(85 - (i * 10)) / 100}`;
+      (line(svg, (i * 2), s.height - 4 + (i * 2), s.width - 4 + (i * 2), s.height - 4 + (i * 2))).style.opacity = `${(85 - (i * 10)) / 100}`;
+      (line(svg, s.width - 4 + (i * 2), s.height - 4 + (i * 2), s.width - 4 + (i * 2), i * 2)).style.opacity = `${(85 - (i * 10)) / 100}`;
     }
     this.classList.remove('wired-pending');
   }
