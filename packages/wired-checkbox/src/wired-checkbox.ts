@@ -5,7 +5,6 @@ import { rectangle, line } from 'wired-lib';
 export class WiredCheckbox extends WiredBase {
   @property({ type: Boolean }) checked = false;
   @property({ type: Boolean, reflect: true }) disabled = false;
-  @property({ type: String }) text = '';
 
   static get styles(): CSSResult {
     return css`
@@ -41,6 +40,8 @@ export class WiredCheckbox extends WiredBase {
     .inline {
       display: inline-block;
       vertical-align: middle;
+      -moz-user-select: none;
+      user-select: none;
     }
   
     #checkPanel {
@@ -64,7 +65,9 @@ export class WiredCheckbox extends WiredBase {
       <div id="checkPanel" class="inline">
         <svg id="svg" width="0" height="0"></svg>
       </div>
-      <div class="inline">${this.text}</div>
+      <div class="inline">
+        <slot></slot>
+      </div>
     </div>
     `;
   }

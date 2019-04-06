@@ -5,7 +5,6 @@ import { ellipse } from 'wired-lib';
 export class WiredRadio extends WiredBase {
   @property({ type: Boolean }) checked = false;
   @property({ type: Boolean, reflect: true }) disabled = false;
-  @property({ type: String }) text = '';
   @property({ type: String }) name?: string;
   @property({ type: Number }) iconsize = 24;
 
@@ -44,6 +43,8 @@ export class WiredRadio extends WiredBase {
     .inline {
       display: inline-block;
       vertical-align: middle;
+      -moz-user-select: none;
+      user-select: none;
     }
   
     #checkPanel {
@@ -72,7 +73,9 @@ export class WiredRadio extends WiredBase {
       <div id="checkPanel" class="inline">
         <svg id="svg" width="0" height="0"></svg>
       </div>
-      <div class="inline">${this.text}</div>
+      <div class="inline">
+        <slot></slot>
+      </div>
     </div>
     `;
   }
