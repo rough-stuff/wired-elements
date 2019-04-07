@@ -15,11 +15,21 @@
 </head>
 
 <body>
-  <wired-listbox id="combo" selected="two">
-    <wired-item value="one" text="Number one"></wired-item>
-    <wired-item value="two" text="Number two"></wired-item>
-    <wired-item value="three" text="Number three"></wired-item>
-  </wired-listbox>
+  <div>
+    <wired-listbox id="combo" selected="two">
+      <wired-item value="one">Number One</wired-item>
+      <wired-item value="two">Number Two</wired-item>
+      <wired-item value="three">Number Three</wired-item>
+    </wired-listbox>
+  </div>
+  <div style="margin-top: 10px;">
+    <wired-listbox horizontal selected="two"
+      style="--wired-item-selected-color: darkred; --wired-item-selected-bg: pink;">
+      <wired-item value="one">Number One</wired-item>
+      <wired-item value="two">Number Two</wired-item>
+      <wired-item value="three">Number Three</wired-item>
+    </wired-listbox>
+  </div>
   <div id="label"></div>
 
   <script>

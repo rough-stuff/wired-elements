@@ -1,4 +1,4 @@
-import { LitElement, customElement, property, TemplateResult, html, css, CSSResult } from 'lit-element';
+import { WiredBase, customElement, property, TemplateResult, html, css, CSSResult } from 'wired-lib/lib/wired-base';
 
 interface RadioItem extends HTMLElement {
   name: string;
@@ -6,7 +6,7 @@ interface RadioItem extends HTMLElement {
 }
 
 @customElement('wired-radio-group')
-export class WiredRadioGroup extends LitElement {
+export class WiredRadioGroup extends WiredBase {
   @property({ type: String }) selected?: string;
 
   private radioNodes: RadioItem[] = [];
@@ -53,8 +53,7 @@ export class WiredRadioGroup extends LitElement {
   }
 
   private fireSelected() {
-    const ce = new CustomEvent('selected', { bubbles: true, composed: true, detail: { selected: this.selected } });
-    this.dispatchEvent(ce);
+    this.fireEvent('selected', { selected: this.selected });
   }
 
   slotChange() {

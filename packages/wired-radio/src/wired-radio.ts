@@ -1,11 +1,10 @@
-import { LitElement, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'lit-element';
+import { WiredBase, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'wired-lib/lib/wired-base';
 import { ellipse } from 'wired-lib';
 
 @customElement('wired-radio')
-export class WiredRadio extends LitElement {
+export class WiredRadio extends WiredBase {
   @property({ type: Boolean }) checked = false;
   @property({ type: Boolean, reflect: true }) disabled = false;
-  @property({ type: String }) text = '';
   @property({ type: String }) name?: string;
   @property({ type: Number }) iconsize = 24;
 
@@ -44,6 +43,8 @@ export class WiredRadio extends LitElement {
     .inline {
       display: inline-block;
       vertical-align: middle;
+      -moz-user-select: none;
+      user-select: none;
     }
   
     #checkPanel {
@@ -72,7 +73,9 @@ export class WiredRadio extends LitElement {
       <div id="checkPanel" class="inline">
         <svg id="svg" width="0" height="0"></svg>
       </div>
-      <div class="inline">${this.text}</div>
+      <div class="inline">
+        <slot></slot>
+      </div>
     </div>
     `;
   }
@@ -94,8 +97,7 @@ export class WiredRadio extends LitElement {
 
   toggleCheck() {
     this.checked = !(this.checked || false);
-    const event = new CustomEvent('change', { bubbles: true, composed: true, detail: { checked: this.checked } });
-    this.dispatchEvent(event);
+    this.fireEvent('change', { checked: this.checked });
   }
 
   firstUpdated() {

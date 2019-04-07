@@ -1,11 +1,10 @@
-import { LitElement, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'lit-element';
+import { WiredBase, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'wired-lib/lib/wired-base';
 import { rectangle, line } from 'wired-lib';
 
 @customElement('wired-checkbox')
-export class WiredCheckbox extends LitElement {
+export class WiredCheckbox extends WiredBase {
   @property({ type: Boolean }) checked = false;
   @property({ type: Boolean, reflect: true }) disabled = false;
-  @property({ type: String }) text = '';
 
   static get styles(): CSSResult {
     return css`
@@ -41,6 +40,8 @@ export class WiredCheckbox extends LitElement {
     .inline {
       display: inline-block;
       vertical-align: middle;
+      -moz-user-select: none;
+      user-select: none;
     }
   
     #checkPanel {
@@ -64,7 +65,9 @@ export class WiredCheckbox extends LitElement {
       <div id="checkPanel" class="inline">
         <svg id="svg" width="0" height="0"></svg>
       </div>
-      <div class="inline">${this.text}</div>
+      <div class="inline">
+        <slot></slot>
+      </div>
     </div>
     `;
   }
@@ -86,8 +89,7 @@ export class WiredCheckbox extends LitElement {
 
   private toggleCheck() {
     this.checked = !(this.checked || false);
-    const event = new CustomEvent('change', { bubbles: true, composed: true, detail: { checked: this.checked } });
-    this.dispatchEvent(event);
+    this.fireEvent('change', { checked: this.checked });
   }
 
   firstUpdated() {

@@ -11,7 +11,7 @@
     "bootstrap": "npm install && npm run hoist",
     "hoist": "lerna bootstrap --hoist",
     "dev": "polyserve --npm --module-resolution=node",
-    "tsc": "lerna run tsc",
+    "tsc": "tsc --build packages/**/tsconfig.json",
     "build": "rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -41,12 +41,7 @@
     "rollup": "^0.66.6",
     "rollup-plugin-node-resolve": "^3.4.0",
     "rollup-plugin-terser": "^4.0.1",
-    "tslint": "^5.13.1",
-    "typescript": "^3.3.3333"
-  },
-  "dependencies": {
-    "@polymer/polymer": "^3.1.0",
-    "lit-element": "^2.0.1",
-    "roughjs": "^3.0.0"
+    "tslint": "^5.15.0",
+    "typescript": "^3.4.1"
   }
 }

@@ -1,12 +1,12 @@
-import { LitElement, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'lit-element';
-import { rectangle, ellipse } from 'wired-lib';
+import { WiredBase, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'wired-lib/lib/wired-base';
+import { rectangle, ellipse, hachureEllipseFill, svgNode } from 'wired-lib';
 
 @customElement('wired-toggle')
-export class WiredToggle extends LitElement {
+export class WiredToggle extends WiredBase {
   @property({ type: Boolean }) checked = false;
   @property({ type: Boolean, reflect: true }) disabled = false;
 
-  private height = 0;
+  private knob?: SVGElement;
 
   static get styles(): CSSResult {
     return css`
@@ -32,9 +32,9 @@ export class WiredToggle extends LitElement {
     }
 
     :host(:focus) path {
-      stroke-width: 1.5;
+      stroke-width: 1.2;
     }
-  
+
     svg {
       display: block;
     }
@@ -44,13 +44,25 @@ export class WiredToggle extends LitElement {
       stroke-width: 0.7;
       fill: transparent;
     }
-  
-    .unchecked {
-      fill: var(--wired-toggle-off-color, gray);
+
+    .knob {
+      transition: transform 0.3s ease;
     }
-  
-    .checked {
-      fill: var(--wired-toggle-on-color, rgb(63, 81, 181));
+    .knob path {
+      stroke-width: 0.7;
+    }
+    .knob.checked {
+      transform: translateX(48px);
+    }
+    .knobfill path {
+      stroke-width: 3 !important;
+      fill: transparent;
+    }
+    .knob.unchecked .knobFill path {
+      stroke: var(--wired-toggle-off-color, gray);
+    }
+    .knob.checked .knobFill path {
+      stroke: var(--wired-toggle-on-color, rgb(63, 81, 181));
     }
     `;
   }
@@ -80,8 +92,7 @@ export class WiredToggle extends LitElement {
 
   private toggleCheck() {
     this.checked = !(this.checked || false);
-    const event = new CustomEvent('change', { bubbles: true, composed: true, detail: { checked: this.checked } });
-    this.dispatchEvent(event);
+    this.fireEvent('change', { checked: this.checked });
   }
 
   firstUpdated() {
@@ -92,33 +103,43 @@ export class WiredToggle extends LitElement {
         this.toggleCheck();
       }
     });
+
+    const svg = (this.shadowRoot!.getElementById('svg') as any) as SVGSVGElement;
+    while (svg.hasChildNodes()) {
+      svg.removeChild(svg.lastChild!);
+    }
+    const s = { width: 80, height: 34 };
+    svg.setAttribute('width', `${s.width}`);
+    svg.setAttribute('height', `${s.height}`);
+    rectangle(svg, 16, 8, s.width - 32, 18);
+
+    this.knob = svgNode('g');
+    this.knob.classList.add('knob');
+    svg.appendChild(this.knob);
+
+    const knobFill = hachureEllipseFill(16, 16, 32, 32);
+    knobFill.classList.add('knobfill');
+    this.knob.appendChild(knobFill);
+    ellipse(this.knob, 16, 16, 32, 32);
+
+    this.classList.remove('wired-pending');
   }
 
   updated(changed: PropertyValues) {
     if (changed.has('disabled')) {
       this.refreshDisabledState();
     }
-    const svg = (this.shadowRoot!.getElementById('svg') as any) as SVGSVGElement;
-    while (svg.hasChildNodes()) {
-      svg.removeChild(svg.lastChild!);
-    }
-    const s = { width: (this.height || 32) * 2.5, height: this.height || 32 };
-    svg.setAttribute('width', `${s.width}`);
-    svg.setAttribute('height', `${s.height}`);
-    rectangle(svg, 0, 0, s.width, s.height);
-    const knob = ellipse(svg, s.height / 2, s.height / 2, s.height, s.height);
-    const knobOffset = s.width - s.height;
-    knob.style.transition = 'all 0.3s ease';
-    knob.style.transform = this.checked ? ('translateX(' + knobOffset + 'px)') : '';
-    const cl = knob.classList;
-    if (this.checked) {
-      cl.remove('unchecked');
-      cl.add('checked');
-    } else {
-      cl.remove('checked');
-      cl.add('unchecked');
+
+    if (this.knob) {
+      const cl = this.knob.classList;
+      if (this.checked) {
+        cl.remove('unchecked');
+        cl.add('checked');
+      } else {
+        cl.remove('checked');
+        cl.add('unchecked');
+      }
     }
     this.setAttribute('aria-checked', `${this.checked}`);
-    this.classList.remove('wired-pending');
   }
 }

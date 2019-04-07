@@ -1,8 +1,8 @@
-import { LitElement, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'lit-element';
+import { WiredBase, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'wired-lib/lib/wired-base';
 import { rectangle, line } from 'wired-lib';
 
 @customElement('wired-button')
-export class WiredButton extends LitElement {
+export class WiredButton extends WiredBase {
   @property({ type: Number }) elevation = 1;
   @property({ type: Boolean, reflect: true }) disabled = false;
 
@@ -24,6 +24,9 @@ export class WiredButton extends LitElement {
       text-align: center;
       display: inline-flex;
       outline: none;
+      letter-spacing: 1.25px;
+      font-size: 14px;
+      text-transform: uppercase;
     }
 
     :host(.wired-pending) {

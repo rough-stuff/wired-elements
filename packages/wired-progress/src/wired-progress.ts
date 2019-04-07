@@ -1,8 +1,8 @@
-import { LitElement, customElement, property, TemplateResult, html, css, CSSResult } from 'lit-element';
+import { WiredBase, customElement, property, TemplateResult, html, css, CSSResult } from 'wired-lib/lib/wired-base';
 import { rectangle, polygon } from 'wired-lib';
 
 @customElement('wired-progress')
-export class WiredProgress extends LitElement {
+export class WiredProgress extends WiredBase {
   @property({ type: Number }) value = 0;
   @property({ type: Number }) min = 0;
   @property({ type: Number }) max = 100;

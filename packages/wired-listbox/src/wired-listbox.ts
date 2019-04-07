@@ -1,4 +1,4 @@
-import { LitElement, customElement, property, TemplateResult, html, css, CSSResult } from 'lit-element';
+import { WiredBase, customElement, property, TemplateResult, html, css, CSSResult } from 'wired-lib/lib/wired-base';
 import { rectangle } from 'wired-lib';
 import { WiredItem } from 'wired-item';
 import 'wired-item';
@@ -9,7 +9,7 @@ interface ListboxValue {
 }
 
 @customElement('wired-listbox')
-export class WiredListbox extends LitElement {
+export class WiredListbox extends WiredBase {
   @property({ type: Object }) value?: ListboxValue;
   @property({ type: String }) selected?: string;
   @property({ type: Boolean }) horizontal = false;
@@ -54,23 +54,13 @@ export class WiredListbox extends LitElement {
       stroke-width: 0.7;
       fill: transparent;
     }
-  
-    ::slotted(.selected-item) {
-      background: var(--wired-combo-item-selected-bg, rgba(0, 0, 200, 0.1));
-    }
-  
+
     ::slotted(wired-item) {
-      cursor: pointer;
-      white-space: nowrap;
       display: block;
     }
-  
+
     :host(.wired-horizontal) ::slotted(wired-item) {
       display: inline-block;
-    }
-  
-    ::slotted(wired-item:hover) {
-      background: var(--wired-combo-item-hover-bg, rgba(0, 0, 0, 0.1));
     }
     `;
   }
@@ -94,7 +84,7 @@ export class WiredListbox extends LitElement {
     this.setAttribute('role', 'listbox');
     this.tabIndex = +((this.getAttribute('tabindex') || 0));
     this.refreshSelection();
-    this.addEventListener('item-click', this.itemClickHandler);
+    this.addEventListener('click', this.itemClickHandler);
     this.addEventListener('keydown', (event) => {
       switch (event.keyCode) {
         case 37:
@@ -145,14 +135,14 @@ export class WiredListbox extends LitElement {
 
   private onItemClick(event: Event) {
     event.stopPropagation();
-    this.selected = (event as CustomEvent).detail.value;
+    this.selected = (event.target as WiredItem).value;
     this.refreshSelection();
     this.fireSelected();
   }
 
   private refreshSelection() {
     if (this.lastSelectedItem) {
-      this.lastSelectedItem.classList.remove('selected-item');
+      this.lastSelectedItem.selected = false;
       this.lastSelectedItem.removeAttribute('aria-selected');
     }
     const slot = this.shadowRoot!.getElementById('slot') as HTMLSlotElement;
@@ -171,13 +161,13 @@ export class WiredListbox extends LitElement {
       }
       this.lastSelectedItem = selectedItem || undefined;
       if (this.lastSelectedItem) {
-        this.lastSelectedItem.classList.add('selected-item');
+        this.lastSelectedItem.selected = true;
         this.lastSelectedItem.setAttribute('aria-selected', 'true');
       }
       if (selectedItem) {
         this.value = {
           value: selectedItem.value || '',
-          text: selectedItem.text || ''
+          text: selectedItem.textContent || ''
         };
       } else {
         this.value = undefined;
@@ -186,8 +176,7 @@ export class WiredListbox extends LitElement {
   }
 
   private fireSelected() {
-    const selectedEvent = new CustomEvent('selected', { bubbles: true, composed: true, detail: { selected: this.selected } });
-    this.dispatchEvent(selectedEvent);
+    this.fireEvent('selected', { selected: this.selected });
   }
 
   private selectPrevious() {

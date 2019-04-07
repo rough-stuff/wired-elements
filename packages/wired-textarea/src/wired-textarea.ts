@@ -1,8 +1,8 @@
-import { LitElement, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'lit-element';
+import { WiredBase, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'wired-lib/lib/wired-base';
 import { rectangle } from 'wired-lib';
 
 @customElement('wired-textarea')
-export class WiredTextarea extends LitElement {
+export class WiredTextarea extends WiredBase {
   @property({ type: Number }) rows = 1;
   @property({ type: Number }) maxrows = 0;
   @property({ type: String }) autocomplete = '';
@@ -23,7 +23,6 @@ export class WiredTextarea extends LitElement {
     :host {
       display: inline-block;
       position: relative;
-      padding: 5px;
       font-family: sans-serif;
       width: 400px;
       outline: none;
@@ -69,6 +68,10 @@ export class WiredTextarea extends LitElement {
       visibility: hidden;
       word-wrap: break-word;
     }
+
+    #mirror {
+      padding: 10px;
+    }
   
     textarea {
       position: relative;
@@ -83,7 +86,7 @@ export class WiredTextarea extends LitElement {
       font-family: inherit;
       line-height: inherit;
       text-align: inherit;
-      padding: 5px;
+      padding: 10px;
       box-sizing: border-box;
     }
     `;

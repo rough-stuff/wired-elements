@@ -1,9 +1,9 @@
-import { LitElement, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'lit-element';
+import { WiredBase, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'wired-lib/lib/wired-base';
 import { ellipse } from 'wired-lib';
 import '@material/mwc-icon';
 
 @customElement('wired-icon-button')
-export class WiredIconButton extends LitElement {
+export class WiredIconButton extends WiredBase {
   @property({ type: Boolean, reflect: true }) disabled = false;
 
   static get styles(): CSSResult {

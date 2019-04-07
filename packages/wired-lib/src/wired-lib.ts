@@ -1,3 +1,7 @@
+import { hachureLinesForPolygon, hachureLinesForEllipse } from 'roughjs/bin/fillers/filler-utils';
+import { Line } from 'roughjs/bin/geometry';
+import { ResolvedOptions } from 'roughjs/bin/core';
+
 const __maxRandomnessOffset = 2;
 const __roughness = 1;
 const __bowing = 0.85;
@@ -217,4 +221,51 @@ export function ellipse(parent: SVGElement, x: number, y: number, width: number,
   const node = svgNode('path', { d: path.value });
   parent.appendChild(node);
   return node;
+}
+
+function renderHachureLines(lines: Line[]): SVGElement {
+  const gNode = svgNode('g') as SVGGElement;
+  let prevPoint: Point | null = null;
+  lines.forEach((l) => {
+    line(gNode, l[0][0], l[0][1], l[1][0], l[1][1]);
+    if (prevPoint) {
+      line(gNode, prevPoint[0], prevPoint[1], l[0][0], l[0][1]);
+    }
+    prevPoint = l[1];
+  });
+  return gNode;
+}
+
+const options: ResolvedOptions = {
+  bowing: __bowing,
+  curveStepCount: __curveStepCount,
+  curveTightness: __curveTightness,
+  dashGap: 0,
+  dashOffset: 0,
+  fill: '#000',
+  fillStyle: 'hachure',
+  fillWeight: 1,
+  hachureAngle: -41,
+  hachureGap: 5,
+  maxRandomnessOffset: __maxRandomnessOffset,
+  roughness: __roughness,
+  simplification: 1,
+  stroke: '#000',
+  strokeWidth: 2,
+  zigzagOffset: 0
+};
+
+export function hachureFill(points: Point[]): SVGElement {
+  const lines = hachureLinesForPolygon(points, options);
+  return renderHachureLines(lines);
+}
+
+export function hachureEllipseFill(cx: number, cy: number, width: number, height: number): SVGElement {
+  const helper: any = {
+    randOffset(x: number, _o: ResolvedOptions): number {
+      return _getOffset(-x, x);
+    }
+  };
+  const lines = hachureLinesForEllipse(helper, cx, cy, width, height, options);
+  return renderHachureLines(lines);
 }
