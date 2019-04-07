@@ -141,21 +141,5 @@ export class WiredToggle extends WiredBase {
       }
     }
     this.setAttribute('aria-checked', `${this.checked}`);
-
-
-    // rectangle(svg, 0, 0, s.width, s.height);
-    // const knob = ellipse(svg, s.height / 2, s.height / 2, s.height, s.height);
-    // const knobOffset = s.width - s.height;
-    // knob.style.transition = 'all 0.3s ease';
-    // knob.style.transform = this.checked ? ('translateX(' + knobOffset + 'px)') : '';
-    // const cl = knob.classList;
-    // if (this.checked) {
-    //   cl.remove('unchecked');
-    //   cl.add('checked');
-    // } else {
-    //   cl.remove('checked');
-    //   cl.add('unchecked');
-    // }
-
   }
 }
