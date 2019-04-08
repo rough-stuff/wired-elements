@@ -14,3 +14,4 @@ export { WiredTextarea } from 'wired-textarea';
 export { WiredToggle } from 'wired-toggle';
 export { WiredTooltip } from 'wired-tooltip';
 export { WiredTab, WizardTabs } from 'wired-tabs';
+export { WiredFab } from 'wired-fab';
