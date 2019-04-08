@@ -83,8 +83,8 @@ export class WizardTabs extends WiredBase {
     return html`
     <div id="bar">
       ${repeat(this.pages, (p) => p.name, (p) => html`
-      <wired-item .value="${p.name}" .selected="${p.name === this.selected}" @click="${() => this.selected = p.name}">${p.label
-        || p.name}</wired-item>
+      <wired-item role="tab" .value="${p.name}" .selected="${p.name === this.selected}" ?aria-selected="${p.name === this.selected}"
+        @click="${() => this.selected = p.name}">${p.label || p.name}</wired-item>
       `)}
     </div>
     <div>
@@ -126,6 +126,21 @@ export class WizardTabs extends WiredBase {
 
   firstUpdated() {
     this.mapPages();
+    this.tabIndex = +((this.getAttribute('tabindex') || 0));
+    this.addEventListener('keydown', (event) => {
+      switch (event.keyCode) {
+        case 37:
+        case 38:
+          event.preventDefault();
+          this.selectPrevious();
+          break;
+        case 39:
+        case 40:
+          event.preventDefault();
+          this.selectNext();
+          break;
+      }
+    });
   }
 
   updated() {
@@ -153,5 +168,47 @@ export class WizardTabs extends WiredBase {
       e = this.pages[0];
     }
     return e || null;
+  }
+
+  private selectPrevious() {
+    const list = this.pages;
+    if (list.length) {
+      let index = -1;
+      for (let i = 0; i < list.length; i++) {
+        if (list[i] === this.current) {
+          index = i;
+          break;
+        }
+      }
+      if (index < 0) {
+        index = 0;
+      } else if (index === 0) {
+        index = list.length - 1;
+      } else {
+        index--;
+      }
+      this.selected = list[index].name || '';
+    }
+  }
+
+  private selectNext() {
+    const list = this.pages;
+    if (list.length) {
+      let index = -1;
+      for (let i = 0; i < list.length; i++) {
+        if (list[i] === this.current) {
+          index = i;
+          break;
+        }
+      }
+      if (index < 0) {
+        index = 0;
+      } else if (index >= (list.length - 1)) {
+        index = 0;
+      } else {
+        index++;
+      }
+      this.selected = list[index].name || '';
+    }
   }
 }
