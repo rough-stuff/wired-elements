@@ -13,7 +13,7 @@ npm i wired-fab
 ```
 Import wired-fab definition into your HTML page:
 ```html
-<script type="module" src="wired-fab/lib.wired-fab.js"></script>
+<script type="module" src="wired-fab/lib/wired-fab.js"></script>
 ```
 Or into your module script:
 ```javascript
