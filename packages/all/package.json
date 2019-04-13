@@ -49,6 +49,7 @@
     "wired-toggle": "^0.9.0-1",
     "wired-tooltip": "^0.9.0-1",
     "wired-tabs": "^0.9.0-1",
-    "wired-fab": "^0.9.0-1"
+    "wired-fab": "^0.9.0-1",
+    "wired-spinner": "^0.9.0-1"
   }
 }
