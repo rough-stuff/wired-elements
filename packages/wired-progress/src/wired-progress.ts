@@ -1,5 +1,5 @@
 import { WiredBase, customElement, property, TemplateResult, html, css, CSSResult } from 'wired-lib/lib/wired-base';
-import { rectangle, polygon } from 'wired-lib';
+import { rectangle, hachureFill } from 'wired-lib';
 
 @customElement('wired-progress')
 export class WiredProgress extends WiredBase {
@@ -49,13 +49,17 @@ export class WiredProgress extends WiredBase {
   
     .progressLabel {
       color: var(--wired-progress-label-color, #000);
-      font-size: var(--wired-progress-font-size, 18px);
+      font-size: var(--wired-progress-font-size, 14px);
+      background: var(--wired-progress-label-background, rgba(255,255,255,0.9));
+      padding: 2px 6px;
+      border-radius: 4px;
+      letter-spacing: 1.25px;
     }
   
-    .progbox {
-      fill: var(--wired-progress-color, rgba(0, 0, 200, 0.1));
-      stroke-opacity: 0.6;
-      stroke-width: 0.4;
+    .progbox path {
+      stroke: var(--wired-progress-color, rgba(0, 0, 200, 0.8));
+      stroke-width: 2.75;
+      fill: none;
     }
     `;
   }
@@ -104,12 +108,13 @@ export class WiredProgress extends WiredBase {
     if (this.max > this.min) {
       pct = (this.value - this.min) / (this.max - this.min);
       const progWidth = s.width * Math.max(0, Math.min(pct, 100));
-      const progBox = polygon(svg, [
+      const progBox = hachureFill([
         [0, 0],
         [progWidth, 0],
         [progWidth, s.height],
         [0, s.height]
       ]);
+      svg.appendChild(progBox);
       progBox.classList.add('progbox');
     }
     this.classList.remove('wired-pending');

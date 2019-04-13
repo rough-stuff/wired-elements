@@ -1,0 +1,35 @@
+<html>
+
+<head>
+  <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+  <script type="module" src="../packages/wired-progress/lib/wired-progress.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 10px;
+      font-family: sans-serif;
+      line-height: 1.5;
+    }
+
+    wired-progress {
+      margin: 10px;
+    }
+
+    .custom {
+      --wired-progress-color: rgba(220, 0, 50, 0.1);
+      --wired-progress-label-color: green;
+      --wired-progress-font-size: 24px;
+      width: 300px;
+    }
+  </style>
+</head>
+
+<body>
+  <wired-progress value="25"></wired-progress>
+  <wired-progress value="10" min="5" max="15"></wired-progress>
+  <wired-progress value="65" percentage></wired-progress>
+  <wired-progress class="custom" value="30"></wired-progress>
+</body>
+
+</html>

@@ -555,13 +555,17 @@ var WiredElements=function(t){"use strict";const e=new WeakMap,i=t=>"function"==
   
     .progressLabel {
       color: var(--wired-progress-label-color, #000);
-      font-size: var(--wired-progress-font-size, 18px);
+      font-size: var(--wired-progress-font-size, 14px);
+      background: var(--wired-progress-label-background, rgba(255,255,255,0.9));
+      padding: 2px 6px;
+      border-radius: 4px;
+      letter-spacing: 1.25px;
     }
   
-    .progbox {
-      fill: var(--wired-progress-color, rgba(0, 0, 200, 0.1));
-      stroke-opacity: 0.6;
-      stroke-width: 0.4;
+    .progbox path {
+      stroke: var(--wired-progress-color, rgba(0, 0, 200, 0.8));
+      stroke-width: 2.75;
+      fill: none;
     }
     `}render(){return A`
     <div class="overlay">
@@ -570,7 +574,7 @@ var WiredElements=function(t){"use strict";const e=new WeakMap,i=t=>"function"==
     <div class="overlay labelContainer">
       <div class="progressLabel">${this.getProgressLabel()}</div>
     </div>
-    `}createRenderRoot(){const t=super.createRenderRoot();return this.classList.add("wired-pending"),t}getProgressLabel(){if(this.percentage){if(this.max===this.min)return"%";return Math.floor((this.value-this.min)/(this.max-this.min)*100)+"%"}return""+this.value}updated(){const t=this.shadowRoot.getElementById("svg");for(;t.hasChildNodes();)t.removeChild(t.lastChild);const e=this.getBoundingClientRect();t.setAttribute("width",`${e.width}`),t.setAttribute("height",`${e.height}`),Et(t,0,0,e.width,e.height);let i=0;if(this.max>this.min){i=(this.value-this.min)/(this.max-this.min);const s=e.width*Math.max(0,Math.min(i,100));Pt(t,[[0,0],[s,0],[s,e.height],[0,e.height]]).classList.add("progbox")}this.classList.remove("wired-pending")}},ee([et({type:Number}),ie("design:type",Object)],t.WiredProgress.prototype,"value",void 0),ee([et({type:Number}),ie("design:type",Object)],t.WiredProgress.prototype,"min",void 0),ee([et({type:Number}),ie("design:type",Object)],t.WiredProgress.prototype,"max",void 0),ee([et({type:Boolean}),ie("design:type",Object)],t.WiredProgress.prototype,"percentage",void 0),t.WiredProgress=ee([Q("wired-progress")],t.WiredProgress);var se=function(t,e,i,s){var o,n=arguments.length,r=n<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var a=t.length-1;a>=0;a--)(o=t[a])&&(r=(n<3?o(r):n>3?o(e,i,r):o(e,i))||r);return n>3&&r&&Object.defineProperty(e,i,r),r},oe=function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)};t.WiredRadio=class extends ct{constructor(){super(...arguments),this.checked=!1,this.disabled=!1,this.iconsize=24}static get styles(){return dt`
+    `}createRenderRoot(){const t=super.createRenderRoot();return this.classList.add("wired-pending"),t}getProgressLabel(){if(this.percentage){if(this.max===this.min)return"%";return Math.floor((this.value-this.min)/(this.max-this.min)*100)+"%"}return""+this.value}updated(){const t=this.shadowRoot.getElementById("svg");for(;t.hasChildNodes();)t.removeChild(t.lastChild);const e=this.getBoundingClientRect();t.setAttribute("width",`${e.width}`),t.setAttribute("height",`${e.height}`),Et(t,0,0,e.width,e.height);let i=0;if(this.max>this.min){i=(this.value-this.min)/(this.max-this.min);const s=e.width*Math.max(0,Math.min(i,100)),o=Tt([[0,0],[s,0],[s,e.height],[0,e.height]]);t.appendChild(o),o.classList.add("progbox")}this.classList.remove("wired-pending")}},ee([et({type:Number}),ie("design:type",Object)],t.WiredProgress.prototype,"value",void 0),ee([et({type:Number}),ie("design:type",Object)],t.WiredProgress.prototype,"min",void 0),ee([et({type:Number}),ie("design:type",Object)],t.WiredProgress.prototype,"max",void 0),ee([et({type:Boolean}),ie("design:type",Object)],t.WiredProgress.prototype,"percentage",void 0),t.WiredProgress=ee([Q("wired-progress")],t.WiredProgress);var se=function(t,e,i,s){var o,n=arguments.length,r=n<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var a=t.length-1;a>=0;a--)(o=t[a])&&(r=(n<3?o(r):n>3?o(e,i,r):o(e,i))||r);return n>3&&r&&Object.defineProperty(e,i,r),r},oe=function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)};t.WiredRadio=class extends ct{constructor(){super(...arguments),this.checked=!1,this.disabled=!1,this.iconsize=24}static get styles(){return dt`
     :host {
       display: inline-block;
       position: relative;
