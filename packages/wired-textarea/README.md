@@ -1,9 +1,7 @@
 # wired-textarea
-Hand-drawn sketchy textarea web component.
+Hand-drawn sketchy multi-line text input web component. 
 
 For demo and view the complete set of wired-elememts: [wiredjs.com](http://wiredjs.com/)
-
-Learn about web components [here](https://www.webcomponents.org/introduction).
 
 ## Usage
 
@@ -13,7 +11,7 @@ npm i wired-textarea
 ```
 Import wired-textarea definition into your HTML page:
 ```html
-<script type="module" src="wired-textarea/wired-textarea.js"></script>
+<script type="module" src="wired-textarea/lib/wired-textarea.js"></script>
 ```
 Or into your module script:
 ```javascript
@@ -22,10 +20,10 @@ import { WiredTextarea } from "wired-textarea"
 
 Use it in your web page:
 ```html
-<wired-textarea placeholder="Enter text" rows="3"></wired-textarea>
+<wired-textarea placeholder="Enter text" rows="6"></wired-textarea>
 ```
 
-### Properties
+## Properties
 
 **rows** - Initial number of rows in textarea.
 
@@ -36,4 +34,8 @@ Use it in your web page:
 **disabled** - Disabled the control.
 
 **placeholder** - Placeholder text for the input.
+
+## Events
+
+Fires all the events the native `<textarea>` element fires
 
