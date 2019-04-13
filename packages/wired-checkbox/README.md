@@ -13,7 +13,7 @@ npm i wired-checkbox
 ```
 Import wired-checkbox definition into your HTML page:
 ```html
-<script type="module" src="wired-checkbox/wired-checkbox.js"></script>
+<script type="module" src="wired-checkbox/lib/wired-checkbox.js"></script>
 ```
 Or into your module script:
 ```javascript
