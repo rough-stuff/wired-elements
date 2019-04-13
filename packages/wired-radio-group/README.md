@@ -2,7 +2,7 @@
 ![wired radio group](https://wiredjs.github.io/wired-elements/images/radio.gif)
 
 # wired-radio-group
-Allows user to select at most one radio button from a set. Works with [wired-radio](https://github.com/wiredjs/wired-radio).
+Allows user to select at most one radio button from a set. Works with [wired-radio](https://github.com/wiredjs/wired-elements/tree/master/packages/wired-radio).
 
 For demo and view the complete set of wired-elememts: [wiredjs.com](http://wiredjs.com/)
 
