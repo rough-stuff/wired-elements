@@ -1,10 +1,10 @@
+![wired card](https://wiredjs.github.io/wired-elements/images/card.png)
+
 # wired-card
 
 wired-card is s a container for other web elements - with a hand-drawn, wireframe like, look.
 
 For demo and view the complete set of wired-elememts: [wiredjs.com](http://wiredjs.com/)
-
-Learn about web components [here](https://www.webcomponents.org/introduction).
 
 ## Usage
 
@@ -32,8 +32,10 @@ Use it in your web page:
 </wired-card>
 ```
 
-### Properties
+## Properties
 
 **elevation** - Numerical number between 1-5 (inclusive) - sets the elevation of the card. Default is 1.
 
-![wired card](https://wiredjs.github.io/wired-elements/images/card.png)
+## Methods
+
+**requestUpdate()** - When dynamically adding content to the card, call this method to recompute the boundaries of the card. 
