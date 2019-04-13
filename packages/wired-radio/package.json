@@ -1,6 +1,6 @@
 {
   "name": "wired-radio",
-  "version": "0.9.0-1",
+  "version": "0.9.0",
   "description": "Hand-drawn sketchy radio button - web component",
   "main": "lib/wired-radio.js",
   "module": "lib/wired-radio.js",
@@ -27,6 +27,6 @@
   "author": "Preet Shihn <preetshihn@gmail.com> (https://twitter.com/preetster)",
   "license": "MIT",
   "dependencies": {
-    "wired-lib": "^0.9.0-1"
+    "wired-lib": "^0.9.0"
   }
 }
