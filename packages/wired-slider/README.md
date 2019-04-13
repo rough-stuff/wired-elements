@@ -50,5 +50,5 @@ Use it in your web page:
 **--wired-slider-bar-color** Color of the bar on which the knob slides. 
 
 ## Events
+
 **change** event fired when the user changes the slider value. 
-**input** event fired when the user is changing the slider value. 
