@@ -197,9 +197,6 @@ var WiredElements=function(t){"use strict";const e=new WeakMap,i=t=>"function"==
       background: currentColor;
       opacity: 0;
     }
-    button:hover::before {
-      opacity: 0.05;
-    }
     button span {
       display: inline-block;
       transition: transform 0.2s ease;
@@ -228,6 +225,11 @@ var WiredElements=function(t){"use strict";const e=new WeakMap,i=t=>"function"==
       stroke-width: 2.75;
       fill: transparent;
       transition: transform 0.05s ease;
+    }
+    @media (hover: hover) {
+      button:hover::before {
+        opacity: 0.05;
+      }
     }
     `}render(){return A`
     <button class="${this.selected?"selected":""}">

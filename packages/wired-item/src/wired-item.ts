@@ -51,9 +51,6 @@ export class WiredItem extends WiredBase {
       background: currentColor;
       opacity: 0;
     }
-    button:hover::before {
-      opacity: 0.05;
-    }
     button span {
       display: inline-block;
       transition: transform 0.2s ease;
@@ -82,6 +79,11 @@ export class WiredItem extends WiredBase {
       stroke-width: 2.75;
       fill: transparent;
       transition: transform 0.05s ease;
+    }
+    @media (hover: hover) {
+      button:hover::before {
+        opacity: 0.05;
+      }
     }
     `;
   }
