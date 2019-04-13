@@ -1,12 +1,10 @@
-![wired combo](https://wiredjs.github.io/wired-elements/images/combo.png)
+![wired combo](https://wiredjs.github.io/wired-elements/images/combo.gif)
 
 # wired-combo
 
 Combobox control - similar to a native browser select element; with a hand-drawn, wireframe like, style.
 
 For demo and view the complete set of wired-elememts: [wiredjs.com](http://wiredjs.com/)
-
-Learn about web components [here](https://www.webcomponents.org/introduction).
 
 ## Usage
 
@@ -25,30 +23,23 @@ import { WiredCombo } from "wired-combo"
 
 Use it in your web page:
 ```html
-<wired-combo selected="two">
-  <wired-item value="one" text="Number one"></wired-item>
-  <wired-item value="two" text="Number two"></wired-item>
-  <wired-item value="three" text="Number three"></wired-item>
-</wired-combo>
-  
-<wired-combo selected="one" disabled>
-  <wired-item value="one" text="Number one"></wired-item>
-  <wired-item value="two" text="Number two"></wired-item>
+<wired-combo id="combo" selected="two">
+  <wired-item value="one">Number One</wired-item>
+  <wired-item value="two">Number Two</wired-item>
+  <wired-item value="three">Number Three</wired-item>
 </wired-combo>
 ```
 
-### Properties
+## Properties
 
 **disabled** - disables the combo selector. Default value is false. 
 
-**selected** - Name of the selected item. 
+**selected** - Value of the selected wired-item. 
 
-### Custom CSS Variables
+## Custom CSS Variables
 
 **--wired-combo-popup-bg** Background color of the dropdown when combo selector is open.
+**--wired-item-selected-bg** Background color of the selected item
 
-**--wired-combo-item-hover-bg** Color of item in the dropdown on hover. 
-
-
-### Events
+## Events
 **selected** event fired when an item is selected by the user. 
