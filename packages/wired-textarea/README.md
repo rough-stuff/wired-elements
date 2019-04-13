@@ -1,5 +1,3 @@
-![wired textarea](https://wiredjs.github.io/wired-elements/images/textarea.png)
-
 # wired-textarea
 Hand-drawn sketchy multi-line text input web component. 
 
@@ -41,3 +39,4 @@ Use it in your web page:
 
 Fires all the events the native `<textarea>` element fires
 
+![wired textarea](https://wiredjs.github.io/wired-elements/images/textarea.png)
