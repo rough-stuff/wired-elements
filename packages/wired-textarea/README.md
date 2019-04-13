@@ -1,3 +1,5 @@
+![wired textarea](https://wiredjs.github.io/wired-elements/images/textarea.png)
+
 # wired-textarea
 Hand-drawn sketchy multi-line text input web component. 
 
