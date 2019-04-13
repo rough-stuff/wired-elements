@@ -9,7 +9,7 @@ For demo and view the complete set of wired-elememts: [wiredjs.com](http://wired
 
 Add wired-tabs to your project:
 ```
-npm i wired-button
+npm i wired-tabs
 ```
 Import wired-tabs definition into your HTML page:
 ```html
