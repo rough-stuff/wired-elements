@@ -14,7 +14,7 @@ npm i wired-card
 ```
 Import wired-card definition into your HTML page:
 ```html
-<script type="module" src="wired-card/wired-card.js"></script>
+<script type="module" src="wired-card/lib/wired-card.js"></script>
 ```
 Or into your module script:
 ```javascript
