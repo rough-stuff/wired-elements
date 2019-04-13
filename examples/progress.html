@@ -3,6 +3,7 @@
 <head>
   <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
   <script type="module" src="../packages/wired-progress/lib/wired-progress.js"></script>
+  <script type="module" src="../packages/wired-button/lib/wired-button.js"></script>
 
   <style>
     body {
@@ -14,6 +15,10 @@
 
     wired-progress {
       margin: 10px;
+    }
+
+    wired-button {
+      margin: 0 10px;
     }
 
     .custom {
@@ -30,6 +35,38 @@
   <wired-progress value="10" min="5" max="15"></wired-progress>
   <wired-progress value="65" percentage></wired-progress>
   <wired-progress class="custom" value="30"></wired-progress>
+
+  <section style="margin-top: 40px;">
+    <wired-progress id="progress"></wired-progress>
+    <div style="margin-top: 16px;">
+      <wired-button id="btns">Start</wired-button>
+      <wired-button id="btnr">Reset</wired-button>
+    </div>
+  </section>
+
+  <script>
+    const prog = document.getElementById('progress')
+    let timer = 0;
+    document.getElementById('btns').addEventListener('click', () => {
+      if (timer) {
+        window.clearInterval(timer);
+      }
+      timer = window.setInterval(() => {
+        if (prog.value >= 100) {
+          prog.value = 0;
+        } else {
+          prog.value = prog.value + 1;
+        }
+      }, 100);
+    });
+    document.getElementById('btnr').addEventListener('click', () => {
+      if (timer) {
+        window.clearInterval(timer);
+        timer = 0;
+      }
+      prog.value = 0;
+    });
+  </script>
 </body>
 
 </html>

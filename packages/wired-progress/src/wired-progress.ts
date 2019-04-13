@@ -8,6 +8,8 @@ export class WiredProgress extends WiredBase {
   @property({ type: Number }) max = 100;
   @property({ type: Boolean }) percentage = false;
 
+  private box?: SVGElement;
+
   static get styles(): CSSResult {
     return css`
     :host {
@@ -102,7 +104,11 @@ export class WiredProgress extends WiredBase {
     const s = this.getBoundingClientRect();
     svg.setAttribute('width', `${s.width}`);
     svg.setAttribute('height', `${s.height}`);
-    rectangle(svg, 0, 0, s.width, s.height);
+    if (!this.box) {
+      this.box = rectangle(svg, 0, 0, s.width, s.height);
+    } else {
+      svg.appendChild(this.box);
+    }
 
     let pct = 0;
     if (this.max > this.min) {
