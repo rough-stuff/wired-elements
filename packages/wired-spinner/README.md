@@ -11,7 +11,7 @@ Add wired-spinner to your project:
 ```
 npm i wired-spinner
 ```
-Import wired-button definition into your HTML page:
+Import wired-spinner definition into your HTML page:
 ```html
 <script type="module" src="wired-spinner/lib/wired-spinner.js"></script>
 ```
