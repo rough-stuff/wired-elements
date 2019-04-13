@@ -39,6 +39,7 @@ Use it in your web page:
 ## Custom CSS Variables
 
 **--wired-combo-popup-bg** Background color of the dropdown when combo selector is open.
+
 **--wired-item-selected-bg** Background color of the selected item
 
 ## Events
