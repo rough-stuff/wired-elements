@@ -1,11 +1,9 @@
-![wired radio](https://wiredjs.github.io/wired-elements/images/radio.png)
+![wired radio](https://wiredjs.github.io/wired-elements/images/radio.gif)
 
 # wired-radio
-Hand-drawn sketchy radio button web component.
+Hand-drawn sketchy radio button web component. Usually used with [wired-radio-group](https://github.com/wiredjs/wired-elements/tree/master/packages/wired-radio-group).
 
 For demo and view the complete set of wired-elememts: [wiredjs.com](http://wiredjs.com/)
-
-Learn about web components [here](https://www.webcomponents.org/introduction).
 
 ## Usage
 
@@ -15,7 +13,7 @@ npm i wired-radio
 ```
 Import wired-radio definition into your HTML page:
 ```html
-<script type="module" src="wired-radio/wired-radio.js"></script>
+<script type="module" src="wired-radio/lib/wired-radio.js"></script>
 ```
 Or into your module script:
 ```javascript
@@ -24,9 +22,9 @@ import { WiredRadio } from "wired-radio"
 
 Use it in your web page:
 ```html
-<wired-radio text="Radio One"></wired-radio>
-<wired-radio text="Radio Two" checked></wired-radio>
-<wired-radio text="Radio disabled" disabled></wired-radio>
+<wired-radio>Radio One</wired-radio>
+<wired-radio checked>Radio Two</wired-radio>
+<wired-radio disabled>Disabled Radio</wired-radio>
 ```
 
 ### Properties
