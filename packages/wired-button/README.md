@@ -13,7 +13,7 @@ npm i wired-button
 ```
 Import wired-button definition into your HTML page:
 ```html
-<script type="module" src="wired-button/wired-button.js"></script>
+<script type="module" src="wired-button/lib/wired-button.js"></script>
 ```
 Or into your module script:
 ```javascript
