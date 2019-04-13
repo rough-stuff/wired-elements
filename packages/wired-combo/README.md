@@ -14,7 +14,7 @@ npm i wired-combo
 ```
 Import wired-combo definition into your HTML page:
 ```html
-<script type="module" src="wired-combo/wired-combo.js"></script>
+<script type="module" src="wired-combo/lib/wired-combo.js"></script>
 ```
 Or into your module script:
 ```javascript
