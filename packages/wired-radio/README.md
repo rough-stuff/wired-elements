@@ -42,5 +42,5 @@ Use it in your web page:
 **--wired-radio-icon-color** Color of the radio button. Default is *currentColor*.
 
 ### Events
-**change** event fired when state of the radio changes, i.e. the user checks/unchecks the radio.
+**change** - event fired when state of the radio changes, i.e. the user checks/unchecks the radio.
 
