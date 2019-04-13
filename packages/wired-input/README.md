@@ -1,11 +1,9 @@
-![wired input](https://wiredjs.github.io/wired-elements/images/input.png)
+![wired input](https://wiredjs.github.io/wired-elements/images/input.gif)
 
 # wired-input
 Hand-drawn sketchy text input web component.
 
 For demo and view the complete set of wired-elememts: [wiredjs.com](http://wiredjs.com/)
-
-Learn about web components [here](https://www.webcomponents.org/introduction).
 
 ## Usage
 
@@ -15,7 +13,7 @@ npm i wired-input
 ```
 Import wired-input definition into your HTML page:
 ```html
-<script type="module" src="wired-input/wired-input.js"></script>
+<script type="module" src="wired-input/lib/wired-input.js"></script>
 ```
 Or into your module script:
 ```javascript
@@ -26,10 +24,11 @@ Use it in your web page:
 ```html
 <wired-input></wired-input>
 <wired-input placeholder="Enter name"></wired-input>
+<wired-input type="password" placeholder="Password"></wired-input>
 <wired-input placeholder="Disabled" disabled></wired-input>
 ```
 
-### Properties
+## Properties
 
 **placeholder** - Placeholder text for the input.
 
@@ -39,4 +38,6 @@ Use it in your web page:
 
 **value** - Value of the text.
 
+## Events
 
+Fires all events a standard `<input>` element fires. 
