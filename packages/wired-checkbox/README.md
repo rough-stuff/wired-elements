@@ -1,11 +1,9 @@
-![wired checkbox](https://wiredjs.github.io/wired-elements/images/checkbox.png)
+![wired checkbox](https://wiredjs.github.io/wired-elements/images/checkbox.gif)
 
 # wired-checkbox
 Hand-drawn sketchy checkbox web component.
 
 For demo and view the complete set of wired-elememts: [wiredjs.com](http://wiredjs.com/)
-
-Learn about web components [here](https://www.webcomponents.org/introduction).
 
 ## Usage
 
@@ -24,22 +22,20 @@ import { WiredCheckbox } from "wired-checkbox"
 
 Use it in your web page:
 ```html
-<wired-checkbox text="Checkbox One"></wired-checkbox>
-<wired-checkbox text="Checkbox Two" checked></wired-checkbox>
-<wired-checkbox text="Checkbox disabled" disabled></wired-checkbox>
+<wired-checkbox>Checkbox One</wired-checkbox>
+<wired-checkbox checked>Checkbox Two</wired-checkbox>
+<wired-checkbox disabled>Disabled checkbox</wired-checkbox>
 ```
 
-### Properties
+## Properties
 
 **checked** - Checked state (boolean). Default is false.
 
-**disabled** - disables the checkbox. Default value is false. 
+**disabled** - Disables the checkbox. Default value is false. 
 
-**text** - Text associated with the checkbox.
-
-### Custom CSS Variables
+## Custom CSS Properties
 
 **--wired-checkbox-icon-color** Color of the checkbox. Default is *currentColor*.
 
-### Events
+## Events
 **change** event fired when state of the checkbox changes, i.e. the user checks/unchecks the box.
