@@ -12,7 +12,7 @@ Play with wired-elements on CodeSandbox:
 
 [Wired Elements](https://codesandbox.io/s/p77jkn13nq)
 
-### Try it with a framework
+#### Try it with a framework
 
 [Wired Elements in React](https://codesandbox.io/embed/xrll5wyl8w)
 
