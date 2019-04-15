@@ -19,10 +19,11 @@ export class WiredSpinner extends WiredBase {
     :host {
       display: inline-block;
       position: relative;
+      opacity: 0;
     }
 
-    :host(.wired-pending) {
-      opacity: 0;
+    :host(.wired-rendered) {
+      opacity: 1;
     }
 
     #svg {
@@ -50,12 +51,6 @@ export class WiredSpinner extends WiredBase {
     `;
   }
 
-  createRenderRoot() {
-    const root = super.createRenderRoot();
-    this.classList.add('wired-pending');
-    return root;
-  }
-
   firstUpdated() {
     if (this.svg) {
       ellipse(this.svg, 38, 38, 60, 60);
@@ -64,7 +59,7 @@ export class WiredSpinner extends WiredBase {
       this.svg.appendChild(this.knob);
     }
     this.updateCursor();
-    this.classList.remove('wired-pending');
+    this.classList.add('wired-rendered');
   }
 
   updated() {

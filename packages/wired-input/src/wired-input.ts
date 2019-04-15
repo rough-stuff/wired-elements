@@ -31,10 +31,11 @@ export class WiredInput extends WiredBase {
       font-family: sans-serif;
       width: 150px;
       outline: none;
-    }
-  
-    :host(.wired-pending) {
       opacity: 0;
+    }
+
+    :host(.wired-rendered) {
+      opacity: 1;
     }
   
     :host(.wired-disabled) {
@@ -94,9 +95,7 @@ export class WiredInput extends WiredBase {
   }
 
   createRenderRoot() {
-    const root = this.attachShadow({ mode: 'open', delegatesFocus: true });
-    this.classList.add('wired-pending');
-    return root;
+    return this.attachShadow({ mode: 'open', delegatesFocus: true });
   }
 
   get input(): HTMLInputElement | null {
@@ -142,7 +141,7 @@ export class WiredInput extends WiredBase {
       this.input!.value = this.pendingValue;
       delete this.pendingValue;
     }
-    this.classList.remove('wired-pending');
+    this.classList.add('wired-rendered');
   }
 
   private refreshDisabledState() {

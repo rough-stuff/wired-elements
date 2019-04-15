@@ -13,10 +13,11 @@ export class WiredCard extends WiredBase {
       display: inline-block;
       position: relative;
       padding: 10px;
-    }
-  
-    :host(.wired-pending) {
       opacity: 0;
+    }
+
+    :host(.wired-rendered) {
+      opacity: 1;
     }
   
     .overlay {
@@ -49,12 +50,6 @@ export class WiredCard extends WiredBase {
       <svg id="svg"></svg>
     </div>
     `;
-  }
-
-  createRenderRoot() {
-    const root = super.createRenderRoot();
-    this.classList.add('wired-pending');
-    return root;
   }
 
   connectedCallback() {
@@ -111,6 +106,6 @@ export class WiredCard extends WiredBase {
       (line(svg, (i * 2), s.height - 4 + (i * 2), s.width - 4 + (i * 2), s.height - 4 + (i * 2))).style.opacity = `${(85 - (i * 10)) / 100}`;
       (line(svg, s.width - 4 + (i * 2), s.height - 4 + (i * 2), s.width - 4 + (i * 2), i * 2)).style.opacity = `${(85 - (i * 10)) / 100}`;
     }
-    this.classList.remove('wired-pending');
+    this.classList.add('wired-rendered');
   }
 }

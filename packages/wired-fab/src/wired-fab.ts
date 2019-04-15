@@ -33,10 +33,11 @@ export class WiredFab extends WiredBase {
       box-sizing: border-box !important;
       outline: none;
       color: #fff;
-    }
-  
-    :host(.wired-pending) {
       opacity: 0;
+    }
+
+    :host(.wired-rendered) {
+      opacity: 1;
     }
   
     :host(.wired-disabled) {
@@ -95,12 +96,6 @@ export class WiredFab extends WiredBase {
     `;
   }
 
-  createRenderRoot() {
-    const root = super.createRenderRoot();
-    this.classList.add('wired-pending');
-    return root;
-  }
-
   firstUpdated() {
     this.addEventListener('keydown', (event) => {
       if ((event.keyCode === 13) || (event.keyCode === 32)) {
@@ -127,7 +122,7 @@ export class WiredFab extends WiredBase {
     svg.setAttribute('height', `${min}`);
     const g = hachureEllipseFill(min / 2, min / 2, min, min);
     svg.appendChild(g);
-    this.classList.remove('wired-pending');
+    this.classList.add('wired-rendered');
   }
 
   private refreshDisabledState() {

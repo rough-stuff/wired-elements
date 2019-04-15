@@ -12,6 +12,7 @@ export class WiredCheckbox extends WiredBase {
       display: block;
       font-family: inherit;
       outline: none;
+      opacity: 0;
     }
   
     :host(.wired-disabled) {
@@ -23,9 +24,9 @@ export class WiredCheckbox extends WiredBase {
     :host(.wired-disabled) svg {
       background: rgba(0, 0, 0, 0.07);
     }
-  
-    :host(.wired-pending) {
-      opacity: 0;
+
+    :host(.wired-rendered) {
+      opacity: 1;
     }
   
     :host(:focus) path {
@@ -70,12 +71,6 @@ export class WiredCheckbox extends WiredBase {
       </div>
     </div>
     `;
-  }
-
-  createRenderRoot() {
-    const root = super.createRenderRoot();
-    this.classList.add('wired-pending');
-    return root;
   }
 
   private refreshDisabledState() {
@@ -129,6 +124,6 @@ export class WiredCheckbox extends WiredBase {
         d.style.display = 'none';
       });
     }
-    this.classList.remove('wired-pending');
+    this.classList.add('wired-rendered');
   }
 }
