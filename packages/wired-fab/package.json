@@ -1,6 +1,6 @@
 {
   "name": "wired-fab",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "Round hand-drawn sketchy button with an icon placed at the cente.",
   "main": "lib/wired-fab.js",
   "module": "lib/wired-fab.js",
