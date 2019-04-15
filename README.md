@@ -8,11 +8,15 @@ Wired Elements is a series of basic UI Elements that have a hand drawn look. The
 The elements are drawn with enough randomness that no two renderings will be exactly the same - just like two separate hand drawn shapes. 
 
 ## Try now
-Play with wired-elements live on StackBlitz playground:
+Play with wired-elements on CodeSandbox:
 
-[Wired Elements](https://stackblitz.com/edit/wired-elements?file=index.html)
+[Wired Elements](https://codesandbox.io/s/p77jkn13nq)
 
-[Wired Elements in React](https://stackblitz.com/edit/wired-elements-react?file=index.js)
+### Try it with a framework
+
+[Wired Elements in React](https://codesandbox.io/embed/xrll5wyl8w)
+
+[Wired Elements in Vue](https://codesandbox.io/embed/vj389y9375)
 
 
 ## Install
