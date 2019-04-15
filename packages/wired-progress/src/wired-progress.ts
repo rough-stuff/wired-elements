@@ -18,10 +18,11 @@ export class WiredProgress extends WiredBase {
       width: 400px;
       height: 42px;
       font-family: sans-serif;
-    }
-  
-    :host(.wired-pending) {
       opacity: 0;
+    }
+
+    :host(.wired-rendered) {
+      opacity: 1;
     }
   
     svg {
@@ -77,12 +78,6 @@ export class WiredProgress extends WiredBase {
     `;
   }
 
-  createRenderRoot() {
-    const root = super.createRenderRoot();
-    this.classList.add('wired-pending');
-    return root;
-  }
-
   private getProgressLabel(): string {
     if (this.percentage) {
       if (this.max === this.min) {
@@ -123,6 +118,6 @@ export class WiredProgress extends WiredBase {
       svg.appendChild(progBox);
       progBox.classList.add('progbox');
     }
-    this.classList.remove('wired-pending');
+    this.classList.add('wired-rendered');
   }
 }

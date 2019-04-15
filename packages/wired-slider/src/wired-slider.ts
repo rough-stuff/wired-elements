@@ -29,6 +29,11 @@ export class WiredSlider extends WiredBase {
       height: 40px;
       outline: none;
       box-sizing: border-box;
+      opacity: 0;
+    }
+
+    :host(.wired-rendered) {
+      opacity: 1;
     }
   
     :host(.wired-disabled) {
@@ -83,10 +88,6 @@ export class WiredSlider extends WiredBase {
     .bar {
       stroke: var(--wired-slider-bar-color, rgb(0, 0, 0));
     }
-  
-    :host(.wired-pending) {
-      opacity: 0;
-    }
     `;
   }
 
@@ -96,12 +97,6 @@ export class WiredSlider extends WiredBase {
       <svg id="svg"></svg>
     </div>
     `;
-  }
-
-  createRenderRoot() {
-    const root = super.createRenderRoot();
-    this.classList.add('wired-pending');
-    return root;
   }
 
   get value(): number {
@@ -138,7 +133,7 @@ export class WiredSlider extends WiredBase {
     this.knob = ellipse(this.knobGroup, radius, s.height / 2, radius * 2, radius * 2);
     this.knob.classList.add('knob');
     this.onValueChange();
-    this.classList.remove('wired-pending');
+    this.classList.add('wired-rendered');
 
     // aria
     this.setAttribute('role', 'slider');

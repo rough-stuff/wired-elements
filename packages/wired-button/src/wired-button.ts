@@ -27,10 +27,11 @@ export class WiredButton extends WiredBase {
       letter-spacing: 1.25px;
       font-size: 14px;
       text-transform: uppercase;
+      opacity: 0;
     }
 
-    :host(.wired-pending) {
-      opacity: 0;
+    :host(.wired-rendered) {
+      opacity: 1;
     }
 
     :host(:active) path {
@@ -79,12 +80,6 @@ export class WiredButton extends WiredBase {
     `;
   }
 
-  createRenderRoot() {
-    const root = super.createRenderRoot();
-    this.classList.add('wired-pending');
-    return root;
-  }
-
   firstUpdated() {
     this.addEventListener('keydown', (event) => {
       if ((event.keyCode === 13) || (event.keyCode === 32)) {
@@ -118,7 +113,7 @@ export class WiredButton extends WiredBase {
       (line(svg, (i * 2), s.height + (i * 2), s.width + (i * 2), s.height + (i * 2))).style.opacity = `${(75 - (i * 10)) / 100}`;
       (line(svg, s.width + (i * 2), s.height + (i * 2), s.width + (i * 2), i * 2)).style.opacity = `${(75 - (i * 10)) / 100}`;
     }
-    this.classList.remove('wired-pending');
+    this.classList.add('wired-rendered');
   }
 
   private refreshDisabledState() {

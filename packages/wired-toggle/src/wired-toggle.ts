@@ -15,10 +15,11 @@ export class WiredToggle extends WiredBase {
       cursor: pointer;
       position: relative;
       outline: none;
-    }
-  
-    :host(.wired-pending) {
       opacity: 0;
+    }
+
+    :host(.wired-rendered) {
+      opacity: 1;
     }
   
     :host(.wired-disabled) {
@@ -75,12 +76,6 @@ export class WiredToggle extends WiredBase {
     `;
   }
 
-  createRenderRoot() {
-    const root = super.createRenderRoot();
-    this.classList.add('wired-pending');
-    return root;
-  }
-
   private refreshDisabledState() {
     if (this.disabled) {
       this.classList.add('wired-disabled');
@@ -122,7 +117,7 @@ export class WiredToggle extends WiredBase {
     this.knob.appendChild(knobFill);
     ellipse(this.knob, 16, 16, 32, 32);
 
-    this.classList.remove('wired-pending');
+    this.classList.add('wired-rendered');
   }
 
   updated(changed: PropertyValues) {

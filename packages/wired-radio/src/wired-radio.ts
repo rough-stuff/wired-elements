@@ -19,10 +19,11 @@ export class WiredRadio extends WiredBase {
       font-family: inherit;
       width: 150px;
       outline: none;
-    }
-  
-    :host(.wired-pending) {
       opacity: 0;
+    }
+
+    :host(.wired-rendered) {
+      opacity: 1;
     }
   
     :host(.wired-disabled) {
@@ -80,12 +81,6 @@ export class WiredRadio extends WiredBase {
     `;
   }
 
-  createRenderRoot() {
-    const root = super.createRenderRoot();
-    this.classList.add('wired-pending');
-    return root;
-  }
-
   private refreshDisabledState() {
     if (this.disabled) {
       this.classList.add('wired-disabled');
@@ -129,6 +124,6 @@ export class WiredRadio extends WiredBase {
     this.dot = ellipse(svg, s.width / 2, s.height / 2, iw, ih);
     this.dot.classList.add('filledPath');
     this.dot.style.display = this.checked ? '' : 'none';
-    this.classList.remove('wired-pending');
+    this.classList.add('wired-rendered');
   }
 }

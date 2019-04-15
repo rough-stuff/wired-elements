@@ -32,10 +32,11 @@ export class WiredIconButton extends WiredBase {
       -webkit-tap-highlight-color: transparent;
       box-sizing: border-box !important;
       outline: none;
-    }
-  
-    :host(.wired-pending) {
       opacity: 0;
+    }
+
+    :host(.wired-rendered) {
+      opacity: 1;
     }
   
     :host(.wired-disabled) {
@@ -92,12 +93,6 @@ export class WiredIconButton extends WiredBase {
     `;
   }
 
-  createRenderRoot() {
-    const root = super.createRenderRoot();
-    this.classList.add('wired-pending');
-    return root;
-  }
-
   firstUpdated() {
     this.addEventListener('keydown', (event) => {
       if ((event.keyCode === 13) || (event.keyCode === 32)) {
@@ -123,7 +118,7 @@ export class WiredIconButton extends WiredBase {
     svg.setAttribute('width', `${min}`);
     svg.setAttribute('height', `${min}`);
     ellipse(svg, min / 2, min / 2, min, min);
-    this.classList.remove('wired-pending');
+    this.classList.add('wired-rendered');
   }
 
   private refreshDisabledState() {

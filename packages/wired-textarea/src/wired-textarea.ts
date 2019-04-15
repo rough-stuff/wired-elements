@@ -26,10 +26,11 @@ export class WiredTextarea extends WiredBase {
       font-family: sans-serif;
       width: 400px;
       outline: none;
-    }
-  
-    :host(.wired-pending) {
       opacity: 0;
+    }
+
+    :host(.wired-rendered) {
+      opacity: 1;
     }
   
     :host(.wired-disabled) {
@@ -107,9 +108,7 @@ export class WiredTextarea extends WiredBase {
   }
 
   createRenderRoot() {
-    const root = this.attachShadow({ mode: 'open', delegatesFocus: true });
-    this.classList.add('wired-pending');
-    return root;
+    return this.attachShadow({ mode: 'open', delegatesFocus: true });
   }
 
   get textarea(): HTMLTextAreaElement | null {
@@ -190,7 +189,7 @@ export class WiredTextarea extends WiredBase {
       svg.setAttribute('height', `${s.height}`);
       rectangle(svg, 2, 2, s.width - 2, s.height - 2);
       this.prevHeight = s.height;
-      this.classList.remove('wired-pending');
+      this.classList.add('wired-rendered');
       this.updateCached();
     }
   }

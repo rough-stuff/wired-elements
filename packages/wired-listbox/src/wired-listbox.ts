@@ -26,10 +26,11 @@ export class WiredListbox extends WiredBase {
       position: relative;
       padding: 5px;
       outline: none;
-    }
-  
-    :host(.wired-pending) {
       opacity: 0;
+    }
+
+    :host(.wired-rendered) {
+      opacity: 1;
     }
 
     :host(:focus) path {
@@ -74,12 +75,6 @@ export class WiredListbox extends WiredBase {
     `;
   }
 
-  createRenderRoot() {
-    const root = super.createRenderRoot();
-    this.classList.add('wired-pending');
-    return root;
-  }
-
   firstUpdated() {
     this.setAttribute('role', 'listbox');
     this.tabIndex = +((this.getAttribute('tabindex') || 0));
@@ -110,7 +105,7 @@ export class WiredListbox extends WiredBase {
     svg.setAttribute('width', `${s.width}`);
     svg.setAttribute('height', `${s.height}`);
     rectangle(svg, 0, 0, s.width, s.height);
-    this.classList.remove('wired-pending');
+    this.classList.add('wired-rendered');
 
     if (this.horizontal) {
       this.classList.add('wired-horizontal');

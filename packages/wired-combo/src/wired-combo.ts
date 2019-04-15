@@ -27,6 +27,7 @@ export class WiredCombo extends WiredBase {
       font-family: inherit;
       position: relative;
       outline: none;
+      opacity: 0;
     }
   
     :host(.wired-disabled) {
@@ -35,9 +36,9 @@ export class WiredCombo extends WiredBase {
       pointer-events: none;
       background: rgba(0, 0, 0, 0.02);
     }
-  
-    :host(.wired-pending) {
-      opacity: 0;
+    
+    :host(.wired-rendered) {
+      opacity: 1;
     }
 
     :host(:focus) path {
@@ -113,12 +114,6 @@ export class WiredCombo extends WiredBase {
       <slot id="slot"></slot>
     </wired-card>
     `;
-  }
-
-  createRenderRoot() {
-    const root = super.createRenderRoot();
-    this.classList.add('wired-pending');
-    return root;
   }
 
   private refreshDisabledState() {
@@ -197,7 +192,7 @@ export class WiredCombo extends WiredBase {
     poly.style.fill = 'currentColor';
     poly.style.pointerEvents = this.disabled ? 'none' : 'auto';
     poly.style.cursor = 'pointer';
-    this.classList.remove('wired-pending');
+    this.classList.add('wired-rendered');
 
     // aria
     this.setAttribute('aria-expanded', `${this.cardShowing}`);
