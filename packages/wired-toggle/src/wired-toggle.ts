@@ -59,10 +59,10 @@ export class WiredToggle extends WiredBase {
       stroke-width: 3 !important;
       fill: transparent;
     }
-    .knob.unchecked .knobFill path {
+    .knob.unchecked .knobfill path {
       stroke: var(--wired-toggle-off-color, gray);
     }
-    .knob.checked .knobFill path {
+    .knob.checked .knobfill path {
       stroke: var(--wired-toggle-on-color, rgb(63, 81, 181));
     }
     `;
