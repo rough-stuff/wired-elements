@@ -10,7 +10,7 @@
   "scripts": {
     "bootstrap": "npm install && npm run hoist",
     "hoist": "lerna bootstrap --hoist",
-    "dev": "polyserve --npm --module-resolution=node",
+    "dev": "npm run tsc && polyserve --npm --module-resolution=node",
     "tsc": "tsc --build packages/**/tsconfig.json",
     "build": "rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1"
