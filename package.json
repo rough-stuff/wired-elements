@@ -1,6 +1,6 @@
 {
   "name": "wired-elements-repo",
-  "version": "0.8.0",
+  "version": "0.9.2",
   "description": "Collection of hand-drawn sketchy web components",
   "main": "wired-elements.js",
   "private": true,
@@ -12,7 +12,9 @@
     "hoist": "lerna bootstrap --hoist",
     "dev": "npm run tsc && polyserve --npm --module-resolution=node",
     "tsc": "tsc --build packages/**/tsconfig.json",
+    "tsc-all": "tsc -build packages/all/tsconfig-all.json",
     "build": "rollup -c",
+    "bundle": "npm run tsc && npm run tsc-all && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
