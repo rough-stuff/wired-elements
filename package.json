@@ -10,7 +10,7 @@
   "scripts": {
     "bootstrap": "npm install && npm run hoist",
     "hoist": "lerna bootstrap --hoist",
-    "dev": "npm run tsc && polyserve --npm --module-resolution=node",
+    "dev": "polyserve --npm --module-resolution=node",
     "tsc": "lerna run tsc",
     "build": "rollup -c",
     "bundle": "npm run tsc && npm run build",
