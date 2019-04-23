@@ -11,10 +11,9 @@
     "bootstrap": "npm install && npm run hoist",
     "hoist": "lerna bootstrap --hoist",
     "dev": "npm run tsc && polyserve --npm --module-resolution=node",
-    "tsc": "tsc --build packages/**/tsconfig.json",
-    "tsc-all": "tsc -build packages/all/tsconfig-all.json",
+    "tsc": "lerna run tsc",
     "build": "rollup -c",
-    "bundle": "npm run tsc && npm run tsc-all && npm run build",
+    "bundle": "npm run tsc && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
