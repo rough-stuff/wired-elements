@@ -39,3 +39,6 @@ Use it in your web page:
 ## Methods
 
 **requestUpdate()** - When dynamically adding content to the card, call this method to recompute the boundaries of the card. 
+
+## License
+[MIT License](https://github.com/wiredjs/wired-elements/blob/master/LICENSE) (c) [Preet Shihn](https://twitter.com/preetster)

@@ -52,3 +52,6 @@ Use it in your web page:
 ## Events
 
 **change** event fired when the user changes the slider value. 
+
+## License
+[MIT License](https://github.com/wiredjs/wired-elements/blob/master/LICENSE) (c) [Preet Shihn](https://twitter.com/preetster)

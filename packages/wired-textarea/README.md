@@ -40,3 +40,6 @@ Use it in your web page:
 Fires all the events the native `<textarea>` element fires
 
 ![wired textarea](https://wiredjs.github.io/wired-elements/images/textarea.png)
+
+## License
+[MIT License](https://github.com/wiredjs/wired-elements/blob/master/LICENSE) (c) [Preet Shihn](https://twitter.com/preetster)

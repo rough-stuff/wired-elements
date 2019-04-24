@@ -35,7 +35,7 @@ Use it in your web page:
 </div>
 ```
 
-### Properties
+## Properties
 
 **for** - Id of the element the tooltip is for. *Optional*.
 
@@ -43,8 +43,11 @@ Use it in your web page:
 
 **text** - Text in the tooltip.
 
-### Custom CSS Variables
+## Custom CSS Variables
 
 **--wired-tooltip-border-color** Border color of the tooltip. Default is *currentColor*.
 
 **--wired-tooltip-background** Background color of the tooltip. 
+
+## License
+[MIT License](https://github.com/wiredjs/wired-elements/blob/master/LICENSE) (c) [Preet Shihn](https://twitter.com/preetster)

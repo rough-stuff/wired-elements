@@ -39,3 +39,6 @@ Use it in your web page:
 
 ## Events
 **change** event fired when state of the checkbox changes, i.e. the user checks/unchecks the box.
+
+## License
+[MIT License](https://github.com/wiredjs/wired-elements/blob/master/LICENSE) (c) [Preet Shihn](https://twitter.com/preetster)

@@ -27,7 +27,7 @@ Use it in your web page:
 <wired-radio disabled>Disabled Radio</wired-radio>
 ```
 
-### Properties
+## Properties
 
 **checked** - Checked state (boolean) of the radio button. Default is false.
 
@@ -37,10 +37,12 @@ Use it in your web page:
 
 **name** - A name associated with the radio inside a radio-group.
 
-### Custom CSS Variables
+## Custom CSS Variables
 
 **--wired-radio-icon-color** Color of the radio button. Default is *currentColor*.
 
-### Events
+## Events
 **change** - event fired when state of the radio changes, i.e. the user checks/unchecks the radio.
 
+## License
+[MIT License](https://github.com/wiredjs/wired-elements/blob/master/LICENSE) (c) [Preet Shihn](https://twitter.com/preetster)

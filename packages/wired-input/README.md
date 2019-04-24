@@ -41,3 +41,6 @@ Use it in your web page:
 ## Events
 
 Fires all events a standard `<input>` element fires. 
+
+## License
+[MIT License](https://github.com/wiredjs/wired-elements/blob/master/LICENSE) (c) [Preet Shihn](https://twitter.com/preetster)

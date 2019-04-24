@@ -45,3 +45,6 @@ Use it in your web page:
 **--wired-progress-font-size** Font size of the label. Default is *14px*
 
 **--wired-progress-color** Color of the progress bar. Default is *rgba(0, 0, 200, 0.8)*.
+
+## License
+[MIT License](https://github.com/wiredjs/wired-elements/blob/master/LICENSE) (c) [Preet Shihn](https://twitter.com/preetster)

@@ -65,3 +65,6 @@ Use it in your web page:
 **--wired-item-selected-bg** Background color of the selected tab.
 
 **--wired-item-selected-color** Text color of the selected tab.
+
+## License
+[MIT License](https://github.com/wiredjs/wired-elements/blob/master/LICENSE) (c) [Preet Shihn](https://twitter.com/preetster)

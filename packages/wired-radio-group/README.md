@@ -31,11 +31,13 @@ Use it in your web page:
 </wired-radio-group>
 ```
 
-### Properties
+## Properties
 
 **selected** - Named of the selected radio button.
 
-### Events
+## Events
 
 **selected** Event fired when user changes selection
 
+## License
+[MIT License](https://github.com/wiredjs/wired-elements/blob/master/LICENSE) (c) [Preet Shihn](https://twitter.com/preetster)

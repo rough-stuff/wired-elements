@@ -26,17 +26,20 @@ Use it in your web page:
 <wired-toggle checked></wired-toggle>
 ```
 
-### Properties
+## Properties
 
 **checked** - Checked state (boolean). 
 
 **disabled** - disables the toggle button. Default value is false. 
 
-### Custom CSS Variables
+## Custom CSS Variables
 
 **--wired-toggle-off-color** Color of the knob when in off (false) position. Default value is *gray*.
 
 **--wired-toggle-on-color** Color of the knob when in on (true) position. Default value is *rgb(63, 81, 181)*.
 
-### Events
+## Events
 **change** event fired when state of the toggle is changed by the user.
+
+## License
+[MIT License](https://github.com/wiredjs/wired-elements/blob/master/LICENSE) (c) [Preet Shihn](https://twitter.com/preetster)

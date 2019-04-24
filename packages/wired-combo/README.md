@@ -44,3 +44,6 @@ Use it in your web page:
 
 ## Events
 **selected** event fired when an item is selected by the user. 
+
+## License
+[MIT License](https://github.com/wiredjs/wired-elements/blob/master/LICENSE) (c) [Preet Shihn](https://twitter.com/preetster)

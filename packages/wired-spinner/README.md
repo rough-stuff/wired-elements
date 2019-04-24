@@ -35,3 +35,6 @@ Use it in your web page:
 ## Styling
 
 Change the **color** style of the spinner element to change its color. 
+
+## License
+[MIT License](https://github.com/wiredjs/wired-elements/blob/master/LICENSE) (c) [Preet Shihn](https://twitter.com/preetster)
