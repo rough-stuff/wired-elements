@@ -1,6 +1,6 @@
 {
   "name": "wired-listbox",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.0",
   "description": "A listbox control with Wired hand-drawn styling. The selected item is highlighted. Can be vertical (default) or horizontal.",
   "main": "lib/wired-listbox.js",
   "module": "lib/wired-listbox.js",
@@ -28,7 +28,7 @@
   "author": "Preet Shihn <preetshihn@gmail.com> (https://twitter.com/preetster)",
   "license": "MIT",
   "dependencies": {
-    "wired-item": "^1.0.0-alpha.0",
-    "wired-lib": "^1.0.0-alpha.0"
+    "wired-item": "^1.0.0",
+    "wired-lib": "^1.0.0"
   }
 }

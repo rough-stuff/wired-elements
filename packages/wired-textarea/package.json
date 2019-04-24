@@ -1,6 +1,6 @@
 {
   "name": "wired-textarea",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.0",
   "description": "Hand-drawn sketchy textarea - web component",
   "main": "lib/wired-textarea.js",
   "module": "lib/wired-textarea.js",
@@ -28,6 +28,6 @@
   "author": "Preet Shihn <preetshihn@gmail.com> (https://twitter.com/preetster)",
   "license": "MIT",
   "dependencies": {
-    "wired-lib": "^1.0.0-alpha.0"
+    "wired-lib": "^1.0.0"
   }
 }
