@@ -6,11 +6,17 @@ Wired Elements is a series of basic UI Elements that have a hand drawn look. The
 The elements are drawn with enough randomness that no two renderings will be exactly the same - just like two separate hand drawn shapes. 
 
 ## Try now
-Play with wired-elements live on StackBlitz playground:
+Play with wired-elements on CodeSandbox:
 
-[Wired Elements](https://stackblitz.com/edit/wired-elements?file=index.html)
+[Wired Elements](https://codesandbox.io/s/p77jkn13nq)
 
-[Wired Elements in React](https://stackblitz.com/edit/wired-elements-react?file=index.js)
+#### Try it with a framework
+
+[Wired Elements in Vue](https://codesandbox.io/embed/vj389y9375)
+
+[Wired Elements in React](https://codesandbox.io/embed/xrll5wyl8w)
+
+[Wired Elements in Svelte](https://svelte.dev/repl?version=3.0.0&gist=abf635c032a20c3e18b510c7a15eaac5)
 
 
 ## Install
@@ -21,10 +27,14 @@ Add wired-elements to your project:
 ```
 npm i wired-elements
 ```
-or individual controls
+or add individual controls
 ```
 npm i wired-button
 ```
+```
+npm i wired-input
+```
+
 
 ## Usage
 
@@ -36,7 +46,7 @@ import { WiredButton, WiredInput } from "wired-elements"
 Alternatively, load a bundled version from the [dist folder](https://github.com/wiredjs/wired-elements/tree/master/packages/all/dist) or from CDN:
 
 ```html
-<script src="https://unpkg.com/wired-elements@latest/dist/wired-elements.bundled.min.js"></script>
+<script src="https://unpkg.com/wired-elements@latest/dist/wired-elements.bundled.js"></script>
 ```
 
 #### Use it in your web page:
@@ -45,11 +55,20 @@ Alternatively, load a bundled version from the [dist folder](https://github.com/
 <wired-button>Click Me</wired-button>
 ```
 
-Learn about web components [here](https://www.webcomponents.org/introduction).
+Learn about web components [here](https://developer.mozilla.org/en-US/docs/Web/Web_Components).
 
-### Demo
+## Component API
+
+To view details of each component - properties, events, css-properties, etc, are provided in their package folder. 
+[List of all packages](https://github.com/wiredjs/wired-elements/tree/master/packages)
+
+## Demo
 
 Demo of all components is available at [wiredjs.com](https://wiredjs.com/showcase.html).
 
-### License
+## Dev Environment
+
+View the [Dev environment page](https://github.com/wiredjs/wired-elements/wiki/Dev-Environment) for instructions.
+
+## License
 [MIT License](https://github.com/wiredjs/wired-elements/blob/master/LICENSE) (c) [Preet Shihn](https://twitter.com/preetster)
