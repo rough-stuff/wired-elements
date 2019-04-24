@@ -18,6 +18,8 @@ Play with wired-elements on CodeSandbox:
 
 [Wired Elements in React](https://codesandbox.io/embed/xrll5wyl8w)
 
+[Wired Elements in Svelte](https://svelte.dev/repl?version=3.0.0&gist=abf635c032a20c3e18b510c7a15eaac5)
+
 
 ## Install
 
