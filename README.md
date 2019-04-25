@@ -20,6 +20,8 @@ Play with wired-elements:
 
 [Wired Elements in Svelte](https://svelte.dev/repl?version=3.0.0&gist=abf635c032a20c3e18b510c7a15eaac5)
 
+[Wired Elements in Angular](https://ng-run.com/edit/TRjDTfMDLaa1d7GRoXQd)
+
 
 ## Install
 
