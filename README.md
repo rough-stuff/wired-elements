@@ -22,6 +22,9 @@ Play with wired-elements:
 
 [Wired Elements in Angular](https://ng-run.com/edit/TRjDTfMDLaa1d7GRoXQd)
 
+### Components collection
+
+[Wired Elements components collection](https://bit.dev/wiredjs/wired-elements)
 
 ## Install
 
