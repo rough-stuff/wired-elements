@@ -34,7 +34,7 @@ export class WiredCalendar extends WiredBase {
   @property({ type: String }) lastdate?: string; // date range higher limit
   @property({ type: Boolean, reflect: true }) disabled = false;
   @property({ type: Boolean, reflect: true }) initials = false; // days of week
-  @property({ type: Object }) value?: {value: Date, text: string};
+  @property({ type: Object }) value?: {date: Date, text: string};
   @property({ type: Function }) format: Function = (d: Date) => {
     return months_short[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear()
   };
@@ -249,7 +249,7 @@ export class WiredCalendar extends WiredBase {
     if (this.selected) {
       // TODO: Validate `this.selected`
       d = new Date(this.selected);
-      this.value = {value: new Date(this.selected), text: this.selected};
+      this.value = {date: new Date(this.selected), text: this.selected};
     } else {
       d = new Date();
       // Commented to avoid uninteded today date selection
@@ -382,7 +382,7 @@ export class WiredCalendar extends WiredBase {
 
   private fireSelected() {
     if (this.selected) {
-      this.value = {value: new Date(this.selected), text: this.selected};
+      this.value = {date: new Date(this.selected), text: this.selected};
       this.fireEvent('selected', { selected: this.selected });
     }
   }
