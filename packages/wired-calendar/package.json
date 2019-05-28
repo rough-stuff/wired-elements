@@ -26,6 +26,9 @@
     "wireframe"
   ],
   "author": "Preet Shihn <preetshihn@gmail.com> (https://twitter.com/preetster)",
+  "contributors": [
+    "Eduardo Martinez"
+  ],
   "license": "MIT",
   "dependencies": {
     "wired-lib": "^1.0.0"
