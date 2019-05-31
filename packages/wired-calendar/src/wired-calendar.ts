@@ -214,7 +214,7 @@ export class WiredCalendar extends WiredBase {
                         // Render "selected" cell
                         html`
                             <td class="selected" value="${d.value}">
-                            <div style="width: ${this.tblColWidth};line-height:${this.tblRowHeight}px">${d.text}</div>
+                            <div style="width: ${this.tblColWidth}px;line-height:${this.tblRowHeight}px">${d.text}</div>
                             <div class="overlay">
                               <svg id="svgTD" class="selected"></svg>
                             </div></td>
