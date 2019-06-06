@@ -133,6 +133,7 @@ export class WiredCalendar extends WiredBase {
       border-collapse: collapse;
       font-size: inherit;
       line-height: unset;
+      cursor: default;
     }
 
     table:focus {
@@ -147,6 +148,7 @@ export class WiredCalendar extends WiredBase {
 
     td.disabled {
         color: var(--wired-calendar-disabled-color, lightgray);
+        cursor: not-allowed;
     }
 
     td.dimmed {
@@ -159,6 +161,7 @@ export class WiredCalendar extends WiredBase {
 
     td:not(.disabled):not(.selected):hover {
         background-color: #d0d0d0;
+        cursor: pointer;
     }
 
     .pointer {
@@ -187,9 +190,9 @@ export class WiredCalendar extends WiredBase {
             @touchstart="${this.onItemClick}">
       ${ /* 1st header row with calendar title and prev/next controls */ '' }
       <tr class="top-header" style="height:${this.tblHeadHeight}px;">
-        <th id="prevCal" @click="${this.onPrevClick}"><<</th>
+        <th id="prevCal" class="pointer" @click="${this.onPrevClick}"><<</th>
         <th colSpan="5">${this.monthYear}</th>
-        <th id="nextCal" @click="${this.onNextClick}">>></th>
+        <th id="nextCal" class="pointer" @click="${this.onNextClick}">>></th>
       </tr>
       ${ /* 2nd header row with the seven weekdays names (short or initials) */ '' }
       <tr class="header" style="height:${this.tblHeadHeight}px;">
