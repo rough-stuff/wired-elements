@@ -142,13 +142,13 @@ export class WiredCalendar extends WiredBase {
 
     td,
     th {
-        border-radius: 4px;
-        text-align: center;
+      border-radius: 4px;
+      text-align: center;
     }
 
     td.disabled {
-        color: var(--wired-calendar-disabled-color, lightgray);
-        cursor: not-allowed;
+      color: var(--wired-calendar-disabled-color, lightgray);
+      cursor: not-allowed;
     }
 
     td.dimmed {
@@ -156,12 +156,12 @@ export class WiredCalendar extends WiredBase {
     }
 
     td.selected {
-        position: absolute;
+      position: absolute;
     }
 
     td:not(.disabled):not(.selected):hover {
-        background-color: #d0d0d0;
-        cursor: pointer;
+      background-color: #d0d0d0;
+      cursor: pointer;
     }
 
     .pointer {
@@ -224,18 +224,18 @@ export class WiredCalendar extends WiredBase {
                         `:
                         // Render "not selected" cell
                         html`
-                            <td class="${d.disabled?'disabled':(d.dimmed?' dimmed': ' ')}"
-                                value="${d.disabled ? ' ':d.value}">${d.text}</td>
+                            <td .className="${d.disabled?'disabled':(d.dimmed?'dimmed':'')}"
+                                value="${d.disabled ? '':d.value}">${d.text}</td>
                         `}
                     `
 
                     // This blank space left on purpose for clarity
 
                   )
-            }${ /* End weekdays loop */ '' }
+            }${ /* End `weekDays` map loop */ '' }
             </tr>`
         )
-    }${ /* End weeks loop */ '' }
+    }${ /* End `weeks` map loop */ '' }
     </table>
     <div class="overlay">
       <svg id="svg" class="calendar"></svg>
@@ -255,8 +255,6 @@ export class WiredCalendar extends WiredBase {
       this.value = {date: new Date(this.selected), text: this.selected};
     } else {
       d = new Date();
-      // Commented to avoid uninteded today date selection
-      // this.selected = this.format(d);
     }
     // Define a reference date used to build one month calendar
     this.firstOfMonthDate = new Date(d.getFullYear(), d.getMonth(), 1);
@@ -297,7 +295,7 @@ export class WiredCalendar extends WiredBase {
       (line(svg, s.width - 4 + (i * 2), s.height - 4 + (i * 2), s.width - 4 + (i * 2), i * 2)).style.opacity = `${(85 - (i * 10)) / 100}`;
     }
 
-    // Redraw `selected` cell
+    // Redraw sketchy red circle `selected` cell
     const svgTD = (this.shadowRoot!.getElementById('svgTD') as any) as SVGSVGElement;
     if (svgTD) {
       while (svgTD.hasChildNodes()) {
@@ -375,8 +373,8 @@ export class WiredCalendar extends WiredBase {
   private onItemClick(event: CustomEvent) {
     event.stopPropagation();
     let sel = event.target as HTMLElement;
-    // No attribute 'value' means: is a disabled date (should not be 'selected')
-    if (sel && sel.hasAttribute('value')) {
+    // Attribute 'value' empty means: is a disabled date (should not be 'selected')
+    if (sel && sel.hasAttribute('value') && sel.getAttribute('value') != '') {
       this.selected = sel.getAttribute('value') || undefined;
       this.refreshSelection();
       this.fireSelected();
@@ -449,38 +447,7 @@ export class WiredCalendar extends WiredBase {
     }
   }
 
-  /** Compute if date should be render as disabled in present month calendar.
-    *
-    * Disable days from previous month that could appear at the first week start.
-    * Disable days from next month that could appear at last week end.
-    * Disable any previous days from `firstdate` when present.
-    * Disable any following days from `lastdate` when present.
-    *
-    * Return `true` means: render as disabled.
-    * Note that `return true` happens in the `else` clause (this is like ...
-    * ...negated logic).
-    */
   private isDateOutOfRange(day: Date): boolean {
-    /*
-    if (day.getMonth() == this.firstOfMonthDate.getMonth() && ( // Is same month?
-        this.fDate == undefined ? true : ( // Is there fistdate?
-            day.getMonth() == this.fDate.getMonth() ? ( // If so, is same month?
-                day.getFullYear() == this.fDate.getFullYear() ? // ...and same year?
-                    day.getDate() >= this.fDate.getDate() : true // ... greather day?
-            ) : true
-        )
-    ) && (
-        this.lDate == undefined ? true : (
-            day.getMonth() == this.lDate.getMonth() ? (
-                day.getFullYear() == this.lDate.getFullYear() ?
-                    day.getDate() <= this.lDate.getDate() : true
-            ) : true
-        )
-    )) {
-         return false;
-    } else return true;
-    */
-
     if (this.fDate && this.lDate) {
       return day < this.fDate || this.lDate < day
     } else if (this.fDate) {
