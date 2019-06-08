@@ -22,22 +22,26 @@ const DAY = HOUR * 24;
 
 const TABLE_PADDING = 8; // pixels
 
-const weekdays_short = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-const months_short = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
 @customElement('wired-calendar')
 export class WiredCalendar extends WiredBase {
   @property({ type: Number }) elevation = 3;
   @property({ type: String }) selected?: string; // pre-selected date
   @property({ type: String }) firstdate?: string; // date range lower limit
   @property({ type: String }) lastdate?: string; // date range higher limit
+  @property({ type: String}) locale?: string; // BCP 47 language tag like `es-MX`
   @property({ type: Boolean, reflect: true }) disabled = false;
   @property({ type: Boolean, reflect: true }) initials = false; // days of week
   @property({ type: Object }) value?: {date: Date, text: string};
   @property({ type: Function }) format: Function = (d: Date) => {
-    return months_short[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear()
+    return this.months_short[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear()
   };
+
+  // Initial calendar headers (will be replaced if different locale than `en` or `en-US`)
+  private weekdays_short: string[] = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  private months: string[] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+  // Fix month shorts for internal value comparations (not changed by locale)
+  private months_short: string[] = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
   private resizeHandler?: EventListenerOrEventListenerObject;
 
@@ -45,7 +49,7 @@ export class WiredCalendar extends WiredBase {
   private fDate: Date | undefined = undefined; // Date obj for firstdate string
   private lDate: Date | undefined = undefined; // Date obj for lastdate string
 
-  private calendarRefSize: AreaSize;
+  private calendarRefSize: AreaSize = {width: 0, height: 0};
   private tblColWidth: number = 0;
   private tblRowHeight: number = 0;
   private tblHeadHeight: number = 0;
@@ -53,18 +57,19 @@ export class WiredCalendar extends WiredBase {
   private monthYear: string = '';
   private weeks: CalendarCell[][] = [[]];
 
-  constructor() {
-    super();
-    // Initialize calendar element size
-    this.calendarRefSize = this.getCalendarSize();
-  }
-
   connectedCallback() {
     super.connectedCallback();
     if (!this.resizeHandler) {
       this.resizeHandler = this.debounce(this.resized.bind(this), 200, false, this);
       window.addEventListener('resize', this.resizeHandler);
     }
+
+    // Initial setup (now that `wired-calendar` element is ready in DOM)
+    this.localizeCalendarHeaders();
+    this.setInitialConditions();
+    this.computeCalendar();
+    this.refreshSelection();
+
     setTimeout(() => this.updated());
   }
 
@@ -132,6 +137,7 @@ export class WiredCalendar extends WiredBase {
       background: var(--wired-calendar-bg, white);
       border-collapse: collapse;
       font-size: inherit;
+      text-transform: capitalize;
       line-height: unset;
       cursor: default;
     }
@@ -184,8 +190,7 @@ export class WiredCalendar extends WiredBase {
     * ... (and svg tag) to draw over it.
     */
     return html`
-    <table role="dialog"
-            style="width:${this.calendarRefSize.width}px;height:${this.calendarRefSize.height}px;border:${TABLE_PADDING}px solid transparent"
+    <table style="width:${this.calendarRefSize.width}px;height:${this.calendarRefSize.height}px;border:${TABLE_PADDING}px solid transparent"
             @mousedown="${this.onItemClick}"
             @touchstart="${this.onItemClick}">
       ${ /* 1st header row with calendar title and prev/next controls */ '' }
@@ -196,7 +201,7 @@ export class WiredCalendar extends WiredBase {
       </tr>
       ${ /* 2nd header row with the seven weekdays names (short or initials) */ '' }
       <tr class="header" style="height:${this.tblHeadHeight}px;">
-        ${weekdays_short
+        ${this.weekdays_short
           .map(d =>
             html`<th style="width: ${this.tblColWidth};">${this.initials? d[0]:d}</th>
             `
@@ -245,29 +250,6 @@ export class WiredCalendar extends WiredBase {
 
   firstUpdated() {
     this.setAttribute('role', 'dialog');
-
-    // Define an initial reference date either from a paramenter or new today date
-    let d: Date;
-    // TODO: Validate `this.selected`
-    if (this.selected) {
-      // TODO: Validate `this.selected`
-      d = new Date(this.selected);
-      this.value = {date: new Date(this.selected), text: this.selected};
-    } else {
-      d = new Date();
-    }
-    // Define a reference date used to build one month calendar
-    this.firstOfMonthDate = new Date(d.getFullYear(), d.getMonth(), 1);
-
-    // Convert string paramenters (when present) to Date objects
-    // TODO: Validate `this.firstdate`
-    if (this.firstdate) this.fDate = new Date(this.firstdate);
-    // TODO: Validate `this.lastdate`
-    if (this.lastdate) this.lDate = new Date(this.lastdate);
-
-    this.computeCalendar();
-    this.refreshSelection();
-
   }
 
   updated(changed?: PropertyValues) {
@@ -323,6 +305,71 @@ export class WiredCalendar extends WiredBase {
   }
 
   /* private methods */
+
+  /*
+  * Change calendar headers according to locale parameter or browser locale
+  * Notes:
+  *   This only change the rendered text in the calendar
+  *   All the internal parsing of string dates do not use locale
+  */
+  private localizeCalendarHeaders() {
+    // Find locale preference when parameter not set
+    if (!this.locale) {
+      // Guess from different browser possibilities
+      let n: any = navigator;
+      if (n.hasOwnProperty('systemLanguage')) this.locale = n['systemLanguage']
+      else if (n.hasOwnProperty('browserLanguage')) this.locale = n['browserLanguage']
+      else this.locale =  ( navigator.languages || [ "en" ] ) [ 0 ];
+    }
+
+    // Replace localized calendar texts when not `en-US` or not `en`
+    let l = (this.locale || '').toLowerCase();
+    if (l != 'en-us' && l != 'en') {
+      let d = new Date();
+
+      // Compute weekday header texts (like "Sun", "Mon", "Tue", ...)
+      let weekDayOffset = d.getUTCDay();
+      const daySunday = new Date(d.getTime() - DAY * weekDayOffset);
+      let weekdayDate = new Date(daySunday);
+      for (let i=0; i<7; i++) {
+        weekdayDate.setDate(daySunday.getDate() + i);
+        this.weekdays_short[i] = weekdayDate.toLocaleString(this.locale, {weekday: 'short'});
+      }
+
+      // Compute month header texts (like "January", "February", ...)
+      d.setDate(1); // Set to first of the month to avoid cases like "February 30"
+      for (let m=0; m<12; m++) {
+        d.setMonth(m);
+        this.months[m] = d.toLocaleString(this.locale, {month: 'long'});
+        // Beware: month shorts are used in `en-US` internally. Do not change.
+        // this.months_short[m] = d.toLocaleString(this.locale, {month: 'short'});
+      }
+    }
+  }
+
+  private setInitialConditions() {
+    // Initialize calendar element size
+    this.calendarRefSize = this.getCalendarSize();
+
+    // Define an initial reference date either from a paramenter or new today date
+    let d: Date;
+    // TODO: Validate `this.selected`
+    if (this.selected) {
+      // TODO: Validate `this.selected`
+      d = new Date(this.selected);
+      this.value = {date: new Date(this.selected), text: this.selected};
+    } else {
+      d = new Date();
+    }
+    // Define a reference date used to build one month calendar
+    this.firstOfMonthDate = new Date(d.getFullYear(), d.getMonth(), 1);
+
+    // Convert string paramenters (when present) to Date objects
+    // TODO: Validate `this.firstdate`
+    if (this.firstdate) this.fDate = new Date(this.firstdate);
+    // TODO: Validate `this.lastdate`
+    if (this.lastdate) this.lDate = new Date(this.lastdate);
+  }
 
   private refreshSelection() {
     // Loop thru all weeks and thru all day in each week
@@ -389,9 +436,8 @@ export class WiredCalendar extends WiredBase {
   }
 
   private computeCalendar():void {
-
     // Compute month and year for table header
-    this.monthYear = months[this.firstOfMonthDate.getMonth()] + " " + this.firstOfMonthDate.getFullYear();
+    this.monthYear = this.months[this.firstOfMonthDate.getMonth()] + " " + this.firstOfMonthDate.getFullYear();
 
     // Compute all month dates (one per day, 7 days per week, all weeks of the month)
     const first_day_in_month = new Date(this.firstOfMonthDate.getFullYear(), this.firstOfMonthDate.getMonth(), 1);

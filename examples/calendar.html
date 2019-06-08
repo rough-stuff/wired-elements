@@ -19,6 +19,11 @@
       line-height: 1.5;
     }
 
+    .item_wrapper {
+      margin-bottom: 30px;
+      display: inline-block;
+    }
+
     p {
       margin: 0 10px;
     }
@@ -44,28 +49,47 @@
 </head>
 
 <body>
-  <!-- Minimal working calendar -->
-  <wired-calendar id="calendar1"></wired-calendar>
+  <div>
+    <!-- Minimal working calendar -->
+    <div class="item_wrapper">
+      <p>Minimal</p>
+      <wired-calendar></wired-calendar>
+    </div>
 
-  <!-- Calendar with some parameters -->
-  <wired-calendar id="calendar2"
-    elevation="1"
-    firstdate="Apr 15, 2019"
-    lastdate="Jul 15, 2019"
-    selected="Jul 4, 2019"
-    initials>
-  </wired-calendar>
+    <!-- Calendar with some parameters -->
+    <div class="item_wrapper">
+      <p>"fr" locale</p>
+      <!-- Note: parameter dates not affected by locale -->
+      <wired-calendar id="calendar2"
+        elevation="1"
+        firstdate="Apr 15, 2019"
+        lastdate="Jul 15, 2019"
+        selected="Jul 4, 2019"
+        locale="fr"
+        initials>
+      </wired-calendar>
+    </div>
 
-  <!-- Calendar with custom style and some parameters -->
-  <wired-calendar id="calendar3" class="custom" firstdate="Apr 15, 2019"initials>
-  </wired-calendar>
+    <!-- Calendar with custom style and some parameters -->
+    <div class="item_wrapper">
+      <p>"de" locale</p>
+      <wired-calendar id="calendar3"
+        class="custom"
+        firstdate="Apr 15, 2019"
+        locale="de" initials>
+      </wired-calendar>
+    </div>
+  </div>
 
+  <hr>
   <!-- Calendar with javascript interactions (event and non-event driven) -->
-  <section style="margin-top: 40px;">
+  <section>
+    <p>"es-MX" locale with javascript interactions sample (event and non-event driven)</p>
     <wired-calendar id="calendar4"
       elevation="5"
       firstdate="Apr 15, 2019"
       lastdate="Jul 15, 2019"
+      locale="es-MX"
       initials>
     </wired-calendar>
     <p id="calendar4-result">Select a date in the calendar<p>
@@ -106,7 +130,7 @@
       // `selectedObject.date` is a javascript Date object
       // `selectedObject.text` is the formated text of the date
       let formatedDate = selectedObject.text;
-      myCalendar4result.innerHTML = formatedDate;
+      myCalendar4result.innerHTML = formatedDate + ' <br><small>Note: Internal date handling not affected by locale.</small>';
     });
 
   </script>

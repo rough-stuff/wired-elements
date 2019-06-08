@@ -23,21 +23,25 @@ import { WiredCalendar } from "wired-calendar"
 
 Use it in your web page:
 ```html
-<wired-calendar id="my-calendar-1" selected="Jul 4, 2019">
+<wired-calendar selected="Jul 4, 2019">
 </wired-calendar>
 ```
 
 ## Properties
 
-**disabled** - disables the calendar selector. Default value is false.
+**elevation** - Numerical number between 1-5 (inclusive) - sets the elevation of the card. Default is 1.
 
-**selected** - pre selects a date highlighted in the calendar.
+**selected** - Optional string value that will be parsed as Date. Pre selects a date highlighted in the calendar.
 
-**firstdate** - lower limit of valid dates.
+**firstdate** - Optional string value that will be parsed as Date. Lower limit of valid dates.
 
-**lastdate** - higher limit of valid dates.
+**lastdate** - Optional string value that will be parsed as Date. Higher limit of valid dates.
 
-**initials** - use initials in week days names.
+**locale** - Optional string value to set locale used ONLY FOR RENDERING headers in calendar. Default to browser locale. Note: All internal and external dates handling are not affected by locale.
+
+**disabled** - Boolean value that disables the calendar selector. Default value is false.
+
+**initials** - Boolean value to use initials in weekdays names. Default value is false.
 
 **value** - javascript object that contains the selected Date object and the
 corresponing formated text.
