@@ -1,0 +1,72 @@
+<html>
+  <head>
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script
+      type="module"
+      src="../packages/all/dist/wired-elements.bundled.js"
+    ></script>
+
+    <style>
+      body {
+        margin: 0;
+        padding: 10px;
+        font-family: sans-serif;
+        line-height: 1.5;
+      }
+
+      wired-dialog {
+        max-width: 600px;
+        margin: 0 auto;
+      }
+    </style>
+  </head>
+
+  <body>
+    <wired-button id="btnOne">Open One</wired-button>
+    <wired-button id="btnTwo">Open Two</wired-button>
+    <wired-button id="toaster">Show Toast</wired-button>
+    <wired-dialog name="one">
+      <h4>Dialog 1</h4>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+        commodo consequat.
+      </p>
+    </wired-dialog>
+    <wired-dialog name="two">
+      <h4>Dialog 2</h4>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+        commodo consequat.
+      </p>
+    </wired-dialog>
+
+    <script type="module">
+      import { openDialog } from "../packages/wired-dialog/lib/wired-dialog.js";
+      import { showToast } from "../packages/wired-toast/lib/wired-toast.js";
+
+      let locations = [
+        "top",
+        "top-right",
+        "bottom-right",
+        "bottom",
+        "bottom-left",
+        "top-left"
+      ];
+
+      const uno = document.getElementById("btnOne");
+      const dos = document.getElementById("btnTwo");
+      const toaster = document.getElementById("toaster");
+      uno.addEventListener("click", () => openDialog("one"));
+      dos.addEventListener("click", () => openDialog("two"));
+      toaster.addEventListener("click", () => {
+        let location = locations.shift();
+        showToast(`Showing toast: ${location}`, 3000, location);
+        locations.push(location);
+      });
+    </script>
+  </body>
+</html>

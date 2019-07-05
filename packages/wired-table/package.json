@@ -1,0 +1,35 @@
+{
+  "name": "wired-table",
+  "version": "1.0.0",
+  "description": "Hand-drawn sketchy table - web component",
+  "main": "lib/wired-table.js",
+  "module": "lib/wired-table.js",
+  "types": "lib/wired-table.d.ts",
+  "scripts": {
+    "tsc": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wiredjs/wired-elements.git"
+  },
+  "keywords": [
+    "table",
+    "webcomponent",
+    "web component",
+    "rough",
+    "sketchy",
+    "hand-drawn",
+    "hand drawn"
+  ],
+  "author": "Preet Shihn <preetshihn@gmail.com> (https://twitter.com/preetster)",
+  "contributors": [
+    "Brian Kimball <bvkimball@gmail.com"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "wired-card": "^1.0.0",
+    "wired-item": "^1.0.0",
+    "wired-lib": "^1.0.0"
+  }
+}

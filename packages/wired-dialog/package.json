@@ -1,0 +1,37 @@
+{
+  "name": "wired-dialog",
+  "version": "1.0.0",
+  "description": "Hand-drawn sketchy dialog - web component",
+  "main": "lib/wired-dialog.js",
+  "module": "lib/wired-dialog.js",
+  "types": "lib/wired-dialog.d.ts",
+  "scripts": {
+    "tsc": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wiredjs/wired-elements.git"
+  },
+  "keywords": [
+    "dialog",
+    "tab",
+    "webcomponent",
+    "web component",
+    "rough",
+    "sketchy",
+    "hand-drawn",
+    "hand drawn"
+  ],
+  "author": "Preet Shihn <preetshihn@gmail.com> (https://twitter.com/preetster)",
+  "contributors": [
+    "Brian Kimball <bvkimball@gmail.com"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "wired-card": "^1.0.0",
+    "wired-item": "^1.0.0",
+    "wired-button": "^1.0.0",
+    "wired-lib": "^1.0.0"
+  }
+}

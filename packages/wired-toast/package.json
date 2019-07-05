@@ -1,0 +1,34 @@
+{
+  "name": "wired-toast",
+  "version": "1.0.0",
+  "description": "Hand-drawn sketchy toast - web component",
+  "main": "lib/wired-toast.js",
+  "module": "lib/wired-toast.js",
+  "types": "lib/wired-toast.d.ts",
+  "scripts": {
+    "tsc": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wiredjs/wired-elements.git"
+  },
+  "keywords": [
+    "toast",
+    "tab",
+    "webcomponent",
+    "web component",
+    "rough",
+    "sketchy",
+    "hand-drawn",
+    "hand drawn"
+  ],
+  "author": "Preet Shihn <preetshihn@gmail.com> (https://twitter.com/preetster)",
+  "contributors": [
+    "Brian Kimball <bvkimball@gmail.com"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "wired-lib": "^1.0.0"
+  }
+}

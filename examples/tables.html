@@ -1,0 +1,78 @@
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah&display=swap"
+      rel="stylesheet"
+    />
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script
+      type="module"
+      src="../packages/all/dist/wired-elements.bundled.js"
+    ></script>
+
+    <style>
+      body {
+        margin: 0;
+        padding: 10px;
+        font-family: "Gloria Hallelujah", sans-serif;
+        line-height: 1.5;
+      }
+      .custom {
+        max-width: 600px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <wired-table>
+      <wired-columns>
+        <wired-column name="id">#</wired-column>
+        <wired-column name="name">Name</wired-column>
+        <wired-column name="company">Company</wired-column>
+        <wired-column name="title">Title</wired-column>
+        <wired-column name="email">Email</wired-column>
+        <wired-column name="phone">Phone</wired-column>
+      </wired-columns>
+
+      <wired-row>
+        <wired-cell column="id">100</wired-cell>
+        <wired-cell column="name">Jim Halpert</wired-cell>
+        <wired-cell column="company">Dunder Mifflin</wired-cell>
+        <wired-cell column="title">Sales Representative</wired-cell>
+        <wired-cell column="email">jhalpert@dmpaper.co</wired-cell>
+        <wired-cell column="phone">900-555-8820</wired-cell>
+      </wired-row>
+
+      <wired-row>
+        <wired-cell column="id">101</wired-cell>
+        <wired-cell column="name">Michael Scott</wired-cell>
+        <wired-cell column="company">Dunder Mifflin</wired-cell>
+        <wired-cell column="title">Regional Manager</wired-cell>
+        <wired-cell column="email">mscott@dmpaper.co</wired-cell>
+        <wired-cell column="phone">900-555-8820</wired-cell>
+      </wired-row>
+    </wired-table>
+
+    <wired-table class="custom">
+      <wired-columns>
+        <wired-column name="id">#</wired-column>
+        <wired-column name="name">Name</wired-column>
+        <wired-column name="title">Title</wired-column>
+      </wired-columns>
+
+      <wired-row>
+        <wired-cell column="id">100</wired-cell>
+        <wired-cell column="name">Jim Halpert</wired-cell>
+        <wired-cell column="title">Sales Representative</wired-cell>
+      </wired-row>
+
+      <wired-row>
+        <wired-cell column="id">101</wired-cell>
+        <wired-cell column="name">Michael Scott</wired-cell>
+        <wired-cell column="title">Regional Manager</wired-cell>
+      </wired-row>
+    </wired-table>
+  </body>
+</html>
