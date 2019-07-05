@@ -36,6 +36,7 @@
     "wired-card": "^1.0.0",
     "wired-checkbox": "^1.0.0",
     "wired-combo": "^1.0.0",
+    "wired-dialog": "^1.0.0",
     "wired-fab": "^1.0.0",
     "wired-icon-button": "^1.0.0",
     "wired-input": "^1.0.0",
@@ -47,8 +48,10 @@
     "wired-radio-group": "^1.0.0",
     "wired-slider": "^1.0.0",
     "wired-spinner": "^1.0.0",
+    "wired-table": "^1.0.0",
     "wired-tabs": "^1.0.0",
     "wired-textarea": "^1.0.0",
+    "wired-toast": "^1.0.0",
     "wired-toggle": "^1.0.0",
     "wired-tooltip": "^1.0.0"
   }
