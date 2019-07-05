@@ -5,3 +5,4 @@ demo
 lerna-debug.log
 npm-debug.log
 packages/*/lib
+.DS_Store
