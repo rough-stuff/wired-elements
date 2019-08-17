@@ -1,6 +1,6 @@
 {
   "name": "wired-elements-repo",
-  "version": "0.9.2",
+  "version": "1.0.0",
   "description": "Collection of hand-drawn sketchy web components",
   "main": "wired-elements.js",
   "private": true,
