@@ -1,0 +1,36 @@
+{
+  "name": "wired-calendar",
+  "version": "1.0.0",
+  "description": "Hand-drawn sketchy selector/combo-box web component",
+  "main": "lib/wired-calendar.js",
+  "module": "lib/wired-calendar.js",
+  "types": "lib/wired-calendar.d.ts",
+  "scripts": {
+    "tsc": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wiredjs/wired-elements.git"
+  },
+  "keywords": [
+    "calendar",
+    "datepicker",
+    "date picker",
+    "webcomponent",
+    "web component",
+    "rough",
+    "sketchy",
+    "hand-drawn",
+    "hand drawn",
+    "wireframe"
+  ],
+  "author": "Preet Shihn <preetshihn@gmail.com> (https://twitter.com/preetster)",
+  "contributors": [
+    "Eduardo Martinez"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "wired-lib": "^1.0.0"
+  }
+}

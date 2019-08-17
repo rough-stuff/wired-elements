@@ -1,0 +1,139 @@
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
+
+  <script type="module" src="../packages/wired-calendar/lib/wired-calendar.js"></script>
+  <script type="module" src="../packages/wired-button/lib/wired-button.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 10px;
+      font-family: 'Gloria Hallelujah', sans-serif;
+      font-size: 24px;
+      font-display: fallback;
+      letter-spacing: 0.05em;
+      line-height: 1.5;
+    }
+
+    .item_wrapper {
+      margin-bottom: 30px;
+      display: inline-block;
+    }
+
+    p {
+      margin: 0 10px;
+    }
+
+    wired-calendar {
+      margin: 10px;
+    }
+
+    wired-button {
+      margin: 0 10px;
+    }
+
+    .custom {
+      --wired-calendar-bg: yellow;
+      --wired-calendar-color: red;
+      --wired-calendar-selected-color: black;
+      --wired-calendar-dimmed-color: brown;
+      width: 260px;
+      height: 260px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <!-- Minimal working calendar -->
+    <div class="item_wrapper">
+      <p>Minimal</p>
+      <wired-calendar></wired-calendar>
+    </div>
+
+    <!-- Calendar with some parameters -->
+    <div class="item_wrapper">
+      <p>"fr" locale</p>
+      <!-- Note: parameter dates not affected by locale -->
+      <wired-calendar id="calendar2"
+        elevation="1"
+        firstdate="Apr 15, 2019"
+        lastdate="Jul 15, 2019"
+        selected="Jul 4, 2019"
+        locale="fr"
+        initials>
+      </wired-calendar>
+    </div>
+
+    <!-- Calendar with custom style and some parameters -->
+    <div class="item_wrapper">
+      <p>"de" locale</p>
+      <wired-calendar id="calendar3"
+        class="custom"
+        firstdate="Apr 15, 2019"
+        locale="de" initials>
+      </wired-calendar>
+    </div>
+  </div>
+
+  <hr>
+  <!-- Calendar with javascript interactions (event and non-event driven) -->
+  <section>
+    <p>"es-MX" locale with javascript interactions sample (event and non-event driven)</p>
+    <wired-calendar id="calendar4"
+      elevation="5"
+      firstdate="Apr 15, 2019"
+      lastdate="Jul 15, 2019"
+      locale="es-MX"
+      initials>
+    </wired-calendar>
+    <p id="calendar4-result">Select a date in the calendar<p>
+    <div style="margin-top: 16px;">
+      <wired-button id="btn-today">Today</wired-button>
+      <wired-button id="btn-update">Update</wired-button>
+    </div>
+    <p id="calendar4-update">No updated yet<p>
+  </section>
+
+  <script>
+    const myCalendar4 = document.getElementById('calendar4');
+    const myCalendar4result = document.getElementById('calendar4-result');
+    const myCalendar4update = document.getElementById('calendar4-update');
+    document.getElementById('btn-update').addEventListener('click', () => {
+      const today = new Date();
+      const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      const updateTimeLeyend = ' <small>Updated at:' + time + '</small>';
+
+      const selectedObject = myCalendar4.value;
+      if (selectedObject && selectedObject.date) {
+        myCalendar4update.innerHTML = selectedObject.date.toLocaleDateString() + updateTimeLeyend;
+      } else {
+        myCalendar4update.innerHTML = 'No date selected yet.' + updateTimeLeyend;
+      }
+    });
+    document.getElementById('btn-today').addEventListener('click', () => {
+      let today = new Date();
+      // Sample using optional internal date formatter
+      formatedDate = myCalendar4.format(today);
+      console.log('Set date to today = ', formatedDate);
+
+      // Set selected date using any format accepted by javascript Date object
+      myCalendar4.setSelectedDate(formatedDate);
+    });
+    myCalendar4.addEventListener('selected', () => {
+      let selectedObject = myCalendar4.value;
+      // `selectedObject.date` is a javascript Date object
+      // `selectedObject.text` is the formated text of the date
+      let formatedDate = selectedObject.text;
+      myCalendar4result.innerHTML = formatedDate + ' <br><small>Note: Internal date handling not affected by locale.</small>';
+    });
+
+  </script>
+</body>
+
+</html>
