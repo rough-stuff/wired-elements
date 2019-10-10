@@ -1,11 +1,12 @@
-import { LitElement, CSSResult, TemplateResult } from 'lit-element';
-export declare class WiredButton extends LitElement {
+import { WiredBaseElement } from './wired-base-element';
+import { TemplateResult, CSSResultArray } from 'lit-element';
+import { Point } from './core';
+export declare class WiredButton extends WiredBaseElement {
     elevation: number;
     disabled: boolean;
-    private svg?;
     private button?;
-    static readonly styles: CSSResult;
+    static readonly styles: CSSResultArray;
     render(): TemplateResult;
-    updated(): void;
-    private drawShape;
+    protected canvasSize(): Point;
+    protected draw(svg: SVGSVGElement, size: Point): void;
 }
