@@ -39,7 +39,7 @@ export abstract class WiredBaseElement extends LitElement {
     this.wiredRender();
   }
 
-  protected wiredRender(force = false) {
+  wiredRender(force = false) {
     if (this.svg) {
       const size = this.canvasSize();
       if ((!force) && (size[0] === this.lastSize[0]) && (size[1] === this.lastSize[1])) {
