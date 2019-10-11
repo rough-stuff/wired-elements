@@ -1,6 +1,6 @@
 import { WiredBaseElement, BaseCSS } from './wired-base-element';
 import { customElement, property, css, TemplateResult, html, CSSResultArray, query } from 'lit-element';
-import { rectangle, line, Point, svgNode } from './core';
+import { rectangle, line, Point, svgNode, fire } from './core';
 
 @customElement('wired-checkbox')
 export class WiredCheckbox extends WiredBaseElement {
@@ -57,10 +57,23 @@ export class WiredCheckbox extends WiredBaseElement {
     ];
   }
 
+  focus() {
+    if (this.input) {
+      this.input.focus();
+    } else {
+      super.focus();
+    }
+  }
+
+  wiredRender(force = false) {
+    super.wiredRender(force);
+    this.refreshCheckVisibility();
+  }
+
   render(): TemplateResult {
     return html`
     <label id="container" class="${this.focused ? 'focused' : ''}">
-      <input type="checkbox" ?checked="${this.checked}" ?disabled="${this.disabled}" 
+      <input type="checkbox" .checked="${this.checked}" ?disabled="${this.disabled}" 
         @change="${this.onChange}"
         @focus="${() => this.focused = true}"
         @blur="${() => this.focused = false}">
@@ -73,6 +86,7 @@ export class WiredCheckbox extends WiredBaseElement {
   private onChange() {
     this.checked = this.input!.checked;
     this.refreshCheckVisibility();
+    fire(this, 'change', { checked: this.checked });
   }
 
   protected canvasSize(): Point {
@@ -85,7 +99,6 @@ export class WiredCheckbox extends WiredBaseElement {
     svg.appendChild(this.svgCheck);
     line(this.svgCheck, size[0] * 0.3, size[1] * 0.4, size[0] * 0.5, size[1] * 0.7);
     line(this.svgCheck, size[0] * 0.5, size[1] * 0.7, size[0] + 5, -5);
-    this.refreshCheckVisibility();
   }
 
   private refreshCheckVisibility() {

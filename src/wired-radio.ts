@@ -1,6 +1,6 @@
 import { WiredBaseElement, BaseCSS } from './wired-base-element';
 import { customElement, property, css, TemplateResult, html, CSSResultArray, query } from 'lit-element';
-import { ellipse, Point, svgNode } from './core';
+import { ellipse, Point, svgNode, fire } from './core';
 
 @customElement('wired-radio')
 export class WiredRadio extends WiredBaseElement {
@@ -59,10 +59,23 @@ export class WiredRadio extends WiredBaseElement {
     ];
   }
 
+  focus() {
+    if (this.input) {
+      this.input.focus();
+    } else {
+      super.focus();
+    }
+  }
+
+  wiredRender(force = false) {
+    super.wiredRender(force);
+    this.refreshCheckVisibility();
+  }
+
   render(): TemplateResult {
     return html`
     <label id="container" class="${this.focused ? 'focused' : ''}">
-      <input type="checkbox" ?checked="${this.checked}" ?disabled="${this.disabled}" 
+      <input type="checkbox" .checked="${this.checked}" ?disabled="${this.disabled}" 
         @change="${this.onChange}"
         @focus="${() => this.focused = true}"
         @blur="${() => this.focused = false}">
@@ -75,6 +88,7 @@ export class WiredRadio extends WiredBaseElement {
   private onChange() {
     this.checked = this.input!.checked;
     this.refreshCheckVisibility();
+    fire(this, 'change', { checked: this.checked });
   }
 
   protected canvasSize(): Point {
@@ -88,7 +102,6 @@ export class WiredRadio extends WiredBaseElement {
     const iw = Math.max(size[0] * 0.6, 5);
     const ih = Math.max(size[1] * 0.6, 5);
     ellipse(this.svgCheck, size[0] / 2, size[1] / 2, iw, ih);
-    this.refreshCheckVisibility();
   }
 
   private refreshCheckVisibility() {
