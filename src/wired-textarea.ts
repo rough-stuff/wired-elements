@@ -2,26 +2,21 @@ import { WiredBaseElement, BaseCSS } from './wired-base-element';
 import { customElement, property, query, css, TemplateResult, html, CSSResultArray } from 'lit-element';
 import { rectangle, Point, fire } from './core';
 
-@customElement('wired-input')
-export class WiredButton extends WiredBaseElement {
+@customElement('wired-textarea')
+export class WiredTextarea extends WiredBaseElement {
   @property({ type: Boolean, reflect: true }) disabled = false;
-  @property({ type: String }) placeholder = '';
-  @property({ type: String }) name?: string;
-  @property({ type: String }) min?: string;
-  @property({ type: String }) max?: string;
-  @property({ type: String }) step?: string;
-  @property({ type: String }) type = 'text';
+  @property({ type: Number }) rows = 2;
+  @property({ type: Number }) maxrows = 0;
   @property({ type: String }) autocomplete = '';
-  @property({ type: String }) autocapitalize = '';
-  @property({ type: String }) autocorrect = '';
-  @property({ type: Boolean }) required = false;
   @property({ type: Boolean }) autofocus = false;
+  @property({ type: String }) inputmode = '';
+  @property({ type: String }) placeholder = '';
+  @property({ type: Boolean }) required = false;
   @property({ type: Boolean }) readonly = false;
   @property({ type: Number }) minlength?: number;
   @property({ type: Number }) maxlength?: number;
-  @property({ type: Number }) size?: number;
 
-  @query('input') private textInput?: HTMLInputElement;
+  @query('textarea') private textareaInput?: HTMLTextAreaElement;
   private pendingValue?: string;
 
   static get styles(): CSSResultArray {
@@ -31,10 +26,10 @@ export class WiredButton extends WiredBaseElement {
         :host {
           display: inline-block;
           position: relative;
-          padding: 5px;
           font-family: sans-serif;
-          width: 150px;
+          width: 400px;
           outline: none;
+          padding: 4px;
         }
         :host([disabled]) {
           opacity: 0.6 !important;
@@ -44,17 +39,20 @@ export class WiredButton extends WiredBaseElement {
         :host([disabled]) svg {
           background: rgba(0, 0, 0, 0.07);
         }
-        input {
-          display: block;
-          width: 100%;
-          box-sizing: border-box;
+        textarea {
+          position: relative;
           outline: none;
           border: none;
-          font-family: inherit;
-          font-size: inherit;
-          font-weight: inherit;
+          resize: none;
+          background: inherit;
           color: inherit;
-          padding: 6px;
+          width: 100%;
+          font-size: inherit;
+          font-family: inherit;
+          line-height: inherit;
+          text-align: inherit;
+          padding: 10px;
+          box-sizing: border-box;
         }
       `
     ];
@@ -62,29 +60,28 @@ export class WiredButton extends WiredBaseElement {
 
   render(): TemplateResult {
     return html`
-    <input name="${this.name}" type="${this.type}" placeholder="${this.placeholder}" ?disabled="${this.disabled}"
-      ?required="${this.required}" autocomplete="${this.autocomplete}" ?autofocus="${this.autofocus}" minlength="${this.minlength}"
-      maxlength="${this.maxlength}" min="${this.min}" max="${this.max}" step="${this.step}" ?readonly="${this.readonly}"
-      size="${this.size}" autocapitalize="${this.autocapitalize}" autocorrect="${this.autocorrect}" 
-      @change="${this.refire}" @input="${this.refire}">
+    <textarea id="textarea" autocomplete="${this.autocomplete}" ?autofocus="${this.autofocus}" inputmode="${this.inputmode}"
+      placeholder="${this.placeholder}" ?readonly="${this.readonly}" ?required="${this.required}" ?disabled="${this.disabled}"
+      rows="${this.rows}" minlength="${this.minlength}" maxlength="${this.maxlength}"
+      @change="${this.refire}" @input="${this.refire}"></textarea>
     <div id="overlay">
       <svg></svg>
     </div>
     `;
   }
 
-  get input(): HTMLInputElement | undefined {
-    return this.textInput;
+  get textarea(): HTMLTextAreaElement | undefined {
+    return this.textareaInput;
   }
 
   get value(): string {
-    const input = this.input;
+    const input = this.textarea;
     return (input && input.value) || '';
   }
 
   set value(v: string) {
     if (this.shadowRoot) {
-      const input = this.input;
+      const input = this.textarea;
       if (input) {
         input.value = v;
       }
@@ -104,7 +101,7 @@ export class WiredButton extends WiredBaseElement {
   }
 
   protected draw(svg: SVGSVGElement, size: Point) {
-    rectangle(svg, 2, 2, size[0] - 2, size[1] - 2);
+    rectangle(svg, 4, 4, size[0] - 4, size[1] - 4);
   }
 
   private refire(event: Event) {
