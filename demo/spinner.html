@@ -1,0 +1,41 @@
+<html>
+
+<head>
+  <script type="module" src="../lib/wired-button.js"></script>
+  <script type="module" src="../lib/wired-spinner.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 10px;
+      font-family: sans-serif;
+      line-height: 1.5;
+    }
+
+    wired-spinner {
+      margin: 10px;
+    }
+
+    .custom {
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+  <wired-spinner id="sp"></wired-spinner>
+  <wired-spinner class="custom" spinning duration="1000"></wired-spinner>
+
+  <div style="margin-top: 30px;">
+    <wired-button>Toggle</wired-button>
+  </div>
+
+  <script>
+    document.querySelector('wired-button').addEventListener('click', () => {
+      const sp = document.getElementById('sp');
+      sp.spinning = !sp.spinning;
+    });
+  </script>
+</body>
+
+</html>
