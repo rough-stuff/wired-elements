@@ -1,0 +1,55 @@
+<html>
+
+<head>
+  <script type="module" src="../lib/wired-card.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 10px;
+      font-family: sans-serif;
+      line-height: 1.5;
+    }
+
+    wired-card {
+      max-width: 100%;
+    }
+
+    .card-grid {
+      display: grid;
+      gap: 30px;
+      grid-template-columns: repeat(3, 1fr);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card-grid">
+    <wired-card>
+      <h4>Card 1</h4>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+        magna aliqua.
+        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+      </p>
+    </wired-card>
+    <wired-card elevation="5">
+      <h4>Card 2</h4>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+        magna aliqua.
+        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+      </p>
+    </wired-card>
+    <wired-card>
+      <h4>Card 3</h4>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+        magna aliqua.
+        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+      </p>
+    </wired-card>
+  </div>
+</body>
+
+</html>

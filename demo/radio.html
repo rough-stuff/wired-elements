@@ -1,0 +1,45 @@
+<html>
+
+<head>
+  <script type="module" src="../lib/wired-radio.js"></script>
+  <script type="module" src="../lib/wired-radio-group.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 10px;
+      font-family: sans-serif;
+      line-height: 1.5;
+    }
+
+    wired-radio {
+      margin: 0 15px;
+      opacity: 1;
+    }
+
+    .custom {
+      color: blue;
+      --wired-radio-icon-color: red;
+    }
+  </style>
+</head>
+
+<body>
+  <wired-radio>Radio One</wired-radio>
+  <wired-radio checked>Radio Two</wired-radio>
+  <wired-radio disabled>Disabled Radio</wired-radio>
+  <wired-radio class="custom">Styled Radio</wired-radio>
+
+  <p></p>
+
+  <div>
+    <wired-radio-group id="rg" selected="one">
+      <wired-radio name="one">One</wired-radio>
+      <wired-radio name="two">Two</wired-radio>
+      <wired-radio name="three">Three</wired-radio>
+      <wired-radio name="four">Four</wired-radio>
+    </wired-radio-group>
+  </div>
+</body>
+
+</html>
