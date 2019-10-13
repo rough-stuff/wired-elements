@@ -1,6 +1,6 @@
 {
   "name": "wired-elements-repo",
-  "version": "2.0.0",
+  "version": "2.0.0-beta.0",
   "description": "Collection of hand-drawn sketchy web components",
   "main": "wired-elements.js",
   "private": true,
@@ -10,11 +10,7 @@
   "scripts": {
     "bootstrap": "npm install && npm run hoist",
     "hoist": "lerna bootstrap --hoist",
-    "dev": "polyserve --npm --module-resolution=node",
-    "tsc": "lerna run tsc",
-    "build": "rollup -c",
-    "bundle": "npm run tsc && npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "tsc": "lerna run tsc"
   },
   "repository": {
     "type": "git",
@@ -37,8 +33,6 @@
   "homepage": "https://github.com/wiredjs/wired-elements#readme",
   "devDependencies": {
     "@material/mwc-icon": "^0.10.0",
-    "rollup": "^1.23.1",
-    "rollup-plugin-terser": "^5.1.2",
     "tslint": "^5.20.0",
     "typescript": "^3.6.3"
   },
