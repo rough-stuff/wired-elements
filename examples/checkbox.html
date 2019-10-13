@@ -1,9 +1,7 @@
 <html>
 
 <head>
-  <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-  <script type="module" src="../packages/wired-checkbox/lib/wired-checkbox.js"></script>
-  <script type="module" src="../packages/wired-radio/lib/wired-radio.js"></script>
+  <script type="module" src="../lib/wired-checkbox.js"></script>
 
   <style>
     body {
@@ -12,31 +10,24 @@
       font-family: sans-serif;
       line-height: 1.5;
     }
+
+    wired-checkbox {
+      margin: 0 15px;
+      opacity: 1;
+    }
+
+    .custom {
+      color: blue;
+      --wired-checkbox-icon-color: red;
+    }
   </style>
 </head>
 
 <body>
-  <wired-checkbox id="cbox">Checkbox label</wired-checkbox>
-  <div id="label"></div>
-
-  <div style="padding: 40px 0;">
-    <wired-radio id="radio">Radio label</wired-radio>
-    <div id="label2"></div>
-  </div>
-
-  <script>
-    const checkbox = document.getElementById('cbox');
-    const label = document.getElementById('label');
-    checkbox.addEventListener('change', () => {
-      label.textContent = checkbox.checked;
-    });
-
-    const radio = document.getElementById('radio');
-    const label2 = document.getElementById('label2');
-    radio.addEventListener('change', () => {
-      label2.textContent = radio.checked;
-    });
-  </script>
+  <wired-checkbox>Checkbox One</wired-checkbox>
+  <wired-checkbox checked>Checkbox Two</wired-checkbox>
+  <wired-checkbox disabled>Disabled checkbox</wired-checkbox>
+  <wired-checkbox class="custom">Styled checkbox</wired-checkbox>
 </body>
 
 </html>
