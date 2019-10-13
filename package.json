@@ -36,6 +36,7 @@
   },
   "homepage": "https://github.com/wiredjs/wired-elements#readme",
   "devDependencies": {
+    "@material/mwc-icon": "^0.10.0",
     "rollup": "^1.23.1",
     "rollup-plugin-terser": "^5.1.2",
     "tslint": "^5.20.0",
