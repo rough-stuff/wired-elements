@@ -26,6 +26,7 @@
   "author": "Preet Shihn <preetshihn@gmail.com> (https://twitter.com/preetster)",
   "license": "MIT",
   "dependencies": {
-    "wired-lib": "^1.0.0"
+    "wired-lib": "^1.0.0",
+    "wired-item": "^1.0.0"
   }
 }

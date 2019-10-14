@@ -34,6 +34,7 @@
   },
   "homepage": "https://github.com/wiredjs/wired-elements#readme",
   "devDependencies": {
+    "@material/mwc-icon": "^0.10.0",
     "lerna": "^3.17.0",
     "tslint": "^5.20.0",
     "typescript": "^3.6.3"
