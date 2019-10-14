@@ -49,7 +49,6 @@
     "wired-spinner": "^1.0.0",
     "wired-tabs": "^1.0.0",
     "wired-textarea": "^1.0.0",
-    "wired-toggle": "^1.0.0",
-    "wired-tooltip": "^1.0.0"
+    "wired-toggle": "^1.0.0"
   }
 }
