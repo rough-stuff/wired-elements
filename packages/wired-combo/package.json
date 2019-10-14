@@ -33,7 +33,6 @@
   "license": "MIT",
   "dependencies": {
     "wired-card": "^1.0.0",
-    "wired-item": "^1.0.0",
     "wired-lib": "^1.0.0"
   }
 }
