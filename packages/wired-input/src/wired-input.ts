@@ -1,8 +1,10 @@
-import { WiredBase, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'wired-lib/lib/wired-base';
-import { rectangle } from 'wired-lib';
+import { rectangle, Point, fire } from 'wired-lib';
+import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
+import { customElement, property, query, css, TemplateResult, html, CSSResultArray } from 'lit-element';
 
 @customElement('wired-input')
-export class WiredInput extends WiredBase {
+export class WiredButton extends WiredBase {
+  @property({ type: Boolean, reflect: true }) disabled = false;
   @property({ type: String }) placeholder = '';
   @property({ type: String }) name?: string;
   @property({ type: String }) min?: string;
@@ -12,7 +14,6 @@ export class WiredInput extends WiredBase {
   @property({ type: String }) autocomplete = '';
   @property({ type: String }) autocapitalize = '';
   @property({ type: String }) autocorrect = '';
-  @property({ type: Boolean, reflect: true }) disabled = false;
   @property({ type: Boolean }) required = false;
   @property({ type: Boolean }) autofocus = false;
   @property({ type: Boolean }) readonly = false;
@@ -20,89 +21,60 @@ export class WiredInput extends WiredBase {
   @property({ type: Number }) maxlength?: number;
   @property({ type: Number }) size?: number;
 
+  @query('input') private textInput?: HTMLInputElement;
   private pendingValue?: string;
 
-  static get styles(): CSSResult {
-    return css`
-    :host {
-      display: inline-block;
-      position: relative;
-      padding: 5px;
-      font-family: sans-serif;
-      width: 150px;
-      outline: none;
-      opacity: 0;
-    }
-
-    :host(.wired-rendered) {
-      opacity: 1;
-    }
-  
-    :host(.wired-disabled) {
-      opacity: 0.6 !important;
-      cursor: default;
-      pointer-events: none;
-    }
-  
-    :host(.wired-disabled) svg {
-      background: rgba(0, 0, 0, 0.07);
-    }
-  
-    .overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      pointer-events: none;
-    }
-  
-    svg {
-      display: block;
-    }
-  
-    path {
-      stroke: currentColor;
-      stroke-width: 0.7;
-      fill: transparent;
-    }
-  
-    input {
-      display: block;
-      width: 100%;
-      box-sizing: border-box;
-      outline: none;
-      border: none;
-      font-family: inherit;
-      font-size: inherit;
-      font-weight: inherit;
-      color: inherit;
-      padding: 6px;
-    }
-    `;
+  static get styles(): CSSResultArray {
+    return [
+      BaseCSS,
+      css`
+        :host {
+          display: inline-block;
+          position: relative;
+          padding: 5px;
+          font-family: sans-serif;
+          width: 150px;
+          outline: none;
+        }
+        :host([disabled]) {
+          opacity: 0.6 !important;
+          cursor: default;
+          pointer-events: none;
+        }
+        :host([disabled]) svg {
+          background: rgba(0, 0, 0, 0.07);
+        }
+        input {
+          display: block;
+          width: 100%;
+          box-sizing: border-box;
+          outline: none;
+          border: none;
+          font-family: inherit;
+          font-size: inherit;
+          font-weight: inherit;
+          color: inherit;
+          padding: 6px;
+        }
+      `
+    ];
   }
 
   render(): TemplateResult {
     return html`
-    <input id="txt" name="${this.name}" type="${this.type}" placeholder="${this.placeholder}" ?disabled="${this.disabled}"
+    <input name="${this.name}" type="${this.type}" placeholder="${this.placeholder}" ?disabled="${this.disabled}"
       ?required="${this.required}" autocomplete="${this.autocomplete}" ?autofocus="${this.autofocus}" minlength="${this.minlength}"
       maxlength="${this.maxlength}" min="${this.min}" max="${this.max}" step="${this.step}" ?readonly="${this.readonly}"
-      size="${this.size}" autocapitalize="${this.autocapitalize}" autocorrect="${this.autocorrect}" @change="${this.onChange}">
-    <div class="overlay">
-      <svg id="svg"></svg>
+      size="${this.size}" autocapitalize="${this.autocapitalize}" autocorrect="${this.autocorrect}" 
+      @change="${this.refire}" @input="${this.refire}">
+    <div id="overlay">
+      <svg></svg>
     </div>
     `;
   }
 
-  createRenderRoot() {
-    return this.attachShadow({ mode: 'open', delegatesFocus: true });
-  }
-
-  get input(): HTMLInputElement | null {
-    if (this.shadowRoot) {
-      return this.shadowRoot.getElementById('txt') as HTMLInputElement;
-    }
-    return null;
+  get input(): HTMLInputElement | undefined {
+    return this.textInput;
   }
 
   get value(): string {
@@ -122,38 +94,21 @@ export class WiredInput extends WiredBase {
   }
 
   firstUpdated() {
-    this.value = this.value || this.getAttribute('value') || '';
+    this.value = this.pendingValue || this.value || this.getAttribute('value') || '';
+    delete this.pendingValue;
   }
 
-  updated(changed: PropertyValues) {
-    if (changed.has('disabled')) {
-      this.refreshDisabledState();
-    }
-    const svg = (this.shadowRoot!.getElementById('svg') as any) as SVGSVGElement;
-    while (svg.hasChildNodes()) {
-      svg.removeChild(svg.lastChild!);
-    }
+  protected canvasSize(): Point {
     const s = this.getBoundingClientRect();
-    svg.setAttribute('width', `${s.width}`);
-    svg.setAttribute('height', `${s.height}`);
-    rectangle(svg, 0, 0, s.width, s.height);
-    if (typeof this.pendingValue !== 'undefined') {
-      this.input!.value = this.pendingValue;
-      delete this.pendingValue;
-    }
-    this.classList.add('wired-rendered');
+    return [s.width, s.height];
   }
 
-  private refreshDisabledState() {
-    if (this.disabled) {
-      this.classList.add('wired-disabled');
-    } else {
-      this.classList.remove('wired-disabled');
-    }
+  protected draw(svg: SVGSVGElement, size: Point) {
+    rectangle(svg, 2, 2, size[0] - 2, size[1] - 2);
   }
 
-  private onChange(event: Event) {
+  private refire(event: Event) {
     event.stopPropagation();
-    this.fireEvent(event.type, { sourceEvent: event });
+    fire(this, event.type, { sourceEvent: event });
   }
 }

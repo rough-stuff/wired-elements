@@ -1,130 +1,111 @@
-import { WiredBase, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'wired-lib/lib/wired-base';
-import { rectangle, ellipse, hachureEllipseFill, svgNode } from 'wired-lib';
+import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
+import { customElement, property, css, TemplateResult, html, CSSResultArray, query } from 'lit-element';
+import { rectangle, hachureEllipseFill, ellipse, Point, svgNode, fire } from 'wired-lib';
 
 @customElement('wired-toggle')
 export class WiredToggle extends WiredBase {
   @property({ type: Boolean }) checked = false;
   @property({ type: Boolean, reflect: true }) disabled = false;
 
+  @query('input') private input?: HTMLInputElement;
+
   private knob?: SVGElement;
 
-  static get styles(): CSSResult {
-    return css`
-    :host {
-      display: inline-block;
-      cursor: pointer;
-      position: relative;
-      outline: none;
-      opacity: 0;
-    }
-
-    :host(.wired-rendered) {
-      opacity: 1;
-    }
-  
-    :host(.wired-disabled) {
-      opacity: 0.4 !important;
-      cursor: default;
-      pointer-events: none;
-    }
-  
-    :host(.wired-disabled) svg {
-      background: rgba(0, 0, 0, 0.07);
-    }
-
-    :host(:focus) path {
-      stroke-width: 1.2;
-    }
-
-    svg {
-      display: block;
-    }
-  
-    path {
-      stroke: currentColor;
-      stroke-width: 0.7;
-      fill: transparent;
-    }
-
-    .knob {
-      transition: transform 0.3s ease;
-    }
-    .knob path {
-      stroke-width: 0.7;
-    }
-    .knob.checked {
-      transform: translateX(48px);
-    }
-    .knobfill path {
-      stroke-width: 3 !important;
-      fill: transparent;
-    }
-    .knob.unchecked .knobfill path {
-      stroke: var(--wired-toggle-off-color, gray);
-    }
-    .knob.checked .knobfill path {
-      stroke: var(--wired-toggle-on-color, rgb(63, 81, 181));
-    }
-    `;
+  static get styles(): CSSResultArray {
+    return [
+      BaseCSS,
+      css`
+      :host {
+        display: inline-block;
+        cursor: pointer;
+        position: relative;
+        outline: none;
+      }
+      :host([disabled]) {
+        opacity: 0.4 !important;
+        cursor: default;
+        pointer-events: none;
+      }
+      :host([disabled]) svg {
+        background: rgba(0, 0, 0, 0.07);
+      }
+      input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+        cursor: pointer;
+        opacity: 0;
+      }
+      .knob {
+        transition: transform 0.3s ease;
+      }
+      .knob path {
+        stroke-width: 0.7;
+      }
+      .knob.checked {
+        transform: translateX(48px);
+      }
+      .knobfill path {
+        stroke-width: 3 !important;
+        fill: transparent;
+      }
+      .knob.unchecked .knobfill path {
+        stroke: var(--wired-toggle-off-color, gray);
+      }
+      .knob.checked .knobfill path {
+        stroke: var(--wired-toggle-on-color, rgb(63, 81, 181));
+      }
+      `
+    ];
   }
 
   render(): TemplateResult {
     return html`
-    <div @click="${this.toggleCheck}">
-      <svg id="svg"></svg>
+    <div style="position: relative;">
+      <svg></svg>
+      <input type="checkbox" .checked="${this.checked}" ?disabled="${this.disabled}"  @change="${this.onChange}">
     </div>
     `;
   }
 
-  private refreshDisabledState() {
-    if (this.disabled) {
-      this.classList.add('wired-disabled');
+  focus() {
+    if (this.input) {
+      this.input.focus();
     } else {
-      this.classList.remove('wired-disabled');
+      super.focus();
     }
-    this.tabIndex = this.disabled ? -1 : +(this.getAttribute('tabindex') || 0);
   }
 
-  private toggleCheck() {
-    this.checked = !(this.checked || false);
-    this.fireEvent('change', { checked: this.checked });
+  wiredRender(force = false) {
+    super.wiredRender(force);
+    this.refreshKnob();
   }
 
-  firstUpdated() {
-    this.setAttribute('role', 'switch');
-    this.addEventListener('keydown', (event) => {
-      if ((event.keyCode === 13) || (event.keyCode === 32)) {
-        event.preventDefault();
-        this.toggleCheck();
-      }
-    });
+  private onChange() {
+    this.checked = this.input!.checked;
+    this.refreshKnob();
+    fire(this, 'change', { checked: this.checked });
+  }
 
-    const svg = (this.shadowRoot!.getElementById('svg') as any) as SVGSVGElement;
-    while (svg.hasChildNodes()) {
-      svg.removeChild(svg.lastChild!);
-    }
-    const s = { width: 80, height: 34 };
-    svg.setAttribute('width', `${s.width}`);
-    svg.setAttribute('height', `${s.height}`);
-    rectangle(svg, 16, 8, s.width - 32, 18);
+  protected canvasSize(): Point {
+    return [80, 34];
+  }
 
+  protected draw(svg: SVGSVGElement, size: Point) {
+    rectangle(svg, 16, 8, size[0] - 32, 18);
     this.knob = svgNode('g');
     this.knob.classList.add('knob');
     svg.appendChild(this.knob);
-
     const knobFill = hachureEllipseFill(16, 16, 32, 32);
     knobFill.classList.add('knobfill');
     this.knob.appendChild(knobFill);
     ellipse(this.knob, 16, 16, 32, 32);
-
-    this.classList.add('wired-rendered');
   }
 
-  updated(changed: PropertyValues) {
-    if (changed.has('disabled')) {
-      this.refreshDisabledState();
-    }
-
+  private refreshKnob() {
     if (this.knob) {
       const cl = this.knob.classList;
       if (this.checked) {
@@ -135,6 +116,5 @@ export class WiredToggle extends WiredBase {
         cl.add('unchecked');
       }
     }
-    this.setAttribute('aria-checked', `${this.checked}`);
   }
 }

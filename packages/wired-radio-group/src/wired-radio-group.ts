@@ -1,4 +1,5 @@
-import { WiredBase, customElement, property, TemplateResult, html, css, CSSResult } from 'wired-lib/lib/wired-base';
+import { LitElement, customElement, property, css, TemplateResult, html, CSSResult } from 'lit-element';
+import { fire } from 'wired-lib';
 
 interface RadioItem extends HTMLElement {
   name: string;
@@ -6,28 +7,26 @@ interface RadioItem extends HTMLElement {
 }
 
 @customElement('wired-radio-group')
-export class WiredRadioGroup extends WiredBase {
+export class WiredCheckbox extends LitElement {
   @property({ type: String }) selected?: string;
-
   private radioNodes: RadioItem[] = [];
   private checkListener = this.handleChecked.bind(this);
 
   static get styles(): CSSResult {
     return css`
-    :host {
-      display: inline-block;
-    }
-  
-    :host ::slotted(*) {
-      padding: var(--wired-radio-group-item-padding, 5px);
-    }
+      :host {
+        display: inline-block;
+        font-family: inherit;
+        outline: none;
+      }
+      :host ::slotted(*) {
+        padding: var(--wired-radio-group-item-padding, 5px);
+      }
     `;
   }
 
   render(): TemplateResult {
-    return html`
-    <slot id="slot" @slotchange="${this.slotChange}"></slot>
-    `;
+    return html`<slot id="slot" @slotchange="${this.slotChange}"></slot>`;
   }
 
   connectedCallback() {
@@ -37,7 +36,7 @@ export class WiredRadioGroup extends WiredBase {
 
   disconnectedCallback() {
     if (super.disconnectedCallback) super.disconnectedCallback();
-    this.removeEventListener('checked', this.checkListener);
+    this.removeEventListener('change', this.checkListener);
   }
 
   private handleChecked(event: Event) {
@@ -50,10 +49,6 @@ export class WiredRadioGroup extends WiredBase {
       this.selected = (checked && name) || '';
       this.fireSelected();
     }
-  }
-
-  private fireSelected() {
-    this.fireEvent('selected', { selected: this.selected });
   }
 
   slotChange() {
@@ -163,5 +158,9 @@ export class WiredRadioGroup extends WiredBase {
         this.fireSelected();
       }
     }
+  }
+
+  private fireSelected() {
+    fire(this, 'selected', { selected: this.selected });
   }
 }

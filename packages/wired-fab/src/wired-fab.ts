@@ -1,136 +1,91 @@
-import { WiredBase, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'wired-lib/lib/wired-base';
-import { hachureEllipseFill } from 'wired-lib';
-import '@material/mwc-icon';
+import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
+import { customElement, property, query, css, TemplateResult, html, CSSResultArray } from 'lit-element';
+import { hachureEllipseFill, Point } from 'wired-lib';
 
 @customElement('wired-fab')
 export class WiredFab extends WiredBase {
   @property({ type: Boolean, reflect: true }) disabled = false;
+  @query('button') private button?: HTMLButtonElement;
 
-  static get styles(): CSSResult {
-    return css`
-    :host {
-      display: -ms-inline-flexbox;
-      display: -webkit-inline-flex;
-      display: inline-flex;
-      -ms-flex-align: center;
-      -webkit-align-items: center;
-      align-items: center;
-      -ms-flex-pack: center;
-      -webkit-justify-content: center;
-      justify-content: center;
-      position: relative;
-      vertical-align: middle;
-      padding: 16px;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-      cursor: pointer;
-      z-index: 0;
-      line-height: 1;
-      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-      -webkit-tap-highlight-color: transparent;
-      box-sizing: border-box !important;
-      outline: none;
-      color: #fff;
-      opacity: 0;
-    }
+  static get styles(): CSSResultArray {
+    return [
+      BaseCSS,
+      css`
+        :host {
+          display: inline-block;
+          font-size: 14px;
+          color: #fff;
+        }
+        button {
+          position: relative;
+          user-select: none;
+          border: none;
+          background: none;
+          font-family: inherit;
+          font-size: inherit;
+          cursor: pointer;
+          letter-spacing: 1.25px;
+          text-transform: uppercase;
+          text-align: center;
+          padding: 16px;
+          color: inherit;
+          outline: none;
+          border-radius: 50%;
+        }
+        button[disabled] {
+          opacity: 0.6 !important;
+          background: rgba(0, 0, 0, 0.07);
+          cursor: default;
+          pointer-events: none;
+        }
+        button::-moz-focus-inner {
+          border: 0;
+        }
+        button ::slotted(*) {
+          position: relative;
+          font-size: var(--wired-icon-size, 24px);
+          transition: transform 0.2s ease, opacity 0.2s ease;
+          opacity: 0.85;
+        }
+        path {
+          stroke: var(--wired-fab-bg-color, #018786);
+          stroke-width: 3;
+          fill: transparent;
+        }
 
-    :host(.wired-rendered) {
-      opacity: 1;
-    }
-  
-    :host(.wired-disabled) {
-      opacity: 0.45 !important;
-      cursor: default;
-      background: rgba(0, 0, 0, 0.07);
-      border-radius: 50%;
-      pointer-events: none;
-    }
-  
-    :host(:active) mwc-icon {
-      opacity: 1;
-      transform: scale(1.15);
-    }
-
-    :host(:focus) mwc-icon {
-      opacity: 1;
-    }
-  
-    .overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      pointer-events: none;
-    }
-  
-    svg {
-      display: block;
-    }
-  
-    path {
-      stroke: var(--wired-fab-bg-color, #018786);
-      stroke-width: 3;
-      fill: transparent;
-    }
-  
-    mwc-icon {
-      position: relative;
-      font-size: var(--wired-icon-size, 24px);
-      transition: transform 0.2s ease, opacity 0.2s ease;
-      opacity: 0.85;
-    }
-    `;
+        button:focus ::slotted(*) {
+          opacity: 1;
+        }
+        button:active ::slotted(*) {
+          opacity: 1;
+          transform: scale(1.15);
+        }
+      `
+    ];
   }
 
   render(): TemplateResult {
     return html`
-    <div class="overlay">
-      <svg id="svg"></svg>
-    </div>
-    <mwc-icon>
-      <slot></slot>
-    </mwc-icon>
+    <button ?disabled="${this.disabled}">
+      <div id="overlay">
+        <svg></svg>
+      </div>
+      <slot @slotchange="${this.wiredRender}"></slot>
+    </button>
     `;
   }
 
-  firstUpdated() {
-    this.addEventListener('keydown', (event) => {
-      if ((event.keyCode === 13) || (event.keyCode === 32)) {
-        event.preventDefault();
-        this.click();
-      }
-    });
-    this.setAttribute('role', 'button');
-    this.setAttribute('aria-label', this.textContent || this.innerText);
-    setTimeout(() => this.requestUpdate());
+  protected canvasSize(): Point {
+    if (this.button) {
+      const size = this.button.getBoundingClientRect();
+      return [size.width, size.height];
+    }
+    return this.lastSize;
   }
 
-  updated(changed: PropertyValues) {
-    if (changed.has('disabled')) {
-      this.refreshDisabledState();
-    }
-    const svg = (this.shadowRoot!.getElementById('svg') as any) as SVGSVGElement;
-    while (svg.hasChildNodes()) {
-      svg.removeChild(svg.lastChild!);
-    }
-    const s = this.getBoundingClientRect();
-    const min = Math.min(s.width, s.height);
-    svg.setAttribute('width', `${min}`);
-    svg.setAttribute('height', `${min}`);
+  protected draw(svg: SVGSVGElement, size: Point) {
+    const min = Math.min(size[0], size[1]);
     const g = hachureEllipseFill(min / 2, min / 2, min, min);
     svg.appendChild(g);
-    this.classList.add('wired-rendered');
-  }
-
-  private refreshDisabledState() {
-    if (this.disabled) {
-      this.classList.add('wired-disabled');
-    } else {
-      this.classList.remove('wired-disabled');
-    }
-    this.tabIndex = this.disabled ? -1 : +(this.getAttribute('tabindex') || 0);
   }
 }

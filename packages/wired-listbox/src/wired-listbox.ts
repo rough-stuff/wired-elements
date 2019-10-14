@@ -1,7 +1,11 @@
-import { WiredBase, customElement, property, TemplateResult, html, css, CSSResult } from 'wired-lib/lib/wired-base';
-import { rectangle } from 'wired-lib';
-import { WiredItem } from 'wired-item';
-import 'wired-item';
+import { customElement, property, css, TemplateResult, html, CSSResultArray } from 'lit-element';
+import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
+import { rectangle, Point, fire } from 'wired-lib';
+
+interface WiredComboItem extends HTMLElement {
+  value: string;
+  selected: boolean;
+}
 
 interface ListboxValue {
   value: string;
@@ -14,62 +18,38 @@ export class WiredListbox extends WiredBase {
   @property({ type: String }) selected?: string;
   @property({ type: Boolean }) horizontal = false;
 
-  private itemNodes: WiredItem[] = [];
-  private lastSelectedItem?: WiredItem;
+  private itemNodes: WiredComboItem[] = [];
+  private lastSelectedItem?: WiredComboItem;
   private itemClickHandler = this.onItemClick.bind(this);
 
-  static get styles(): CSSResult {
-    return css`
-    :host {
-      display: inline-block;
-      font-family: inherit;
-      position: relative;
-      padding: 5px;
-      outline: none;
-      opacity: 0;
-    }
-
-    :host(.wired-rendered) {
-      opacity: 1;
-    }
-
-    :host(:focus) path {
-      stroke-width: 1.5;
-    }
-  
-    .overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      pointer-events: none;
-    }
-  
-    svg {
-      display: block;
-    }
-  
-    path {
-      stroke: currentColor;
-      stroke-width: 0.7;
-      fill: transparent;
-    }
-
-    ::slotted(wired-item) {
-      display: block;
-    }
-
-    :host(.wired-horizontal) ::slotted(wired-item) {
-      display: inline-block;
-    }
-    `;
+  static get styles(): CSSResultArray {
+    return [
+      BaseCSS,
+      css`
+      :host {
+        display: inline-block;
+        font-family: inherit;
+        position: relative;
+        padding: 5px;
+        outline: none;
+      }
+      :host(:focus) path {
+        stroke-width: 1.5;
+      }
+      ::slotted(wired-item) {
+        display: block;
+      }
+      :host(.wired-horizontal) ::slotted(wired-item) {
+        display: inline-block;
+      }
+      `
+    ];
   }
 
   render(): TemplateResult {
     return html`
     <slot id="slot" @slotchange="${() => this.requestUpdate()}"></slot>
-    <div class="overlay">
+    <div id="overlay">
       <svg id="svg"></svg>
     </div>
     `;
@@ -97,28 +77,18 @@ export class WiredListbox extends WiredBase {
   }
 
   updated() {
-    const svg = (this.shadowRoot!.getElementById('svg') as any) as SVGSVGElement;
-    while (svg.hasChildNodes()) {
-      svg.removeChild(svg.lastChild!);
-    }
-    const s = this.getBoundingClientRect();
-    svg.setAttribute('width', `${s.width}`);
-    svg.setAttribute('height', `${s.height}`);
-    rectangle(svg, 0, 0, s.width, s.height);
-    this.classList.add('wired-rendered');
-
+    super.updated();
     if (this.horizontal) {
       this.classList.add('wired-horizontal');
     } else {
       this.classList.remove('wired-horizontal');
     }
-
     if (!this.itemNodes.length) {
       this.itemNodes = [];
       const nodes = (this.shadowRoot!.getElementById('slot') as HTMLSlotElement).assignedNodes();
       if (nodes && nodes.length) {
         for (let i = 0; i < nodes.length; i++) {
-          const element = nodes[i] as WiredItem;
+          const element = nodes[i] as WiredComboItem;
           if (element.tagName === 'WIRED-ITEM') {
             element.setAttribute('role', 'option');
             this.itemNodes.push(element);
@@ -130,7 +100,7 @@ export class WiredListbox extends WiredBase {
 
   private onItemClick(event: Event) {
     event.stopPropagation();
-    this.selected = (event.target as WiredItem).value;
+    this.selected = (event.target as WiredComboItem).value;
     this.refreshSelection();
     this.fireSelected();
   }
@@ -145,7 +115,7 @@ export class WiredListbox extends WiredBase {
     if (nodes) {
       let selectedItem = null;
       for (let i = 0; i < nodes.length; i++) {
-        const element = nodes[i] as WiredItem;
+        const element = nodes[i] as WiredComboItem;
         if (element.tagName === 'WIRED-ITEM') {
           const value = element.value || '';
           if (this.selected && (value === this.selected)) {
@@ -171,7 +141,7 @@ export class WiredListbox extends WiredBase {
   }
 
   private fireSelected() {
-    this.fireEvent('selected', { selected: this.selected });
+    fire(this, 'selected', { selected: this.selected });
   }
 
   private selectPrevious() {
@@ -218,5 +188,14 @@ export class WiredListbox extends WiredBase {
       this.refreshSelection();
       this.fireSelected();
     }
+  }
+
+  protected canvasSize(): Point {
+    const s = this.getBoundingClientRect();
+    return [s.width, s.height];
+  }
+
+  protected draw(svg: SVGSVGElement, size: Point) {
+    rectangle(svg, 0, 0, size[0], size[1]);
   }
 }

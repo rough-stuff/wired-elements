@@ -1,129 +1,112 @@
-import { WiredBase, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'wired-lib/lib/wired-base';
-import { ellipse } from 'wired-lib';
+import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
+import { customElement, property, css, TemplateResult, html, CSSResultArray, query } from 'lit-element';
+import { ellipse, Point, svgNode, fire } from 'wired-lib';
 
 @customElement('wired-radio')
 export class WiredRadio extends WiredBase {
   @property({ type: Boolean }) checked = false;
   @property({ type: Boolean, reflect: true }) disabled = false;
   @property({ type: String }) name?: string;
-  @property({ type: Number }) iconsize = 24;
+  @property() private focused = false;
 
-  private dot?: SVGElement;
+  @query('input') private input?: HTMLInputElement;
 
-  static get styles(): CSSResult {
-    return css`
-    :host {
-      display: inline-block;
-      position: relative;
-      padding: 5px;
-      font-family: inherit;
-      width: 150px;
-      outline: none;
-      opacity: 0;
-    }
+  private svgCheck?: SVGElement;
 
-    :host(.wired-rendered) {
-      opacity: 1;
-    }
-  
-    :host(.wired-disabled) {
-      opacity: 0.45 !important;
-      cursor: default;
-      pointer-events: none;
-    }
+  static get styles(): CSSResultArray {
+    return [
+      BaseCSS,
+      css`
+      :host {
+        display: inline-block;
+        font-family: inherit;
+      }
+      :host([disabled]) {
+        opacity: 0.6 !important;
+        cursor: default;
+        pointer-events: none;
+      }
+      :host([disabled]) svg {
+        background: rgba(0, 0, 0, 0.07);
+      }
 
-    :host(:focus) path {
-      stroke-width: 1.5;
+      #container {
+        display: flex;
+        flex-direction: row;
+        position: relative;
+        user-select: none;
+        min-height: 24px;
+        cursor: pointer;
+      }
+      span {
+        margin-left: 1.5ex;
+      }
+      input {
+        opacity: 0;
+      }
+      path {
+        stroke: var(--wired-radio-icon-color, currentColor);
+        stroke-width: var(--wired-radio-default-swidth, 0.7);
+      }
+      g path {
+        stroke-width: 0;
+        fill: var(--wired-radio-icon-color, currentColor);
+      }
+      #container.focused {
+        --wired-radio-default-swidth: 1.5;
+      }
+      `
+    ];
+  }
+
+  focus() {
+    if (this.input) {
+      this.input.focus();
+    } else {
+      super.focus();
     }
-  
-    #container {
-      display: inline-block;
-      white-space: nowrap;
-    }
-  
-    .inline {
-      display: inline-block;
-      vertical-align: middle;
-      -moz-user-select: none;
-      user-select: none;
-    }
-  
-    #checkPanel {
-      cursor: pointer;
-    }
-  
-    svg {
-      display: block;
-    }
-  
-    path {
-      stroke: var(--wired-radio-icon-color, currentColor);
-      stroke-width: 0.7;
-      fill: transparent;
-    }
-  
-    .filledPath {
-      fill: var(--wired-radio-icon-color, currentColor);
-    }
-    `;
+  }
+
+  wiredRender(force = false) {
+    super.wiredRender(force);
+    this.refreshCheckVisibility();
   }
 
   render(): TemplateResult {
     return html`
-    <div id="container" @click="${this.toggleCheck}">
-      <div id="checkPanel" class="inline">
-        <svg id="svg" width="0" height="0"></svg>
-      </div>
-      <div class="inline">
-        <slot></slot>
-      </div>
-    </div>
+    <label id="container" class="${this.focused ? 'focused' : ''}">
+      <input type="checkbox" .checked="${this.checked}" ?disabled="${this.disabled}" 
+        @change="${this.onChange}"
+        @focus="${() => this.focused = true}"
+        @blur="${() => this.focused = false}">
+      <span><slot></slot></span>
+      <div id="overlay"><svg></svg></div>
+    </label>
     `;
   }
 
-  private refreshDisabledState() {
-    if (this.disabled) {
-      this.classList.add('wired-disabled');
-    } else {
-      this.classList.remove('wired-disabled');
-    }
-    this.tabIndex = this.disabled ? -1 : +(this.getAttribute('tabindex') || 0);
+  private onChange() {
+    this.checked = this.input!.checked;
+    this.refreshCheckVisibility();
+    fire(this, 'change', { checked: this.checked });
   }
 
-  toggleCheck() {
-    this.checked = !(this.checked || false);
-    this.fireEvent('change', { checked: this.checked });
+  protected canvasSize(): Point {
+    return [24, 24];
   }
 
-  firstUpdated() {
-    this.setAttribute('role', 'checkbox');
-    this.addEventListener('keydown', (event) => {
-      if ((event.keyCode === 13) || (event.keyCode === 32)) {
-        event.preventDefault();
-        this.toggleCheck();
-      }
-    });
+  protected draw(svg: SVGSVGElement, size: Point) {
+    ellipse(svg, size[0] / 2, size[1] / 2, size[0], size[1]);
+    this.svgCheck = svgNode('g');
+    svg.appendChild(this.svgCheck);
+    const iw = Math.max(size[0] * 0.6, 5);
+    const ih = Math.max(size[1] * 0.6, 5);
+    ellipse(this.svgCheck, size[0] / 2, size[1] / 2, iw, ih);
   }
 
-  updated(changed: PropertyValues) {
-    if (changed.has('disabled')) {
-      this.refreshDisabledState();
+  private refreshCheckVisibility() {
+    if (this.svgCheck) {
+      this.svgCheck.style.display = this.checked ? '' : 'none';
     }
-    const svg = (this.shadowRoot!.getElementById('svg') as any) as SVGSVGElement;
-    while (svg.hasChildNodes()) {
-      svg.removeChild(svg.lastChild!);
-    }
-    this.dot = undefined;
-    const s = { width: this.iconsize || 24, height: this.iconsize || 24 };
-    svg.setAttribute('width', `${s.width}`);
-    svg.setAttribute('height', `${s.height}`);
-    ellipse(svg, s.width / 2, s.height / 2, s.width, s.height);
-
-    const iw = Math.max(s.width * 0.6, 5);
-    const ih = Math.max(s.height * 0.6, 5);
-    this.dot = ellipse(svg, s.width / 2, s.height / 2, iw, ih);
-    this.dot.classList.add('filledPath');
-    this.dot.style.display = this.checked ? '' : 'none';
-    this.classList.add('wired-rendered');
   }
 }

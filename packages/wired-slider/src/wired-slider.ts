@@ -1,289 +1,156 @@
-import { WiredBase, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'wired-lib/lib/wired-base';
-import { line, svgNode, ellipse } from 'wired-lib';
-import { addListener } from '@polymer/polymer/lib/utils/gestures.js';
+import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
+import { customElement, property, query, css, TemplateResult, html, CSSResultArray } from 'lit-element';
+import { Point, line, ellipse, fire } from 'wired-lib';
 
 @customElement('wired-slider')
 export class WiredSlider extends WiredBase {
-  @property({ type: Number }) _value = 0;
   @property({ type: Number }) min = 0;
   @property({ type: Number }) max = 100;
-  @property({ type: Number }) knobradius = 10;
+  @property({ type: Number }) step = 1;
+  @property({ type: Number }) value = this.min;
   @property({ type: Boolean, reflect: true }) disabled = false;
 
-  private step = 1;
-  private barWidth = 0;
-  private bar?: SVGElement;
-  private knobGroup?: SVGElement;
+  @query('input') private input?: HTMLInputElement;
+
   private knob?: SVGElement;
-  private intermediateValue = this.min;
-  private pct = 0;
-  private startx = 0;
-  private dragging = false;
+  private canvasWidth = 300;
 
-  static get styles(): CSSResult {
-    return css`
-    :host {
-      display: inline-block;
-      position: relative;
-      width: 300px;
-      height: 40px;
-      outline: none;
-      box-sizing: border-box;
-      opacity: 0;
-    }
-
-    :host(.wired-rendered) {
-      opacity: 1;
-    }
-  
-    :host(.wired-disabled) {
-      opacity: 0.45 !important;
-      cursor: default;
-      pointer-events: none;
-      background: rgba(0, 0, 0, 0.07);
-      border-radius: 5px;
-    }
-  
-    :host(.wired-disabled) .knob {
-      pointer-events: none !important;
-    }
-  
-    :host(:focus) .knob {
-      cursor: move;
-      stroke: var(--wired-slider-knob-outline-color, #000);
-      fill-opacity: 0.8;
-    }
-  
-    .overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      pointer-events: none;
-    }
-  
-    svg {
-      display: block;
-    }
-  
-    path {
-      stroke-width: 0.7;
-      fill: transparent;
-    }
-  
-    .knob {
-      pointer-events: auto;
-      fill: var(--wired-slider-knob-zero-color, gray);
-      stroke: var(--wired-slider-knob-zero-color, gray);
-      transition: transform 0.15s ease;
-      cursor: pointer;
-    }
-  
-    .hasValue {
-      fill: var(--wired-slider-knob-color, rgb(51, 103, 214));
-      stroke: var(--wired-slider-knob-color, rgb(51, 103, 214));
-    }
-  
-    .bar {
-      stroke: var(--wired-slider-bar-color, rgb(0, 0, 0));
-    }
-    `;
+  static get styles(): CSSResultArray {
+    return [
+      BaseCSS,
+      css`
+      :host {
+        display: inline-block;
+        position: relative;
+        width: 300px;
+        box-sizing: border-box;
+      }
+      :host([disabled]) {
+        opacity: 0.45 !important;
+        cursor: default;
+        pointer-events: none;
+        background: rgba(0, 0, 0, 0.07);
+        border-radius: 5px;
+      }
+      input[type=range] {
+        width: 100%;
+        height: 40px;
+        box-sizing: border-box;
+        margin: 0;
+        -webkit-appearance: none;
+        background: transparent;
+        outline: none;
+        position: relative;
+      }
+      input[type=range]:focus {
+        outline: none;
+      }
+      input[type=range]::-ms-track {
+        width: 100%;
+        cursor: pointer;
+        background: transparent;
+        border-color: transparent;
+        color: transparent;
+      }
+      input[type=range]::-moz-focus-outer {
+        outline: none;
+        border: 0;
+      }
+      input[type=range]::-moz-range-thumb {
+        border-radius: 50px;
+        background: none;
+        cursor: pointer;
+        border: none;
+        margin: 0;
+        height: 20px;
+        width: 20px;
+        line-height: 1;
+      }
+      input[type=range]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        border-radius: 50px;
+        background: none;
+        cursor: pointer;
+        border: none;
+        height: 20px;
+        width: 20px;
+        margin: 0;
+        line-height: 1;
+      }
+      .knob{
+        fill: var(--wired-slider-knob-color, rgb(51, 103, 214));
+        stroke: var(--wired-slider-knob-color, rgb(51, 103, 214));
+      }
+      .bar {
+        stroke: var(--wired-slider-bar-color, rgb(0, 0, 0));
+      }
+      input:focus + div svg .knob {
+        stroke: var(--wired-slider-knob-outline-color, #000);
+        fill-opacity: 0.8;
+      }
+      `
+    ];
   }
 
   render(): TemplateResult {
     return html`
-    <div class="overlay">
-      <svg id="svg"></svg>
+    <div id="container">
+      <input type="range" 
+        min="${this.min}"
+        max="${this.max}"
+        step="${this.step}"
+        .value="${this.value}"
+        ?disabled="${this.disabled}"
+        @input="${this.onInput}">
+      <div id="overlay">
+        <svg></svg>
+      </div>
     </div>
     `;
   }
 
-  get value(): number {
-    return this._value;
-  }
-
-  set value(v: number) {
-    this.setValue(v, true);
-  }
-
-  private refreshDisabledState() {
-    if (this.disabled) {
-      this.classList.add('wired-disabled');
+  focus() {
+    if (this.input) {
+      this.input.focus();
     } else {
-      this.classList.remove('wired-disabled');
+      super.focus();
     }
-    this.tabIndex = this.disabled ? -1 : +(this.getAttribute('tabindex') || 0);
   }
 
-  firstUpdated() {
-    const svg = (this.shadowRoot!.getElementById('svg') as any) as SVGSVGElement;
-    while (svg.hasChildNodes()) {
-      svg.removeChild(svg.lastChild!);
+  private onInput(e: Event) {
+    e.stopPropagation();
+    this.updateThumbPosition();
+    if (this.input) {
+      fire(this, 'change', { value: +this.input.value });
     }
+  }
+
+  wiredRender(force = false) {
+    super.wiredRender(force);
+    this.updateThumbPosition();
+  }
+
+  protected canvasSize(): Point {
     const s = this.getBoundingClientRect();
-    svg.setAttribute('width', `${s.width}`);
-    svg.setAttribute('height', `${s.height}`);
-    const radius = this.knobradius || 10;
-    this.barWidth = s.width - (2 * radius);
-    this.bar = line(svg, radius, s.height / 2, s.width - radius, s.height / 2);
-    this.bar.classList.add('bar');
-    this.knobGroup = svgNode('g');
-    svg.appendChild(this.knobGroup);
-    this.knob = ellipse(this.knobGroup, radius, s.height / 2, radius * 2, radius * 2);
+    return [s.width, s.height];
+  }
+
+  protected draw(svg: SVGSVGElement, size: Point) {
+    this.canvasWidth = size[0];
+    const midY = Math.round(size[1] / 2);
+    line(svg, 0, midY, size[0], midY).classList.add('bar');
+    this.knob = ellipse(svg, 10, midY, 20, 20);
     this.knob.classList.add('knob');
-    this.onValueChange();
-    this.classList.add('wired-rendered');
-
-    // aria
-    this.setAttribute('role', 'slider');
-    this.setAttribute('aria-valuemax', `${this.max}`);
-    this.setAttribute('aria-valuemin', `${this.min}`);
-    this.setAriaValue();
-
-    // attach events
-    addListener(this.knob, 'down', (event) => {
-      if (!this.disabled) {
-        this.knobdown(event);
-      }
-    });
-    addListener(this.knob, 'up', () => {
-      if (!this.disabled) {
-        this.resetKnob();
-      }
-    });
-    addListener(this.knob, 'track', (event) => {
-      if (!this.disabled) {
-        this.onTrack(event);
-      }
-    });
-    this.addEventListener('keydown', (event) => {
-      switch (event.keyCode) {
-        case 38:
-        case 39:
-          this.incremenent();
-          break;
-        case 37:
-        case 40:
-          this.decrement();
-          break;
-        case 36:
-          this.setValue(this.min);
-          break;
-        case 35:
-          this.setValue(this.max);
-          break;
-      }
-    });
   }
 
-  updated(changed: PropertyValues) {
-    if (changed.has('disabled')) {
-      this.refreshDisabledState();
-    }
-  }
-
-  private setAriaValue() {
-    this.setAttribute('aria-valuenow', `${this.value}`);
-  }
-
-  private setValue(v: number, skipEvent: boolean = false) {
-    this._value = v;
-    this.setAriaValue();
-    this.onValueChange();
-    if (!skipEvent) {
-      this.fireEvent('change', { value: this.intermediateValue });
-    }
-  }
-
-  private incremenent() {
-    const newValue = Math.min(this.max, Math.round(this.value + this.step));
-    if (newValue !== this.value) {
-      this.setValue(newValue);
-    }
-  }
-
-  private decrement() {
-    const newValue = Math.max(this.min, Math.round(this.value - this.step));
-    if (newValue !== this.value) {
-      this.setValue(newValue);
-    }
-  }
-
-  private onValueChange() {
-    if (!this.knob) {
-      return;
-    }
-    let pct = 0;
-    if (this.max > this.min) {
-      pct = Math.min(1, Math.max((this.value - this.min) / (this.max - this.min), 0));
-    }
-    this.pct = pct;
-    if (pct) {
-      this.knob.classList.add('hasValue');
-    } else {
-      this.knob.classList.remove('hasValue');
-    }
-    const knobOffset = pct * this.barWidth;
-    this.knobGroup!.style.transform = `translateX(${Math.round(knobOffset)}px)`;
-  }
-
-  private knobdown(event: Event) {
-    this.knobExpand(true);
-    event.preventDefault();
-    this.focus();
-  }
-
-  private resetKnob() {
-    this.knobExpand(false);
-  }
-
-  private knobExpand(value: boolean) {
-    if (this.knob) {
-      if (value) {
-        this.knob.classList.add('expanded');
-      } else {
-        this.knob.classList.remove('expanded');
+  private updateThumbPosition() {
+    if (this.input) {
+      const value = +this.input!.value;
+      const delta = Math.max(this.step, this.max - this.min);
+      const pct = (value - this.min) / delta;
+      if (this.knob) {
+        this.knob.style.transform = `translateX(${pct * (this.canvasWidth - 20)}px)`;
       }
     }
-  }
-
-  private onTrack(event: Event) {
-    event.stopPropagation();
-    switch ((event as CustomEvent).detail.state) {
-      case 'start':
-        this.trackStart();
-        break;
-      case 'track':
-        this.trackX(event);
-        break;
-      case 'end':
-        this.trackEnd();
-        break;
-    }
-  }
-
-  private trackStart() {
-    this.intermediateValue = this.value;
-    this.startx = this.pct * this.barWidth;
-    this.dragging = true;
-  }
-
-  private trackX(event: Event) {
-    if (!this.dragging) {
-      this.trackStart();
-    }
-    const dx: number = (event as CustomEvent).detail.dx || 0;
-    const newX = Math.max(Math.min(this.startx + dx, this.barWidth), 0);
-    this.knobGroup!.style.transform = `translateX(${Math.round(newX)}px)`;
-    const newPct = newX / this.barWidth;
-    this.intermediateValue = this.min + newPct * (this.max - this.min);
-  }
-
-  private trackEnd() {
-    this.dragging = false;
-    this.resetKnob();
-    this.setValue(this.intermediateValue);
-    this.pct = (this.value - this.min) / (this.max - this.min);
   }
 }
