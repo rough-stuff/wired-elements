@@ -3,7 +3,7 @@ import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
 import { customElement, property, query, css, TemplateResult, html, CSSResultArray } from 'lit-element';
 
 @customElement('wired-input')
-export class WiredButton extends WiredBase {
+export class WiredInput extends WiredBase {
   @property({ type: Boolean, reflect: true }) disabled = false;
   @property({ type: String }) placeholder = '';
   @property({ type: String }) name?: string;

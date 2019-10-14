@@ -7,7 +7,7 @@ interface RadioItem extends HTMLElement {
 }
 
 @customElement('wired-radio-group')
-export class WiredCheckbox extends LitElement {
+export class WiredRadioGroup extends LitElement {
   @property({ type: String }) selected?: string;
   private radioNodes: RadioItem[] = [];
   private checkListener = this.handleChecked.bind(this);

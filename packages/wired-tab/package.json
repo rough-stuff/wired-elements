@@ -1,10 +1,10 @@
 {
-  "name": "wired-tabs",
+  "name": "wired-tab",
   "version": "1.0.0",
   "description": "Hand-drawn sketchy tabs - web component",
-  "main": "lib/wired-tabs.js",
-  "module": "lib/wired-tabs.js",
-  "types": "lib/wired-tabs.d.ts",
+  "main": "lib/wired-tab.js",
+  "module": "lib/wired-tab.js",
+  "types": "lib/wired-tab.d.ts",
   "scripts": {
     "tsc": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
