@@ -12,6 +12,7 @@
     "hoist": "lerna bootstrap --hoist",
     "tsc": "lerna run tsc",
     "watch": "tsc --build packages/**/tsconfig.json -w",
+    "dev": "polyserve --npm --module-resolution=node",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -36,6 +37,7 @@
   "devDependencies": {
     "@material/mwc-icon": "^0.10.0",
     "lerna": "^3.17.0",
+    "polyserve": "^0.27.15",
     "tslint": "^5.20.0",
     "typescript": "^3.6.3"
   }
