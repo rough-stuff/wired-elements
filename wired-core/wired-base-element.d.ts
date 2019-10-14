@@ -1,0 +1,1 @@
+../lib/wired-base-element.d.ts
