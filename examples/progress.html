@@ -1,7 +1,6 @@
 <html>
 
 <head>
-  <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
   <script type="module" src="../packages/wired-progress/lib/wired-progress.js"></script>
   <script type="module" src="../packages/wired-button/lib/wired-button.js"></script>
 
@@ -24,7 +23,6 @@
     .custom {
       --wired-progress-color: rgba(220, 0, 50, 0.1);
       --wired-progress-label-color: green;
-      --wired-progress-font-size: 24px;
       width: 300px;
     }
   </style>
@@ -32,15 +30,13 @@
 
 <body>
   <wired-progress value="25"></wired-progress>
-  <wired-progress value="10" min="5" max="15"></wired-progress>
   <wired-progress value="65" percentage></wired-progress>
   <wired-progress class="custom" value="30"></wired-progress>
-
-  <section style="margin-top: 40px;">
+  <section style="margin-top: 16px;">
     <wired-progress id="progress"></wired-progress>
     <div style="margin-top: 16px;">
       <wired-button id="btns">Start</wired-button>
-      <wired-button id="btnr">Reset</wired-button>
+      <wired-button id="btnr">Stop</wired-button>
     </div>
   </section>
 

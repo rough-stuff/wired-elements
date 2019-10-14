@@ -1,10 +1,10 @@
 {
-  "name": "wired-tooltip",
+  "name": "wired-tab",
   "version": "1.0.0",
-  "description": "Hand-drawn sketchy tooltip with text that appears on hover over an element.",
-  "main": "lib/wired-tooltip.js",
-  "module": "lib/wired-tooltip.js",
-  "types": "lib/wired-tooltip.d.ts",
+  "description": "Hand-drawn sketchy tabs - web component",
+  "main": "lib/wired-tab.js",
+  "module": "lib/wired-tab.js",
+  "types": "lib/wired-tab.d.ts",
   "scripts": {
     "tsc": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,18 +14,19 @@
     "url": "git+https://github.com/wiredjs/wired-elements.git"
   },
   "keywords": [
-    "tooltip",
+    "tabs",
+    "tab",
     "webcomponent",
     "web component",
     "rough",
     "sketchy",
     "hand-drawn",
-    "hand drawn",
-    "wireframe"
+    "hand drawn"
   ],
   "author": "Preet Shihn <preetshihn@gmail.com> (https://twitter.com/preetster)",
   "license": "MIT",
   "dependencies": {
-    "wired-lib": "^1.0.0"
+    "wired-lib": "^1.0.0",
+    "wired-item": "^1.0.0"
   }
 }

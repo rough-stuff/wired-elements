@@ -1,9 +1,7 @@
 <html>
 
 <head>
-  <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
   <script type="module" src="../packages/wired-slider/lib/wired-slider.js"></script>
-  <script type="module" src="../packages/wired-button/lib/wired-button.js"></script>
 
   <style>
     body {
@@ -12,27 +10,27 @@
       font-family: sans-serif;
       line-height: 1.5;
     }
+
+    wired-slider {
+      margin: 5px 0;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    .custom {
+      width: 200px;
+      --wired-slider-knob-color: green;
+      --wired-slider-bar-color: blue;
+    }
   </style>
 </head>
 
 <body>
-  <wired-slider id="slider"></wired-slider>
-  <div id="label"></div>
-  <p>
-    <wired-button id="btn">Reset</wired-button>
-  </p>
-
-  <script>
-    const slider = document.getElementById('slider');
-    const label = document.getElementById('label');
-    slider.addEventListener('change', () => {
-      label.textContent = slider.value;
-    });
-    document.getElementById('btn').addEventListener('click', () => {
-      slider.value = 0;
-      label.textContent = slider.value;
-    });
-  </script>
+  <wired-slider></wired-slider>
+  <wired-slider value="40"></wired-slider>
+  <wired-slider value="10" min="5" max="15"></wired-slider>
+  <wired-slider value="60" disabled></wired-slider>
+  <wired-slider class="custom" value="25"></wired-slider>
 </body>
 
 </html>

@@ -1,7 +1,7 @@
 <html>
 
 <head>
-  <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+  <script type="module" src="../packages/wired-item/lib/wired-item.js"></script>
   <script type="module" src="../packages/wired-listbox/lib/wired-listbox.js"></script>
 
   <style>
@@ -11,34 +11,33 @@
       font-family: sans-serif;
       line-height: 1.5;
     }
+
+    wired-listbox {
+      margin: 5px;
+      --wired-item-selected-bg: darkblue;
+    }
+
+    .customListBox {
+      --wired-item-selected-bg: pink;
+      --wired-item-selected-color: darkred;
+    }
   </style>
 </head>
 
 <body>
-  <div>
-    <wired-listbox id="combo" selected="two">
-      <wired-item value="one">Number One</wired-item>
-      <wired-item value="two">Number Two</wired-item>
-      <wired-item value="three">Number Three</wired-item>
-    </wired-listbox>
-  </div>
-  <div style="margin-top: 10px;">
-    <wired-listbox horizontal selected="two"
-      style="--wired-item-selected-color: darkred; --wired-item-selected-bg: pink;">
-      <wired-item value="one">Number One</wired-item>
-      <wired-item value="two">Number Two</wired-item>
-      <wired-item value="three">Number Three</wired-item>
-    </wired-listbox>
-  </div>
-  <div id="label"></div>
+  <wired-listbox selected="one">
+    <wired-item value="one">No. one</wired-item>
+    <wired-item value="two">No. two</wired-item>
+    <wired-item value="three">No. three</wired-item>
+    <wired-item value="four">No. four</wired-item>
+  </wired-listbox>
 
-  <script>
-    const combo = document.getElementById('combo');
-    const label = document.getElementById('label');
-    combo.addEventListener('selected', () => {
-      label.textContent = combo.selected;
-    });
-  </script>
+  <wired-listbox horizontal class="customListBox" selected="two">
+    <wired-item value="one">No. one</wired-item>
+    <wired-item value="two">No. two</wired-item>
+    <wired-item value="three">No. three</wired-item>
+    <wired-item value="four">No. four</wired-item>
+  </wired-listbox>
 </body>
 
 </html>

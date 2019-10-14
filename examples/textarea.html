@@ -1,7 +1,6 @@
 <html>
 
 <head>
-  <script src="https://unpkg.com/@webcomponents/webcomponentsjs@2.1.3/webcomponents-loader.js"></script>
   <script type="module" src="../packages/wired-textarea/lib/wired-textarea.js"></script>
 
   <style>
@@ -11,11 +10,21 @@
       font-family: sans-serif;
       line-height: 1.5;
     }
+
+    wired-textarea {
+      margin: 10px 0;
+      box-sizing: border-box;
+      max-width: 100%;
+    }
   </style>
 </head>
 
 <body>
-  <wired-textarea rows="8" value="Hello world" placeholder="placeholder text"></wired-textarea>
+  <wired-textarea placeholder="Enter text"></wired-textarea>
+  <wired-textarea placeholder="Enter text 3 rows" rows="3"></wired-textarea>
+  <wired-textarea placeholder="Enter text 6 rows" rows="6"></wired-textarea>
+  <wired-textarea placeholder="Enter text 1 rows" rows="1"></wired-textarea>
+  <wired-textarea disabled placeholder="disabled" rows="2"></wired-textarea>
 </body>
 
 </html>

@@ -1,8 +1,8 @@
 <html>
 
 <head>
-  <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-  <!-- <script type="module" src="../node_modules/@material/mwc-icon/mwc-icon.js"></script> -->
+  <script src="../node_modules//@material/mwc-icon/mwc-icon-font.js"></script>
+  <script type="module" src="../node_modules//@material/mwc-icon/mwc-icon.js"></script>
   <script type="module" src="../packages/wired-icon-button/lib/wired-icon-button.js"></script>
 
   <style>
@@ -13,30 +13,42 @@
       line-height: 1.5;
     }
 
-    wired-button {
-      background: yellow;
+    wired-icon-button {
+      margin: 0 10px;
     }
 
-    #label {
-      padding: 10px 0;
+    .big {
+      --wired-icon-size: 40px;
+      padding: 16px;
+    }
+
+    .red {
+      color: red;
+    }
+
+    .pinkbg {
+      color: red;
+      --wired-icon-bg-color: pink;
     }
   </style>
 </head>
 
 <body>
-  <wired-icon-button id="btn1">favorite</wired-icon-button>
-  <wired-icon-button id="btn2" class="red">close</wired-icon-button>
-  <div id="label"></div>
-
-  <script>
-    const label = document.getElementById('label');
-    document.getElementById('btn1').addEventListener('click', () => {
-      label.textContent = 'Favorite button click';
-    });
-    document.getElementById('btn2').addEventListener('click', () => {
-      label.textContent = 'Close button click';
-    });
-  </script>
+  <wired-icon-button>
+    <mwc-icon>favorite</mwc-icon>
+  </wired-icon-button>
+  <wired-icon-button class="red">
+    <mwc-icon>favorite</mwc-icon>
+  </wired-icon-button>
+  <wired-icon-button class="pinkbg">
+    <mwc-icon>favorite</mwc-icon>
+  </wired-icon-button>
+  <wired-icon-button class="big">
+    <mwc-icon>favorite</mwc-icon>
+  </wired-icon-button>
+  <wired-icon-button disabled>
+    <mwc-icon>favorite</mwc-icon>
+  </wired-icon-button>
 </body>
 
 </html>

@@ -1,111 +1,87 @@
-import { WiredBase, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'wired-lib/lib/wired-base';
-import { rectangle, line } from 'wired-lib';
+import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
+import { rectangle, line, Point } from 'wired-lib';
+import { customElement, property, query, css, TemplateResult, html, CSSResultArray } from 'lit-element';
 
 @customElement('wired-button')
 export class WiredButton extends WiredBase {
   @property({ type: Number }) elevation = 1;
   @property({ type: Boolean, reflect: true }) disabled = false;
 
-  static get styles(): CSSResult {
-    return css`
-    :host {
-      display: inline-block;
-      font-family: inherit;
-      cursor: pointer;
-      padding: 8px 10px;
-      position: relative;
-      text-align: center;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      -webkit-user-select: none;
-      user-select: none;
-      justify-content: center;
-      flex-direction: column;
-      text-align: center;
-      display: inline-flex;
-      outline: none;
-      letter-spacing: 1.25px;
-      font-size: 14px;
-      text-transform: uppercase;
-      opacity: 0;
-    }
+  @query('button') private button?: HTMLButtonElement;
 
-    :host(.wired-rendered) {
-      opacity: 1;
-    }
-
-    :host(:active) path {
-      transform: scale(0.97) translate(1.5%, 1.5%);
-    }
-
-    :host(.wired-disabled) {
-      opacity: 0.6 !important;
-      background: rgba(0, 0, 0, 0.07);
-      cursor: default;
-      pointer-events: none;
-    }
-
-    :host(:focus) path {
-      stroke-width: 1.5;
-    }
-
-    .overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      pointer-events: none;
-    }
-
-    svg {
-      display: block;
-    }
-
-    path {
-      stroke: currentColor;
-      stroke-width: 0.7;
-      fill: transparent;
-      transition: transform 0.05s ease;
-    }
-    `;
+  static get styles(): CSSResultArray {
+    return [
+      BaseCSS,
+      css`
+        :host {
+          display: inline-block;
+          font-size: 14px;
+        }
+        path {
+          transition: transform 0.05s ease;
+        }
+        button {
+          position: relative;
+          user-select: none;
+          border: none;
+          background: none;
+          font-family: inherit;
+          font-size: inherit;
+          cursor: pointer;
+          letter-spacing: 1.25px;
+          text-transform: uppercase;
+          text-align: center;
+          padding: 10px;
+          color: inherit;
+          outline: none;
+        }
+        button[disabled] {
+          opacity: 0.6 !important;
+          background: rgba(0, 0, 0, 0.07);
+          cursor: default;
+          pointer-events: none;
+        }
+        button:active path {
+          transform: scale(0.97) translate(1.5%, 1.5%);
+        }
+        button:focus path {
+          stroke-width: 1.5;
+        }
+        button::-moz-focus-inner {
+          border: 0;
+        }
+      `
+    ];
   }
 
   render(): TemplateResult {
     return html`
-    <slot></slot>
-    <div class="overlay">
-      <svg id="svg"></svg>
-    </div>
+    <button ?disabled="${this.disabled}">
+      <slot @slotchange="${this.wiredRender}"></slot>
+      <div id="overlay">
+        <svg></svg>
+      </div>
+    </button>
     `;
   }
 
-  firstUpdated() {
-    this.addEventListener('keydown', (event) => {
-      if ((event.keyCode === 13) || (event.keyCode === 32)) {
-        event.preventDefault();
-        this.click();
-      }
-    });
-    this.setAttribute('role', 'button');
-    this.setAttribute('aria-label', this.textContent || this.innerText);
-    setTimeout(() => this.requestUpdate());
+  protected canvasSize(): Point {
+    if (this.button) {
+      const size = this.button.getBoundingClientRect();
+      const elev = Math.min(Math.max(1, this.elevation), 5);
+      const w = size.width + ((elev - 1) * 2);
+      const h = size.height + ((elev - 1) * 2);
+      return [w, h];
+    }
+    return this.lastSize;
   }
 
-  updated(changed: PropertyValues) {
-    if (changed.has('disabled')) {
-      this.refreshDisabledState();
-    }
-    const svg = (this.shadowRoot!.getElementById('svg') as any) as SVGSVGElement;
-    while (svg.hasChildNodes()) {
-      svg.removeChild(svg.lastChild!);
-    }
-    const s = this.getBoundingClientRect();
+  protected draw(svg: SVGSVGElement, size: Point) {
     const elev = Math.min(Math.max(1, this.elevation), 5);
-    const w = s.width + ((elev - 1) * 2);
-    const h = s.height + ((elev - 1) * 2);
-    svg.setAttribute('width', `${w}`);
-    svg.setAttribute('height', `${h}`);
+    const s = {
+      width: size[0] - ((elev - 1) * 2),
+      height: size[1] - ((elev - 1) * 2)
+    };
     rectangle(svg, 0, 0, s.width, s.height);
     for (let i = 1; i < elev; i++) {
       (line(svg, (i * 2), s.height + (i * 2), s.width + (i * 2), s.height + (i * 2))).style.opacity = `${(75 - (i * 10)) / 100}`;
@@ -113,15 +89,5 @@ export class WiredButton extends WiredBase {
       (line(svg, (i * 2), s.height + (i * 2), s.width + (i * 2), s.height + (i * 2))).style.opacity = `${(75 - (i * 10)) / 100}`;
       (line(svg, s.width + (i * 2), s.height + (i * 2), s.width + (i * 2), i * 2)).style.opacity = `${(75 - (i * 10)) / 100}`;
     }
-    this.classList.add('wired-rendered');
-  }
-
-  private refreshDisabledState() {
-    if (this.disabled) {
-      this.classList.add('wired-disabled');
-    } else {
-      this.classList.remove('wired-disabled');
-    }
-    this.tabIndex = this.disabled ? -1 : +(this.getAttribute('tabindex') || 0);
   }
 }

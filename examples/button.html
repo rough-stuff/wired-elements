@@ -1,0 +1,39 @@
+<html>
+
+<head>
+   <script type="module" src="../packages/wired-button/lib/wired-button.js"></script>
+
+   <style>
+      body {
+         margin: 0;
+         padding: 10px;
+         font-family: sans-serif;
+         line-height: 1.5;
+      }
+
+      #styled {
+         background: yellow;
+         color: red;
+      }
+   </style>
+</head>
+
+<body>
+   <p>
+      <wired-button id="btn1">Submit</wired-button>
+   </p>
+   <p>
+      <wired-button id="btn2">Hello, world!</wired-button>
+   </p>
+   <p>
+      <wired-button elevation="5" id="btn2">Hello, world!</wired-button>
+   </p>
+   <p>
+      <wired-button disabled id="btn1">Submit</wired-button>
+   </p>
+   <p>
+      <wired-button id="styled" onclick="alert('ddd');">Click me</wired-button>
+   </p>
+</body>
+
+</html>

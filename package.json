@@ -10,10 +10,9 @@
   "scripts": {
     "bootstrap": "npm install && npm run hoist",
     "hoist": "lerna bootstrap --hoist",
-    "dev": "polyserve --npm --module-resolution=node",
     "tsc": "lerna run tsc",
-    "build": "rollup -c",
-    "bundle": "npm run tsc && npm run build",
+    "watch": "tsc --build packages/**/tsconfig.json -w",
+    "dev": "polyserve --npm --module-resolution=node",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -36,13 +35,10 @@
   },
   "homepage": "https://github.com/wiredjs/wired-elements#readme",
   "devDependencies": {
-    "@webcomponents/webcomponentsjs": "^2.2.7",
-    "lerna": "^3.13.1",
+    "@material/mwc-icon": "^0.10.0",
+    "lerna": "^3.17.0",
     "polyserve": "^0.27.15",
-    "rollup": "^0.66.6",
-    "rollup-plugin-node-resolve": "^3.4.0",
-    "rollup-plugin-terser": "^4.0.1",
-    "tslint": "^5.15.0",
-    "typescript": "^3.4.1"
+    "tslint": "^5.20.0",
+    "typescript": "^3.6.3"
   }
 }

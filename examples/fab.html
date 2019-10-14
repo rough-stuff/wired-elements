@@ -1,7 +1,8 @@
 <html>
 
 <head>
-  <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+  <script src="../node_modules/@material/mwc-icon/mwc-icon-font.js"></script>
+  <script type="module" src="../node_modules//@material/mwc-icon/mwc-icon.js"></script>
   <script type="module" src="../packages/wired-fab/lib/wired-fab.js"></script>
 
   <style>
@@ -12,35 +13,42 @@
       line-height: 1.5;
     }
 
-    wired-button {
-      background: yellow;
+    wired-fab {
+      margin: 0 10px;
     }
 
-    #label {
-      padding: 10px 0;
+    .big {
+      --wired-icon-size: 40px;
+      padding: 16px;
     }
 
-    #btn2 {
-      --wired-fab-bg-color: lightpink;
-      color: darkred;
+    .red {
+      color: red;
+    }
+
+    .pinkbg {
+      color: red;
+      --wired-fab-bg-color: pink;
     }
   </style>
 </head>
 
 <body>
-  <wired-fab id="btn1">favorite</wired-fab>
-  <wired-fab id="btn2" class="red">close</wired-fab>
-  <div id="label"></div>
-
-  <script>
-    const label = document.getElementById('label');
-    document.getElementById('btn1').addEventListener('click', () => {
-      label.textContent = 'Favorite button click';
-    });
-    document.getElementById('btn2').addEventListener('click', () => {
-      label.textContent = 'Close button click';
-    });
-  </script>
+  <wired-fab>
+    <mwc-icon>favorite</mwc-icon>
+  </wired-fab>
+  <wired-fab class="red">
+    <mwc-icon>favorite</mwc-icon>
+  </wired-fab>
+  <wired-fab class="pinkbg">
+    <mwc-icon>favorite</mwc-icon>
+  </wired-fab>
+  <wired-fab class="big">
+    <mwc-icon>favorite</mwc-icon>
+  </wired-fab>
+  <wired-fab disabled>
+    <mwc-icon>favorite</mwc-icon>
+  </wired-fab>
 </body>
 
 </html>

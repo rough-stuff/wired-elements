@@ -1,4 +1,5 @@
-import { WiredBase, customElement, property, TemplateResult, html, css, CSSResult, query } from 'wired-lib/lib/wired-base';
+import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
+import { customElement, property, css, TemplateResult, html, CSSResultArray } from 'lit-element';
 import { ellipse, hachureEllipseFill, Point } from 'wired-lib';
 
 @customElement('wired-spinner')
@@ -6,63 +7,61 @@ export class WiredSpinner extends WiredBase {
   @property({ type: Boolean }) spinning = false;
   @property({ type: Number }) duration = 1500;
 
-  @query('svg')
-  private svg?: SVGSVGElement;
   private knob?: SVGElement;
-
   private value = 0;
   private timerstart = 0;
   private frame = 0;
 
-  static get styles(): CSSResult {
-    return css`
-    :host {
-      display: inline-block;
-      position: relative;
-      opacity: 0;
-    }
-
-    :host(.wired-rendered) {
-      opacity: 1;
-    }
-
-    #svg {
-      display: block;
-      width: 76px;
-      height: 76px;
-    }
-
-    path {
-      stroke: currentColor;
-      stroke-opacity: 0.5;
-      stroke-width: 1.5;
-      fill: none;
-    }
-    .knob path {
-      stroke-width: 2.8 !important;
-      stroke-opacity: 1;
-    }
-    `;
+  static get styles(): CSSResultArray {
+    return [
+      BaseCSS,
+      css`
+        :host {
+          display: inline-block;
+          position: relative;
+        }
+        path {
+          stroke: currentColor;
+          stroke-opacity: 0.65;
+          stroke-width: 1.5;
+          fill: none;
+        }
+        .knob {
+          stroke-width: 2.8 !important;
+          stroke-opacity: 1;
+        }
+      `
+    ];
   }
 
   render(): TemplateResult {
-    return html`
-    <svg id="svg"></svg>
-    `;
+    return html`<svg></svg>`;
   }
 
-  firstUpdated() {
-    if (this.svg) {
-      ellipse(this.svg, 38, 38, 60, 60);
-      this.knob = hachureEllipseFill(0, 0, 20, 20);
-      this.knob.classList.add('knob');
-      this.svg.appendChild(this.knob);
-    }
+  protected canvasSize(): Point {
+    return [76, 76];
+  }
+
+  protected draw(svg: SVGSVGElement, size: Point) {
+    ellipse(svg, size[0] / 2, size[1] / 2, Math.floor(size[0] * 0.8), Math.floor(0.8 * size[1]));
+    this.knob = hachureEllipseFill(0, 0, 20, 20);
+    this.knob.classList.add('knob');
+    svg.appendChild(this.knob);
     this.updateCursor();
-    this.classList.add('wired-rendered');
+  }
+
+  private updateCursor() {
+    if (this.knob) {
+      const position: Point = [
+        Math.round(38 + 25 * Math.cos(this.value * Math.PI * 2)),
+        Math.round(38 + 25 * Math.sin(this.value * Math.PI * 2))
+      ];
+      this.knob.style.transform = `translate3d(${position[0]}px, ${position[1]}px, 0) rotateZ(${Math.round(this.value * 360 * 2)}deg)`;
+    }
   }
 
   updated() {
+    super.updated();
     if (this.spinning) {
       this.startSpinner();
     } else {
@@ -102,16 +101,6 @@ export class WiredSpinner extends WiredBase {
       this.nextTick();
     } else {
       this.frame = 0;
-    }
-  }
-
-  private updateCursor() {
-    if (this.knob) {
-      const position: Point = [
-        Math.round(38 + 25 * Math.cos(this.value * Math.PI * 2)),
-        Math.round(38 + 25 * Math.sin(this.value * Math.PI * 2))
-      ];
-      this.knob.style.transform = `translate3d(${position[0]}px, ${position[1]}px, 0) rotateZ(${Math.round(this.value * 360 * 2)}deg)`;
     }
   }
 }
