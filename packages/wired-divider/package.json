@@ -1,10 +1,10 @@
 {
-  "name": "wired-link",
+  "name": "wired-divider",
   "version": "2.0.0-alpha.0",
   "description": "Hand-drawn sketchy tabs - web component",
-  "main": "lib/wired-link.js",
-  "module": "lib/wired-link.js",
-  "types": "lib/wired-link.d.ts",
+  "main": "lib/wired-divider.js",
+  "module": "lib/wired-divider.js",
+  "types": "lib/wired-divider.d.ts",
   "scripts": {
     "tsc": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,8 +14,7 @@
     "url": "git+https://github.com/wiredjs/wired-elements.git"
   },
   "keywords": [
-    "link",
-    "anchor",
+    "divider",
     "webcomponent",
     "web component",
     "rough",
