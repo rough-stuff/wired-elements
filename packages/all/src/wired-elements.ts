@@ -19,3 +19,4 @@ export { WiredToggle } from 'wired-toggle';
 export { WiredLink } from 'wired-link';
 export { WiredDivider } from 'wired-divider';
 export { WiredSearchInput } from 'wired-search-input';
+export { WiredDialog } from 'wired-dialog';
