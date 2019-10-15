@@ -51,6 +51,8 @@
     "wired-tabs": "^2.0.0-alpha.0",
     "wired-textarea": "^2.0.0-alpha.0",
     "wired-toggle": "^2.0.0-alpha.0",
-    "wired-link": "^2.0.0-alpha.0"
+    "wired-link": "^2.0.0-alpha.0",
+    "wired-search-input": "^2.0.0-alpha.0",
+    "wired-divider": "^2.0.0-alpha.0"
   }
 }
