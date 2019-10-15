@@ -1,6 +1,6 @@
 {
   "name": "wired-input",
-  "version": "1.0.0",
+  "version": "2.0.0-alpha.0",
   "description": "Hand-drawn sketchy text input - web component",
   "main": "lib/wired-input.js",
   "module": "lib/wired-input.js",
@@ -28,6 +28,6 @@
   "author": "Preet Shihn <preetshihn@gmail.com> (https://twitter.com/preetster)",
   "license": "MIT",
   "dependencies": {
-    "wired-lib": "^1.0.0"
+    "wired-lib": "^2.0.0-alpha.0"
   }
 }

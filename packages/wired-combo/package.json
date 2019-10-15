@@ -1,6 +1,6 @@
 {
   "name": "wired-combo",
-  "version": "1.0.0",
+  "version": "2.0.0-alpha.0",
   "description": "Hand-drawn sketchy selector/combo-box web component",
   "main": "lib/wired-combo.js",
   "module": "lib/wired-combo.js",
@@ -32,7 +32,7 @@
   "author": "Preet Shihn <preetshihn@gmail.com> (https://twitter.com/preetster)",
   "license": "MIT",
   "dependencies": {
-    "wired-card": "^1.0.0",
-    "wired-lib": "^1.0.0"
+    "wired-card": "^2.0.0-alpha.0",
+    "wired-lib": "^2.0.0-alpha.0"
   }
 }
