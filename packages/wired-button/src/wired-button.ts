@@ -65,6 +65,14 @@ export class WiredButton extends WiredBase {
     `;
   }
 
+  focus() {
+    if (this.button) {
+      this.button.focus();
+    } else {
+      super.focus();
+    }
+  }
+
   protected canvasSize(): Point {
     if (this.button) {
       const size = this.button.getBoundingClientRect();

@@ -16,3 +16,4 @@ export { WiredTab } from 'wired-tab';
 export { WiredTabs } from 'wired-tabs';
 export { WiredFab } from 'wired-fab';
 export { WiredSpinner } from 'wired-spinner';
+export { WiredLink } from 'wired-link';
