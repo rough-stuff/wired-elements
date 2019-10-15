@@ -1,0 +1,54 @@
+<html>
+
+<head>
+  <script type="module" src="../packages/wired-link/lib/wired-link.js"></script>
+  <script type="module" src="../packages/wired-divider/lib/wired-divider.js"></script>
+  <script type="module" src="../packages/wired-button/lib/wired-button.js"></script>
+  <script type="module" src="../packages/wired-dialog/lib/wired-dialog.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 10px;
+      font-family: sans-serif;
+      line-height: 1.5;
+      font-size: 20px;
+    }
+
+    p {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+
+<body>
+  <p>
+    <wired-button id="openDialog">Show dialog</wired-button>
+  </p>
+  <wired-dialog>
+    <p>
+      This is a paragraph and here's a link about <wired-link href="./button.html">wired-button</wired-link> and well
+      well
+      well, what do you know, same link with more elevation <wired-link elevation="3" href="./button.html">wired-button
+      </wired-link>.
+      Here's another link that opens in a new tab about <wired-link href="./input.html" target="_blank">wired-input
+      </wired-link>. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+      et dolore magna aliqua.
+    </p>
+    <div style="text-align: right; padding: 30px 16px 16px;">
+      <wired-button id="closeDialog">Close dialog</wired-button>
+    </div>
+  </wired-dialog>
+
+  <script>
+    document.getElementById('openDialog').addEventListener('click', () => {
+      document.querySelector('wired-dialog').open = true;
+    });
+    document.getElementById('closeDialog').addEventListener('click', () => {
+      document.querySelector('wired-dialog').open = false;
+    });
+  </script>
+</body>
+
+</html>
