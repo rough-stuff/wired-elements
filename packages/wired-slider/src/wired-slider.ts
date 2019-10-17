@@ -7,13 +7,13 @@ export class WiredSlider extends WiredBase {
   @property({ type: Number }) min = 0;
   @property({ type: Number }) max = 100;
   @property({ type: Number }) step = 1;
-  @property({ type: Number }) value = this.min;
   @property({ type: Boolean, reflect: true }) disabled = false;
 
   @query('input') private input?: HTMLInputElement;
 
   private knob?: SVGElement;
   private canvasWidth = 300;
+  private pendingValue?: number;
 
   static get styles(): CSSResultArray {
     return [
@@ -92,6 +92,28 @@ export class WiredSlider extends WiredBase {
     ];
   }
 
+  get value(): number {
+    if (this.input) {
+      return +this.input.value;
+    }
+    return this.min;
+  }
+
+  set value(v: number) {
+    if (this.input) {
+      this.input.value = `${v}`;
+    } else {
+      this.pendingValue = v;
+    }
+    this.updateThumbPosition();
+  }
+
+  firstUpdated() {
+    this.value = this.pendingValue || this.value || +(this.getAttribute('value') || this.min);
+    delete this.pendingValue;
+  }
+
+
   render(): TemplateResult {
     return html`
     <div id="container">
@@ -99,7 +121,6 @@ export class WiredSlider extends WiredBase {
         min="${this.min}"
         max="${this.max}"
         step="${this.step}"
-        .value="${this.value}"
         ?disabled="${this.disabled}"
         @input="${this.onInput}">
       <div id="overlay">

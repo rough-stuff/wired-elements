@@ -2,6 +2,7 @@ import { WiredBase, BaseCSS, ResizeObserver } from 'wired-lib/lib/wired-base';
 import { rectangle, Point } from 'wired-lib';
 import { customElement, property, css, TemplateResult, html, CSSResultArray, query } from 'lit-element';
 import { WiredProgress } from 'wired-progress';
+import { WiredSlider } from 'wired-slider';
 import 'wired-progress';
 import 'wired-icon-button';
 import 'wired-slider';
@@ -17,6 +18,7 @@ export class WiredVideo extends WiredBase {
   @property() private timeDisplay = '';
 
   @query('wired-progress') private progressBar?: WiredProgress;
+  @query('wired-slider') private slider?: WiredSlider;
   @query('video') private video?: HTMLVideoElement;
 
   private resizeObserver?: ResizeObserver;
@@ -122,6 +124,7 @@ export class WiredVideo extends WiredBase {
       src="${this.src}"
       @play="${() => this.playing = true}"
       @pause="${() => this.playing = false}"
+      @canplay="${this.canPlay}"
       @timeupdate="${this.updateTime}">
     </video>
     <div id="overlay">
@@ -135,7 +138,7 @@ export class WiredVideo extends WiredBase {
         </wired-icon-button>
         <div id="timeDisplay">${this.timeDisplay}</div>
         <div class="flex">
-          <wired-slider></wired-slider>
+          <wired-slider @change="${this.volumeChange}"></wired-slider>
         </div>
         <div style="width: 24px; height: 24px;">
           <svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" style="pointer-events: none; display: block; width: 100%; height: 100%;"><g><path style="stroke: none; fill: currentColor;" d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></g></svg>
@@ -208,6 +211,18 @@ export class WiredVideo extends WiredBase {
       } else {
         this.video.play();
       }
+    }
+  }
+
+  private volumeChange() {
+    if (this.video && this.slider) {
+      this.video.volume = this.slider.value / 100;
+    }
+  }
+
+  private canPlay() {
+    if (this.slider && this.video) {
+      this.slider.value = this.video!.volume * 100;
     }
   }
 }
