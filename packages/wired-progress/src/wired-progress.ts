@@ -78,7 +78,7 @@ export class WiredProgress extends WiredBase {
 
   wiredRender(force = false) {
     super.wiredRender(force);
-    this.refreshProgtessFill();
+    this.refreshProgressFill();
   }
 
   protected canvasSize(): Point {
@@ -90,24 +90,28 @@ export class WiredProgress extends WiredBase {
     rectangle(svg, 2, 2, size[0] - 2, size[1] - 2);
   }
 
-  private refreshProgtessFill() {
-    if (this.progBox && this.svg) {
-      this.svg.removeChild(this.progBox);
+  private refreshProgressFill() {
+    if (this.progBox) {
+      if (this.progBox.parentElement) {
+        this.progBox.parentElement.removeChild(this.progBox);
+      }
       this.progBox = undefined;
     }
-    let pct = 0;
-    const s = this.getBoundingClientRect();
-    if (this.max > this.min) {
-      pct = (this.value - this.min) / (this.max - this.min);
-      const progWidth = s.width * Math.max(0, Math.min(pct, 100));
-      this.progBox = hachureFill([
-        [0, 0],
-        [progWidth, 0],
-        [progWidth, s.height],
-        [0, s.height]
-      ]);
-      this.svg!.appendChild(this.progBox);
-      this.progBox.classList.add('progbox');
+    if (this.svg) {
+      let pct = 0;
+      const s = this.getBoundingClientRect();
+      if (this.max > this.min) {
+        pct = (this.value - this.min) / (this.max - this.min);
+        const progWidth = s.width * Math.max(0, Math.min(pct, 100));
+        this.progBox = hachureFill([
+          [0, 0],
+          [progWidth, 0],
+          [progWidth, s.height],
+          [0, s.height]
+        ]);
+        this.svg!.appendChild(this.progBox);
+        this.progBox.classList.add('progbox');
+      }
     }
   }
 }

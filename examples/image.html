@@ -1,0 +1,36 @@
+<html>
+
+<head>
+  <script type="module" src="../packages/wired-image/lib/wired-image.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 10px;
+      font-family: sans-serif;
+      line-height: 1.5;
+    }
+
+    wired-image {
+      margin: 20px;
+    }
+
+    .red {
+      color: purple;
+    }
+
+    .sized {
+      max-width: 400px;
+      max-height: 400px;
+    }
+  </style>
+</head>
+
+<body>
+  <wired-image src="https://www.gstatic.com/webp/gallery/1.sm.jpg"></wired-image>
+  <wired-image elevation="4" class="red" src="https://www.gstatic.com/webp/gallery/1.sm.jpg"></wired-image>
+  <wired-image src="https://www.gstatic.com/webp/gallery/4.jpg"></wired-image>
+  <wired-image class="sized" elevation="5" src="https://www.gstatic.com/webp/gallery/4.jpg"></wired-image>
+</body>
+
+</html>

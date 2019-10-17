@@ -1,11 +1,13 @@
 import { WiredBase, BaseCSS, ResizeObserver } from 'wired-lib/lib/wired-base';
-import { rectangle, line, Point, hachureFill } from 'wired-lib';
-import { customElement, property, css, TemplateResult, html, CSSResultArray, PropertyValues } from 'lit-element';
+import { rectangle, line, Point } from 'wired-lib';
+import { customElement, property, css, TemplateResult, html, CSSResultArray } from 'lit-element';
 
-@customElement('wired-card')
-export class WiredCard extends WiredBase {
+const EMPTY_IMAGE = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+
+@customElement('wired-image')
+export class WiredImage extends WiredBase {
   @property({ type: Number }) elevation = 1;
-  @property({ type: String }) fill?: string;
+  @property({ type: String }) src: string = EMPTY_IMAGE;
   private resizeObserver?: ResizeObserver;
   private windowResizeHandler?: EventListenerOrEventListenerObject;
 
@@ -27,14 +29,17 @@ export class WiredCard extends WiredBase {
         :host {
           display: inline-block;
           position: relative;
-          padding: 10px;
+          line-height: 1;
+          padding: 3px;
         }
-        .cardFill path {
-          stroke-width: 3.5;
-          stroke: var(--wired-card-background-fill);
+        img {
+          display: block;
+          box-sizing: border-box;
+          max-width: 100%;
+          max-height: 100%;
         }
         path {
-          stroke: var(--wired-card-background-fill, currentColor);
+          stroke-width: 1;
         }
       `
     ];
@@ -42,16 +47,13 @@ export class WiredCard extends WiredBase {
 
   render(): TemplateResult {
     return html`
+    <img src="${this.src}">
     <div id="overlay"><svg></svg></div>
-    <div style="position: relative;">
-      <slot @slotchange="${this.wiredRender}"></slot>
-    </div>
     `;
   }
 
-  updated(changed: PropertyValues) {
-    const force = changed.has('fill');
-    this.wiredRender(force);
+  updated() {
+    super.updated();
     this.attachResizeListener();
   }
 
@@ -91,17 +93,6 @@ export class WiredCard extends WiredBase {
       width: size[0] - ((elev - 1) * 2),
       height: size[1] - ((elev - 1) * 2)
     };
-    if (this.fill && this.fill.trim()) {
-      const fillNode = hachureFill([
-        [2, 2],
-        [s.width - 4, 2],
-        [s.width - 2, s.height - 4],
-        [2, s.height - 4]
-      ]);
-      fillNode.classList.add('cardFill');
-      svg.style.setProperty('--wired-card-background-fill', this.fill.trim());
-      svg.appendChild(fillNode);
-    }
     rectangle(svg, 2, 2, s.width - 4, s.height - 4);
     for (let i = 1; i < elev; i++) {
       (line(svg, (i * 2), s.height - 4 + (i * 2), s.width - 4 + (i * 2), s.height - 4 + (i * 2))).style.opacity = `${(85 - (i * 10)) / 100}`;

@@ -16,7 +16,6 @@ export class WiredDialog extends LitElement {
         left: 0;
         right: 0;
         bottom: 0;
-        opacity: 0;
         pointer-events: none;
         z-index: var(--wired-dialog-z-index, 100);
       }
@@ -29,6 +28,7 @@ export class WiredDialog extends LitElement {
         bottom: 0;
         background: rgba(0,0,0,0.4);
         opacity: 0;
+        transition: opacity 0.5s ease;
       }
       #overlay {
         position: absolute;
@@ -36,6 +36,9 @@ export class WiredDialog extends LitElement {
         left: 0;
         right: 0;
         bottom: 0;
+        opacity: 0;
+        transform: translateY(150px);
+        transition: transform 0.5s ease, opacity 0.5s ease;
       }
       .layout.vertical {
         display: -ms-flexbox;
@@ -55,19 +58,18 @@ export class WiredDialog extends LitElement {
       wired-card {
         display: inline-block;
         background: white;
-        opacity: 0;
         text-align: left;
       }
 
       :host([open]) #container {
-        opacity: 1;
         pointer-events: auto;
       }
       :host([open]) #container::before {
         opacity: 1;
       }
-      :host([open]) wired-card {
+      :host([open]) #overlay {
         opacity: 1;
+        transform: none;
       }
     `;
   }
