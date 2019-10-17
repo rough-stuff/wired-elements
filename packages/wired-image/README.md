@@ -1,35 +1,35 @@
 ![wired card](https://wiredjs.github.io/wired-elements/images/card.png)
 
-# wired-card
+# wired-image
 
-wired-card is s a container for other web elements - with a hand-drawn, wireframe like, look.
+wired-image is s a container for other web elements - with a hand-drawn, wireframe like, look.
 
 For demo and view the complete set of wired-elememts: [wiredjs.com](http://wiredjs.com/)
 
 ## Usage
 
-Add wired-card to your project:
+Add wired-image to your project:
 ```
-npm i wired-card
+npm i wired-image
 ```
-Import wired-card definition into your HTML page:
+Import wired-image definition into your HTML page:
 ```html
-<script type="module" src="wired-card/lib/wired-card.js"></script>
+<script type="module" src="wired-image/lib/wired-image.js"></script>
 ```
 Or into your module script:
 ```javascript
-import { WiredCard } from "wired-card"
+import { WiredImage } from "wired-image"
 ```
 
 Use it in your web page:
 ```html
-<wired-card>
+<wired-image>
   <p>Elevation: 1</p>
-</wired-card>
+</wired-image>
 
-<wired-card elevation="3">
+<wired-image elevation="3">
   <p>Elevation: 3</p>
-</wired-card>
+</wired-image>
 ```
 
 ## Properties
