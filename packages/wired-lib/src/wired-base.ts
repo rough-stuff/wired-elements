@@ -1,4 +1,4 @@
-import { LitElement, query, css } from 'lit-element';
+import { LitElement, query, css, PropertyValues } from 'lit-element';
 import { Point } from './wired-lib';
 
 export type ResizeObserver = any;
@@ -35,7 +35,7 @@ export abstract class WiredBase extends LitElement {
   @query('svg') protected svg?: SVGSVGElement;
   protected lastSize: Point = [0, 0];
 
-  updated() {
+  updated(_changed?: PropertyValues) {
     this.wiredRender();
   }
 
