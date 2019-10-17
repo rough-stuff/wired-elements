@@ -1,28 +1,28 @@
-# wired-image
+# wired-video
 
-wired-image displays an image and draws a sketchy border around it. 
+wired-video displays an image and draws a sketchy border around it. 
 
 For demo and view the complete set of wired-elememts: [wiredjs.com](http://wiredjs.com/)
 
 ## Usage
 
-Add wired-image to your project:
+Add wired-video to your project:
 ```
-npm i wired-image
+npm i wired-video
 ```
-Import wired-image definition into your HTML page:
+Import wired-video definition into your HTML page:
 ```html
-<script type="module" src="wired-image/lib/wired-image.js"></script>
+<script type="module" src="wired-video/lib/wired-video.js"></script>
 ```
 Or into your module script:
 ```javascript
-import { WiredImage } from "wired-image"
+import { WiredImage } from "wired-video"
 ```
 
 Use it in your web page:
 ```html
-<wired-image src="https://www.gstatic.com/webp/gallery/1.sm.jpg"></wired-image>
-<wired-image elevation="4" src="https://www.gstatic.com/webp/gallery/1.sm.jpg"></wired-image>
+<wired-video src="https://www.gstatic.com/webp/gallery/1.sm.jpg"></wired-video>
+<wired-video elevation="4" src="https://www.gstatic.com/webp/gallery/1.sm.jpg"></wired-video>
 ```
 
 ## Properties

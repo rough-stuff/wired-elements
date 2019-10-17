@@ -2,7 +2,7 @@
 
 # wired-card
 
-wired-card is s a container for other web elements - with a hand-drawn, wireframe like, look.
+wired-card is a container for other web elements - with a hand-drawn, wireframe like, look.
 
 For demo and view the complete set of wired-elememts: [wiredjs.com](http://wiredjs.com/)
 
