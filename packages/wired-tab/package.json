@@ -1,6 +1,6 @@
 {
   "name": "wired-tab",
-  "version": "2.0.0-alpha.0",
+  "version": "2.0.0-alpha.1",
   "description": "Hand-drawn sketchy tabs - web component",
   "main": "lib/wired-tab.js",
   "module": "lib/wired-tab.js",
@@ -26,7 +26,7 @@
   "author": "Preet Shihn <preetshihn@gmail.com> (https://twitter.com/preetster)",
   "license": "MIT",
   "dependencies": {
-    "wired-item": "^2.0.0-alpha.0",
-    "wired-lib": "^2.0.0-alpha.0"
+    "wired-item": "^2.0.0-alpha.1",
+    "wired-lib": "^2.0.0-alpha.1"
   }
 }
