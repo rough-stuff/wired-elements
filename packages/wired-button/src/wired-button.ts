@@ -1,4 +1,4 @@
-import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
+import { WiredBase, BaseCSS, ResizeObserver } from 'wired-lib/lib/wired-base';
 import { rectangle, line, Point } from 'wired-lib';
 import { customElement, property, query, css, TemplateResult, html, CSSResultArray } from 'lit-element';
 
@@ -8,6 +8,19 @@ export class WiredButton extends WiredBase {
   @property({ type: Boolean, reflect: true }) disabled = false;
 
   @query('button') private button?: HTMLButtonElement;
+
+  private resizeObserver?: ResizeObserver;
+
+  constructor() {
+    super();
+    if ((window as any).ResizeObserver) {
+      this.resizeObserver = new (window as any).ResizeObserver(() => {
+        if (this.svg) {
+          this.wiredRender();
+        }
+      });
+    }
+  }
 
   static get styles(): CSSResultArray {
     return [
@@ -96,6 +109,27 @@ export class WiredButton extends WiredBase {
       (line(svg, s.width + (i * 2), s.height + (i * 2), s.width + (i * 2), i * 2)).style.opacity = `${(75 - (i * 10)) / 100}`;
       (line(svg, (i * 2), s.height + (i * 2), s.width + (i * 2), s.height + (i * 2))).style.opacity = `${(75 - (i * 10)) / 100}`;
       (line(svg, s.width + (i * 2), s.height + (i * 2), s.width + (i * 2), i * 2)).style.opacity = `${(75 - (i * 10)) / 100}`;
+    }
+  }
+
+  updated() {
+    super.updated();
+    this.attachResizeListener();
+  }
+
+  disconnectedCallback() {
+    this.detachResizeListener();
+  }
+
+  private attachResizeListener() {
+    if (this.resizeObserver && this.resizeObserver.observe) {
+      this.resizeObserver.observe(this);
+    }
+  }
+
+  private detachResizeListener() {
+    if (this.resizeObserver && this.resizeObserver.unobserve) {
+      this.resizeObserver.unobserve(this);
     }
   }
 }
