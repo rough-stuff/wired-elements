@@ -16,7 +16,7 @@ export class WiredButton extends WiredBase {
     if ((window as any).ResizeObserver) {
       this.resizeObserver = new (window as any).ResizeObserver(() => {
         if (this.svg) {
-          this.wiredRender();
+          this.wiredRender(true);
         }
       });
     }
@@ -122,14 +122,14 @@ export class WiredButton extends WiredBase {
   }
 
   private attachResizeListener() {
-    if (this.resizeObserver && this.resizeObserver.observe) {
-      this.resizeObserver.observe(this);
+    if (this.button && this.resizeObserver && this.resizeObserver.observe) {
+      this.resizeObserver.observe(this.button);
     }
   }
 
   private detachResizeListener() {
-    if (this.resizeObserver && this.resizeObserver.unobserve) {
-      this.resizeObserver.unobserve(this);
+    if (this.button && this.resizeObserver && this.resizeObserver.unobserve) {
+      this.resizeObserver.unobserve(this.button);
     }
   }
 }
