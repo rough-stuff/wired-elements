@@ -60,23 +60,15 @@
     <div class="item_wrapper">
       <p>"fr" locale</p>
       <!-- Note: parameter dates not affected by locale -->
-      <wired-calendar id="calendar2"
-        elevation="1"
-        firstdate="Apr 15, 2019"
-        lastdate="Jul 15, 2019"
-        selected="Jul 4, 2019"
-        locale="fr"
-        initials>
+      <wired-calendar id="calendar2" elevation="1" firstdate="Apr 15, 2019" lastdate="Jul 15, 2019"
+        selected="Jul 4, 2019" locale="fr" initials>
       </wired-calendar>
     </div>
 
     <!-- Calendar with custom style and some parameters -->
     <div class="item_wrapper">
       <p>"de" locale</p>
-      <wired-calendar id="calendar3"
-        class="custom"
-        firstdate="Apr 15, 2019"
-        locale="de" initials>
+      <wired-calendar id="calendar3" class="custom" firstdate="Apr 15, 2019" locale="de" initials>
       </wired-calendar>
     </div>
   </div>
@@ -85,19 +77,15 @@
   <!-- Calendar with javascript interactions (event and non-event driven) -->
   <section>
     <p>"es-MX" locale with javascript interactions sample (event and non-event driven)</p>
-    <wired-calendar id="calendar4"
-      elevation="5"
-      firstdate="Apr 15, 2019"
-      lastdate="Jul 15, 2019"
-      locale="es-MX"
+    <wired-calendar id="calendar4" elevation="5" firstdate="Apr 15, 2019" lastdate="Jul 15, 2019" locale="es-MX"
       initials>
     </wired-calendar>
     <p id="calendar4-result">Select a date in the calendar<p>
-    <div style="margin-top: 16px;">
-      <wired-button id="btn-today">Today</wired-button>
-      <wired-button id="btn-update">Update</wired-button>
-    </div>
-    <p id="calendar4-update">No updated yet<p>
+        <div style="margin-top: 16px;">
+          <wired-button id="btn-today">Today</wired-button>
+          <wired-button id="btn-update">Update</wired-button>
+        </div>
+        <p id="calendar4-update">No updated yet<p>
   </section>
 
   <script>

@@ -249,7 +249,6 @@ export class WiredCombo extends LitElement {
         this.value = undefined;
       }
     }
-    console.log('refresh selection', nodes, this.value, this.selected);
   }
 
   private setCardShowing(showing: boolean) {
