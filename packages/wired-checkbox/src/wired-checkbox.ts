@@ -39,6 +39,7 @@ export class WiredCheckbox extends WiredBase {
       }
       span {
         margin-left: 1.5ex;
+        line-height: 24px;
       }
       input {
         opacity: 0;
