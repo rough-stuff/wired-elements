@@ -1,6 +1,6 @@
 {
   "name": "wired-spinner",
-  "version": "2.0.0-alpha.1",
+  "version": "2.0.0",
   "description": "Hand-drawn sketchy button - web component",
   "main": "lib/wired-spinner.js",
   "module": "lib/wired-spinner.js",
@@ -26,6 +26,6 @@
   "author": "Preet Shihn <preetshihn@gmail.com> (https://twitter.com/preetster)",
   "license": "MIT",
   "dependencies": {
-    "wired-lib": "^2.0.0-alpha.1"
+    "wired-lib": "^2.0.0"
   }
 }

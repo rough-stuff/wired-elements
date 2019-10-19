@@ -1,6 +1,6 @@
 {
   "name": "wired-item",
-  "version": "2.0.0-alpha.1",
+  "version": "2.0.0",
   "description": "wired-item is a list item used by Wired components like wired-combo and wired-list-box",
   "main": "lib/wired-item.js",
   "module": "lib/wired-item.js",
@@ -16,6 +16,6 @@
   "author": "Preet Shihn",
   "license": "MIT",
   "dependencies": {
-    "wired-lib": "^2.0.0-alpha.1"
+    "wired-lib": "^2.0.0"
   }
 }
