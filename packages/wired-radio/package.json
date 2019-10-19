@@ -1,6 +1,6 @@
 {
   "name": "wired-radio",
-  "version": "2.0.0-alpha.1",
+  "version": "2.0.0-alpha.6",
   "description": "Hand-drawn sketchy radio button - web component",
   "main": "lib/wired-radio.js",
   "module": "lib/wired-radio.js",
