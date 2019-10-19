@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.0] - October 19, 2019
+* New component: **wired-video** Video player with the hand-drawn look
+* New component: **wired-calendar** is a calendar component contributed by [@elingerojo](https://github.com/elingerojo)
+* New component: **wired-dialog** emulates dialogs
+* New component: **wired-divider** Draws a sketchy horizontal line between two sections
+* New component: **wired-image** Image component that frames the image in a sketchy border
+* New component: **wired-link** Akin to `<a>` tag, a link with href, and a sketchy underline
+* New component: **wired-search-input** is a text input emulating a search input
+* **wired-card** now supports a sketchy filled background
+* **wired-slider** is more accessible, now built on top of input range.
+* Elements are more responsive to size changes using the Resize observer
+* **wired-textarea** does not auto-grow anymore. 
+
+
 ## [1.0.0] - April 24, 2019
 
 * New component: **wired-fab** mimics the floating action button proposed in Material design
