@@ -138,6 +138,7 @@ export class WiredCalendar extends LitElement {
       text-transform: capitalize;
       line-height: unset;
       cursor: default;
+      overflow: hidden;
     }
 
     table:focus {
