@@ -26,7 +26,7 @@ Use it in your web page:
 
 ## Properties
 
-**src** - URL of the image.
+**src** - URL of the video.
 
 **autoplay** - Boolean value indicating if the video should auto-play
 
