@@ -87,10 +87,10 @@ export class WiredInput extends WiredBase {
       const input = this.input;
       if (input) {
         input.value = v;
+        return;
       }
-    } else {
-      this.pendingValue = v;
     }
+    this.pendingValue = v;
   }
 
   firstUpdated() {
