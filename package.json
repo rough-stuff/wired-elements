@@ -13,6 +13,7 @@
     "tsc": "lerna run tsc",
     "watch": "tsc --build packages/**/tsconfig.json -w",
     "dev": "polyserve --npm --module-resolution=node",
+    "lernaupdate": "lernaupdate",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -36,9 +37,10 @@
   "homepage": "https://github.com/wiredjs/wired-elements#readme",
   "devDependencies": {
     "@material/mwc-icon": "^0.10.0",
-    "lerna": "^3.18.1",
+    "lerna": "^3.20.2",
+    "lerna-update-wizard": "^0.17.7",
     "polyserve": "^0.27.15",
-    "tslint": "^5.20.0",
-    "typescript": "^3.6.3"
+    "tslint": "^5.20.1",
+    "typescript": "^3.7.5"
   }
 }

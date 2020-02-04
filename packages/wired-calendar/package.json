@@ -31,6 +31,7 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "lit-element": "^2.2.1",
     "wired-lib": "^2.0.0"
   }
 }
