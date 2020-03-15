@@ -1,6 +1,6 @@
 {
   "name": "wired-search-input",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Hand-drawn sketchy text input - web component",
   "main": "lib/wired-search-input.js",
   "module": "lib/wired-search-input.js",

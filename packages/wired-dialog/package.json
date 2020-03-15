@@ -1,6 +1,6 @@
 {
   "name": "wired-dialog",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Hand-drawn sketchy tabs - web component",
   "main": "lib/wired-dialog.js",
   "module": "lib/wired-dialog.js",
@@ -26,6 +26,6 @@
   "license": "MIT",
   "dependencies": {
     "lit-element": "^2.2.1",
-    "wired-card": "^2.0.1"
+    "wired-card": "^2.0.2"
   }
 }

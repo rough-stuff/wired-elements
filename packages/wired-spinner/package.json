@@ -1,6 +1,6 @@
 {
   "name": "wired-spinner",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Hand-drawn sketchy button - web component",
   "main": "lib/wired-spinner.js",
   "module": "lib/wired-spinner.js",
