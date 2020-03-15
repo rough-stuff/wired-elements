@@ -14,7 +14,8 @@
     "watch": "tsc --build packages/**/tsconfig.json -w",
     "dev": "polyserve --npm --module-resolution=node",
     "lernaupdate": "lernaupdate",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "bundle": "rollup -c"
   },
   "repository": {
     "type": "git",
@@ -37,10 +38,14 @@
   "homepage": "https://github.com/wiredjs/wired-elements#readme",
   "devDependencies": {
     "@material/mwc-icon": "^0.10.0",
+    "@rollup/plugin-typescript": "^4.0.0",
     "lerna": "^3.20.2",
     "lerna-update-wizard": "^0.17.7",
     "polyserve": "^0.27.15",
+    "rollup": "^1.32.1",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^5.3.0",
     "tslint": "^5.20.1",
-    "typescript": "^3.7.5"
+    "typescript": "^3.8.3"
   }
 }
