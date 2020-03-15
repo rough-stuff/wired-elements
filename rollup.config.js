@@ -14,6 +14,18 @@ export default [
   {
     input,
     output: {
+      file: `${outDir}/wired-elements-bundled-full.js`,
+      format: 'iife',
+      name: 'WiredElements'
+    },
+    onwarn,
+    plugins: [
+      resolve()
+    ]
+  },
+  {
+    input,
+    output: {
       file: `${outDir}/wired-elements-bundled.js`,
       format: 'iife',
       name: 'WiredElements'
