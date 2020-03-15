@@ -1,6 +1,6 @@
 {
   "name": "wired-toggle",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Hand-drawn sketchy toggle button - web component",
   "main": "lib/wired-toggle.js",
   "module": "lib/wired-toggle.js",
