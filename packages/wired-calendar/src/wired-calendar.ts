@@ -194,9 +194,9 @@ export class WiredCalendar extends LitElement {
             @touchstart="${this.onItemClick}">
       ${ /* 1st header row with calendar title and prev/next controls */ ''}
       <tr class="top-header" style="height:${this.tblHeadHeight}px;">
-        <th id="prevCal" class="pointer" @click="${this.onPrevClick}"><<</th>
+        <th id="prevCal" class="pointer" @click="${this.onPrevClick}">&lt;&lt;</th>
         <th colSpan="5">${this.monthYear}</th>
-        <th id="nextCal" class="pointer" @click="${this.onNextClick}">>></th>
+        <th id="nextCal" class="pointer" @click="${this.onNextClick}">&gt;&gt;</th>
       </tr>
       ${ /* 2nd header row with the seven weekdays names (short or initials) */ ''}
       <tr class="header" style="height:${this.tblHeadHeight}px;">
