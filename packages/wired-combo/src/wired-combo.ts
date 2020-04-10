@@ -14,7 +14,7 @@ interface ComboValue {
 @customElement('wired-combo')
 export class WiredCombo extends LitElement {
   @property({ type: Object }) value?: ComboValue;
-  @property({ type: String }) selected?: string;
+  @property({ type: String, reflect: true }) selected?: string;
   @property({ type: Boolean, reflect: true }) disabled = false;
 
   @query('svg') private svg?: SVGSVGElement;
