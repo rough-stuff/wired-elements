@@ -11,6 +11,8 @@
 <svg><use xlink:href="actions-symbol.svg#ic_visibility_24px"></use></svg>
 <svg id="svg_visibility" width="300" height="150" viewBox="0 0 24 24"></svg>
 
+<object id="svg-object" data="actions-symbol.svg" type="image/svg+xml"></object>
+
 <script src="https://cdn.jsdelivr.net/npm/roughjs@4.1.4/bundled/rough.min.js"></script>
 <script>
 	const svgSettings = document.getElementById('svg_settings');
@@ -25,11 +27,17 @@
 	node = rc.path(svgPath, {roughness: 0.1, fill: 'green', hachureGap: 1, fillStyle: 'zigzag' });
 	svgAndroid.appendChild(node);
 
-	const svgVisibility = document.getElementById('svg_visibility');
-	svgPath = 'M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z';
-	rc = rough.svg(svgVisibility);
-	node = rc.path(svgPath, {roughness: 0.1, hachureAngle: 60, hachureGap: 1.5, fill: 'black'});
-	svgVisibility.appendChild(node);
+	const icons = document.getElementById('svg-object');
+	icons.addEventListener('load', function(){
+		// Way to retrieve path from the .svg doc if loaded async
+		const el = icons.contentDocument.getElementById('ic_visibility_24px');
+		svgPath = el.firstElementChild.getAttribute('d');
+
+		const svgVisibility = document.getElementById('svg_visibility');
+		rc = rough.svg(svgVisibility);
+		node = rc.path(svgPath, {roughness: 0.1, hachureAngle: 60, hachureGap: 1.5, fill: 'black'});
+		svgVisibility.appendChild(node);
+	});
 </script>
 </body>
 </html>
