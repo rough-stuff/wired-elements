@@ -23,7 +23,8 @@
     "url": "git+https://github.com/apennamen/wired-elements.git"
   },
   "scripts": {
-    "test": "serve ./public"
+    "test": "serve ./public",
+    "tsc": "tsc"
   },
   "bugs": {
     "url": "https://github.com/apennamen/wired-elements/issues"

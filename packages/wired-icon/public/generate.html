@@ -23,7 +23,7 @@
 		for (icon of icons) {
 			const id = regex.exec(icon.getAttribute('id'))[1];
 			const config = {};
-			attributes.forEach(attr => config[attr[0]] = icon.getAttribute(attr));
+			attributes.forEach(attr => config[attr[0]] = icon.getAttribute(attr) || "0");
 			config.p = icon.lastElementChild.getAttribute('d');
 			result[id] = config;
 		}

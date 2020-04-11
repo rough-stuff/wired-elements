@@ -1,6 +1,7 @@
 import { hachureLinesForPolygon, hachureLinesForEllipse } from 'roughjs/bin/fillers/filler-utils';
 import { Line } from 'roughjs/bin/geometry';
-import { ResolvedOptions } from 'roughjs/bin/core';
+import { ResolvedOptions, Options } from 'roughjs/bin/core';
+import { RoughSVG } from 'roughjs/bin/svg';
 
 const __maxRandomnessOffset = 2;
 const __roughness = 1;
@@ -10,6 +11,7 @@ const __curveStepCount = 9;
 
 declare type Params = { [name: string]: string };
 export declare type Point = [number, number];
+export { Options };
 
 class WiresPath {
   private p = '';
@@ -282,4 +284,11 @@ export function fire(element: HTMLElement, name: string, detail?: any, bubbles: 
     const CE = ((window as any).SlickCustomEvent || CustomEvent);
     element.dispatchEvent(new CE(name, init));
   }
+}
+
+export function path(path: string, rootSvg: SVGSVGElement, options?: Options): SVGGElement {
+  let rough = new RoughSVG(rootSvg);
+  const result = rough.path(path, options);
+  rootSvg.append(result);
+  return result;
 }
