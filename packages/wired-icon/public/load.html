@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<body>
+<svg id="original"></svg>
+<svg id="display"></svg>
+
+<script src="https://cdn.jsdelivr.net/npm/roughjs@4.1.4/bundled/rough.min.js"></script>
+<script src="DATA.js"></script>
+<script>
+	(
+		function() {
+			// Load config for settings icon
+			const {p, x, y} = DATA['alarm'];
+
+			// Load the original
+			const originalSvg = document.getElementById('original');
+			originalSvg.setAttribute('width', 60);
+			originalSvg.setAttribute('height', 60);
+			originalSvg.setAttribute('viewBox', "0 0 24 24");
+			if (x) originalSvg.setAttribute('x', x);
+			if (y) originalSvg.setAttribute('y', y);
+			const originalPath = document.createElementNS('http://www.w3.org/2000/svg',"path"); 
+			originalPath.setAttribute('d', p);
+			originalSvg.appendChild(originalPath);
+
+
+			// Create the rough version
+			const svgDisplay = document.getElementById('display');
+			svgDisplay.setAttribute('width', 60);
+			svgDisplay.setAttribute('height', 60);
+			// We need to compensate the rough effect with viewbox
+			svgDisplay.setAttribute('viewBox', "-1 0 26 24");
+			if (x) svgDisplay.setAttribute('x', x);
+			if (y) svgDisplay.setAttribute('y', y);
+
+			const rc = rough.svg(svgDisplay);
+			const roughConfig = {roughness: 0.1, fill: 'green', stroke: 'blue', hachureGap: 1.5, fillStyle: 'zigzag' };
+			const node = rc.path(p, roughConfig);
+			svgDisplay.appendChild(node);
+
+		}
+	)();
+</script>
+</body>
+</html>

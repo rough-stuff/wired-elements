@@ -30,5 +30,9 @@
   },
   "devDependencies": {
     "serve": "^11.3.0"
+  },
+  "dependencies": {
+    "lit-element": "^2.3.1",
+    "wired-lib": "^2.0.0"
   }
 }
