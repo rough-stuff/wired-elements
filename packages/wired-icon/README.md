@@ -2,6 +2,8 @@
 
 Hand drawn version of Material Icon, based on [Material Design SVG Icon](https://github.com/google/material-design-icons/blob/master/sprites/svg-sprite)
 
+![image](https://user-images.githubusercontent.com/7101875/78978100-8391f100-7b19-11ea-943f-2842e2b5ea44.png)
+
 For the complete set of wired-elements: [wiredjs.com](http://wiredjs.com/)
 
 ## Usage
