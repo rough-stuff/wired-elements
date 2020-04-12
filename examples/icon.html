@@ -2,18 +2,59 @@
 
 <head>
   <script type="module" src="../packages/wired-icon/lib/wired-icon.js"></script>
+  <script type="module" src="../packages/wired-icon-button/lib/wired-icon-button.js"></script>
 
   <style>
-    #icon {
-      width: 600px;
-      height: 600px;
+    .icon {
+      width: 100px;
+    }
+
+    .icon-button {
+      width: 50px;
     }
   </style>
 </head>
 
 <body>
-  <wired-icon id="icon" config='{"roughness": "0.5", "fill": "green"}'>
+  <wired-icon class="icon" icon="build">
   </wired-icon>
+  <span>Default (roughness = 0.1)</span>
+  <br>
+  <hr>
+  
+  <wired-icon class="icon" icon="settings" config='{"fill": "red", "hachureGap": "1"}'>
+  </wired-icon>
+  <span>{"fill": "red", "hachureGap": "1"}</span>
+  <br>
+  <hr>
+  
+  <wired-icon class="icon" icon="android"
+    config='{"fillStyle": "zigzag", "fill": "green", "hachureGap": "1.5", "fillWeight": "0.9"}'>
+  </wired-icon>
+  <span>{"fillStyle": "zigzag", "fill": "green", "hachureGap": "1.5", "fillWeight": "0.9"}</span>
+  <br>
+  <hr>
+
+  <span>Inside a wired icon button :</span>
+  <wired-icon-button elevation="5">
+    <wired-icon class="icon-button" icon="autorenew"
+      config='{"strokeWidth": "0.3", "fill": "blue", "fillStyle": "cross-hatch"}'
+    ></wired-icon>
+  </wired-icon-button>
+  <hr>
+
+  <wired-icon class="icon" icon="explore"
+    config='{"stroke": "transparent", "fill": "pink", "fillStyle": "solid"}'>
+  </wired-icon>
+  <span>With transparent stroke {"stroke": "transparent", "fill": "pink", "fillStyle": "solid"}</span>
+  <br>
+  <hr>
+
+  <wired-icon class="icon" icon="account_box"
+    config='{"stroke": "transparent", "fill": "black", "fillStyle": "zigzag", "hachureGap": "1.5", "fillWeight": "0.9"}'>
+  </wired-icon>
+  <span>With transparent stroke {"stroke": "transparent", "fill": "black", "fillStyle": "zigzag", "hachureGap": "1.7", "fillWeight": "0.8"}</span>
+  <br>
 </body>
 
 </html>

@@ -1,29 +1,31 @@
 import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
 import { Point, Options, path } from '../../wired-lib/lib/wired-lib';
-import { customElement, css, TemplateResult, html, CSSResultArray, property } from 'lit-element';
+import { customElement, TemplateResult, html, css, CSSResultArray, property } from 'lit-element';
 
-import { ICON_SET } from './icon-set';
+import { ICON_SET } from './icon-set-action';
+
+const DEFAULT_CONFIG = { 
+  roughness: 0.1,
+};
 
 @customElement('wired-icon')
 export class WiredIcon extends WiredBase {
-    @property() icon = 'build';
-    @property({type: Object }) config: Options = { 
-      roughness: 0.1,
-      fill: 'black',
-    };
+    @property() icon = '';
+    @property({type: Object }) config: Options = DEFAULT_CONFIG;
 
     static get styles(): CSSResultArray {
         return [
           BaseCSS,
           css`
-            :host {
-              width: 100%;
-            }`
+              :host {
+                  display: block;
+              }
+          `
         ];
     }
 
   render(): TemplateResult {
-    return html`<svg></svg>`;
+    return html`<svg viewBox="-1 0 26 24"></svg>`;
   }
 
   protected canvasSize(): Point {
@@ -32,13 +34,16 @@ export class WiredIcon extends WiredBase {
   }
 
   protected draw(svg: SVGSVGElement, size: Point) {
-      const { p, x, y } = ICON_SET[this.icon];
+      if (!this.icon) return;
+      const svgPath = ICON_SET[this.icon];
+      if (!path) return;
       const min = Math.min(size[0], size[1]);
       svg.setAttribute('width', `${min}`);
       svg.setAttribute('height', `${min}`);
-      svg.setAttribute('viewBox', '-1 0 26 24');
-      svg.setAttribute('x', x);
-      svg.setAttribute('y', y);
-      path(p, svg, this.config);
+      try {
+        path(svgPath, svg, {...DEFAULT_CONFIG, ...this.config});
+      } catch (e) {
+        // Die in silence in case of failure
+      }
     }
 }
