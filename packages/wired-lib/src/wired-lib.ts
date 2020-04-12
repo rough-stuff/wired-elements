@@ -287,7 +287,7 @@ export function fire(element: HTMLElement, name: string, detail?: any, bubbles: 
 }
 
 export function path(path: string, rootSvg: SVGSVGElement, options?: Options): SVGGElement {
-  let rough = new RoughSVG(rootSvg);
+  const rough = new RoughSVG(rootSvg);
   const result = rough.path(path, options);
   rootSvg.append(result);
   return result;

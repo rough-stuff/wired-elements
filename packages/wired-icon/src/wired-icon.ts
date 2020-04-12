@@ -2,7 +2,7 @@ import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
 import { Point, Options, path } from '../../wired-lib/lib/wired-lib';
 import { customElement, TemplateResult, html, css, CSSResultArray, property } from 'lit-element';
 
-import { ICON_SET } from './icon-set-action';
+import { getSvgPath } from './icon-set';
 
 const DEFAULT_CONFIG = { 
   roughness: 0.1,
@@ -10,16 +10,16 @@ const DEFAULT_CONFIG = {
 
 @customElement('wired-icon')
 export class WiredIcon extends WiredBase {
-    @property() icon = '';
-    @property({type: Object }) config: Options = DEFAULT_CONFIG;
+    @property({ type: String }) icon = '';
+    @property({ type: Object }) config: Options = DEFAULT_CONFIG;
 
     static get styles(): CSSResultArray {
         return [
           BaseCSS,
           css`
-              :host {
-                  display: block;
-              }
+            :host {
+                display: block;
+            }
           `
         ];
     }
@@ -35,8 +35,8 @@ export class WiredIcon extends WiredBase {
 
   protected draw(svg: SVGSVGElement, size: Point) {
       if (!this.icon) return;
-      const svgPath = ICON_SET[this.icon];
-      if (!path) return;
+      const svgPath = getSvgPath(this.icon);
+      if (!svgPath) return;
       const min = Math.min(size[0], size[1]);
       svg.setAttribute('width', `${min}`);
       svg.setAttribute('height', `${min}`);
