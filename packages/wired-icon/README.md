@@ -23,11 +23,8 @@ import { WiredIcon } from "wired-icon"
 
 Use it in your web page:
 ```html
-<wired-icon icon="settings">
-</wired-icon>
-
 <wired-icon
-    icon="android"
+    icon="settings"
     config='{"fillStyle": "zigzag", "fill": "green", "hachureGap": "1.5", "fillWeight": "0.9"}'>
 </wired-icon>
 ```
@@ -43,7 +40,14 @@ Use it in your web page:
 You can define CSS width and height on the wired-icon element to scale it.
 To change color, use the config property.
 
-## Bonuses
+## Extras
+### I want more icons !
+Because we know that bundle size is what matters, only the most common icons are available by default (list below).
+Therefore, we provide a way to had custom icons by setting the path.
+And we also provide a utility function to get the path of all the material icon !
+
+
+
 ### Material Look
 You can have the material look with the following config:
 ```javascript
@@ -58,6 +62,23 @@ You can use Wired Icon inside a Wired Button
     ></wired-icon>
 </wired-icon-button>
 ```
+
+## Default Iconset included
+#### A
+accessibility, accessible, account_box, add, alarm, apps, audiotrack, autorenew
+#### B
+battery_full, block, bluetooth, build
+#### C
+call, clear, cloud, computer, contact_mail, contact_phone
+#### D,E,F,G,I,K,L
+done, edit, flash_on, folder, gps_fixed, image, keyboard, language
+#### M,P
+mail, map, menu, message, person, photo_camera
+#### R,S
+refresh, room, search, send, settings, share, smartphone, star
+#### T,V,W
+timer, tv, visibility, visibility_off, wifi
+
 
 ## License
 [MIT License](https://github.com/wiredjs/wired-elements/blob/master/LICENSE) (c) [Preet Shihn](https://twitter.com/preetster)

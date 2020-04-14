@@ -2,7 +2,7 @@ import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
 import { Point, Options, path, svgNode } from 'wired-lib/lib/wired-lib';
 import { customElement, TemplateResult, html, css, CSSResultArray, property } from 'lit-element';
 
-import { getSvgPath } from './iconset/icon-set';
+import { getSvgPath } from './iconset/iconset-loader';
 
 const DEFAULT_CONFIG: Options = { 
   roughness: 0.1,
@@ -12,6 +12,7 @@ const DEFAULT_CONFIG: Options = {
 export class WiredIcon extends WiredBase {
     @property({ type: String }) icon = '';
     @property({ type: Object }) config: Options = DEFAULT_CONFIG;
+    @property({ type: String }) path = '';
 
     static get styles(): CSSResultArray {
         return [
@@ -34,8 +35,7 @@ export class WiredIcon extends WiredBase {
   }
 
   protected draw(svg: SVGSVGElement, size: Point) {
-    if (!this.icon) return;
-    const svgPath = getSvgPath(this.icon);
+    const svgPath = this.path || getSvgPath(this.icon);
     if (!svgPath) return;
     const min = Math.min(size[0], size[1]);
     svg.setAttribute('width', `${min}`);
@@ -51,7 +51,7 @@ export class WiredIcon extends WiredBase {
   private addAriaLabel(svg: SVGSVGElement, iconName: string) {
     svg.setAttribute('aria-labelledby', 'title');
     const titleNode = svgNode('title', {id : 'title'});
-    titleNode.innerHTML = `${iconName} Icon`;
+    titleNode.innerHTML = `${iconName} icon`;
     svg.appendChild(titleNode);
 
   }
