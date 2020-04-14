@@ -8,9 +8,9 @@ const DEFAULT_CONFIG: Options = {
 
 @customElement('wired-icon')
 export class WiredIcon extends WiredBase {
-    @property({ type: Object }) config: Options = DEFAULT_CONFIG;
-    @property({ type: String }) path = '';
-    @property({ type: String }) aria = '';
+    @property({ type: Object, reflect: true }) config: Options = DEFAULT_CONFIG;
+    @property({ type: String, reflect: true }) path = '';
+    @property({ type: String, reflect: true }) aria = '';
 
     static get styles(): CSSResultArray {
         return [

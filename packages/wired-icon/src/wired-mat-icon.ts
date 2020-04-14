@@ -9,14 +9,14 @@ const findSvgPath = iconsetLoader(ICON_SET);
 export class WiredMatIcon extends WiredIcon {
   private _icon: string = '';
 
-  @property({ type: String })
+  @property({ type: String, reflect: true })
   get icon(): string {
     return this._icon;
   }
 
   set icon(value: string) {
     this._icon = value;
-    this.path = findSvgPath(this.icon);
-    this.aria = this.icon;
+    this.path = this.path || findSvgPath(this.icon);
+    this.aria = this.aria || this.icon;
   }
 }
