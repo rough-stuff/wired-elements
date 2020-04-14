@@ -2,17 +2,15 @@ import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
 import { Point, Options, path, svgNode } from 'wired-lib/lib/wired-lib';
 import { customElement, TemplateResult, html, css, CSSResultArray, property } from 'lit-element';
 
-import { getSvgPath } from './iconset/iconset-loader';
-
 const DEFAULT_CONFIG: Options = { 
   roughness: 0.1,
 };
 
 @customElement('wired-icon')
 export class WiredIcon extends WiredBase {
-    @property({ type: String }) icon = '';
     @property({ type: Object }) config: Options = DEFAULT_CONFIG;
     @property({ type: String }) path = '';
+    @property({ type: String }) aria = '';
 
     static get styles(): CSSResultArray {
         return [
@@ -35,14 +33,13 @@ export class WiredIcon extends WiredBase {
   }
 
   protected draw(svg: SVGSVGElement, size: Point) {
-    const svgPath = this.path || getSvgPath(this.icon);
-    if (!svgPath) return;
+    if (!this.path) return;
     const min = Math.min(size[0], size[1]);
     svg.setAttribute('width', `${min}`);
     svg.setAttribute('height', `${min}`);
-    this.addAriaLabel(svg, this.icon);
+    this.addAriaLabel(svg, this.aria);
     try {
-      path(svgPath, svg, {...DEFAULT_CONFIG, ...this.config});
+      path(this.path, svg, {...DEFAULT_CONFIG, ...this.config});
     } catch (e) {
       // Die in silence in case of failure
     }

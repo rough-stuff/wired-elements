@@ -1,12 +1,18 @@
-import { ICON_SET } from './iconset-full';
+/**
+ * key is the name of the icon
+ * value is the path for the svg (d attribute on path svg element)
+ */
+export type SvgIconSet = {
+    [key: string]: string
+};
 
 /**
-* Retrieves the svg path from the icon name from the full iconset.
-* @param iconName : the icon name as known in material icon.
-*/
-export const findSvgPath = (iconName?: string): string => {
-   if (iconName) {
-       return ICON_SET[iconName];
-   }
-   return '';
-}
+ * Returns a utility function to browse an iconset
+ * @param ICON_SET the iconset to be used
+ */
+export const iconsetLoader = (ICON_SET: SvgIconSet) => (iconName?: string): string => {
+    if (iconName) {
+        return ICON_SET[iconName];
+    }
+    return '';
+ }
