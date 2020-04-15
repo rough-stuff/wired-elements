@@ -8,7 +8,7 @@
     "material",
     "wired"
   ],
-  "author": "apennamen <adrien.pennamen@soprasteria.com>",
+  "author": "apennamen <adrien.pennamen@gmail.com>",
   "homepage": "https://github.com/wiredjs/wired-elements/tree/master/packages/wired-icon#readme",
   "license": "MIT",
   "main": "lib/wired-icon.js",
