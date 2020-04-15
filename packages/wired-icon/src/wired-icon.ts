@@ -11,6 +11,7 @@ export class WiredIcon extends WiredBase {
     @property({ type: Object, reflect: true }) config: Options = DEFAULT_CONFIG;
     @property({ type: String, reflect: true }) path = '';
     @property({ type: String, reflect: true }) aria = '';
+    @property({ type: String, reflect: true }) viewBox = '-1 0 26 24';
 
     static get styles(): CSSResultArray {
         return [
@@ -24,7 +25,7 @@ export class WiredIcon extends WiredBase {
     }
 
   render(): TemplateResult {
-    return html`<svg viewBox="-1 0 26 24"></svg>`;
+    return html`<svg></svg>`;
   }
 
   protected canvasSize(): Point {
@@ -37,6 +38,7 @@ export class WiredIcon extends WiredBase {
     const min = Math.min(size[0], size[1]);
     svg.setAttribute('width', `${min}`);
     svg.setAttribute('height', `${min}`);
+    svg.setAttribute('viewBox', this.viewBox);
     this.addAriaLabel(svg, this.aria);
     try {
       path(this.path, svg, {...DEFAULT_CONFIG, ...this.config});
