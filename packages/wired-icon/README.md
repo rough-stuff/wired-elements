@@ -154,6 +154,12 @@ firstUpdated() {
 }
 ```
 
+## Troubleshooting
+### I did everything right but the icon won't render, HELP !
+1. Try to set a fixed width/height with CSS on the web component. If it's Bounding Client Rect is 0, the component won't event bother rendering ;)
+2. Some few icons couldn't be included for weird technical reasons. Here is the list:
+__signal_wifi_statusbar_1_bar, signal_wifi_statusbar_2_bar, signal_wifi_statusbar_3_bar, signal_wifi_statusbar_4_bar, signal_wifi_statusbar_connected_no_internet_1, signal_wifi_statusbar_connected_no_internet, signal_wifi_statusbar_connected_no_internet_2, signal_wifi_statusbar_connected_no_internet_3, signal_wifi_statusbar_connected_no_internet_4, signal_wifi_statusbar_not_connected, signal_wifi_statusbar_null, fiber_manual_record, fiber_smart_record, pets, bubble_chart, brightness_1, pool__
+
 ## License
 [MIT License](https://github.com/wiredjs/wired-elements/blob/master/LICENSE) (c) [Preet Shihn](https://twitter.com/preetster)
 

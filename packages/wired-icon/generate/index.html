@@ -1,32 +1,42 @@
 <!doctype html>
 <html lang="en">
 <body>
+<style>
+	object {
+		visibility: hidden;
+		height: 0px;
+		width: 0px;
+	}
+</style>
+<object data="actions.svg" type="image/svg+xml"></object>
+<object data="alert.svg" type="image/svg+xml"></object>
+<object data="av.svg" type="image/svg+xml"></object>
+<object data="communication.svg" type="image/svg+xml"></object>
+<object data="content.svg" type="image/svg+xml"></object>
+<object data="device.svg" type="image/svg+xml"></object>
+<object data="editor.svg" type="image/svg+xml"></object>
+<object data="file.svg" type="image/svg+xml"></object>
+<object data="hardware.svg" type="image/svg+xml"></object>
+<object data="image.svg" type="image/svg+xml"></object>
+<object data="maps.svg" type="image/svg+xml"></object>
+<object data="navigation.svg" type="image/svg+xml"></object>
+<object data="notification.svg" type="image/svg+xml"></object>
+<object data="places.svg" type="image/svg+xml"></object>
+<object data="social.svg" type="image/svg+xml"></object>
 
-<!--<object id="svg-object" data="actions.svg" type="image/svg+xml"></object>-->
-<!--<object id="svg-object" data="device.svg" type="image/svg+xml"></object>-->
-<!--<object id="svg-object" data="alert.svg" type="image/svg+xml"></object>-->
-<!--<object id="svg-object" data="av.svg" type="image/svg+xml"></object>-->
-<!--<object id="svg-object" data="communication.svg" type="image/svg+xml"></object>-->
-<!--<object id="svg-object" data="content.svg" type="image/svg+xml"></object>-->
-<!--<object id="svg-object" data="editor.svg" type="image/svg+xml"></object>-->
-<!--<object id="svg-object" data="file.svg" type="image/svg+xml"></object>-->
-<!--<object id="svg-object" data="hardware.svg" type="image/svg+xml"></object>-->
-<!--<object id="svg-object" data="image.svg" type="image/svg+xml"></object>-->
-<!--<object id="svg-object" data="maps.svg" type="image/svg+xml"></object>-->
-<!--<object id="svg-object" data="navigation.svg" type="image/svg+xml"></object>-->
-<!--<object id="svg-object" data="notification.svg" type="image/svg+xml"></object>-->
-<!--<object id="svg-object" data="places.svg" type="image/svg+xml"></object>-->
-<!--<object id="svg-object" data="social.svg" type="image/svg+xml"></object>-->
-<object id="svg-object" data="toggle.svg" type="image/svg+xml"></object>
-<br><br>
-<p>Write the content of this textarea to file icon-set-*.ts</p>
+<p>Write the content of this textarea to file iconset-full.ts</p>
 <textarea id="result" style="width: 100%; height:200px;"></textarea>
 
 <script>
-	const source = document.getElementById('svg-object');
 	const resultArea = document.getElementById('result');
-	source.addEventListener('load', function(){
-		const icons = source.contentDocument.firstElementChild.getElementsByTagName('svg');
+	resultArea.value = "import { SvgIconSet } from './index';export const ICON_SET: SvgIconSet = {";
+	const source = document.getElementsByTagName('object');
+	let counter = 0;
+
+	const retrievePaths = function(object) {
+		counter++;
+		const icons = object.contentDocument.firstElementChild.getElementsByTagName('svg');
+		
 		// All the id in the doc follow this format
 		const regex = /ic_(.*)_24px/;
 		// We want to retrieve the following attributes from the svg
@@ -40,9 +50,22 @@
 			const id = regex.exec(icon.getAttribute('id'))[1];
 			result[id] = icon.lastElementChild.getAttribute('d');
 		}
-		// Remove all the quotes to gain some KB
-		resultArea.value = JSON.stringify(result);
-	});
+		
+		let stringValue = JSON.stringify(result);
+		stringValue = stringValue.substring(1, stringValue.length -1);
+
+		if (counter === source.length) {
+			stringValue += '};';
+		} else {
+			stringValue += ',';
+		}
+		resultArea.value += stringValue;
+	}
+
+	for (let object of source) {
+		object.addEventListener('load', () => retrievePaths(object))
+	}
+
 </script>
 </body>
 </html>
