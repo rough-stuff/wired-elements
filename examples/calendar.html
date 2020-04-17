@@ -6,6 +6,8 @@
   <link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
 
   <script type="module" src="../packages/wired-calendar/lib/wired-calendar.js"></script>
+  <script type="module" src="../packages/wired-calendar/lib/wired-calendar-grid.js"></script>
+  <script type="module" src="../packages/wired-calendar/lib/wired-calendar-cell.js"></script>
   <script type="module" src="../packages/wired-button/lib/wired-button.js"></script>
 
   <style>
@@ -70,6 +72,10 @@
       <p>"de" locale</p>
       <wired-calendar id="calendar3" class="custom" firstdate="Apr 15, 2019" locale="de" initials>
       </wired-calendar>
+    </div>
+
+    <div class="item_wrapper">
+      <wired-calendar-grid initials style="width: 300px;" locale="fr-FR" elevation="5" selected="Apr 15, 2020"></wired-calendar-grid>
     </div>
   </div>
 
