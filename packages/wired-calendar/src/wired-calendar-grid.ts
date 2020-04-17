@@ -1,22 +1,10 @@
 import { customElement, property, TemplateResult, html } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { fire } from 'wired-lib';
-import { WiredCard } from '../../wired-card/lib/wired-card';
+import { WiredCard } from 'wired-card';
 import './wired-calendar-cell';
 import { getLocaleFromNavigator, localizedDays, localizedMonths } from './locale-utils';
-
-/**
- * Number of days in a particular month
- * @param month month between 0 and 11
- * @param year full year (1991, 2000)
- */
-const daysInMonth = function (month: number, year: number): number {
-    return new Date(year, month+1, 0).getDate();
-}
-
-const isDateInMonth = function (month: number, year: number, date: Date): boolean {
-    return date.getMonth() === month && date.getFullYear() === year;
-}
+import { daysInMonth, isDateInMonth } from './date-utils';
 
 const Cell = (number: number, selected: boolean = false, disabled: boolean = false, handleSelect?: Function) => html`
     <wired-calendar-cell
@@ -49,7 +37,7 @@ const monthSelector = (canGo: boolean, onChangeMonth: Function, selector: Templa
     </span>
 `;
 
-const Calendar = (header: string, days: string[], cells: TemplateResult[], style: TemplateResult, prevMonthSel: TemplateResult, nextMonthSel: TemplateResult) => html`
+const Calendar = (header: string, days: string[], cells: TemplateResult[], style: TemplateResult, prevMonthSelector: TemplateResult, nextMonthSelector: TemplateResult) => html`
     ${style}
     <style>
         :host(:focus) path {
@@ -81,9 +69,9 @@ const Calendar = (header: string, days: string[], cells: TemplateResult[], style
     </style>
     <div class="calendar">
         <div class="month-indicator">
-            ${prevMonthSel}
+            ${prevMonthSelector}
             <span>${header}</span>
-            ${nextMonthSel}
+            ${nextMonthSelector}
         </div>
         <div class="day-of-week">
             ${days.map(d => html`<div>${d}</div>`)}
@@ -95,14 +83,17 @@ const Calendar = (header: string, days: string[], cells: TemplateResult[], style
     <div id="overlay"><svg></svg></div>
 `;
 
+/**
+ * We inherit the overlay from WiredCard.
+ * Elevation property comes for free!
+ */
 @customElement('wired-calendar-grid')
 export class WiredCalendarGrid extends WiredCard {
-    @property({ type: String }) locale?: string; // BCP 47 language tag like `es-MX`
+    @property({ type: String, reflect: true }) locale?: string; // BCP 47 language tag like `es-MX`
     @property({ type: Boolean, reflect: true }) disabled = false;
     @property({ type: Boolean, reflect: true }) initials = false; // days of week
-    @property({ type: Object }) value: { date?: Date, text: string } = {text: ''};
     
-    @property({ type: String })
+    @property({ type: String, reflect: true })
     get selected(): string {
         return this.value.text;
     }
@@ -116,7 +107,7 @@ export class WiredCalendarGrid extends WiredCard {
             selectedDate = undefined;
             fire(this, 'error', { msg: `Invalid 'selected' value '${value}'`});
         }
-        this.value = {
+        this._value = {
             date: selectedDate,
             text: value,
         }
@@ -124,7 +115,7 @@ export class WiredCalendarGrid extends WiredCard {
         fire(this, 'selected', { selected: this.selected });
     }
 
-    @property({ type: String }) 
+    @property({ type: String, reflect: true }) 
     get firstdate(): string {
         return this._firstdate.text;
     }
@@ -139,7 +130,7 @@ export class WiredCalendarGrid extends WiredCard {
         }
     }
 
-    @property({ type: String }) 
+    @property({ type: String, reflect: true }) 
     get lastdate(): string {
         return this._lastdate.text;
     }
@@ -155,13 +146,21 @@ export class WiredCalendarGrid extends WiredCard {
     }
 
     /**
-     * Reference Date is used internally to represent currently displayed month.
-     * It is in local time.
+     * We expose the selected date as a readonly property
      */
-    private refDate :Date;
+    get value() : { date?: Date, text: string } {
+        return {...this._value};
+    }
 
-    private _firstdate :{ date? :Date, text :string } = { date: undefined, text: '' };
-    private _lastdate :{ date? :Date, text :string } = { date: undefined, text: '' };
+    /**
+     * Reference Date is used internally to represent currently displayed month.
+     * It is in local time and correspond to 1st day of the displayed month.
+     */
+    private refDate: Date;
+
+    private _firstdate: { date? :Date, text :string } = { date: undefined, text: '' };
+    private _lastdate: { date? :Date, text :string } = { date: undefined, text: '' };
+    private _value: { date? :Date, text :string } = { date: undefined, text: '' };
 
     constructor() {
         super();
@@ -191,10 +190,10 @@ export class WiredCalendarGrid extends WiredCard {
         const style = gridOffset(firstDayUtc+1);
         const monthName = localizedMonths(this.locale)[month];
         const cells = this.buildCells(year, month);
-        const prevMonthSel = monthSelector(this.canGoPrev(), () => this.onChangeMonth('prev'), html`&lt;&lt;`);
-        const nextMonthSel = monthSelector(this.canGoNext(), () => this.onChangeMonth('next'), html`&gt;&gt;`);
+        const prevMonthSelector = monthSelector(this.canGoPrev(), () => this.loadPrevMonth(), html`&lt;&lt;`);
+        const nextMonthSelector = monthSelector(this.canGoNext(), () => this.loadNextMonth(), html`&gt;&gt;`);
 
-        return Calendar(`${monthName} ${year}`, days, cells, style, prevMonthSel, nextMonthSel);
+        return Calendar(`${monthName} ${year}`, days, cells, style, prevMonthSelector, nextMonthSelector);
     }
 
     private buildCells(year: number, month: number): TemplateResult[] {
@@ -249,15 +248,13 @@ export class WiredCalendarGrid extends WiredCard {
             && nextDate.getMonth() <= maxDate.getMonth();
     }
 
-    private onChangeMonth(dir: string) {
-        if (dir === 'prev' && this.canGoPrev()) {
-            this.refDate.setMonth(this.refDate.getMonth() -1);
-            this.performUpdate();
-        } else {
-            if (this.canGoNext()) {
-                this.refDate.setMonth(this.refDate.getMonth() +1);
-                this.performUpdate();
-            }
-        }
+    private loadNextMonth() {
+        this.refDate.setMonth(this.refDate.getMonth() +1);
+        this.performUpdate();
+    }
+
+    private loadPrevMonth() {
+        this.refDate.setMonth(this.refDate.getMonth() -1);
+        this.performUpdate();
     }
 }

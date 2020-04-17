@@ -7,7 +7,8 @@
   "types": "lib/wired-calendar.d.ts",
   "scripts": {
     "tsc": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "karma start --coverage",
+    "test:watch": "karma start --auto-watch=true --single-run=false"
   },
   "repository": {
     "type": "git",
@@ -32,6 +33,14 @@
   "license": "MIT",
   "dependencies": {
     "lit-element": "^2.2.1",
+    "wired-card": "^2.0.2",
     "wired-lib": "^2.0.0"
+  },
+  "devDependencies": {
+    "@open-wc/testing": "^2.5.11",
+    "@open-wc/testing-karma": "^3.3.12",
+    "deepmerge": "^4.2.2",
+    "karma-typescript": "^5.0.2",
+    "lit-html": "^1.2.1"
   }
 }
