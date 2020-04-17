@@ -1,5 +1,6 @@
 import { customElement, property, TemplateResult, html } from 'lit-element';
-// import { Point, ellipse, line, rectangle, fire } from 'wired-lib';
+import { classMap } from 'lit-html/directives/class-map';
+import { fire } from 'wired-lib';
 import { WiredCard } from '../../wired-card/lib/wired-card';
 import './wired-calendar-cell';
 import { getLocaleFromNavigator, localizedDays, localizedMonths } from './locale-utils';
@@ -9,8 +10,12 @@ import { getLocaleFromNavigator, localizedDays, localizedMonths } from './locale
  * @param month month between 0 and 11
  * @param year full year (1991, 2000)
  */
-const daysInMonth = function (month: number, year: number) {
+const daysInMonth = function (month: number, year: number): number {
     return new Date(year, month+1, 0).getDate();
+}
+
+const isDateInMonth = function (month: number, year: number, date: Date): boolean {
+    return date.getMonth() === month && date.getFullYear() === year;
 }
 
 const Cell = (number: number, selected: boolean = false, disabled: boolean = false, handleSelect?: Function) => html`
@@ -36,9 +41,20 @@ const gridOffset = (offset: number) => html`
     </style>
 `;
 
-const Calendar = (header: string, days: string[], cells: TemplateResult[], style: TemplateResult, onChangeMonth: Function):TemplateResult => html`
+const monthSelector = (canGo: boolean, onChangeMonth: Function, selector: TemplateResult) => html` 
+    <span 
+        class=${classMap({"month-selector-active": canGo, "month-selector-disabled": !canGo})}
+        @click=${() => canGo ? onChangeMonth() : null}>
+        ${selector}
+    </span>
+`;
+
+const Calendar = (header: string, days: string[], cells: TemplateResult[], style: TemplateResult, prevMonthSel: TemplateResult, nextMonthSel: TemplateResult) => html`
     ${style}
     <style>
+        :host(:focus) path {
+            stroke-width: 1.5;
+        }
         .month-indicator {
             display:flex;
             justify-content: space-between;
@@ -55,15 +71,19 @@ const Calendar = (header: string, days: string[], cells: TemplateResult[], style
         .day-of-week {
             font-weight: bold;
         }
-        .month-selector {
+        .month-selector-active {
             cursor: pointer;
+        }
+        .month-selector-disabled {
+            cursor: not-allowed;
+            color: lightgray;
         }
     </style>
     <div class="calendar">
         <div class="month-indicator">
-            <span class="month-selector" @click=${() => onChangeMonth('prev')}>&lt;&lt;</span>  
+            ${prevMonthSel}
             <span>${header}</span>
-            <span class="month-selector" @click=${() => onChangeMonth('next')}>&gt;&gt;</span>
+            ${nextMonthSel}
         </div>
         <div class="day-of-week">
             ${days.map(d => html`<div>${d}</div>`)}
@@ -77,27 +97,60 @@ const Calendar = (header: string, days: string[], cells: TemplateResult[], style
 
 @customElement('wired-calendar-grid')
 export class WiredCalendarGrid extends WiredCard {
-    @property({ type: String }) firstdate?: string; // date range lower limit
-    @property({ type: String }) lastdate?: string; // date range higher limit
     @property({ type: String }) locale?: string; // BCP 47 language tag like `es-MX`
     @property({ type: Boolean, reflect: true }) disabled = false;
     @property({ type: Boolean, reflect: true }) initials = false; // days of week
     @property({ type: Object }) value: { date?: Date, text: string } = {text: ''};
     
     @property({ type: String })
-    get selected():string {
+    get selected(): string {
         return this.value.text;
     }
 
     set selected(value: string) {
-        let selectedDate = undefined;
+        let selectedDate;
         // we validate the input
         if (!isNaN(Date.parse(value))) {
             selectedDate = new Date(value);
+        } else {
+            selectedDate = undefined;
+            fire(this, 'error', { msg: `Invalid 'selected' value '${value}'`});
         }
         this.value = {
             date: selectedDate,
             text: value,
+        }
+        // Whenever selected is valid or not, we fire the event
+        fire(this, 'selected', { selected: this.selected });
+    }
+
+    @property({ type: String }) 
+    get firstdate(): string {
+        return this._firstdate.text;
+    }
+    set firstdate(value: string) {
+        if (value && !isNaN(Date.parse(value))) {
+            this._firstdate.date = new Date(value);
+            this._firstdate.text = value;
+        } else {
+            this._firstdate.text = '';
+            this._firstdate.date = undefined;
+            fire(this, 'error', { msg: `Invalid 'lastdate' value '${value}'`});
+        }
+    }
+
+    @property({ type: String }) 
+    get lastdate(): string {
+        return this._lastdate.text;
+    }
+    set lastdate(value: string) {
+        if (value && !isNaN(Date.parse(value))) {
+            this._lastdate.date = new Date(value);
+            this._lastdate.text = value;
+        } else {
+            this._lastdate.text = '';
+            this._lastdate.date = undefined;
+            fire(this, 'error', { msg: `Invalid 'lastdate' value '${value}'`});
         }
     }
 
@@ -105,7 +158,10 @@ export class WiredCalendarGrid extends WiredCard {
      * Reference Date is used internally to represent currently displayed month.
      * It is in local time.
      */
-    private refDate: Date;
+    private refDate :Date;
+
+    private _firstdate :{ date? :Date, text :string } = { date: undefined, text: '' };
+    private _lastdate :{ date? :Date, text :string } = { date: undefined, text: '' };
 
     constructor() {
         super();
@@ -133,32 +189,75 @@ export class WiredCalendarGrid extends WiredCard {
         const year = this.refDate.getFullYear();
         const firstDayUtc = this.refDate.getDay();
         const style = gridOffset(firstDayUtc+1);
-        const dayCount = daysInMonth(month, year);
         const monthName = localizedMonths(this.locale)[month];
-        
-        const cells = [...Array(dayCount).keys()].map(i => Cell(i+1, false, this.disabled, this.onSelectDate.bind(this)));
+        const cells = this.buildCells(year, month);
+        const prevMonthSel = monthSelector(this.canGoPrev(), () => this.onChangeMonth('prev'), html`&lt;&lt;`);
+        const nextMonthSel = monthSelector(this.canGoNext(), () => this.onChangeMonth('next'), html`&gt;&gt;`);
+
+        return Calendar(`${monthName} ${year}`, days, cells, style, prevMonthSel, nextMonthSel);
+    }
+
+    private buildCells(year: number, month: number): TemplateResult[] {
+        const dayCount = daysInMonth(month, year);
+        let enabledMinIndex = -1;
+        let enabledMaxIndex = 32;
+        const minDate = this._firstdate.date
+        const maxDate = this._lastdate.date;
+        if (minDate && isDateInMonth(month, year, minDate)) {
+            enabledMinIndex = minDate.getDate();
+        }
+        if (maxDate && isDateInMonth(month, year, maxDate)) {
+            enabledMaxIndex = maxDate.getDate();
+        }
+        const cells = [...Array(dayCount).keys()].map(i => {
+            const enabled = !this.disabled && i<enabledMaxIndex && i>=enabledMinIndex;
+            const onClick = enabled ? this.onSelectDate.bind(this) : undefined;
+            return Cell(i+1, false, !enabled, onClick);
+        });
         
         // Display a selected cell if in the current month
         if (this.value.date && this.value.date.getMonth() === month) {
             const selectedDay = this.value.date.getDate();
             cells[selectedDay-1] = Cell(selectedDay, true, this.disabled);
         }
-
-        return Calendar(`${monthName} ${year}`, days, cells, style, this.onChangeMonth.bind(this));
+        return cells;
     }
 
-    private onSelectDate(day:number) {
-        this.value.date = new Date(this.refDate);
-        this.value.date.setDate(day);
-        this.performUpdate();
+    private onSelectDate(day: number) {
+        const tmp = new Date(this.refDate);
+        tmp.setDate(day);
+        this.selected = tmp.toDateString();
     }
 
-    private onChangeMonth(month: string) {
-        if (month === 'prev') {
-            this.refDate.setMonth(this.refDate.getMonth() -1)
+    private canGoPrev(): boolean {
+        const minDate = this._firstdate.date;
+        const prevDate = new Date(this.refDate); 
+        prevDate.setMonth(prevDate.getMonth() -1);
+
+        return !!minDate
+            && prevDate.getFullYear() >= minDate.getFullYear()
+            && prevDate.getMonth() >= minDate.getMonth();
+    }
+
+    private canGoNext(): boolean {
+        const maxDate = this._lastdate.date;
+        const nextDate = new Date(this.refDate); 
+        nextDate.setMonth(nextDate.getMonth() +1);
+        
+        return !!maxDate
+            && nextDate.getFullYear() <= maxDate.getFullYear()
+            && nextDate.getMonth() <= maxDate.getMonth();
+    }
+
+    private onChangeMonth(dir: string) {
+        if (dir === 'prev' && this.canGoPrev()) {
+            this.refDate.setMonth(this.refDate.getMonth() -1);
+            this.performUpdate();
         } else {
-            this.refDate.setMonth(this.refDate.getMonth() +1)
+            if (this.canGoNext()) {
+                this.refDate.setMonth(this.refDate.getMonth() +1);
+                this.performUpdate();
+            }
         }
-        this.performUpdate();
     }
 }

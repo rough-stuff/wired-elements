@@ -31,10 +31,6 @@ export class WiredCalendarCell extends WiredBase {
         :host {
             display: inline-block;
         }
-        :host(.disabled) {
-            color: var(--wired-calendar-cell-disabled, lightgray);
-            cursor: not-allowed;
-        }
         :host(.selected), :host(.selected:hover) {
             cursor: default;
         }
@@ -44,6 +40,15 @@ export class WiredCalendarCell extends WiredBase {
         }
         :host(.selected) path {
             stroke: var(--wired-calendar-cell-selected, red);
+            stroke-width: 2.5;
+        }
+        :host(.disabled), :host(.selected.disabled:hover) {
+            color: var(--wired-calendar-cell-disabled, lightgray);
+            cursor: not-allowed;
+        }
+        #overlay {
+            top: -3;
+            left: -3;
         }
       `
     ];
