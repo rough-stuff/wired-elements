@@ -55,7 +55,7 @@ describe('WiredCalendarCell', () => {
     expect(el).to.not.have.class("disabled");
   });
 
-  it('has to remove disabled class when disabled property is set to false', async () => {
+  it('has to remove selected class when selected property is set to false', async () => {
     const el = /** @type {WiredCalendarCell} */ await fixture(html`
       <wired-calendar-cell class="selected"></wired-calendar-cell>
     `);

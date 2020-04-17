@@ -6,6 +6,8 @@ import './wired-calendar-cell';
 import { getLocaleFromNavigator, localizedDays, localizedMonths } from './locale-utils';
 import { daysInMonth, isDateInMonth } from './date-utils';
 
+type WiredDate = { date? :Date, text :string };
+
 const Cell = (number: number, selected: boolean = false, disabled: boolean = false, handleSelect?: Function) => html`
     <wired-calendar-cell
         class="cell"
@@ -112,7 +114,7 @@ export class WiredCalendarGrid extends WiredCard {
             text: value,
         }
         // Whenever selected is valid or not, we fire the event
-        fire(this, 'selected', { selected: this.selected });
+        fire(this, 'selected', { selected: this.value });
     }
 
     @property({ type: String, reflect: true }) 
@@ -148,7 +150,7 @@ export class WiredCalendarGrid extends WiredCard {
     /**
      * We expose the selected date as a readonly property
      */
-    get value() : { date?: Date, text: string } {
+    get value() : WiredDate {
         return {...this._value};
     }
 
@@ -158,9 +160,9 @@ export class WiredCalendarGrid extends WiredCard {
      */
     private refDate: Date;
 
-    private _firstdate: { date? :Date, text :string } = { date: undefined, text: '' };
-    private _lastdate: { date? :Date, text :string } = { date: undefined, text: '' };
-    private _value: { date? :Date, text :string } = { date: undefined, text: '' };
+    private _firstdate: WiredDate = { text: '' };
+    private _lastdate: WiredDate = { text: '' };
+    private _value: WiredDate = { text: '' };
 
     constructor() {
         super();
@@ -193,7 +195,8 @@ export class WiredCalendarGrid extends WiredCard {
         const prevMonthSelector = monthSelector(this.canGoPrev(), () => this.loadPrevMonth(), html`&lt;&lt;`);
         const nextMonthSelector = monthSelector(this.canGoNext(), () => this.loadNextMonth(), html`&gt;&gt;`);
 
-        return Calendar(`${monthName} ${year}`, days, cells, style, prevMonthSelector, nextMonthSelector);
+        Calendar(`${monthName} ${year}`, days, cells, style, prevMonthSelector, nextMonthSelector);
+        return html`<div>yolo!</div>`;
     }
 
     private buildCells(year: number, month: number): TemplateResult[] {
