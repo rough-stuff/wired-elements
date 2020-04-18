@@ -3,9 +3,9 @@ import { html } from 'lit-html';
 import { classMap } from 'lit-html/directives/class-map';
 import { fire } from 'wired-lib';
 import { WiredCard } from 'wired-card';
-import './wired-calendar-cell';
-import { getLocaleFromNavigator, localizedDays, localizedMonths } from './locale-utils';
-import { daysInMonth, isDateInMonth } from './date-utils';
+import './wired-datepicker-cell';
+import { getLocaleFromNavigator, localizedDays, localizedMonths } from './locale.utils';
+import { daysInMonth, isDateInMonth } from './date.utils';
 
 /**
  * Handy representation of a date, with both Date and String
@@ -20,14 +20,14 @@ type WiredDate = { date? :Date, text :string };
  * @param handleSelect callback function when the cell is selected
  */
 const Cell = (number: number, selected: boolean = false, disabled: boolean = false, handleSelect?: Function) => html`
-    <wired-calendar-cell
+    <wired-datepicker-cell
         class="cell"
         ?selected=${selected}
         ?disabled=${disabled}
         @click=${() => handleSelect && handleSelect(number)}
         >
         ${number}
-    </wired-calendar-cell>
+    </wired-datepicker-cell>
 `;
 
 /**
@@ -120,11 +120,12 @@ const Calendar = (header: string, days: string[], cells: TemplateResult[], style
  * Calendar WebComponent.
  * 
  * Example:
- * <wired-calendar-grid
+ * <wired-datepicker
  *   locale="fr-FR"
  *   selected="Apr 29 2020">
- * <wired-calendar-grid>
+ * <wired-datepicker>
  * 
+ * @attribute elevation - elevation between 1 and 5
  * @attribute locale - BCP 47 language tag string like `es-MX`
  * @attribute disabled - disables the whole calendar if set
  * @attribute initials - displays minimalistic version of week day names if set
@@ -134,10 +135,10 @@ const Calendar = (header: string, days: string[], cells: TemplateResult[], style
  * @property value - current selected date {date:Date, text:String}
  * @fires selected - when a date is selected
  * @fires attr-error - for debug purpose if an attribute is not validated
- * @extends WiredCard to display a wired outline
+ * @extends WiredCard to display a wired outline with elevation
  */
-@customElement('wired-calendar-grid')
-export class WiredCalendarGrid extends WiredCard {
+@customElement('wired-datepicker')
+export class WiredDatePicker extends WiredCard {
     @property({ type: String, reflect: true }) locale?: string;
     @property({ type: Boolean, reflect: true }) disabled = false;
     @property({ type: Boolean, reflect: true }) initials = false;

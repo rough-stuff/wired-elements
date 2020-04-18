@@ -1,6 +1,6 @@
 import { expect } from '@open-wc/testing';
 
-import { localizedMonths, localizedDays, getLocaleFromNavigator } from '../lib/locale-utils';
+import { localizedMonths, localizedDays, getLocaleFromNavigator } from '../lib/locale.utils';
 
 describe('locale-util localizedMonths', () => {
     it('should output 12 months', () => {

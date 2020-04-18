@@ -1,33 +1,22 @@
 import { html, fixture, expect, oneEvent, elementUpdated, assert } from '@open-wc/testing';
-import { WiredCalendarGrid } from '../lib/wired-calendar-grid';
+import { WiredDatePicker } from '../lib/wired-datepicker';
 
 /**
- * @typedef {import('../lib/wired-calendar-grid.js').WiredCalendarGrid} WiredCalendarGrid
+ * @typedef {import('../lib/wired-datepicker.js').WiredDatePicker} WiredDatePicker
  */
 
-describe('WiredCalendarGrid', () => {
+describe('WiredDatePicker - disabled', () => {
     it('should reflect disabled attribute to property', async () => {
-        const el = /** @type {WiredCalendarGrid} */ await fixture(html`
-            <wired-calendar-grid disabled></wired-calendar-grid>
+        const el = /** @type {WiredDatePicker} */ await fixture(html`
+            <wired-datepicker disabled></wired-datepicker>
         `);
 
         expect(el.disabled).to.be.true;
     });
 
-    it('should reflect local property to attribute', async () => {
-        const el = /** @type {WiredCalendarGrid} */ await fixture(html`
-            <wired-calendar-grid selected="Apr 15 2020"></wired-calendar-grid>
-        `);
-        el.locale = 'fr-FR';
-
-        await elementUpdated(el);
-
-        expect(el).to.have.attribute("locale", "fr-FR");
-    });
-
     it('should reflect disabled property to attribute', async () => {
-        const el = /** @type {WiredCalendarGrid} */ await fixture(html`
-            <wired-calendar-grid></wired-calendar-grid>
+        const el = /** @type {WiredDatePicker} */ await fixture(html`
+            <wired-datepicker></wired-datepicker>
         `);
 
         el.disabled = true;
@@ -36,41 +25,33 @@ describe('WiredCalendarGrid', () => {
         expect(el).to.have.attribute("disabled");
     });
 
-    it('should dispatch selected event when property selected is set', async () => {
-        const el = /** @type {WiredCalendarGrid} */ await fixture(html`<wired-calendar-grid></wired-calendar-grid>`);
-        setTimeout(() => el.selected = 'Apr 15 2020');
-        const ev = await oneEvent(el, 'selected');
+    it('should disable all cells if disabled attribute is given', async () => {
+        const el = /** @type {WiredDatePicker} */ await fixture(html`
+            <wired-datepicker disabled></wired-datepicker>
+        `);
+        const days = el.shadowRoot.querySelectorAll('wired-datepicker-cell');
 
-        expect(ev).to.exist;
-        expect(ev.detail.selected.text).to.eql('Apr 15 2020');
-        const expectedDate = new Date('Apr 15 2020');
-        expect(ev.detail.selected.date).to.eql(expectedDate);
+        for (let i = 0; i < days.length; i++) {
+            expect(days[i].disabled).to.be.true;
+        }
     });
+});
 
-    it('should dispatch attr-error event when incorrect selected property is set', async () => {
-        const el = /** @type {WiredCalendarGrid} */ await fixture(html`<wired-calendar-grid></wired-calendar-grid>`);
-        setTimeout(() => el.selected = 'yolo');
-        const ev = await oneEvent(el, 'attr-error');
-        expect(ev.detail.msg).to.eql(`Invalid 'selected' value 'yolo'`);
-    });
+describe('WiredDatePicker - locale / render', () => {
+    it('should reflect locale property to attribute', async () => {
+        const el = /** @type {WiredDatePicker} */ await fixture(html`
+            <wired-datepicker selected="Apr 15 2020"></wired-datepicker>
+        `);
+        el.locale = 'fr-FR';
 
-    it('should dispatch attr-error event when incorrect firstdate property is set', async () => {
-        const el = /** @type {WiredCalendarGrid} */ await fixture(html`<wired-calendar-grid></wired-calendar-grid>`);
-        setTimeout(() => el.firstdate = 'yolo');
-        const ev = await oneEvent(el, 'attr-error');
-        expect(ev.detail.msg).to.eql(`Invalid 'firstdate' value 'yolo'`);
-    });
+        await elementUpdated(el);
 
-    it('should dispatch attr-error event when incorrect lastdate property is set', async () => {
-        const el = /** @type {WiredCalendarGrid} */ await fixture(html`<wired-calendar-grid></wired-calendar-grid>`);
-        setTimeout(() => el.lastdate = 'yolo');
-        const ev = await oneEvent(el, 'attr-error');
-        expect(ev.detail.msg).to.eql(`Invalid 'lastdate' value 'yolo'`);
+        expect(el).to.have.attribute("locale", "fr-FR");
     });
 
     it('should render month of selected date in fr-FR', async () => {
-        const el = /** @type {WiredCalendarGrid} */ await fixture(html`
-            <wired-calendar-grid selected="Jan 15 2020" locale="fr-FR"></wired-calendar-grid>
+        const el = /** @type {WiredDatePicker} */ await fixture(html`
+            <wired-datepicker selected="Jan 15 2020" locale="fr-FR"></wired-datepicker>
             `);
         expect(el).shadowDom.to.equal(`
             <div class="calendar">
@@ -96,12 +77,12 @@ describe('WiredCalendarGrid', () => {
                 </div>
             </div>
             <div id="overlay"></div>
-        `, {ignoreTags: ['wired-calendar-cell']});
+        `, {ignoreTags: ['wired-datepicker-cell']});
     });
 
     it('should render month of selected date in en-US', async () => {
-        const el = /** @type {WiredCalendarGrid} */ await fixture(html`
-            <wired-calendar-grid selected="Feb 29 2020" locale="en-US"></wired-calendar-grid>
+        const el = /** @type {WiredDatePicker} */ await fixture(html`
+            <wired-datepicker selected="Feb 29 2020" locale="en-US"></wired-datepicker>
             `);
         expect(el).shadowDom.to.equal(`
             <div class="calendar">
@@ -127,74 +108,12 @@ describe('WiredCalendarGrid', () => {
                 </div>
             </div>
             <div id="overlay"></div>
-        `, {ignoreTags: ['wired-calendar-cell']});
-    });
-
-    it('should disable next month selector  if lastDate is current month', async () => {
-        const el = /** @type {WiredCalendarGrid} */ await fixture(html`
-            <wired-calendar-grid selected="Mar 1 2020" lastdate="Mar 31 2020" locale="de-DE"></wired-calendar-grid>
-            `);
-        expect(el).shadowDom.to.equal(`
-            <div class="calendar">
-                <div class="month-indicator">
-                    <span class="month-selector-active">
-                    <<
-                    </span>
-                    <span>März 2020</span>
-                    <span class="month-selector-disabled">
-                    >>
-                    </span>
-                </div>
-                <div class="day-of-week">
-                    <div>So</div>
-                    <div>Mo</div>
-                    <div>Di</div>
-                    <div>Mi</div>
-                    <div>Do</div>
-                    <div>Fr</div>
-                    <div>Sa</div>
-                </div>
-                <div class="date-grid">
-                </div>
-            </div>
-            <div id="overlay"></div>
-        `, {ignoreTags: ['wired-calendar-cell']});
-    });
-
-    it('should disable last month selector if firstDate is in current month', async () => {
-        const el = /** @type {WiredCalendarGrid} */ await fixture(html`
-            <wired-calendar-grid selected="Apr 4 2020" firstdate="Apr 1 2020" locale="en-US"></wired-calendar-grid>
-            `);
-        expect(el).shadowDom.to.equal(`
-            <div class="calendar">
-                <div class="month-indicator">
-                    <span class="month-selector-disabled">
-                    <<
-                    </span>
-                    <span>April 2020</span>
-                    <span class="month-selector-active">
-                    >>
-                    </span>
-                </div>
-                <div class="day-of-week">
-                    <div>Sun</div>
-                    <div>Mon</div>
-                    <div>Tue</div>
-                    <div>Wed</div>
-                    <div>Thu</div>
-                    <div>Fri</div>
-                    <div>Sat</div>
-                </div>
-                <div class="date-grid">
-                </div>
-            </div>
-            <div id="overlay"></div>
-        `, {ignoreTags: ['wired-calendar-cell']});
+        `, {ignoreTags: ['wired-datepicker-cell']});
     });
 
     it('should display short week day name if initials attribute is set', async () => {
-        const el = /** @type {WiredCalendarGrid} */ await fixture(html`
-            <wired-calendar-grid initials selected="May 4 2020" locale="en-US"></wired-calendar-grid>
+        const el = /** @type {WiredDatePicker} */ await fixture(html`
+            <wired-datepicker initials selected="May 4 2020" locale="en-US"></wired-datepicker>
             `);
         expect(el).shadowDom.to.equal(`
             <div class="calendar">
@@ -220,12 +139,12 @@ describe('WiredCalendarGrid', () => {
                 </div>
             </div>
             <div id="overlay"></div>
-        `, {ignoreTags: ['wired-calendar-cell']});
+        `, {ignoreTags: ['wired-datepicker-cell']});
     });
 
     it('should expose value as a readonly property', async () => {
-        const el = /** @type {WiredCalendarGrid} */ await fixture(html`
-            <wired-calendar-grid></wired-calendar-grid>
+        const el = /** @type {WiredDatePicker} */ await fixture(html`
+            <wired-datepicker></wired-datepicker>
             `);
         try {
             el.value = 'toto';
@@ -234,10 +153,108 @@ describe('WiredCalendarGrid', () => {
             assert.isTrue(true);
         }
     });
+});
+
+describe('WiredDatePicker - events', () => {
+    it('should dispatch selected event when property selected is set', async () => {
+        const el = /** @type {WiredDatePicker} */ await fixture(html`<wired-datepicker></wired-datepicker>`);
+        setTimeout(() => el.selected = 'Apr 15 2020');
+        const ev = await oneEvent(el, 'selected');
+
+        expect(ev).to.exist;
+        expect(ev.detail.selected.text).to.eql('Apr 15 2020');
+        const expectedDate = new Date('Apr 15 2020');
+        expect(ev.detail.selected.date).to.eql(expectedDate);
+    });
+
+    it('should dispatch attr-error event when incorrect selected property is set', async () => {
+        const el = /** @type {WiredDatePicker} */ await fixture(html`<wired-datepicker></wired-datepicker>`);
+        setTimeout(() => el.selected = 'yolo');
+        const ev = await oneEvent(el, 'attr-error');
+        expect(ev.detail.msg).to.eql(`Invalid 'selected' value 'yolo'`);
+    });
+
+    it('should dispatch attr-error event when incorrect firstdate property is set', async () => {
+        const el = /** @type {WiredDatePicker} */ await fixture(html`<wired-datepicker></wired-datepicker>`);
+        setTimeout(() => el.firstdate = 'yolo');
+        const ev = await oneEvent(el, 'attr-error');
+        expect(ev.detail.msg).to.eql(`Invalid 'firstdate' value 'yolo'`);
+    });
+
+    it('should dispatch attr-error event when incorrect lastdate property is set', async () => {
+        const el = /** @type {WiredDatePicker} */ await fixture(html`<wired-datepicker></wired-datepicker>`);
+        setTimeout(() => el.lastdate = 'yolo');
+        const ev = await oneEvent(el, 'attr-error');
+        expect(ev.detail.msg).to.eql(`Invalid 'lastdate' value 'yolo'`);
+    });
+});
+
+describe('WiredDatePicker - Month selector', () => {
+    it('should disable next month selector  if lastDate is current month', async () => {
+        const el = /** @type {WiredDatePicker} */ await fixture(html`
+            <wired-datepicker selected="Mar 1 2020" lastdate="Mar 31 2020" locale="de-DE"></wired-datepicker>
+            `);
+        expect(el).shadowDom.to.equal(`
+            <div class="calendar">
+                <div class="month-indicator">
+                    <span class="month-selector-active">
+                    <<
+                    </span>
+                    <span>März 2020</span>
+                    <span class="month-selector-disabled">
+                    >>
+                    </span>
+                </div>
+                <div class="day-of-week">
+                    <div>So</div>
+                    <div>Mo</div>
+                    <div>Di</div>
+                    <div>Mi</div>
+                    <div>Do</div>
+                    <div>Fr</div>
+                    <div>Sa</div>
+                </div>
+                <div class="date-grid">
+                </div>
+            </div>
+            <div id="overlay"></div>
+        `, {ignoreTags: ['wired-datepicker-cell']});
+    });
+
+    it('should disable last month selector if firstDate is in current month', async () => {
+        const el = /** @type {WiredDatePicker} */ await fixture(html`
+            <wired-datepicker selected="Apr 4 2020" firstdate="Apr 1 2020" locale="en-US"></wired-datepicker>
+            `);
+        expect(el).shadowDom.to.equal(`
+            <div class="calendar">
+                <div class="month-indicator">
+                    <span class="month-selector-disabled">
+                    <<
+                    </span>
+                    <span>April 2020</span>
+                    <span class="month-selector-active">
+                    >>
+                    </span>
+                </div>
+                <div class="day-of-week">
+                    <div>Sun</div>
+                    <div>Mon</div>
+                    <div>Tue</div>
+                    <div>Wed</div>
+                    <div>Thu</div>
+                    <div>Fri</div>
+                    <div>Sat</div>
+                </div>
+                <div class="date-grid">
+                </div>
+            </div>
+            <div id="overlay"></div>
+        `, {ignoreTags: ['wired-datepicker-cell']});
+    });
 
     it('should display previous month if previous month selector is clicked', async () => {
-        const el = /** @type {WiredCalendarGrid} */ await fixture(html`
-            <wired-calendar-grid selected="July 18 2020" initials locale="en-US"></wired-calendar-grid>
+        const el = /** @type {WiredDatePicker} */ await fixture(html`
+            <wired-datepicker selected="July 18 2020" initials locale="en-US"></wired-datepicker>
         `);
         const sel = el.shadowRoot.querySelector('.month-selector-active');
         sel.click();
@@ -266,12 +283,12 @@ describe('WiredCalendarGrid', () => {
             </div>
         </div>
         <div id="overlay"></div>
-    `, {ignoreTags: ['wired-calendar-cell']});
+    `, {ignoreTags: ['wired-datepicker-cell']});
     });
 
     it('should display next month if next month selector is clicked', async () => {
-        const el = /** @type {WiredCalendarGrid} */ await fixture(html`
-            <wired-calendar-grid selected="July 18 2020" initials locale="en-US"></wired-calendar-grid>
+        const el = /** @type {WiredDatePicker} */ await fixture(html`
+            <wired-datepicker selected="July 18 2020" initials locale="en-US"></wired-datepicker>
         `);
         const sel = el.shadowRoot.querySelectorAll('.month-selector-active');
         sel[1].click();
@@ -300,14 +317,16 @@ describe('WiredCalendarGrid', () => {
             </div>
         </div>
         <div id="overlay"></div>
-    `, {ignoreTags: ['wired-calendar-cell']});
+    `, {ignoreTags: ['wired-datepicker-cell']});
     });
+});
 
+describe('WiredDatePicker - Cells', () => {
     it('should display all days of the month', async () => {
-        const el = /** @type {WiredCalendarGrid} */ await fixture(html`
-            <wired-calendar-grid selected="September 18 2020"></wired-calendar-grid>
+        const el = /** @type {WiredDatePicker} */ await fixture(html`
+            <wired-datepicker selected="September 18 2020"></wired-datepicker>
         `);
-        const days = el.shadowRoot.querySelectorAll('wired-calendar-cell');
+        const days = el.shadowRoot.querySelectorAll('wired-datepicker-cell');
 
         expect(days.length).to.equal(30);
 
@@ -317,10 +336,10 @@ describe('WiredCalendarGrid', () => {
     });
 
     it('should display the correct selected cell if selected attribute is given', async () => {
-        const el = /** @type {WiredCalendarGrid} */ await fixture(html`
-            <wired-calendar-grid selected="October 24 2020"></wired-calendar-grid>
+        const el = /** @type {WiredDatePicker} */ await fixture(html`
+            <wired-datepicker selected="October 24 2020"></wired-datepicker>
         `);
-        const days = el.shadowRoot.querySelectorAll('wired-calendar-cell');
+        const days = el.shadowRoot.querySelectorAll('wired-datepicker-cell');
 
         expect(days[23].selected).to.be.true;
     });

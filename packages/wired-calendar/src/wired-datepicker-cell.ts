@@ -2,8 +2,8 @@ import { ellipse, Point } from 'wired-lib';
 import { customElement, css, TemplateResult, CSSResultArray, property, html } from 'lit-element';
 import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
 
-@customElement('wired-calendar-cell')
-export class WiredCalendarCell extends WiredBase {
+@customElement('wired-datepicker-cell')
+export class WiredDatePickerCell extends WiredBase {
     @property({ type: Number }) content = 0;
     @property({ type: Boolean, reflect: true }) 
     get selected() {
@@ -83,6 +83,6 @@ export class WiredCalendarCell extends WiredBase {
     svg.setAttribute('width', `${width}`);
     svg.setAttribute('height', `${height}`);
     const c = ellipse(svg, width / 2, height / 2, width*0.9, height);
-    svg.appendChild(c);height
+    svg.appendChild(c);
   }
 }
