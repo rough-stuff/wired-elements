@@ -300,6 +300,7 @@ export class WiredDatePicker extends WiredCard {
         const tmp = new Date(this.refDate);
         tmp.setDate(day);
         this.selected = tmp.toDateString();
+        this.performUpdate();
     }
 
     /**

@@ -344,4 +344,18 @@ describe('WiredDatePicker - Cells', () => {
         expect(days[23].selected).to.be.true;
     });
 
+    it('should change value when cell is selected', async () => {
+        const el = /** @type {WiredDatePicker} */ await fixture(html`
+            <wired-datepicker selected="November 12 2020"></wired-datepicker>
+        `);
+        let days = el.shadowRoot.querySelectorAll('wired-datepicker-cell');
+        expect(days[11].selected).to.be.true;
+        expect(days[28].selected).to.be.false;
+        days[28].click();
+        await elementUpdated(el);
+        days = el.shadowRoot.querySelectorAll('wired-datepicker-cell');
+        expect(days[11].selected).to.be.false;
+        expect(days[28].selected).to.be.true;
+    });
+
 });
