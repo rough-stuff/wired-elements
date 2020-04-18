@@ -39,9 +39,13 @@
   "homepage": "https://github.com/wiredjs/wired-elements#readme",
   "devDependencies": {
     "@material/mwc-icon": "^0.10.0",
+    "@open-wc/testing": "^3.0.0",
+    "@open-wc/testing-karma": "^3.3.13",
     "@rollup/plugin-typescript": "^4.0.0",
+    "deepmerge": "^4.2.2",
     "lerna": "^3.20.2",
     "lerna-update-wizard": "^0.17.7",
+    "lit-html": "^1.2.1",
     "polyserve": "^0.27.15",
     "rollup": "^1.32.1",
     "rollup-plugin-node-resolve": "^5.2.0",

@@ -1,6 +1,6 @@
 import { expect } from '@open-wc/testing';
 
-import { localizedMonths, localizedDays } from '../lib/locale-utils';
+import { localizedMonths, localizedDays, getLocaleFromNavigator } from '../lib/locale-utils';
 
 describe('locale-util localizedMonths', () => {
     it('should output 12 months', () => {
@@ -37,4 +37,28 @@ describe('locale-util localizedDays', () => {
         const expected = ["dim.","lun.","mar.","mer.","jeu.","ven.","sam."];
         expect(localizedDays('fr-FR')).to.eql(expected);
     });
+});
+
+describe('locale-util getLocaleFromNavigator', () => {
+
+    it('should return en-US if navigator has no locale', () => {
+        const navigator = {};
+        expect(getLocaleFromNavigator(navigator)).to.equal('en-US');
+    });
+    
+    it('should return first of languages if navigator has no locale', () => {
+        const navigator = {languages: ['fr-FR', 'en-US']}
+        expect(getLocaleFromNavigator(navigator)).to.equal('fr-FR');
+    });
+    
+    it('should return browserLanguage if set', () => {
+        const navigator = {browserLanguage: 'ru-RU', languages: ['fr-FR', 'en-US']}
+        expect(getLocaleFromNavigator(navigator)).to.equal('ru-RU');
+    });
+    
+    it('should return systemLanguage if set', () => {
+        const navigator = {systemLanguage: 'es-MX', browserLanguage: 'ru-RU', languages: ['fr-FR', 'en-US']}
+        expect(getLocaleFromNavigator(navigator)).to.equal('es-MX');
+    });
+
 });

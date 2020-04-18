@@ -7,8 +7,18 @@ import './wired-calendar-cell';
 import { getLocaleFromNavigator, localizedDays, localizedMonths } from './locale-utils';
 import { daysInMonth, isDateInMonth } from './date-utils';
 
+/**
+ * Handy representation of a date, with both Date and String
+ */
 type WiredDate = { date? :Date, text :string };
 
+/**
+ * Calendar Cell Template
+ * @param number the day number
+ * @param selected if the cell is selected
+ * @param disabled if the cell is disabled
+ * @param handleSelect callback function when the cell is selected
+ */
 const Cell = (number: number, selected: boolean = false, disabled: boolean = false, handleSelect?: Function) => html`
     <wired-calendar-cell
         class="cell"
@@ -21,7 +31,8 @@ const Cell = (number: number, selected: boolean = false, disabled: boolean = fal
 `;
 
 /**
- * Offset the first day of the grid
+ * Additionnal style to offset the first day of the grid.
+ * For performance reasons, it is not included in the calendar as it is dynamic
  * @param offset number of column to offset between 1 and 7
  */
 const gridOffset = (offset: number) => html`
@@ -32,14 +43,33 @@ const gridOffset = (offset: number) => html`
     </style>
 `;
 
-const monthSelector = (canGo: boolean, onChangeMonth: Function, selector: TemplateResult) => html` 
+/**
+ * Month Selector Template
+ * @param active if the selector can be activated
+ * @param onChangeMonth callback function whe the selector is clicked
+ * @param selector an html template to use to represent the selector
+ */
+const MonthSelector = (active: boolean, onChangeMonth: Function, selector: TemplateResult) => html` 
     <span 
-        class=${classMap({"month-selector-active": canGo, "month-selector-disabled": !canGo})}
-        @click=${() => canGo ? onChangeMonth() : null}>
+        class=${classMap({"month-selector-active": active, "month-selector-disabled": !active})}
+        @click=${() => active ? onChangeMonth() : null}>
         ${selector}
     </span>
 `;
 
+/**
+ * Calendar Template, based on CSS grid with 4 main parts:
+ * - month-indicators: displays the month and the selectors
+ * - day-of-week: days name, from sunday to saturday
+ * - date-grid: container for the calendar days
+ * - overlay: allow to display a neat wired frame around
+ * @param header the text to display in month-indicators
+ * @param days the days name
+ * @param cells the cells to display
+ * @param style additionnal style (allows to offset the grid)
+ * @param prevMonthSelector custom selector for previous month
+ * @param nextMonthSelector custom selector for next month
+ */
 const Calendar = (header: string, days: string[], cells: TemplateResult[], style: TemplateResult, prevMonthSelector: TemplateResult, nextMonthSelector: TemplateResult) => html`
     ${style}
     <style>
@@ -87,14 +117,30 @@ const Calendar = (header: string, days: string[], cells: TemplateResult[], style
 `;
 
 /**
- * We inherit the overlay from WiredCard.
- * Elevation property comes for free!
+ * Calendar WebComponent.
+ * 
+ * Example:
+ * <wired-calendar-grid
+ *   locale="fr-FR"
+ *   selected="Apr 29 2020">
+ * <wired-calendar-grid>
+ * 
+ * @attribute locale - BCP 47 language tag string like `es-MX`
+ * @attribute disabled - disables the whole calendar if set
+ * @attribute initials - displays minimalistic version of week day names if set
+ * @attribute selected - string of the selected day wanted
+ * @attribute firstdate - string of the min selectable date of the calendar
+ * @attribute lastdate - string of the max selectable date of the calendar
+ * @property value - current selected date {date:Date, text:String}
+ * @fires selected - when a date is selected
+ * @fires attr-error - for debug purpose if an attribute is not validated
+ * @extends WiredCard to display a wired outline
  */
 @customElement('wired-calendar-grid')
 export class WiredCalendarGrid extends WiredCard {
-    @property({ type: String, reflect: true }) locale?: string; // BCP 47 language tag like `es-MX`
+    @property({ type: String, reflect: true }) locale?: string;
     @property({ type: Boolean, reflect: true }) disabled = false;
-    @property({ type: Boolean, reflect: true }) initials = false; // days of week
+    @property({ type: Boolean, reflect: true }) initials = false;
     
     @property({ type: String, reflect: true })
     get selected(): string {
@@ -150,6 +196,8 @@ export class WiredCalendarGrid extends WiredCard {
 
     /**
      * We expose the selected date as a readonly property
+     * It is not reflected as an attribute as it is a complex type,
+     * and must only be used internally to store the selected date.
      */
     get value() : WiredDate {
         return {...this._value};
@@ -165,11 +213,17 @@ export class WiredCalendarGrid extends WiredCard {
     private _lastdate: WiredDate = { text: '' };
     private _value: WiredDate = { text: '' };
 
+    /**
+     * Positions the calendar at the current month for the user (local time),
+     * or selected month if provided with the "selected" attributes.
+     * Retrieves the locale from navigator, it will be override by locale
+     * attribute later if it has been provided.
+     */
     constructor() {
         super();
         // If the selected attribute is given, we want to display the right month
         const selectedDate = this.getAttribute('selected');
-        // refDate is in local time
+        // refDate is in local time, represents the current month for the user
         this.refDate = new Date();
         if (selectedDate) {
             // initialize 'this.value' by setting selected
@@ -185,20 +239,30 @@ export class WiredCalendarGrid extends WiredCard {
         this.locale = getLocaleFromNavigator(navigator);
     }
 
+    /**
+     * Renders the web component calendar for the selected/current month
+     */
     render(): TemplateResult {
         const days = localizedDays(this.locale, this.initials ? 'narrow': 'short');
         const month = this.refDate.getMonth();
         const year = this.refDate.getFullYear();
-        const firstDayUtc = this.refDate.getDay();
-        const style = gridOffset(firstDayUtc+1);
+        // refDate represents the first day of the current month
+        // getDay returns the index of the day in the week, 0 being sunday
+        const firstDayOfMonthIndex = this.refDate.getDay();
+        const style = gridOffset(firstDayOfMonthIndex+1);
         const monthName = localizedMonths(this.locale)[month];
         const cells = this.buildCells(year, month);
-        const prevMonthSelector = monthSelector(this.canGoPrev(), () => this.loadPrevMonth(), html`&lt;&lt;`);
-        const nextMonthSelector = monthSelector(this.canGoNext(), () => this.loadNextMonth(), html`&gt;&gt;`);
+        const prevMonthSelector = MonthSelector(this.canGoPrev(), () => this.loadPrevMonth(), html`&lt;&lt;`);
+        const nextMonthSelector = MonthSelector(this.canGoNext(), () => this.loadNextMonth(), html`&gt;&gt;`);
 
         return Calendar(`${monthName} ${year}`, days, cells, style, prevMonthSelector, nextMonthSelector);
     }
 
+    /**
+     * Creates the HTML templates for all the days in the wanted month.
+     * @param year year of the calendar
+     * @param month month of the calendar
+     */
     private buildCells(year: number, month: number): TemplateResult[] {
         const dayCount = daysInMonth(month, year);
         let enabledMinIndex = -1;
@@ -213,8 +277,8 @@ export class WiredCalendarGrid extends WiredCard {
         }
         const cells = [...Array(dayCount).keys()].map(i => {
             const enabled = !this.disabled && i<enabledMaxIndex && i>=enabledMinIndex;
-            const onClick = enabled ? this.onSelectDate.bind(this) : undefined;
-            return Cell(i+1, false, !enabled, onClick);
+            const onSelectDay = enabled ? this.setSelectedDate.bind(this) : undefined;
+            return Cell(i+1, false, !enabled, onSelectDay);
         });
         
         // Display a selected cell if in the current month
@@ -225,12 +289,22 @@ export class WiredCalendarGrid extends WiredCard {
         return cells;
     }
 
-    private onSelectDate(day: number) {
+    /**
+     * Updates selected date with the provided day.
+     * @param day index of the day selected in the displayed month
+     */
+    private setSelectedDate(day: number) {
+        // the selected day is obviously the same month as our refDate
+        // so we use refDate to build the selected date
         const tmp = new Date(this.refDate);
         tmp.setDate(day);
         this.selected = tmp.toDateString();
     }
 
+    /**
+     * Checks if the calendar allows to go to previous month
+     * @returns true if firstdate is at most previous month or undefined
+     */
     private canGoPrev(): boolean {
         const minDate = this._firstdate.date;
         if (!minDate) return true;
@@ -241,6 +315,10 @@ export class WiredCalendarGrid extends WiredCard {
             && prevDate.getMonth() >= minDate.getMonth();
     }
 
+    /**
+     * Checks if the calendar allows to go to next month
+     * @returns true if lastdate is at least next month or undefined
+     */
     private canGoNext(): boolean {
         const maxDate = this._lastdate.date;
         if (!maxDate) return true;
@@ -251,11 +329,17 @@ export class WiredCalendarGrid extends WiredCard {
             && nextDate.getMonth() <= maxDate.getMonth();
     }
 
+    /**
+     * Changes the reference date to the first day of the next month
+     */
     private loadNextMonth() {
         this.refDate.setMonth(this.refDate.getMonth() +1);
         this.performUpdate();
     }
 
+    /**
+     * * Changes the reference date the first day of the previous month
+     */
     private loadPrevMonth() {
         this.refDate.setMonth(this.refDate.getMonth() -1);
         this.performUpdate();

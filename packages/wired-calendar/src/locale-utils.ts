@@ -1,9 +1,18 @@
+/**
+ * Retrieves locale infos from the navigator. Returns en-US by default.
+ * @param n navigator global object
+ */
 export const getLocaleFromNavigator = function(n: any): string {
     if (n.hasOwnProperty('systemLanguage')) return n['systemLanguage'];
     else if (n.hasOwnProperty('browserLanguage')) return n['browserLanguage'];
     return (n.languages || ['en-US'])[0];
 }
 
+/**
+ * Build month names in the provided locale.
+ * @param locale locale string like 'en-US', 'fr-FR', 'es-MX'
+ * @param variant long | short | narrow | numeric | 2-digit
+ */
 export const localizedMonths = function(locale :string = 'en-US', variant: string = 'long'): string[] {
     const d = new Date();
     const months = [];
@@ -16,6 +25,11 @@ export const localizedMonths = function(locale :string = 'en-US', variant: strin
     return months;
 }
 
+/**
+ * Build day names in the provided locale
+ * @param locale locale string like 'en-US', 'fr-FR', 'es-MX'
+ * @param variant long | short | narrow
+ */
 export const localizedDays = function(locale :string = 'en-US', variant: string = 'short'): string[] {
     const d = new Date(0,0,0); // 31 Dec 1899 was a sunday
     const days = [];

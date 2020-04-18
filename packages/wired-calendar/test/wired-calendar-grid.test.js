@@ -235,4 +235,94 @@ describe('WiredCalendarGrid', () => {
         }
     });
 
+    it('should display previous month if previous month selector is clicked', async () => {
+        const el = /** @type {WiredCalendarGrid} */ await fixture(html`
+            <wired-calendar-grid selected="July 18 2020" initials locale="en-US"></wired-calendar-grid>
+        `);
+        const sel = el.shadowRoot.querySelector('.month-selector-active');
+        sel.click();
+        await elementUpdated(el);
+        expect(el).shadowDom.to.equal(`
+        <div class="calendar">
+            <div class="month-indicator">
+                <span class="month-selector-active">
+                <<
+                </span>
+                <span>June 2020</span>
+                <span class="month-selector-active">
+                >>
+                </span>
+            </div>
+            <div class="day-of-week">
+                <div>S</div>
+                <div>M</div>
+                <div>T</div>
+                <div>W</div>
+                <div>T</div>
+                <div>F</div>
+                <div>S</div>
+            </div>
+            <div class="date-grid">
+            </div>
+        </div>
+        <div id="overlay"></div>
+    `, {ignoreTags: ['wired-calendar-cell']});
+    });
+
+    it('should display next month if next month selector is clicked', async () => {
+        const el = /** @type {WiredCalendarGrid} */ await fixture(html`
+            <wired-calendar-grid selected="July 18 2020" initials locale="en-US"></wired-calendar-grid>
+        `);
+        const sel = el.shadowRoot.querySelectorAll('.month-selector-active');
+        sel[1].click();
+        await elementUpdated(el);
+        expect(el).shadowDom.to.equal(`
+        <div class="calendar">
+            <div class="month-indicator">
+                <span class="month-selector-active">
+                <<
+                </span>
+                <span>August 2020</span>
+                <span class="month-selector-active">
+                >>
+                </span>
+            </div>
+            <div class="day-of-week">
+                <div>S</div>
+                <div>M</div>
+                <div>T</div>
+                <div>W</div>
+                <div>T</div>
+                <div>F</div>
+                <div>S</div>
+            </div>
+            <div class="date-grid">
+            </div>
+        </div>
+        <div id="overlay"></div>
+    `, {ignoreTags: ['wired-calendar-cell']});
+    });
+
+    it('should display all days of the month', async () => {
+        const el = /** @type {WiredCalendarGrid} */ await fixture(html`
+            <wired-calendar-grid selected="September 18 2020"></wired-calendar-grid>
+        `);
+        const days = el.shadowRoot.querySelectorAll('wired-calendar-cell');
+
+        expect(days.length).to.equal(30);
+
+        for (let i = 0; i < days.length; i++) {
+            expect(days[i]).lightDom.to.equal(`${i+1}`);
+        }
+    });
+
+    it('should display the correct selected cell if selected attribute is given', async () => {
+        const el = /** @type {WiredCalendarGrid} */ await fixture(html`
+            <wired-calendar-grid selected="October 24 2020"></wired-calendar-grid>
+        `);
+        const days = el.shadowRoot.querySelectorAll('wired-calendar-cell');
+
+        expect(days[23].selected).to.be.true;
+    });
+
 });
