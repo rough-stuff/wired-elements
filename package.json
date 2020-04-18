@@ -14,7 +14,8 @@
     "watch": "tsc --build packages/**/tsconfig.json -w",
     "dev": "polyserve --npm --module-resolution=node",
     "lernaupdate": "lernaupdate",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "karma start --coverage -c=karma.conf.js",
+    "test:watch": "karma start --auto-watch=true --single-run=false -c=karma.conf.js",
     "bundle": "rollup -c"
   },
   "repository": {

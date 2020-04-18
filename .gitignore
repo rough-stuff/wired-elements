@@ -6,3 +6,4 @@ lerna-debug.log
 npm-debug.log
 packages/*/lib
 packages/*/coverage
+coverage/

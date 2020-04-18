@@ -1,8 +1,6 @@
 import { ellipse, Point } from 'wired-lib';
 import { customElement, css, TemplateResult, CSSResultArray, property, html } from 'lit-element';
-
-// FIXME https://github.com/open-wc/open-wc/issues/1530
-import { WiredBase, BaseCSS } from './wired-base';
+import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
 
 @customElement('wired-calendar-cell')
 export class WiredCalendarCell extends WiredBase {

@@ -2,7 +2,7 @@ import { customElement, property, TemplateResult } from 'lit-element';
 import { html } from 'lit-html';
 import { classMap } from 'lit-html/directives/class-map';
 import { fire } from 'wired-lib';
-import { WiredCard } from './wired-card';
+import { WiredCard } from 'wired-card';
 import './wired-calendar-cell';
 import { getLocaleFromNavigator, localizedDays, localizedMonths } from './locale-utils';
 import { daysInMonth, isDateInMonth } from './date-utils';
@@ -108,7 +108,7 @@ export class WiredCalendarGrid extends WiredCard {
             selectedDate = new Date(value);
         } else {
             selectedDate = undefined;
-            fire(this, 'error', { msg: `Invalid 'selected' value '${value}'`});
+            fire(this, 'attr-error', { msg: `Invalid 'selected' value '${value}'`});
         }
         this._value = {
             date: selectedDate,
@@ -129,7 +129,7 @@ export class WiredCalendarGrid extends WiredCard {
         } else {
             this._firstdate.text = '';
             this._firstdate.date = undefined;
-            fire(this, 'error', { msg: `Invalid 'lastdate' value '${value}'`});
+            fire(this, 'attr-error', { msg: `Invalid 'firstdate' value '${value}'`});
         }
     }
 
@@ -144,7 +144,7 @@ export class WiredCalendarGrid extends WiredCard {
         } else {
             this._lastdate.text = '';
             this._lastdate.date = undefined;
-            fire(this, 'error', { msg: `Invalid 'lastdate' value '${value}'`});
+            fire(this, 'attr-error', { msg: `Invalid 'lastdate' value '${value}'`});
         }
     }
 
@@ -233,21 +233,21 @@ export class WiredCalendarGrid extends WiredCard {
 
     private canGoPrev(): boolean {
         const minDate = this._firstdate.date;
+        if (!minDate) return true;
         const prevDate = new Date(this.refDate); 
         prevDate.setMonth(prevDate.getMonth() -1);
 
-        return !!minDate
-            && prevDate.getFullYear() >= minDate.getFullYear()
+        return prevDate.getFullYear() >= minDate.getFullYear()
             && prevDate.getMonth() >= minDate.getMonth();
     }
 
     private canGoNext(): boolean {
         const maxDate = this._lastdate.date;
+        if (!maxDate) return true;
         const nextDate = new Date(this.refDate); 
         nextDate.setMonth(nextDate.getMonth() +1);
         
-        return !!maxDate
-            && nextDate.getFullYear() <= maxDate.getFullYear()
+        return nextDate.getFullYear() <= maxDate.getFullYear()
             && nextDate.getMonth() <= maxDate.getMonth();
     }
 
