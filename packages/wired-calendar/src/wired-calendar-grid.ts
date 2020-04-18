@@ -1,7 +1,8 @@
-import { customElement, property, TemplateResult, html } from 'lit-element';
+import { customElement, property, TemplateResult } from 'lit-element';
+import { html } from 'lit-html';
 import { classMap } from 'lit-html/directives/class-map';
 import { fire } from 'wired-lib';
-import { WiredCard } from 'wired-card';
+import { WiredCard } from './wired-card';
 import './wired-calendar-cell';
 import { getLocaleFromNavigator, localizedDays, localizedMonths } from './locale-utils';
 import { daysInMonth, isDateInMonth } from './date-utils';
@@ -195,8 +196,7 @@ export class WiredCalendarGrid extends WiredCard {
         const prevMonthSelector = monthSelector(this.canGoPrev(), () => this.loadPrevMonth(), html`&lt;&lt;`);
         const nextMonthSelector = monthSelector(this.canGoNext(), () => this.loadNextMonth(), html`&gt;&gt;`);
 
-        Calendar(`${monthName} ${year}`, days, cells, style, prevMonthSelector, nextMonthSelector);
-        return html`<div>yolo!</div>`;
+        return Calendar(`${monthName} ${year}`, days, cells, style, prevMonthSelector, nextMonthSelector);
     }
 
     private buildCells(year: number, month: number): TemplateResult[] {
