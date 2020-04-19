@@ -37,10 +37,6 @@
     "wired-lib": "^2.0.0"
   },
   "devDependencies": {
-    "@open-wc/testing": "^2.5.11",
-    "@open-wc/testing-karma": "^3.3.12",
-    "deepmerge": "^4.2.2",
-    "karma-typescript": "^5.0.2",
-    "lit-html": "^1.2.1"
+    "@open-wc/testing": "^2.5.11"
   }
 }
