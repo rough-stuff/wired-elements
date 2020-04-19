@@ -6,6 +6,7 @@ export { WiredCombo } from 'wired-combo';
 export { WiredDialog } from 'wired-dialog';
 export { WiredDivider } from 'wired-divider';
 export { WiredFab } from 'wired-fab';
+export { WiredIcon } from 'wired-icon';
 export { WiredIconButton } from 'wired-icon-button';
 export { WiredImage } from 'wired-image';
 export { WiredInput } from 'wired-input';
