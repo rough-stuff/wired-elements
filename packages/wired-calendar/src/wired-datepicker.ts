@@ -10,7 +10,7 @@ import { daysInMonth, isDateInMonth } from './date.utils';
 /**
  * Handy representation of a date, with both Date and String
  */
-type WiredDate = { date? :Date, text :string };
+type WiredDate = { date?: Date, text: string };
 
 /**
  * Calendar Cell Template
@@ -119,7 +119,7 @@ const Calendar = (header: string, days: string[], cells: TemplateResult[], style
 /**
  * Calendar WebComponent.
  * 
- * Example:
+ * @example
  * <wired-datepicker
  *   locale="fr-FR"
  *   selected="Apr 29 2020">
@@ -148,7 +148,12 @@ export class WiredDatePicker extends WiredCard {
         return this.value.text;
     }
 
+    /**
+     * Format must follow the ecma-international norm
+     * https://www.ecma-international.org/ecma-262/5.1/#sec-15.9.1.15
+     */
     set selected(value: string) {
+        const oldVal = this.selected;
         let selectedDate;
         // we validate the input
         if (!isNaN(Date.parse(value))) {
@@ -163,6 +168,8 @@ export class WiredDatePicker extends WiredCard {
         }
         // Whenever selected is valid or not, we fire the event
         fire(this, 'selected', { selected: this.value });
+        // We need to request update if property is defined programmatically
+        this.requestUpdate('selected', oldVal);
     }
 
     @property({ type: String, reflect: true }) 
@@ -170,6 +177,7 @@ export class WiredDatePicker extends WiredCard {
         return this._firstdate.text;
     }
     set firstdate(value: string) {
+        const oldVal = this.firstdate;
         if (value && !isNaN(Date.parse(value))) {
             this._firstdate.date = new Date(value);
             this._firstdate.text = value;
@@ -178,6 +186,8 @@ export class WiredDatePicker extends WiredCard {
             this._firstdate.date = undefined;
             fire(this, 'attr-error', { msg: `Invalid 'firstdate' value '${value}'`});
         }
+        // We need to request update if property is defined programmatically
+        this.requestUpdate('firstdate', oldVal);
     }
 
     @property({ type: String, reflect: true }) 
@@ -185,6 +195,7 @@ export class WiredDatePicker extends WiredCard {
         return this._lastdate.text;
     }
     set lastdate(value: string) {
+        const oldVal = this.lastdate;
         if (value && !isNaN(Date.parse(value))) {
             this._lastdate.date = new Date(value);
             this._lastdate.text = value;
@@ -193,6 +204,8 @@ export class WiredDatePicker extends WiredCard {
             this._lastdate.date = undefined;
             fire(this, 'attr-error', { msg: `Invalid 'lastdate' value '${value}'`});
         }
+        // We need to request update if property is defined programmatically
+        this.requestUpdate('lastdate', oldVal);
     }
 
     /**

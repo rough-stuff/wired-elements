@@ -155,6 +155,57 @@ describe('WiredDatePicker - locale / render', () => {
     });
 });
 
+describe('WiredDatePicker - selected date', () => {
+    it('should update selected date when set programmatically', async () => {
+        const el = /** @type {WiredDatePicker} */ await fixture(html`
+            <wired-datepicker selected="Jan 1 2020" locale="en-US"></wired-datepicker>
+            `);
+        let days = el.shadowRoot.querySelectorAll('wired-datepicker-cell');
+        expect(days[0].selected).to.be.true;
+        
+        // MM-DD-YYYY format
+        el.selected = "Jan 31 2020";
+        await elementUpdated(el);
+        days = el.shadowRoot.querySelectorAll('wired-datepicker-cell');
+        expect(days[30].selected).to.be.true;
+    });
+
+    it('should accept different selected date format', async () => {
+        const el = /** @type {WiredDatePicker} */ await fixture(html`
+            <wired-datepicker selected="2020-01-28" locale="en-US"></wired-datepicker>
+            `);
+        let days = el.shadowRoot.querySelectorAll('wired-datepicker-cell');
+        expect(days[27].selected).to.be.true;
+    });
+
+});
+
+describe('WiredDatePicker - first date', () => {
+    it('should update first date when set programmatically', async () => {
+        const el = /** @type {WiredDatePicker} */ await fixture(html`
+            <wired-datepicker selected="Jan 15 2020" locale="en-US"></wired-datepicker>
+            `);
+        el.firstdate = "Jan 3 2020";
+        
+        await elementUpdated(el);
+        let days = el.shadowRoot.querySelectorAll('wired-datepicker-cell');
+        expect(days[0].disabled).to.be.true;
+    });
+});
+
+describe('WiredDatePicker - last date', () => {
+    it('should update last date when set programmatically', async () => {
+        const el = /** @type {WiredDatePicker} */ await fixture(html`
+            <wired-datepicker selected="Jan 15 2020" locale="en-US"></wired-datepicker>
+            `);
+        el.lastdate = "Jan 20 2020";
+        
+        await elementUpdated(el);
+        let days = el.shadowRoot.querySelectorAll('wired-datepicker-cell');
+        expect(days[20].disabled).to.be.true;
+    });
+});
+
 describe('WiredDatePicker - events', () => {
     it('should dispatch selected event when property selected is set', async () => {
         const el = /** @type {WiredDatePicker} */ await fixture(html`<wired-datepicker></wired-datepicker>`);
