@@ -1,5 +1,4 @@
 import { LitElement, customElement, property, css, TemplateResult, html, CSSResultArray, query } from 'lit-element';
-import { repeat } from 'lit-html/directives/repeat';
 import { BaseCSS } from 'wired-lib/lib/wired-base';
 
 interface WiredTabItem extends HTMLElement {
@@ -47,7 +46,7 @@ export class WiredTabs extends LitElement {
   render(): TemplateResult {
     return html`
     <div id="bar">
-      ${repeat(this.pages, (p) => p.name, (p) => html`
+      ${this.pages.map((p) => html`
       <wired-item role="tab" .value="${p.name}" .selected="${p.name === this.selected}" ?aria-selected="${p.name === this.selected}"
         @click="${() => this.selected = p.name}">${p.label || p.name}</wired-item>
       `)}

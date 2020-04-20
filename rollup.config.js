@@ -1,5 +1,7 @@
 import resolve from 'rollup-plugin-node-resolve';
 import { terser } from "rollup-plugin-terser";
+import analyze from 'rollup-plugin-analyzer';
+import minifyHTML from 'rollup-plugin-minify-html-literals';
 
 const input = 'packages/all/lib/wired-elements.js';
 const outDir = 'packages/all/lib';
@@ -33,11 +35,14 @@ export default [
     onwarn,
     plugins: [
       resolve(),
+      minifyHTML(),
       terser({
         output: {
           comments: false
         }
-      })
+      }),
+      analyze({filter: ({id}) => id.indexOf('lit-html') < 0
+      && id.indexOf('lit-element') < 0 }),
     ]
   },
   {

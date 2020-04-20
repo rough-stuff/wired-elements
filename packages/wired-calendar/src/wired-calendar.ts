@@ -1,4 +1,6 @@
 import { LitElement, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'lit-element';
+import { styleMap } from 'lit-html/directives/style-map';
+import { classMap } from 'lit-html/directives/class-map';
 import { ellipse, line, rectangle, fire } from 'wired-lib';
 
 interface AreaSize {
@@ -177,6 +179,17 @@ export class WiredCalendar extends LitElement {
   }
 
   render(): TemplateResult {
+    const tblHeadHeight = {height: `${this.tblHeadHeight}px`};
+    const tblStyle = {
+      width: `${this.calendarRefSize.width}px`,
+      height: `${this.calendarRefSize.height}px`,
+      border: `${TABLE_PADDING}px solid transparent`,
+    };
+    const tblColWidth = {width: `${this.tblColWidth}px`};
+    const tblRowHeight = {height: `${this.tblRowHeight}px`}
+    const dayNames = this.weekdays_short.map((d) =>
+      html`<th style=${styleMap(tblColWidth)}>${this.initials ? d[0] : d}</th>`)
+
     /*
     * Template to render a one month calendar
     *
@@ -189,29 +202,20 @@ export class WiredCalendar extends LitElement {
     * ... (and svg tag) to draw over it.
     */
     return html`
-    <table style="width:${this.calendarRefSize.width}px;height:${this.calendarRefSize.height}px;border:${TABLE_PADDING}px solid transparent"
+    <table style=${styleMap(tblStyle)}
             @mousedown="${this.onItemClick}"
             @touchstart="${this.onItemClick}">
-      ${ /* 1st header row with calendar title and prev/next controls */ ''}
-      <tr class="top-header" style="height:${this.tblHeadHeight}px;">
+      <tr class="top-header" style=${styleMap(tblHeadHeight)}>
         <th id="prevCal" class="pointer" @click="${this.onPrevClick}">&lt;&lt;</th>
         <th colSpan="5">${this.monthYear}</th>
         <th id="nextCal" class="pointer" @click="${this.onNextClick}">&gt;&gt;</th>
       </tr>
-      ${ /* 2nd header row with the seven weekdays names (short or initials) */ ''}
-      <tr class="header" style="height:${this.tblHeadHeight}px;">
-        ${this.weekdays_short
-        .map((d) =>
-          html`<th style="width: ${this.tblColWidth};">${this.initials ? d[0] : d}</th>
-            `
-        )
-      }
+      <tr class="header" style=${styleMap(tblHeadHeight)}>
+        ${dayNames}
       </tr>
-      ${ /* Loop thru weeks building one row `<tr>` for each week */ ''}
       ${this.weeks
         .map((weekDays: CalendarCell[]) =>
-          html`<tr style="height:${this.tblRowHeight}px;">
-              ${ /* Loop thru weeekdays in each week building one data cell `<td>` for each day */ ''}
+          html`<tr style=${styleMap(tblRowHeight)}>
               ${weekDays
               .map((d: CalendarCell) =>
 
@@ -221,14 +225,14 @@ export class WiredCalendar extends LitElement {
                   // Render "selected" cell
                   html`
                             <td class="selected" value="${d.value}">
-                            <div style="width: ${this.tblColWidth}px; line-height:${this.tblRowHeight}px;">${d.text}</div>
+                            <div style=${styleMap({...tblColWidth, lineHeight: `${tblRowHeight}px`})}>${d.text}</div>
                             <div class="overlay">
                               <svg id="svgTD" class="selected"></svg>
                             </div></td>
                         ` :
                   // Render "not selected" cell
                   html`
-                            <td .className="${d.disabled ? 'disabled' : (d.dimmed ? 'dimmed' : '')}"
+                            <td class=${classMap({disabled: !!d.disabled, dimmed: !!d.dimmed})}
                                 value="${d.disabled ? '' : d.value}">${d.text}</td>
                         `}
                     `
@@ -236,10 +240,10 @@ export class WiredCalendar extends LitElement {
                 // This blank space left on purpose for clarity
 
               )
-            }${ /* End `weekDays` map loop */ ''}
+            }
             </tr>`
         )
-      }${ /* End `weeks` map loop */ ''}
+      }
     </table>
     <div class="overlay">
       <svg id="svg" class="calendar"></svg>
