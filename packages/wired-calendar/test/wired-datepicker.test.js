@@ -142,6 +142,20 @@ describe('WiredDatePicker - locale / render', () => {
         `, {ignoreTags: ['wired-datepicker-cell']});
     });
 
+    it('should update calendar when locale property is set', async () => {
+        const el = /** @type {WiredDatePicker} */ await fixture(html`
+            <wired-datepicker selected="Apr 15 2020" locale="en-US"></wired-datepicker>
+        `);
+
+        let header = el.shadowRoot.querySelectorAll('.month-indicator > span');
+        expect(header[1]).dom.to.equal(`<span>April 2020</span>`);
+
+        el.locale = 'fr-FR';
+        await elementUpdated(el);
+        header = el.shadowRoot.querySelectorAll('.month-indicator > span');
+        expect(header[1]).dom.to.equal(`<span>avril 2020</span>`);
+    });
+
     it('should expose value as a readonly property', async () => {
         const el = /** @type {WiredDatePicker} */ await fixture(html`
             <wired-datepicker></wired-datepicker>
@@ -191,6 +205,17 @@ describe('WiredDatePicker - first date', () => {
         let days = el.shadowRoot.querySelectorAll('wired-datepicker-cell');
         expect(days[0].disabled).to.be.true;
     });
+
+    it('should disable previous month selector when set programmatically', async () => {
+        const el = /** @type {WiredDatePicker} */ await fixture(html`
+            <wired-datepicker selected="Jan 15 2020" locale="en-US"></wired-datepicker>
+            `);
+        el.firstdate = "Jan 3 2020";
+        
+        await elementUpdated(el);
+        const prevMonthSelector = el.shadowRoot.querySelector('.month-indicator > span');
+        expect(prevMonthSelector).to.have.class('month-selector-disabled');
+    });
 });
 
 describe('WiredDatePicker - last date', () => {
@@ -203,6 +228,17 @@ describe('WiredDatePicker - last date', () => {
         await elementUpdated(el);
         let days = el.shadowRoot.querySelectorAll('wired-datepicker-cell');
         expect(days[20].disabled).to.be.true;
+    });
+
+    it('should disable next month selector when set programmatically', async () => {
+        const el = /** @type {WiredDatePicker} */ await fixture(html`
+            <wired-datepicker selected="Jan 15 2020" locale="en-US"></wired-datepicker>
+            `);
+        el.lastdate = "Jan 20 2020";
+        
+        await elementUpdated(el);
+        const nextMonthSelector = el.shadowRoot.querySelectorAll('.month-indicator > span')[2];
+        expect(nextMonthSelector).to.have.class('month-selector-disabled');
     });
 });
 
