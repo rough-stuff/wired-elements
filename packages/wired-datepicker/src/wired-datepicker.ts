@@ -72,7 +72,18 @@ const MonthSelector = (active: boolean, onChangeMonth: Function, selector: Templ
 const Calendar = (header: string, days: string[], cells: TemplateResult[], style: TemplateResult, prevMonthSelector: TemplateResult, nextMonthSelector: TemplateResult) => html`
     ${style}
     <style>
+        :host {
+            display: inline-block;
+            position: relative;
+            --wired-datepicker-color: black;
+            --wired-datepicker-focus-color: var(--wired-datepicker-color);
+        }
+        :host path {
+            stroke: var(--wired-datepicker-color);
+            stroke-width: 0.7;
+        }
         :host(:focus) path {
+            stroke: var(--wired-datepicker-focus-color);
             stroke-width: 1.5;
         }
         .month-indicator {
@@ -254,6 +265,12 @@ export class WiredDatePicker extends WiredCard {
         
         // We start with the locale from navigator
         this.locale = getLocaleFromNavigator(navigator);
+
+        // Enable focus on the element
+        if (!this.hasAttribute('tabindex') && !this.disabled) { 
+            this.setAttribute('tabindex', '0');
+            this.tabIndex = 0;
+        }
     }
 
     /**

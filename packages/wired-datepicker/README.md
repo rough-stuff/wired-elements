@@ -52,13 +52,13 @@ corresponing formated text.
 
 ## Custom CSS Variables
 
-**--wired-datepicker-bg** Background color of the calendar. Default white.
-
 **--wired-datepicker-color** Calendar sketch line color. Default black.
 
 **--wired-datepicker-selected-color** Selected date sketch line color. Default red.
 
-**--wired-datepicker-disabled-color** Font color days not belonging to calendar actual month. Default lightgray.
+**--wired-datepicker-cell-disabled** Font color disabled days. Default lightgray.
+
+**--wired-datepicker-cell-bg-hover-color** Background color for hover selectable cells. Default lightgray.
 
 ## Events
 **selected** event fired when a date is selected by the user.

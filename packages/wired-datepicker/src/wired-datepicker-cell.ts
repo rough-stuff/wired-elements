@@ -36,14 +36,14 @@ export class WiredDatePickerCell extends WiredBase {
         }
         :host(:not(.selected):not(.disabled):hover) {
             cursor: pointer;
-            background-color: var(--wired-calendar-cell-hover-color, lightgray);
+            background-color: var(--wired-datepicker-cell-bg-hover-color, lightgray);
         }
         :host(.selected) path {
-            stroke: var(--wired-calendar-cell-selected, red);
+            stroke: var(--wired-datepicker-selected-color, red);
             stroke-width: 2.5;
         }
         :host(.disabled), :host(.selected.disabled:hover) {
-            color: var(--wired-calendar-cell-disabled, lightgray);
+            color: var(--wired-datepicker-cell-disabled, lightgray);
             cursor: not-allowed;
         }
         #overlay {
