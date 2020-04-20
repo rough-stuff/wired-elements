@@ -3,6 +3,8 @@
 Datepicker control with a hand-drawn, wireframe like, style.
 Based on an original implementation by Eduardo Martinez: wired-calendar
 
+The API and look is almost the same as wired-calendar, but implementation is completely different, based on CSS Grid and with inheritence from wired-card.
+
 For demo and view the complete set of wired-elements: [wiredjs.com](http://wiredjs.com/)
 
 ## Usage
