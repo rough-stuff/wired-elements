@@ -6,9 +6,7 @@
   "module": "lib/wired-calendar.js",
   "types": "lib/wired-calendar.d.ts",
   "scripts": {
-    "tsc": "tsc",
-    "test": "karma start --coverage",
-    "test:watch": "karma start --auto-watch=true --single-run=false"
+    "tsc": "tsc"
   },
   "repository": {
     "type": "git",
