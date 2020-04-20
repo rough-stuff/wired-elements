@@ -51,7 +51,7 @@ const gridOffset = (offset: number) => html`
  */
 const MonthSelector = (active: boolean, onChangeMonth: Function, selector: TemplateResult) => html` 
     <span 
-        class=${classMap({"month-selector-active": active, "month-selector-disabled": !active})}
+        class=${classMap({"month-selector": true, "month-selector-active": active, "month-selector-disabled": !active})}
         @click=${() => active ? onChangeMonth() : null}>
         ${selector}
     </span>
@@ -91,6 +91,9 @@ const Calendar = (header: string, days: string[], cells: TemplateResult[], style
         }
         .day-of-week {
             font-weight: bold;
+        }
+        .month-selector::selection {
+            background: transparent;
         }
         .month-selector-active {
             cursor: pointer;
