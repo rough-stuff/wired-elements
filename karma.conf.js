@@ -11,7 +11,7 @@ module.exports = config => {
         //
         // npm run test -- --grep test/foo/bar.test.js
         // npm run test -- --grep test/bar/*
-        { pattern: config.grep ? config.grep : 'packages/wired-calendar/test/**/*.test.js', type: 'module' },
+        { pattern: config.grep ? config.grep : 'packages/wired-*/__tests__/**/*.test.js', type: 'module' },
       ],
 
       esm: {
