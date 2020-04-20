@@ -3,6 +3,7 @@ export { WiredCalendar } from 'wired-calendar';
 export { WiredCard } from 'wired-card';
 export { WiredCheckbox } from 'wired-checkbox';
 export { WiredCombo } from 'wired-combo';
+export { WiredDatePicker } from 'wired-datepicker';
 export { WiredDialog } from 'wired-dialog';
 export { WiredDivider } from 'wired-divider';
 export { WiredFab } from 'wired-fab';
