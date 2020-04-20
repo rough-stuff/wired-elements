@@ -19,7 +19,7 @@ Import wired-datepicker definition into your HTML page:
 ```
 Or into your module script:
 ```javascript
-import { WiredDatepicker } from "wired-datepicker"
+import { WiredDatePicker } from "wired-datepicker"
 ```
 
 Use it in your web page:

@@ -41,6 +41,7 @@
     "@material/mwc-icon": "^0.10.0",
     "@open-wc/testing": "^2.5.11",
     "@open-wc/testing-karma": "^3.3.12",
+    "@rollup/plugin-typescript": "^4.0.0",
     "deepmerge": "^4.2.2",
     "lerna": "^3.20.2",
     "lerna-update-wizard": "^0.17.7",

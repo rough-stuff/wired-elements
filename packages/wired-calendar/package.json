@@ -32,7 +32,6 @@
   "license": "MIT",
   "dependencies": {
     "lit-element": "^2.2.1",
-    "wired-card": "^2.0.2",
     "wired-lib": "^2.0.0"
   }
 }
