@@ -177,19 +177,38 @@ describe('WiredDatePicker - selected date', () => {
         let days = el.shadowRoot.querySelectorAll('wired-datepicker-cell');
         expect(days[0].selected).to.be.true;
         
-        // MM-DD-YYYY format
         el.selected = "Jan 31 2020";
         await elementUpdated(el);
         days = el.shadowRoot.querySelectorAll('wired-datepicker-cell');
         expect(days[30].selected).to.be.true;
     });
 
-    it('should accept different selected date format', async () => {
+    it('should accept YYYY-MM-DD date format', async () => {
         const el = /** @type {WiredDatePicker} */ await fixture(html`
             <wired-datepicker selected="2020-01-28" locale="en-US"></wired-datepicker>
             `);
         let days = el.shadowRoot.querySelectorAll('wired-datepicker-cell');
         expect(days[27].selected).to.be.true;
+    });
+
+    it('should accept YYYY-MM date format', async () => {
+        const el = /** @type {WiredDatePicker} */ await fixture(html`
+            <wired-datepicker selected="2020-12" locale="en-US"></wired-datepicker>
+            `);
+        let days = el.shadowRoot.querySelectorAll('wired-datepicker-cell');
+        const header = el.shadowRoot.querySelectorAll('.month-indicator > span');
+        expect(header[1]).dom.to.equal(`<span>December 2020</span>`);
+        expect(days[0].selected).to.be.true;
+    });
+
+    it('should accept YYYY date format', async () => {
+        const el = /** @type {WiredDatePicker} */ await fixture(html`
+            <wired-datepicker selected="2020" locale="en-US"></wired-datepicker>
+            `);
+        let days = el.shadowRoot.querySelectorAll('wired-datepicker-cell');
+        const header = el.shadowRoot.querySelectorAll('.month-indicator > span');
+        expect(header[1]).dom.to.equal(`<span>January 2020</span>`);
+        expect(days[0].selected).to.be.true;
     });
 
 });
