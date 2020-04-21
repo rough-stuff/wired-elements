@@ -4,7 +4,7 @@ import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
 
 @customElement('wired-datepicker-cell')
 export class WiredDatePickerCell extends WiredBase {
-    @property({ type: Number }) content = 0;
+    @property({ type: Number }) index = 0;
     @property({ type: Boolean, reflect: true }) 
     get selected() {
         return this.classList.contains('selected');

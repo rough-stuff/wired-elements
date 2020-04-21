@@ -55,7 +55,7 @@ describe('WiredDatePicker - locale / render', () => {
             `);
         expect(el).shadowDom.to.equal(`
             <div class="calendar">
-                <div class="month-indicator">
+                <div class="month-indicator" tabindex="0">
                     <span class="month-selector-active">
                     <<
                     </span>
@@ -86,7 +86,7 @@ describe('WiredDatePicker - locale / render', () => {
             `);
         expect(el).shadowDom.to.equal(`
             <div class="calendar">
-                <div class="month-indicator">
+                <div class="month-indicator" tabindex="0">
                     <span class="month-selector-active">
                     <<
                     </span>
@@ -117,7 +117,7 @@ describe('WiredDatePicker - locale / render', () => {
             `);
         expect(el).shadowDom.to.equal(`
             <div class="calendar">
-                <div class="month-indicator">
+                <div class="month-indicator" tabindex="0">
                     <span class="month-selector-active">
                     <<
                     </span>
@@ -302,7 +302,7 @@ describe('WiredDatePicker - Month selector', () => {
             `);
         expect(el).shadowDom.to.equal(`
             <div class="calendar">
-                <div class="month-indicator">
+                <div class="month-indicator" tabindex="0">
                     <span class="month-selector-active">
                     <<
                     </span>
@@ -333,7 +333,7 @@ describe('WiredDatePicker - Month selector', () => {
             `);
         expect(el).shadowDom.to.equal(`
             <div class="calendar">
-                <div class="month-indicator">
+                <div class="month-indicator" tabindex="0">
                     <span class="month-selector-disabled">
                     <<
                     </span>
@@ -367,7 +367,7 @@ describe('WiredDatePicker - Month selector', () => {
         await elementUpdated(el);
         expect(el).shadowDom.to.equal(`
         <div class="calendar">
-            <div class="month-indicator">
+            <div class="month-indicator" tabindex="0">
                 <span class="month-selector-active">
                 <<
                 </span>
@@ -401,7 +401,7 @@ describe('WiredDatePicker - Month selector', () => {
         await elementUpdated(el);
         expect(el).shadowDom.to.equal(`
         <div class="calendar">
-            <div class="month-indicator">
+            <div class="month-indicator" tabindex="0">
                 <span class="month-selector-active">
                 <<
                 </span>

@@ -5,8 +5,7 @@
 
   <link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
 
-  <script type="module" src="../packages/wired-calendar/lib/wired-calendar.js"></script>
-  <script type="module" src="../packages/wired-button/lib/wired-button.js"></script>
+  <script type="module" src="../packages/wired-datepicker/lib/wired-datepicker.js"></script>
 
   <style>
     body {
@@ -53,23 +52,34 @@
     <!-- Minimal working calendar -->
     <div class="item_wrapper">
       <p>Minimal</p>
-      <wired-calendar></wired-calendar>
+      <wired-datepicker></wired-datepicker>
     </div>
 
     <!-- Calendar with some parameters -->
     <div class="item_wrapper">
       <p>"fr" locale</p>
       <!-- Note: parameter dates not affected by locale -->
-      <wired-calendar id="calendar2" elevation="1" firstdate="Apr 15, 2019" lastdate="Jul 15, 2019"
+      <wired-datepicker id="calendar2" elevation="1" firstdate="Apr 15, 2019" lastdate="Jul 15, 2019"
         selected="Jul 4, 2019" locale="fr" initials>
-      </wired-calendar>
+      </wired-datepicker>
     </div>
 
     <!-- Calendar with custom style and some parameters -->
     <div class="item_wrapper">
       <p>"de" locale</p>
-      <wired-calendar id="calendar3" class="custom" firstdate="Apr 15, 2019" locale="de" initials>
-      </wired-calendar>
+      <wired-datepicker id="calendar3" class="custom" firstdate="Apr 15, 2019" locale="de" initials>
+      </wired-datepicker>
+    </div>
+
+    <div class="item_wrapper">
+      <wired-datepicker
+        style="width: 500px;"
+        locale="fr-FR"
+        elevation="5"
+        firstdate="Mar 04, 2020"
+        lastdate="May 25, 2020"
+        selected="Apr 15, 2020">
+      </wired-datepicker>
     </div>
   </div>
 
@@ -77,9 +87,9 @@
   <!-- Calendar with javascript interactions (event and non-event driven) -->
   <section>
     <p>"es-MX" locale with javascript interactions sample (event and non-event driven)</p>
-    <wired-calendar id="calendar4" elevation="5" firstdate="Apr 15, 2019" lastdate="Jul 15, 2019" locale="es-MX"
+    <wired-datepicker id="calendar4" elevation="5" firstdate="Apr 15, 2019" lastdate="Jul 15, 2019" locale="es-MX"
       initials>
-    </wired-calendar>
+    </wired-datepicker>
     <p id="calendar4-result">Select a date in the calendar<p>
         <div style="margin-top: 16px;">
           <wired-button id="btn-today">Today</wired-button>
