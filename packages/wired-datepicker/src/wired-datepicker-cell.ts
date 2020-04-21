@@ -41,10 +41,18 @@ export class WiredDatePickerCell extends WiredBase {
         :host(.selected) path {
             stroke: var(--wired-datepicker-selected-color, red);
             stroke-width: 2.5;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: dash 0.8s ease-in forwards;
         }
         :host(.disabled), :host(.selected.disabled:hover) {
             color: var(--wired-datepicker-cell-disabled, lightgray);
             cursor: not-allowed;
+        }
+        @keyframes dash {
+            to {
+              stroke-dashoffset: 0;
+            }
         }
         #overlay {
             top: -3;
