@@ -2,8 +2,8 @@ import { customElement, property, TemplateResult, html } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { fire } from 'wired-lib';
 import { WiredCard } from 'wired-card';
-import './wired-datepicker-cell';
-import { WiredDatePickerCell } from './wired-datepicker-cell';
+import './wired-datepicker-grid';
+import { WiredDatePickerGrid } from './wired-datepicker-grid';
 import { getLocaleFromNavigator, localizedDays, localizedMonths } from './locale.utils';
 import { daysInMonth, isDateInMonth } from './date.utils';
 
@@ -11,40 +11,6 @@ import { daysInMonth, isDateInMonth } from './date.utils';
  * Handy representation of a date, with both Date and String
  */
 type WiredDate = { date?: Date, text: string };
-
-/**
- * Calendar Cell Template
- * @param index the cell index, used to display the day
- * @param selected if the cell is selected
- * @param disabled if the cell is disabled
- * @param hasFocus if the cell is currently focused
- * @param handleSelect callback function when the cell is selected
- */
-const Cell = (index: number, selected: boolean = false, disabled: boolean = false, hasFocus: boolean = false, handleSelect?: Function) => html`
-    <wired-datepicker-cell
-        index=${index}
-        tabindex=${hasFocus ? "0" : "-1"}
-        class=${classMap({"cell": true, "selected": selected, "disabled": disabled})}
-        ?selected=${selected}
-        ?disabled=${disabled}
-        @click=${() => handleSelect && handleSelect(index+1)}
-        >
-        ${index+1}
-    </wired-datepicker-cell>
-`;
-
-/**
- * Additionnal style to offset the first day of the grid.
- * For performance reasons, it is not included in the calendar as it is dynamic
- * @param offset number of column to offset between 1 and 7
- */
-const gridOffset = (offset: number) => html`
-    <style>
-        .date-grid .cell:first-child {
-            grid-column: ${offset};
-        }
-    </style>
-`;
 
 /**
  * Month Selector Template
@@ -60,17 +26,6 @@ const MonthSelector = (active: boolean, onChangeMonth: Function, selector: Templ
     </span>
 `;
 
-const giveFocus = (el: HTMLElement) => {
-    el.tabIndex = 0;
-    el.focus();
-    el.setAttribute('aria-checked', 'true');
-};
-
-const removeFocus = (el: HTMLElement) => {
-    el.tabIndex = -1;
-    el.removeAttribute('aria-checked');
-}
-
 /**
  * Calendar Template, based on CSS grid with 4 main parts:
  * - month-indicators: displays the month and the selectors
@@ -80,12 +35,10 @@ const removeFocus = (el: HTMLElement) => {
  * @param header the text to display in month-indicators
  * @param days the days name
  * @param cells the cells to display
- * @param style additionnal style (allows to offset the grid)
  * @param prevMonthSelector custom selector for previous month
  * @param nextMonthSelector custom selector for next month
  */
-const Calendar = (header: string, days: string[], cells: TemplateResult[], style: TemplateResult, prevMonthSelector: TemplateResult, nextMonthSelector: TemplateResult) => html`
-    ${style}
+const Calendar = (header: string, days: string[], grid: TemplateResult, prevMonthSelector: TemplateResult, nextMonthSelector: TemplateResult) => html`
     <style>
         :host {
             display: inline-block;
@@ -108,14 +61,11 @@ const Calendar = (header: string, days: string[], cells: TemplateResult[], style
             padding-right: 1em;
             font-weight: bold;
         }
-        .day-of-week,
-        .date-grid {
+        .day-of-week {
+            font-weight: bold;
             text-align: center;
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-        }
-        .day-of-week {
-            font-weight: bold;
         }
         .month-selector-active::selection,
         .month-selector-disabled::selection {
@@ -138,9 +88,7 @@ const Calendar = (header: string, days: string[], cells: TemplateResult[], style
         <div class="day-of-week">
             ${days.map(d => html`<div>${d}</div>`)}
         </div>
-        <div class="date-grid">
-            ${[...cells]}
-        </div>
+        ${grid}
     </div>
     <div id="overlay"><svg></svg></div>
 `;
@@ -255,10 +203,6 @@ export class WiredDatePicker extends WiredCard {
     private _firstdate: WiredDate = { text: '' };
     private _lastdate: WiredDate = { text: '' };
     private _value: WiredDate = { text: '' };
-    /**
-     * Represents the  cell currently having focus
-     */
-    private _highlightedIndex: number = 0;
 
     /**
      * Positions the calendar at the current month for the user (local time),
@@ -293,14 +237,16 @@ export class WiredDatePicker extends WiredCard {
     }
 
     /**
-     * Enable keyboard navigation in the calendar
+     * Enable keyboard navigation in the calendar.
+     * Attach event listeners to cell selection in the grid.
      */
     firstUpdated() {
-        const VK_SPACE = 32
         const VK_LEFT  = 37;
         const VK_RIGHT = 39;
-        const VK_UP    = 38;
-        const VK_DOWN  = 40;
+        const grid = this.shadowRoot!.querySelector<WiredDatePickerGrid>('wired-datepicker-grid');
+        grid?.addEventListener('cell-selected', ((e: CustomEvent) => {
+            this.setSelectedDate(e.detail.day)
+        }) as EventListener);
         
         this.addEventListener('keydown', (e: KeyboardEvent) => {
             const activeElement = this.shadowRoot?.activeElement;
@@ -322,48 +268,6 @@ export class WiredDatePicker extends WiredCard {
                     default:
                         break;
                 }
-            } else {
-                const cells = this.shadowRoot?.querySelectorAll<WiredDatePickerCell>('wired-datepicker-cell');
-                switch(e.keyCode) {
-                    case VK_LEFT:
-                        e.preventDefault();
-                        if (cells && this._highlightedIndex > 0) {
-                            const oldCell = cells[this._highlightedIndex];
-                            const newCell = cells[--this._highlightedIndex];
-                            this.changeCellFocus(oldCell, newCell);
-                        }
-                        break;
-                    case VK_RIGHT:
-                        e.preventDefault();
-                        if (cells && this._highlightedIndex < cells.length-1) {
-                            const oldCell = cells[this._highlightedIndex];
-                            const newCell = cells[++this._highlightedIndex];
-                            this.changeCellFocus(oldCell, newCell);
-                        }
-                        break;
-                    case VK_DOWN:
-                        e.preventDefault();
-                        if (cells && this._highlightedIndex < cells.length-7) {
-                            const oldCell = cells[this._highlightedIndex];
-                            const newCell = cells[this._highlightedIndex+=7];
-                            this.changeCellFocus(oldCell, newCell);
-                        }
-                        break;
-                    case VK_UP:
-                        e.preventDefault();
-                        if (cells && this._highlightedIndex >= 7) {
-                            const oldCell = cells[this._highlightedIndex];
-                            const newCell = cells[this._highlightedIndex-=7];
-                            this.changeCellFocus(oldCell, newCell);
-                        }
-                        break;
-                    case VK_SPACE:
-                        e.preventDefault();
-                        this.setSelectedDate(this._highlightedIndex+1);
-                        break;
-                    default:
-                        break;
-                }
             }
         })
     }
@@ -377,14 +281,12 @@ export class WiredDatePicker extends WiredCard {
         const year = this.refDate.getFullYear();
         // refDate represents the first day of the current month
         // getDay returns the index of the day in the week, 0 being sunday
-        const firstDayOfMonthIndex = this.refDate.getDay();
-        const style = gridOffset(firstDayOfMonthIndex+1);
         const monthName = localizedMonths(this.locale)[month];
-        const cells = this.buildCells(year, month);
+        const grid = this.buildGrid(year, month);
         const prevMonthSelector = MonthSelector(this.canGoPrev(), () => this.loadPrevMonth(), html`&lt;&lt;`);
         const nextMonthSelector = MonthSelector(this.canGoNext(), () => this.loadNextMonth(), html`&gt;&gt;`);
 
-        return Calendar(`${monthName} ${year}`, days, cells, style, prevMonthSelector, nextMonthSelector);
+        return Calendar(`${monthName} ${year}`, days, grid, prevMonthSelector, nextMonthSelector);
     }
 
     /**
@@ -392,36 +294,42 @@ export class WiredDatePicker extends WiredCard {
      * @param year year of the calendar
      * @param month month of the calendar
      */
-    private buildCells(year: number, month: number): TemplateResult[] {
+    private buildGrid(year: number, month: number): TemplateResult {
         const dayCount = daysInMonth(month, year);
-        let enabledMinIndex = -1;
-        let enabledMaxIndex = 32;
+        const firstDayOfMonthIndex = this.refDate.getDay();
+        let minEnabledIndex = -1;
+        let maxEnabledIndex = 32;
+        let selectedDayIndex = -1;
         const minDate = this._firstdate.date
         const maxDate = this._lastdate.date;
         if (minDate && isDateInMonth(month, year, minDate)) {
-            enabledMinIndex = minDate.getDate();
+            minEnabledIndex = minDate.getDate();
         }
         if (maxDate && isDateInMonth(month, year, maxDate)) {
-            enabledMaxIndex = maxDate.getDate();
+            maxEnabledIndex = maxDate.getDate();
         }
-        const cells = [...Array(dayCount).keys()].map(i => {
-            const enabled = !this.disabled && i<enabledMaxIndex && i>=enabledMinIndex;
-            const onSelectDay = enabled ? this.setSelectedDate.bind(this) : undefined;
-            const isHighlighted = this._highlightedIndex === i;
-            return Cell(i, false, !enabled, isHighlighted, onSelectDay);
-        });
-        
-        // Display a selected cell if in the current month
         if (this.value.date && this.value.date.getMonth() === month) {
-            const selectedDayIndex = this.value.date.getDate() -1;
-            cells[selectedDayIndex] = Cell(selectedDayIndex, true, this.disabled);
+            selectedDayIndex = this.value.date.getDate() -1;
         }
-        return cells;
+        if (this.disabled) {
+            // We can disable all grid this way
+            minEnabledIndex = dayCount;
+        }
+
+        return html`
+            <wired-datepicker-grid
+                dayCount="${dayCount}"
+                minEnabledIndex="${minEnabledIndex}"
+                maxEnabledIndex="${maxEnabledIndex}"
+                selectedDayIndex="${selectedDayIndex}"
+                gridOffset="${firstDayOfMonthIndex+1}"
+            ></wired-datepicker-grid>
+        `;
     }
 
     /**
      * Updates selected date with the provided day.
-     * @param day index of the day selected in the displayed month
+     * @param day day selected in the displayed month
      */
     private setSelectedDate(day: number) {
         // the selected day is obviously the same month as our refDate
@@ -473,15 +381,5 @@ export class WiredDatePicker extends WiredCard {
     private loadPrevMonth() {
         this.refDate.setMonth(this.refDate.getMonth() -1);
         this.performUpdate();
-    }
-
-    /**
-     * Given 2 cells, removes cell focus on the old and gives focus to the new one
-     * @param oldCell Cell that loses focus
-     * @param newCell Cell that gain focus
-     */
-    private changeCellFocus(oldCell: WiredDatePickerCell, newCell: WiredDatePickerCell) {
-        removeFocus(oldCell);
-        giveFocus(newCell);
     }
 }

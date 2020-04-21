@@ -73,11 +73,9 @@ describe('WiredDatePicker - locale / render', () => {
                     <div>ven.</div>
                     <div>sam.</div>
                 </div>
-                <div class="date-grid">
-                </div>
             </div>
             <div id="overlay"></div>
-        `, {ignoreTags: ['wired-datepicker-cell']});
+        `, {ignoreTags: ['wired-datepicker-grid']});
     });
 
     it('should render month of selected date in en-US', async () => {
@@ -104,11 +102,9 @@ describe('WiredDatePicker - locale / render', () => {
                     <div>Fri</div>
                     <div>Sat</div>
                 </div>
-                <div class="date-grid">
-                </div>
             </div>
             <div id="overlay"></div>
-        `, {ignoreTags: ['wired-datepicker-cell']});
+        `, {ignoreTags: ['wired-datepicker-grid']});
     });
 
     it('should display short week day name if initials attribute is set', async () => {
@@ -135,11 +131,9 @@ describe('WiredDatePicker - locale / render', () => {
                     <div>F</div>
                     <div>S</div>
                 </div>
-                <div class="date-grid">
-                </div>
             </div>
             <div id="overlay"></div>
-        `, {ignoreTags: ['wired-datepicker-cell']});
+        `, {ignoreTags: ['wired-datepicker-grid']});
     });
 
     it('should update calendar when locale property is set', async () => {
@@ -174,41 +168,42 @@ describe('WiredDatePicker - selected date', () => {
         const el = /** @type {WiredDatePicker} */ await fixture(html`
             <wired-datepicker selected="Jan 1 2020" locale="en-US"></wired-datepicker>
             `);
-        let days = el.shadowRoot.querySelectorAll('wired-datepicker-cell');
-        expect(days[0].selected).to.be.true;
+        let grid = el.shadowRoot.querySelector('wired-datepicker-grid');
+        expect(grid.selectedDayIndex).to.equal(0);
         
         el.selected = "Jan 31 2020";
         await elementUpdated(el);
-        days = el.shadowRoot.querySelectorAll('wired-datepicker-cell');
-        expect(days[30].selected).to.be.true;
+        
+        grid = el.shadowRoot.querySelector('wired-datepicker-grid');
+        expect(grid.selectedDayIndex).to.equal(30);
     });
 
     it('should accept YYYY-MM-DD date format', async () => {
         const el = /** @type {WiredDatePicker} */ await fixture(html`
             <wired-datepicker selected="2020-01-28" locale="en-US"></wired-datepicker>
             `);
-        let days = el.shadowRoot.querySelectorAll('wired-datepicker-cell');
-        expect(days[27].selected).to.be.true;
+        const grid = el.shadowRoot.querySelector('wired-datepicker-grid');
+        expect(grid.selectedDayIndex).to.equal(27);
     });
 
     it('should accept YYYY-MM date format', async () => {
         const el = /** @type {WiredDatePicker} */ await fixture(html`
             <wired-datepicker selected="2020-12" locale="en-US"></wired-datepicker>
             `);
-        let days = el.shadowRoot.querySelectorAll('wired-datepicker-cell');
+        const grid = el.shadowRoot.querySelector('wired-datepicker-grid');
         const header = el.shadowRoot.querySelectorAll('.month-indicator > span');
         expect(header[1]).dom.to.equal(`<span>December 2020</span>`);
-        expect(days[0].selected).to.be.true;
+        expect(grid.selectedDayIndex).to.equal(0);
     });
 
     it('should accept YYYY date format', async () => {
         const el = /** @type {WiredDatePicker} */ await fixture(html`
             <wired-datepicker selected="2020" locale="en-US"></wired-datepicker>
             `);
-        let days = el.shadowRoot.querySelectorAll('wired-datepicker-cell');
+        const grid = el.shadowRoot.querySelector('wired-datepicker-grid');
         const header = el.shadowRoot.querySelectorAll('.month-indicator > span');
         expect(header[1]).dom.to.equal(`<span>January 2020</span>`);
-        expect(days[0].selected).to.be.true;
+        expect(grid.selectedDayIndex).to.equal(0);
     });
 
 });
@@ -221,8 +216,8 @@ describe('WiredDatePicker - first date', () => {
         el.firstdate = "Jan 3 2020";
         
         await elementUpdated(el);
-        let days = el.shadowRoot.querySelectorAll('wired-datepicker-cell');
-        expect(days[0].disabled).to.be.true;
+        const grid = el.shadowRoot.querySelector('wired-datepicker-grid');
+        expect(grid.minEnabledIndex).to.equal(3);
     });
 
     it('should disable previous month selector when set programmatically', async () => {
@@ -245,8 +240,9 @@ describe('WiredDatePicker - last date', () => {
         el.lastdate = "Jan 20 2020";
         
         await elementUpdated(el);
-        let days = el.shadowRoot.querySelectorAll('wired-datepicker-cell');
-        expect(days[20].disabled).to.be.true;
+
+        const grid = el.shadowRoot.querySelector('wired-datepicker-grid');
+        expect(grid.maxEnabledIndex).to.equal(20);
     });
 
     it('should disable next month selector when set programmatically', async () => {
@@ -320,11 +316,9 @@ describe('WiredDatePicker - Month selector', () => {
                     <div>Fr</div>
                     <div>Sa</div>
                 </div>
-                <div class="date-grid">
-                </div>
             </div>
             <div id="overlay"></div>
-        `, {ignoreTags: ['wired-datepicker-cell']});
+        `, {ignoreTags: ['wired-datepicker-grid']});
     });
 
     it('should disable last month selector if firstDate is in current month', async () => {
@@ -351,11 +345,9 @@ describe('WiredDatePicker - Month selector', () => {
                     <div>Fri</div>
                     <div>Sat</div>
                 </div>
-                <div class="date-grid">
-                </div>
             </div>
             <div id="overlay"></div>
-        `, {ignoreTags: ['wired-datepicker-cell']});
+        `, {ignoreTags: ['wired-datepicker-grid']});
     });
 
     it('should display previous month if previous month selector is clicked', async () => {
@@ -385,11 +377,9 @@ describe('WiredDatePicker - Month selector', () => {
                 <div>F</div>
                 <div>S</div>
             </div>
-            <div class="date-grid">
-            </div>
         </div>
         <div id="overlay"></div>
-    `, {ignoreTags: ['wired-datepicker-cell']});
+    `, {ignoreTags: ['wired-datepicker-grid']});
     });
 
     it('should display next month if next month selector is clicked', async () => {
@@ -419,49 +409,47 @@ describe('WiredDatePicker - Month selector', () => {
                 <div>F</div>
                 <div>S</div>
             </div>
-            <div class="date-grid">
-            </div>
         </div>
         <div id="overlay"></div>
-    `, {ignoreTags: ['wired-datepicker-cell']});
+    `, {ignoreTags: ['wired-datepicker-grid']});
     });
 });
 
 describe('WiredDatePicker - Cells', () => {
-    it('should display all days of the month', async () => {
+    it('should display correct number of days of the month', async () => {
         const el = /** @type {WiredDatePicker} */ await fixture(html`
             <wired-datepicker selected="September 18 2020"></wired-datepicker>
         `);
-        const days = el.shadowRoot.querySelectorAll('wired-datepicker-cell');
+        const grid = el.shadowRoot.querySelector('wired-datepicker-grid');
 
-        expect(days.length).to.equal(30);
-
-        for (let i = 0; i < days.length; i++) {
-            expect(days[i]).lightDom.to.equal(`${i+1}`);
-        }
+        expect(grid.dayCount).to.equal(30);
     });
 
     it('should display the correct selected cell if selected attribute is given', async () => {
         const el = /** @type {WiredDatePicker} */ await fixture(html`
             <wired-datepicker selected="October 24 2020"></wired-datepicker>
         `);
-        const days = el.shadowRoot.querySelectorAll('wired-datepicker-cell');
+        const grid = el.shadowRoot.querySelector('wired-datepicker-grid');
 
-        expect(days[23].selected).to.be.true;
+        expect(grid.selectedDayIndex).to.equal(23);
     });
 
     it('should change value when cell is selected', async () => {
         const el = /** @type {WiredDatePicker} */ await fixture(html`
             <wired-datepicker selected="November 12 2020"></wired-datepicker>
         `);
-        let days = el.shadowRoot.querySelectorAll('wired-datepicker-cell');
-        expect(days[11].selected).to.be.true;
-        expect(days[28].selected).to.be.false;
-        days[28].click();
+        let grid = el.shadowRoot.querySelector('wired-datepicker-grid');
+
+        expect(grid.selectedDayIndex).to.equal(11);
+        grid.dispatchEvent(new CustomEvent('cell-selected', {
+            bubbles: true,
+            composed: true,
+            detail: {day: 29},
+          }));
         await elementUpdated(el);
-        days = el.shadowRoot.querySelectorAll('wired-datepicker-cell');
-        expect(days[11].selected).to.be.false;
-        expect(days[28].selected).to.be.true;
+        grid = el.shadowRoot.querySelector('wired-datepicker-grid');
+
+        expect(grid.selectedDayIndex).to.equal(28);
     });
 
 });
