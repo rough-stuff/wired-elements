@@ -1,11 +1,11 @@
 [![Published on Vaadin  Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/search?keyword=wiredjs)
 
 # wired-elements 👉 [wiredjs.com](https://wiredjs.com)
-Wired Elements is a series of basic UI Elements that have a hand drawn look. These can be used for wireframes, mockups, or just the fun hand-drawn look. 
+Wired Elements is a series of basic UI Elements that have a hand drawn look. These can be used for wireframes, mockups, or just the fun hand-drawn look.
 
 ![alt Preview](https://i.imgur.com/qttPllg.png)
 
-The elements are drawn with enough randomness that no two renderings will be exactly the same - just like two separate hand drawn shapes. 
+The elements are drawn with enough randomness that no two renderings will be exactly the same - just like two separate hand drawn shapes.
 
 ## Try now
 Play with wired-elements:
@@ -47,10 +47,10 @@ Import into your module script:
 import { WiredButton, WiredInput } from "wired-elements"
 ```
 
-Alternatively, load a bundled version from the [dist folder](https://github.com/wiredjs/wired-elements/tree/master/packages/all/dist) or from CDN:
+Alternatively, load a bundled version from the [lib folder](https://github.com/wiredjs/wired-elements/tree/master/packages/all/lib) or from CDN:
 
 ```html
-<script src="https://unpkg.com/wired-elements@latest/dist/wired-elements.bundled.js"></script>
+<script src="https://unpkg.com/wired-elements@2.0.5/lib/wired-elements-bundled.js"></script>
 ```
 
 #### Use it in your web page:
@@ -63,7 +63,7 @@ Learn about web components [here](https://developer.mozilla.org/en-US/docs/Web/W
 
 ## Component API
 
-To view details of each component - properties, events, css-properties, etc, are provided in their package folder. 
+To view details of each component - properties, events, css-properties, etc, are provided in their package folder.
 [List of all packages](https://github.com/wiredjs/wired-elements/tree/master/packages)
 
 ## Demo
