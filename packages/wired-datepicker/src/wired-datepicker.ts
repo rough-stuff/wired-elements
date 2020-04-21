@@ -1,9 +1,10 @@
 import { customElement, property, TemplateResult, html } from 'lit-element';
-import { classMap } from 'lit-html/directives/class-map';
 import { fire } from 'wired-lib';
 import { WiredCard } from 'wired-card';
 import './wired-datepicker-grid';
 import { WiredDatePickerGrid } from './wired-datepicker-grid';
+import './wired-datepicker-indicator';
+import { WiredDatePickerIndicator } from './wired-datepicker-indicator';
 import { getLocaleFromNavigator, localizedDays, localizedMonths } from './locale.utils';
 import { daysInMonth, isDateInMonth } from './date.utils';
 
@@ -13,32 +14,16 @@ import { daysInMonth, isDateInMonth } from './date.utils';
 type WiredDate = { date?: Date, text: string };
 
 /**
- * Month Selector Template
- * @param active if the selector can be activated
- * @param onChangeMonth callback function whe the selector is clicked
- * @param selector an html template to use to represent the selector
- */
-const MonthSelector = (active: boolean, onChangeMonth: Function, selector: TemplateResult) => html` 
-    <span 
-        class=${classMap({"month-selector-active": active, "month-selector-disabled": !active})}
-        @click=${() => active ? onChangeMonth() : null}>
-        ${selector}
-    </span>
-`;
-
-/**
  * Calendar Template, based on CSS grid with 4 main parts:
  * - month-indicators: displays the month and the selectors
  * - day-of-week: days name, from sunday to saturday
  * - date-grid: container for the calendar days
  * - overlay: allow to display a neat wired frame around
- * @param header the text to display in month-indicators
+ * @param indicator the header and months selectors
  * @param days the days name
  * @param cells the cells to display
- * @param prevMonthSelector custom selector for previous month
- * @param nextMonthSelector custom selector for next month
  */
-const Calendar = (header: string, days: string[], grid: TemplateResult, prevMonthSelector: TemplateResult, nextMonthSelector: TemplateResult) => html`
+const Calendar = (indicator: TemplateResult, days: string[], grid: TemplateResult) => html`
     <style>
         :host {
             display: inline-block;
@@ -54,42 +39,18 @@ const Calendar = (header: string, days: string[], grid: TemplateResult, prevMont
             stroke: var(--wired-datepicker-focus-color);
             stroke-width: 1.5;
         }
-        .month-indicator {
-            display:flex;
-            justify-content: space-between;
-            padding-left: 1em;
-            padding-right: 1em;
-            font-weight: bold;
-        }
         .day-of-week {
             font-weight: bold;
             text-align: center;
             display: grid;
             grid-template-columns: repeat(7, 1fr);
         }
-        .month-selector-active::selection,
-        .month-selector-disabled::selection {
-            background: transparent;
-        }
-        .month-selector-active {
-            cursor: pointer;
-        }
-        .month-selector-disabled {
-            cursor: not-allowed;
-            color: lightgray;
-        }
     </style>
-    <div class="calendar">
-        <div class="month-indicator" tabindex="0">
-            ${prevMonthSelector}
-            <span>${header}</span>
-            ${nextMonthSelector}
-        </div>
-        <div class="day-of-week">
-            ${days.map(d => html`<div>${d}</div>`)}
-        </div>
-        ${grid}
+    ${indicator}
+    <div class="day-of-week">
+        ${days.map(d => html`<div>${d}</div>`)}
     </div>
+    ${grid}
     <div id="overlay"><svg></svg></div>
 `;
 
@@ -237,39 +198,23 @@ export class WiredDatePicker extends WiredCard {
     }
 
     /**
-     * Enable keyboard navigation in the calendar.
      * Attach event listeners to cell selection in the grid.
+     * Attach event listeners to month selection in the indicator
      */
     firstUpdated() {
-        const VK_LEFT  = 37;
-        const VK_RIGHT = 39;
         const grid = this.shadowRoot!.querySelector<WiredDatePickerGrid>('wired-datepicker-grid');
         grid?.addEventListener('cell-selected', ((e: CustomEvent) => {
             this.setSelectedDate(e.detail.day)
         }) as EventListener);
-        
-        this.addEventListener('keydown', (e: KeyboardEvent) => {
-            const activeElement = this.shadowRoot?.activeElement;
-            const monthHeader = this.shadowRoot?.querySelector('.month-indicator');
-            if (activeElement === monthHeader) {
-                switch(e.keyCode) {
-                    case VK_LEFT:
-                        e.preventDefault();
-                        if (this.canGoPrev()) {
-                            this.loadPrevMonth();
-                        }
-                        break;
-                    case VK_RIGHT:
-                        e.preventDefault();
-                        if (this.canGoNext()) {
-                            this.loadNextMonth();
-                        }
-                        break;
-                    default:
-                        break;
-                }
+
+        const indicator = this.shadowRoot!.querySelector<WiredDatePickerIndicator>('wired-datepicker-indicator');
+        indicator?.addEventListener('month-selected', ((e: CustomEvent) => {
+            if (e.detail.selector === 'prev') {
+                this.loadPrevMonth()
+            } else {
+                this.loadNextMonth();
             }
-        })
+        }) as EventListener);
     }
 
     /**
@@ -279,14 +224,27 @@ export class WiredDatePicker extends WiredCard {
         const days = localizedDays(this.locale, this.initials ? 'narrow': 'short');
         const month = this.refDate.getMonth();
         const year = this.refDate.getFullYear();
-        // refDate represents the first day of the current month
-        // getDay returns the index of the day in the week, 0 being sunday
-        const monthName = localizedMonths(this.locale)[month];
+        const indicator = this.buildIndicator(year, month);
         const grid = this.buildGrid(year, month);
-        const prevMonthSelector = MonthSelector(this.canGoPrev(), () => this.loadPrevMonth(), html`&lt;&lt;`);
-        const nextMonthSelector = MonthSelector(this.canGoNext(), () => this.loadNextMonth(), html`&gt;&gt;`);
+        return Calendar(indicator, days, grid);
+    }
 
-        return Calendar(`${monthName} ${year}`, days, grid, prevMonthSelector, nextMonthSelector);
+    /**
+     * Creates the HTML templates for the indicator with month selectors
+     * @param year year of the calendar
+     * @param month month of the calendar
+     */
+    private buildIndicator(year: number, month: number): TemplateResult {
+        const monthName = localizedMonths(this.locale)[month];
+        const header = `${monthName} ${year}`;
+        return html`
+            <wired-datepicker-indicator
+                header="${header}"
+                .canGoPrev="${this.canGoPrev()}"
+                .canGoNext="${this.canGoNext()}"
+            >
+            </wired-datepicker-indicator>
+        `;
     }
 
     /**

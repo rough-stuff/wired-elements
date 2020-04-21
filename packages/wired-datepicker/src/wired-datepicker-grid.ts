@@ -17,8 +17,8 @@ const Cell = (index: number, selected: boolean = false, disabled: boolean = fals
     <wired-datepicker-cell
         index=${index}
         class=${classMap({"cell": true, "selected": selected, "disabled": disabled})}
-        ?selected=${selected}
-        ?disabled=${disabled}
+        .selected=${selected}
+        .disabled=${disabled}
         @click=${() => handleSelect && handleSelect(index)}
         >
         ${index+1}

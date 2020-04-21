@@ -54,28 +54,26 @@ describe('WiredDatePicker - locale / render', () => {
             <wired-datepicker selected="Jan 15 2020" locale="fr-FR"></wired-datepicker>
             `);
         expect(el).shadowDom.to.equal(`
-            <div class="calendar">
-                <div class="month-indicator" tabindex="0">
-                    <span class="month-selector-active">
-                    <<
-                    </span>
-                    <span>janvier 2020</span>
-                    <span class="month-selector-active">
-                    >>
-                    </span>
-                </div>
-                <div class="day-of-week">
-                    <div>dim.</div>
-                    <div>lun.</div>
-                    <div>mar.</div>
-                    <div>mer.</div>
-                    <div>jeu.</div>
-                    <div>ven.</div>
-                    <div>sam.</div>
-                </div>
+            <wired-datepicker-indicator>
+            </wired-datepicker-indicator>
+            <div class="day-of-week">
+                <div>dim.</div>
+                <div>lun.</div>
+                <div>mar.</div>
+                <div>mer.</div>
+                <div>jeu.</div>
+                <div>ven.</div>
+                <div>sam.</div>
             </div>
             <div id="overlay"></div>
-        `, {ignoreTags: ['wired-datepicker-grid']});
+        `, {
+            ignoreTags: ['wired-datepicker-grid'],
+            ignoreAttributes: [{ tags: ['wired-datepicker-indicator'],
+            attributes: ['tabindex', 'header', 'cangoprev', 'cangonext']}],
+        });
+
+        const indicator = el.shadowRoot.querySelector('wired-datepicker-indicator');
+        expect(indicator.header).to.equal('janvier 2020');
     });
 
     it('should render month of selected date in en-US', async () => {
@@ -83,28 +81,26 @@ describe('WiredDatePicker - locale / render', () => {
             <wired-datepicker selected="Feb 29 2020" locale="en-US"></wired-datepicker>
             `);
         expect(el).shadowDom.to.equal(`
-            <div class="calendar">
-                <div class="month-indicator" tabindex="0">
-                    <span class="month-selector-active">
-                    <<
-                    </span>
-                    <span>February 2020</span>
-                    <span class="month-selector-active">
-                    >>
-                    </span>
-                </div>
-                <div class="day-of-week">
-                    <div>Sun</div>
-                    <div>Mon</div>
-                    <div>Tue</div>
-                    <div>Wed</div>
-                    <div>Thu</div>
-                    <div>Fri</div>
-                    <div>Sat</div>
-                </div>
+            <wired-datepicker-indicator>
+            </wired-datepicker-indicator>
+            <div class="day-of-week">
+                <div>Sun</div>
+                <div>Mon</div>
+                <div>Tue</div>
+                <div>Wed</div>
+                <div>Thu</div>
+                <div>Fri</div>
+                <div>Sat</div>
             </div>
             <div id="overlay"></div>
-        `, {ignoreTags: ['wired-datepicker-grid']});
+        `, {
+            ignoreTags: ['wired-datepicker-grid'],
+            ignoreAttributes: [{ tags: ['wired-datepicker-indicator'],
+            attributes: ['tabindex', 'header', 'cangoprev', 'cangonext']}],
+        });
+        
+        const indicator = el.shadowRoot.querySelector('wired-datepicker-indicator');
+        expect(indicator.header).to.equal('February 2020');
     });
 
     it('should display short week day name if initials attribute is set', async () => {
@@ -112,28 +108,23 @@ describe('WiredDatePicker - locale / render', () => {
             <wired-datepicker initials selected="May 4 2020" locale="en-US"></wired-datepicker>
             `);
         expect(el).shadowDom.to.equal(`
-            <div class="calendar">
-                <div class="month-indicator" tabindex="0">
-                    <span class="month-selector-active">
-                    <<
-                    </span>
-                    <span>May 2020</span>
-                    <span class="month-selector-active">
-                    >>
-                    </span>
-                </div>
-                <div class="day-of-week">
-                    <div>S</div>
-                    <div>M</div>
-                    <div>T</div>
-                    <div>W</div>
-                    <div>T</div>
-                    <div>F</div>
-                    <div>S</div>
-                </div>
+            <wired-datepicker-indicator>
+            </wired-datepicker-indicator>
+            <div class="day-of-week">
+                <div>S</div>
+                <div>M</div>
+                <div>T</div>
+                <div>W</div>
+                <div>T</div>
+                <div>F</div>
+                <div>S</div>
             </div>
             <div id="overlay"></div>
-        `, {ignoreTags: ['wired-datepicker-grid']});
+        `, {
+            ignoreTags: ['wired-datepicker-grid'],
+            ignoreAttributes: [{ tags: ['wired-datepicker-indicator'],
+            attributes: ['tabindex', 'header', 'cangoprev', 'cangonext']}],
+        });
     });
 
     it('should update calendar when locale property is set', async () => {
@@ -141,13 +132,13 @@ describe('WiredDatePicker - locale / render', () => {
             <wired-datepicker selected="Apr 15 2020" locale="en-US"></wired-datepicker>
         `);
 
-        let header = el.shadowRoot.querySelectorAll('.month-indicator > span');
-        expect(header[1]).dom.to.equal(`<span>April 2020</span>`);
+        let ind = el.shadowRoot.querySelector('wired-datepicker-indicator');
+        expect(ind.header).to.equal('April 2020');
 
         el.locale = 'fr-FR';
         await elementUpdated(el);
-        header = el.shadowRoot.querySelectorAll('.month-indicator > span');
-        expect(header[1]).dom.to.equal(`<span>avril 2020</span>`);
+        ind = el.shadowRoot.querySelector('wired-datepicker-indicator');
+        expect(ind.header).to.equal('avril 2020');
     });
 
     it('should expose value as a readonly property', async () => {
@@ -191,19 +182,19 @@ describe('WiredDatePicker - selected date', () => {
             <wired-datepicker selected="2020-12" locale="en-US"></wired-datepicker>
             `);
         const grid = el.shadowRoot.querySelector('wired-datepicker-grid');
-        const header = el.shadowRoot.querySelectorAll('.month-indicator > span');
-        expect(header[1]).dom.to.equal(`<span>December 2020</span>`);
         expect(grid.selectedDayIndex).to.equal(0);
+        const ind = el.shadowRoot.querySelector('wired-datepicker-indicator');
+        expect(ind.header).to.equal('December 2020');
     });
 
     it('should accept YYYY date format', async () => {
         const el = /** @type {WiredDatePicker} */ await fixture(html`
-            <wired-datepicker selected="2020" locale="en-US"></wired-datepicker>
+            <wired-datepicker selected="2020" locale="et-EE"></wired-datepicker>
             `);
         const grid = el.shadowRoot.querySelector('wired-datepicker-grid');
-        const header = el.shadowRoot.querySelectorAll('.month-indicator > span');
-        expect(header[1]).dom.to.equal(`<span>January 2020</span>`);
         expect(grid.selectedDayIndex).to.equal(0);
+        const ind = el.shadowRoot.querySelector('wired-datepicker-indicator');
+        expect(ind.header).to.equal('jaanuar 2020');
     });
 
 });
@@ -227,8 +218,8 @@ describe('WiredDatePicker - first date', () => {
         el.firstdate = "Jan 3 2020";
         
         await elementUpdated(el);
-        const prevMonthSelector = el.shadowRoot.querySelector('.month-indicator > span');
-        expect(prevMonthSelector).to.have.class('month-selector-disabled');
+        const ind = el.shadowRoot.querySelector('wired-datepicker-indicator');
+        expect(ind.canGoPrev).to.be.false;
     });
 });
 
@@ -252,8 +243,8 @@ describe('WiredDatePicker - last date', () => {
         el.lastdate = "Jan 20 2020";
         
         await elementUpdated(el);
-        const nextMonthSelector = el.shadowRoot.querySelectorAll('.month-indicator > span')[2];
-        expect(nextMonthSelector).to.have.class('month-selector-disabled');
+        const ind = el.shadowRoot.querySelector('wired-datepicker-indicator');
+        expect(ind.canGoNext).to.be.false;
     });
 });
 
@@ -296,122 +287,54 @@ describe('WiredDatePicker - Month selector', () => {
         const el = /** @type {WiredDatePicker} */ await fixture(html`
             <wired-datepicker selected="Mar 1 2020" lastdate="Mar 31 2020" locale="de-DE"></wired-datepicker>
             `);
-        expect(el).shadowDom.to.equal(`
-            <div class="calendar">
-                <div class="month-indicator" tabindex="0">
-                    <span class="month-selector-active">
-                    <<
-                    </span>
-                    <span>März 2020</span>
-                    <span class="month-selector-disabled">
-                    >>
-                    </span>
-                </div>
-                <div class="day-of-week">
-                    <div>So</div>
-                    <div>Mo</div>
-                    <div>Di</div>
-                    <div>Mi</div>
-                    <div>Do</div>
-                    <div>Fr</div>
-                    <div>Sa</div>
-                </div>
-            </div>
-            <div id="overlay"></div>
-        `, {ignoreTags: ['wired-datepicker-grid']});
+        
+        const indicator = el.shadowRoot.querySelector('wired-datepicker-indicator');
+        expect(indicator.canGoNext).to.be.false;
+        
     });
 
-    it('should disable last month selector if firstDate is in current month', async () => {
+    it('should disable prev month selector if firstDate is in current month', async () => {
         const el = /** @type {WiredDatePicker} */ await fixture(html`
             <wired-datepicker selected="Apr 4 2020" firstdate="Apr 1 2020" locale="en-US"></wired-datepicker>
             `);
-        expect(el).shadowDom.to.equal(`
-            <div class="calendar">
-                <div class="month-indicator" tabindex="0">
-                    <span class="month-selector-disabled">
-                    <<
-                    </span>
-                    <span>April 2020</span>
-                    <span class="month-selector-active">
-                    >>
-                    </span>
-                </div>
-                <div class="day-of-week">
-                    <div>Sun</div>
-                    <div>Mon</div>
-                    <div>Tue</div>
-                    <div>Wed</div>
-                    <div>Thu</div>
-                    <div>Fri</div>
-                    <div>Sat</div>
-                </div>
-            </div>
-            <div id="overlay"></div>
-        `, {ignoreTags: ['wired-datepicker-grid']});
+        const indicator = el.shadowRoot.querySelector('wired-datepicker-indicator');
+        expect(indicator.canGoPrev).to.be.false;
     });
 
-    it('should display previous month if previous month selector is clicked', async () => {
+    it('should display previous month if previous selected month event is triggered', async () => {
         const el = /** @type {WiredDatePicker} */ await fixture(html`
             <wired-datepicker selected="July 18 2020" initials locale="en-US"></wired-datepicker>
         `);
-        const sel = el.shadowRoot.querySelector('.month-selector-active');
-        sel.click();
+        let ind = el.shadowRoot.querySelector('wired-datepicker-indicator');
+        expect(ind.header).to.equal('July 2020');
+
+        ind.dispatchEvent(new CustomEvent('month-selected', {
+            bubbles: true,
+            composed: true,
+            detail: {selector: 'prev'},
+        }));
+
         await elementUpdated(el);
-        expect(el).shadowDom.to.equal(`
-        <div class="calendar">
-            <div class="month-indicator" tabindex="0">
-                <span class="month-selector-active">
-                <<
-                </span>
-                <span>June 2020</span>
-                <span class="month-selector-active">
-                >>
-                </span>
-            </div>
-            <div class="day-of-week">
-                <div>S</div>
-                <div>M</div>
-                <div>T</div>
-                <div>W</div>
-                <div>T</div>
-                <div>F</div>
-                <div>S</div>
-            </div>
-        </div>
-        <div id="overlay"></div>
-    `, {ignoreTags: ['wired-datepicker-grid']});
+        ind = el.shadowRoot.querySelector('wired-datepicker-indicator');
+        expect(ind.header).to.equal('June 2020');
     });
 
     it('should display next month if next month selector is clicked', async () => {
         const el = /** @type {WiredDatePicker} */ await fixture(html`
             <wired-datepicker selected="July 18 2020" initials locale="en-US"></wired-datepicker>
         `);
-        const sel = el.shadowRoot.querySelectorAll('.month-selector-active');
-        sel[1].click();
+        let ind = el.shadowRoot.querySelector('wired-datepicker-indicator');
+        expect(ind.header).to.equal('July 2020');
+
+        ind.dispatchEvent(new CustomEvent('month-selected', {
+            bubbles: true,
+            composed: true,
+            detail: {selector: 'next'},
+        }));
+
         await elementUpdated(el);
-        expect(el).shadowDom.to.equal(`
-        <div class="calendar">
-            <div class="month-indicator" tabindex="0">
-                <span class="month-selector-active">
-                <<
-                </span>
-                <span>August 2020</span>
-                <span class="month-selector-active">
-                >>
-                </span>
-            </div>
-            <div class="day-of-week">
-                <div>S</div>
-                <div>M</div>
-                <div>T</div>
-                <div>W</div>
-                <div>T</div>
-                <div>F</div>
-                <div>S</div>
-            </div>
-        </div>
-        <div id="overlay"></div>
-    `, {ignoreTags: ['wired-datepicker-grid']});
+        ind = el.shadowRoot.querySelector('wired-datepicker-indicator');
+        expect(ind.header).to.equal('August 2020');
     });
 });
 
