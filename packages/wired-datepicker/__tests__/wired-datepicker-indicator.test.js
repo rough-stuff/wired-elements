@@ -7,19 +7,19 @@ import '../lib/wired-datepicker-indicator';
  */
 
 describe('WiredDatePickerIndicator - Properties', () => {
-  it('should display three spans', async () => {
+  it('should display three elements', async () => {
     const el = /** @type {WiredDatePickerIndicator} */ await fixture(html`
       <wired-datepicker-indicator></wired-datepicker-indicator>
     `);
     expect(el).shadowDom.to.equal(`
-     <span class="month-selector-active">
+     <button class="month-selector-active">
         <<
-      </span>
+      </button>
       <span>
       </span>
-      <span class="month-selector-active">
+      <button class="month-selector-active">
         >>
-      </span>
+      </button>
     `);
   });
 
@@ -31,13 +31,13 @@ describe('WiredDatePickerIndicator - Properties', () => {
       </wired-datepicker-indicator>
     `);
     expect(el).shadowDom.to.equal(`
-      <span class="month-selector-active">
+      <button class="month-selector-active">
         <<
-      </span>
+      </button>
       <span>yolo</span>
-      <span class="month-selector-active">
+      <button class="month-selector-active">
         >>
-      </span>
+      </button>
    `);
   });
 
@@ -103,41 +103,5 @@ describe('WiredDatePickerIndicator - Properties', () => {
     selectors = el.shadowRoot.querySelectorAll('.month-selector-disabled');
     expect(selectors.length).to.equal(2);
 
-  });
-});
-
-describe('WiredDatePickerIndicator - Keyboard', () => {
-  it('should respond to right arrow keyboard event', async () => {
-    const el = /** @type {WiredDatePickerIndicator} */ await fixture(html`
-      <wired-datepicker-indicator></wired-datepicker-indicator>
-    `);
-
-    const VK_RIGHT = 39; // keycode for right arrow
-    el.focus();
-    const event = new KeyboardEvent('keydown', { keyCode: VK_RIGHT });
-    
-    setTimeout(() => el.dispatchEvent(event));
-
-    const ev = await oneEvent(el, 'month-selected');
-
-    expect(ev).to.exist;
-    expect(ev.detail.selector).to.equal('next');
-  });
-
-  it('should respond to left arrow keyboard event', async () => {
-    const el = /** @type {WiredDatePickerIndicator} */ await fixture(html`
-      <wired-datepicker-indicator></wired-datepicker-indicator>
-    `);
-
-    const VK_LEFT  = 37; // keycode for left arrow
-    el.focus();
-    const event = new KeyboardEvent('keydown', { keyCode: VK_LEFT });
-    
-    setTimeout(() => el.dispatchEvent(event));
-
-    const ev = await oneEvent(el, 'month-selected');
-
-    expect(ev).to.exist;
-    expect(ev.detail.selector).to.equal('prev');
   });
 });

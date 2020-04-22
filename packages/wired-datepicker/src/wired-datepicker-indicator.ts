@@ -9,11 +9,12 @@ import { fire } from 'wired-lib';
  * @param selector an html template to use to represent the selector
  */
 const MonthSelector = (active: boolean, onChangeMonth: Function, selector: TemplateResult) => html` 
-    <span 
+    <button
         class=${classMap({"month-selector-active": active, "month-selector-disabled": !active})}
+        ?disabled=${!active}
         @click=${() => active ? onChangeMonth() : null}>
         ${selector}
-    </span>
+    </button>
 `;
 
 /**
@@ -40,8 +41,9 @@ export class WiredDatePickerIndicator extends LitElement {
             :host {
                 display:flex;
                 justify-content: space-between;
-                padding-left: 1em;
-                padding-right: 1em;
+                aligh-items: center;
+                width: 95%;
+                margin:auto;
                 font-weight: bold;
             }
             .month-selector-active::selection,
@@ -55,16 +57,14 @@ export class WiredDatePickerIndicator extends LitElement {
                 cursor: not-allowed;
                 color: lightgray;
             }
+            :host button {
+                padding: 0;
+                border: none;
+                background: none;
+                font-family: inherit;
+                font-size: 1em;
+            }
         `;
-    }
-
-    constructor() {
-        super();
-        // Make the element focusable
-        if (!this.hasAttribute('tabindex')) { 
-            this.setAttribute('tabindex', '0');
-            this.tabIndex = 0;
-        }
     }
 
     render(): TemplateResult {
@@ -75,42 +75,6 @@ export class WiredDatePickerIndicator extends LitElement {
             <span>${this.header}</span>
             ${nextMonthSelector}
         `;
-    }
-
-    /**
-     * Add support for changing month 
-     */
-    firstUpdated() {
-        this.addEventListener('keydown', this.handleKeyboardNavigation.bind(this));
-    }
-
-    disconnectedCallback() {
-        this.removeEventListener('keydown', this.handleKeyboardNavigation.bind(this));
-    }
-
-    /**
-     * Allows navigation with keyboard when focus in the grid
-     * @param e Keyboard event detected
-     */
-    private handleKeyboardNavigation(e: KeyboardEvent) {
-        const VK_LEFT  = 37;
-        const VK_RIGHT = 39;
-        switch(e.keyCode) {
-            case VK_LEFT:
-                e.preventDefault();
-                if (this.canGoPrev) {
-                    this.onMonthSelected('prev');
-                }
-                break;
-            case VK_RIGHT:
-                e.preventDefault();
-                if (this.canGoNext) {
-                    this.onMonthSelected('next');
-                }
-                break;
-            default:
-                break;
-        }
     }
     
     /**

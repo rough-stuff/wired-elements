@@ -3,7 +3,6 @@ import { classMap } from 'lit-html/directives/class-map';
 import { fire } from 'wired-lib';
 import './wired-datepicker-cell';
 import { WiredDatePickerCell } from './wired-datepicker-cell';
-import { giveFocus, removeFocus } from './aria.utils';
 
 /**
  * Calendar Cell Template
@@ -56,10 +55,10 @@ export class WiredDatePickerGrid extends LitElement {
     set selectedDayIndex(value: number) {
         const oldValue = this._selectedDayIndex;
         this._selectedDayIndex = value;
-        this._highlightedIndex = this._selectedDayIndex;
-        if (this._highlightedIndex < this.minEnabledIndex 
-            || this._highlightedIndex > this.maxEnabledIndex) {
-            this._highlightedIndex = this.minEnabledIndex;
+        this._focusIndex = value;
+        if (this._focusIndex < this.minEnabledIndex 
+            || this._focusIndex > this.maxEnabledIndex) {
+            this._focusIndex = this.minEnabledIndex;
         }
         this.requestUpdate('selectedDayIndex', oldValue);
     }
@@ -72,7 +71,7 @@ export class WiredDatePickerGrid extends LitElement {
     }
     set minEnabledIndex(value: number) {
         this._minEnabledIndex = value;
-        this._highlightedIndex = Math.max(this._minEnabledIndex, this._highlightedIndex);
+        this._focusIndex = Math.max(this._minEnabledIndex, this._focusIndex);
     }
     /**
      * Index before which days are enabled
@@ -83,8 +82,8 @@ export class WiredDatePickerGrid extends LitElement {
     }
     set maxEnabledIndex(value: number) {
         this._maxEnabledIndex = value;
-        if (this._highlightedIndex >= this._maxEnabledIndex) {
-            this._highlightedIndex = this._minEnabledIndex;
+        if (this._focusIndex >= this._maxEnabledIndex) {
+            this._focusIndex = this._minEnabledIndex;
         }
     }
     /**
@@ -99,7 +98,7 @@ export class WiredDatePickerGrid extends LitElement {
     /**
      * Keep track of the focused cell
      */
-    private _highlightedIndex: number = 0;
+    private _focusIndex: number = 0;
 
     private _selectedDayIndex: number = -1;
     private _minEnabledIndex: number = 0;
@@ -178,66 +177,57 @@ export class WiredDatePickerGrid extends LitElement {
 
         const cells = this.shadowRoot?.querySelectorAll<WiredDatePickerCell>('wired-datepicker-cell');
         if (!cells) return;
-        let newHighLightIndex = this._highlightedIndex;
+        let newFocusIndex = this._focusIndex;
         switch(e.keyCode) {
             case VK_LEFT:
                 e.preventDefault();
-                if (this._highlightedIndex-1 >= Math.max(0, this.minEnabledIndex)) {
-                    newHighLightIndex = this._highlightedIndex-1;
-                }
+                newFocusIndex = this.jumpBackward(1);
                 break;
             case VK_RIGHT:
                 e.preventDefault();
-                if (this._highlightedIndex+1 < Math.min(cells.length, this.maxEnabledIndex)) {
-                    newHighLightIndex = this._highlightedIndex+1;
-                }
+                newFocusIndex = this.jumpForward(1, cells.length);
                 break;
             case VK_DOWN:
                 e.preventDefault();
-                if (this._highlightedIndex+7 < Math.min(cells.length, this.maxEnabledIndex)) {
-                    newHighLightIndex = this._highlightedIndex+7;
-                }
+                newFocusIndex = this.jumpForward(7, cells.length);
                 break;
             case VK_UP:
-                e.preventDefault();
-                if (this._highlightedIndex-7 >= Math.max(0, this.minEnabledIndex)) {
-                    newHighLightIndex = this._highlightedIndex-7;
-                }
+                e.preventDefault();    
+                newFocusIndex = this.jumpBackward(7);
                 break;
             case VK_END:
                 e.preventDefault();
-                newHighLightIndex = Math.min(cells.length, this.maxEnabledIndex)-1;
+                newFocusIndex = Math.min(cells.length, this.maxEnabledIndex)-1;
                 break;
             case VK_HOME:
                 e.preventDefault();
-                newHighLightIndex = Math.max(0, this.minEnabledIndex);
+                newFocusIndex = Math.max(0, this.minEnabledIndex);
                 break;
             case VK_SPACE:
             case VK_ENTER:
                 e.preventDefault();
-                this.onCellSelected(this._highlightedIndex);
+                this.onCellSelected(this._focusIndex);
                 break;
             default:
                 break;
         }
-        if (newHighLightIndex !== this._highlightedIndex) {
-            removeFocus(cells[this._highlightedIndex]);
-            this._highlightedIndex = newHighLightIndex;
-            giveFocus(cells[this._highlightedIndex]);
+        if (newFocusIndex !== this._focusIndex) {
+            cells[this._focusIndex].blur();
+            this._focusIndex = newFocusIndex;
+            cells[this._focusIndex].focus();
         }
     };
 
     /**
-     * We don't want the wrapper element to be highlighted
+     * We don't want the wrapper element to be highlighted on focus
      * so we forward to children on focus
      */
     private forwardFocusToCell() {
         const cells = this.shadowRoot?.querySelectorAll<WiredDatePickerCell>('wired-datepicker-cell');
-        if (cells && this._highlightedIndex < this.maxEnabledIndex) {
-            giveFocus(cells[this._highlightedIndex]);
+        if (cells && this._focusIndex < this.maxEnabledIndex) {
+            cells[this._focusIndex].focus();
         }
     }
-
     
     /**
      * Notifies that a cell has been selected
@@ -246,5 +236,32 @@ export class WiredDatePickerGrid extends LitElement {
      */
     private onCellSelected(cellIndex: number) {
         fire(this, 'cell-selected', { day: cellIndex+1 });
+    }
+
+    /**
+     * Check if a forward jump of n step is possible
+     * Returns the new value if the jump is possible
+     * Otherwise return the initial value
+     * @param step the number of step we want to jump 
+     * @param gridLength the grid length
+     */
+    private jumpForward(step: number, gridLength: number): number {
+        if (this._focusIndex+step < Math.min(gridLength, this.maxEnabledIndex)) {
+            return this._focusIndex+step;
+        }
+        return this._focusIndex;
+    }
+
+    /**
+     * Check if a backward jump of n step is possible
+     * Returns the new value if the jump is possible
+     * Otherwise return the initial value
+     * @param step the number of step we want to jump 
+     */
+    private jumpBackward(step: number): number {
+        if (this._focusIndex-step >= Math.max(0, this.minEnabledIndex)) {
+            return this._focusIndex-step;
+        }
+        return this._focusIndex;
     }
 }

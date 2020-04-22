@@ -1,7 +1,6 @@
 import { ellipse, Point } from 'wired-lib';
 import { customElement, css, TemplateResult, CSSResultArray, property, html } from 'lit-element';
 import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
-import { removeFocus } from './aria.utils';
 
 @customElement('wired-datepicker-cell')
 export class WiredDatePickerCell extends WiredBase {
@@ -25,6 +24,8 @@ export class WiredDatePickerCell extends WiredBase {
         this.classList.toggle('disabled', value);
     }
 
+    private _hasFocus: boolean = false;
+
   static get styles(): CSSResultArray {
     return [
       BaseCSS,
@@ -33,6 +34,9 @@ export class WiredDatePickerCell extends WiredBase {
             display: inline-block;
             position: relative;
         }
+        :host path {
+            color: transparent;
+        }
         :host(.selected), :host(.selected:hover) {
             cursor: default;
         }
@@ -40,12 +44,24 @@ export class WiredDatePickerCell extends WiredBase {
             cursor: pointer;
             background-color: var(--wired-datepicker-cell-bg-hover-color, lightgray);
         }
+        :host(:focus) path {
+            stroke: gray;
+            stroke-width: 1.5;
+            stroke-dasharray: 4;
+        }
+        :host(:focus) {
+            outline: none;
+        }
         :host(.selected) path {
             stroke: var(--wired-datepicker-selected-color, red);
             stroke-width: 2.5;
             stroke-dasharray: 1000;
             stroke-dashoffset: 1000;
             animation: dash 0.8s ease-in forwards;
+        }
+        :host(.selected:focus) path {
+            stroke: var(--wired-datepicker-selected-color, red);
+            stroke-width: 2.5;
         }
         :host(.disabled), :host(.selected.disabled:hover) {
             color: var(--wired-datepicker-cell-disabled, lightgray);
@@ -64,6 +80,14 @@ export class WiredDatePickerCell extends WiredBase {
     ];
   }
 
+  constructor() {
+    super();
+    // We allow focus on cell programmatically
+    this.tabIndex = -1;
+    this.addEventListener('focus', () => {this._hasFocus = true; this.wiredRender(true)});
+    this.addEventListener('blur', () => this._hasFocus = false);
+  }
+
   render(): TemplateResult {
     return html`
         <slot @slotchange="${this.wiredRender}"></slot>
@@ -71,19 +95,6 @@ export class WiredDatePickerCell extends WiredBase {
             <svg></svg>
         </div>
     `;
-  }
-
-  /**
-   * Remove the cell from the page tab when blur is lost
-   * to respect aria grid guidelines. Otherwise we might have several
-   * cells with tabindex=0, which is forgotten.
-   */
-  firstUpdated() {
-    this.addEventListener('blur', this.onBlur.bind(this));
-  }
-
-  disconnectedCallback() {
-    this.removeEventListener('blur', this.onBlur.bind(this));
   }
 
   /**
@@ -100,14 +111,12 @@ export class WiredDatePickerCell extends WiredBase {
    * @param size computed size of the canvas
    */
   protected draw(svg: SVGSVGElement, size: Point) {
-    if (!this.selected) {
-        // If cell was previously selected, cleanup
-        while (svg.hasChildNodes()) {
-            svg.removeChild(svg.lastChild!);
-        }
-        return;
+    if (!this.selected && !this._hasFocus) {
+      while (svg.hasChildNodes()) {
+        svg.removeChild(svg.lastChild!);
+      }
+      return;
     }
-
     const width = size[0]*1.1;
     const height = size[1]*1.1;
     svg.setAttribute('width', `${width}`);
@@ -116,10 +125,4 @@ export class WiredDatePickerCell extends WiredBase {
     svg.appendChild(c);
   }
 
-  /**
-   * Triggered when cell loses focus
-   */
-  private onBlur() {
-    removeFocus(this);
-  }
 }

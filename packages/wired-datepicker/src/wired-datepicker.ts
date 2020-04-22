@@ -23,7 +23,7 @@ type WiredDate = { date?: Date, text: string };
  * @param days the days name
  * @param cells the cells to display
  */
-const Calendar = (indicator: TemplateResult, days: string[], grid: TemplateResult) => html`
+const Calendar = (indicator: TemplateResult, days: TemplateResult, grid: TemplateResult) => html`
     <style>
         :host {
             display: inline-block;
@@ -39,17 +39,9 @@ const Calendar = (indicator: TemplateResult, days: string[], grid: TemplateResul
             stroke: var(--wired-datepicker-focus-color);
             stroke-width: 1.5;
         }
-        .day-of-week {
-            font-weight: bold;
-            text-align: center;
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-        }
     </style>
     ${indicator}
-    <div class="day-of-week">
-        ${days.map(d => html`<div>${d}</div>`)}
-    </div>
+    ${days}
     ${grid}
     <div id="overlay"><svg></svg></div>
 `;
@@ -189,12 +181,6 @@ export class WiredDatePicker extends WiredCard {
         
         // We start with the locale from navigator
         this.locale = getLocaleFromNavigator(navigator);
-
-        // Enable focus on the element
-        if (!this.hasAttribute('tabindex') && !this.disabled) { 
-            this.setAttribute('tabindex', '0');
-            this.tabIndex = 0;
-        }
     }
 
     /**
@@ -221,7 +207,7 @@ export class WiredDatePicker extends WiredCard {
      * Renders the web component calendar for the selected/current month
      */
     render(): TemplateResult {
-        const days = localizedDays(this.locale, this.initials ? 'narrow': 'short');
+        const days = this.buildDays();
         const month = this.refDate.getMonth();
         const year = this.refDate.getFullYear();
         const indicator = this.buildIndicator(year, month);
@@ -239,11 +225,31 @@ export class WiredDatePicker extends WiredCard {
         const header = `${monthName} ${year}`;
         return html`
             <wired-datepicker-indicator
-                header="${header}"
-                .canGoPrev="${this.canGoPrev()}"
-                .canGoNext="${this.canGoNext()}"
+                .header=${header}
+                .canGoPrev=${this.canGoPrev()}
+                .canGoNext=${this.canGoNext()}
             >
             </wired-datepicker-indicator>
+        `;
+    }
+
+    /**
+     * Creates the HTML Template for the days' names, based on locale
+     */
+    private buildDays(): TemplateResult {
+        const days = localizedDays(this.locale, this.initials ? 'narrow': 'short');
+        return html `
+            <style>
+                .day-of-week {
+                    font-weight: bold;
+                    text-align: center;
+                    display: grid;
+                    grid-template-columns: repeat(7, 1fr);
+                }
+            </style>
+            <div class="day-of-week">
+                ${days.map(d => html`<div>${d}</div>`)}
+            </div>
         `;
     }
 
@@ -276,11 +282,12 @@ export class WiredDatePicker extends WiredCard {
 
         return html`
             <wired-datepicker-grid
-                dayCount="${dayCount}"
-                minEnabledIndex="${minEnabledIndex}"
-                maxEnabledIndex="${maxEnabledIndex}"
-                selectedDayIndex="${selectedDayIndex}"
-                gridOffset="${firstDayOfMonthIndex+1}"
+                tabindex="0"
+                .dayCount=${dayCount}
+                .minEnabledIndex=${minEnabledIndex}
+                .maxEnabledIndex=${maxEnabledIndex}
+                .selectedDayIndex=${selectedDayIndex}
+                .gridOffset=${firstDayOfMonthIndex+1}
             ></wired-datepicker-grid>
         `;
     }
