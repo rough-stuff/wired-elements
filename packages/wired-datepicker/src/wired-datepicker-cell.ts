@@ -31,6 +31,7 @@ export class WiredDatePickerCell extends WiredBase {
       css`
         :host {
             display: inline-block;
+            position: relative;
         }
         :host(.selected), :host(.selected:hover) {
             cursor: default;
@@ -65,15 +66,18 @@ export class WiredDatePickerCell extends WiredBase {
 
   render(): TemplateResult {
     return html`
-    <div style="position: relative;">
         <slot @slotchange="${this.wiredRender}"></slot>
         <div id="overlay">
             <svg></svg>
         </div>
-    </div>
     `;
   }
 
+  /**
+   * Remove the cell from the page tab when blur is lost
+   * to respect aria grid guidelines. Otherwise we might have several
+   * cells with tabindex=0, which is forgotten.
+   */
   firstUpdated() {
     this.addEventListener('blur', this.onBlur.bind(this));
   }
@@ -82,13 +86,22 @@ export class WiredDatePickerCell extends WiredBase {
     this.removeEventListener('blur', this.onBlur.bind(this));
   }
 
+  /**
+   * Compute the available size for the selection ellipse
+   */
   protected canvasSize(): Point {
     const s = this.getBoundingClientRect();
     return [s.width, s.height];
   }
 
+  /**
+   * Draw the selection ellipse if selected
+   * @param svg the svg node in the template
+   * @param size computed size of the canvas
+   */
   protected draw(svg: SVGSVGElement, size: Point) {
     if (!this.selected) {
+        // If cell was previously selected, cleanup
         while (svg.hasChildNodes()) {
             svg.removeChild(svg.lastChild!);
         }
@@ -103,6 +116,9 @@ export class WiredDatePickerCell extends WiredBase {
     svg.appendChild(c);
   }
 
+  /**
+   * Triggered when cell loses focus
+   */
   private onBlur() {
     removeFocus(this);
   }
