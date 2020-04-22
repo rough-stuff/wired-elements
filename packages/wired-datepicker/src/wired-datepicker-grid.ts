@@ -116,11 +116,6 @@ export class WiredDatePickerGrid extends LitElement {
 
     constructor() {
         super();
-        // Make the element focusable
-        if (!this.hasAttribute('tabindex')) { 
-            this.setAttribute('tabindex', '0');
-            this.tabIndex = 0;
-        }
         // Add ARIA role of grid
         this.setAttribute('role', 'grid');
     }
@@ -152,12 +147,10 @@ export class WiredDatePickerGrid extends LitElement {
      * Add support for navigation in the grid with keyboard
      */
     firstUpdated() {
-        this.addEventListener('focus', this.forwardFocusToCell.bind(this));
         this.addEventListener('keydown', this.handleKeyboardNavigation.bind(this));
     }
 
     disconnectedCallback() {
-        this.removeEventListener('focus', this.forwardFocusToCell.bind(this));
         this.removeEventListener('keydown', this.handleKeyboardNavigation.bind(this));
     }
 
@@ -217,17 +210,6 @@ export class WiredDatePickerGrid extends LitElement {
             cells[this._focusIndex].focus();
         }
     };
-
-    /**
-     * We don't want the wrapper element to be highlighted on focus
-     * so we forward to children on focus
-     */
-    private forwardFocusToCell() {
-        const cells = this.shadowRoot?.querySelectorAll<WiredDatePickerCell>('wired-datepicker-cell');
-        if (cells && this._focusIndex < this.maxEnabledIndex) {
-            cells[this._focusIndex].focus();
-        }
-    }
     
     /**
      * Notifies that a cell has been selected

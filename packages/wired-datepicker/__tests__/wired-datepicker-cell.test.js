@@ -1,4 +1,4 @@
-import { html, fixture, expect } from '@open-wc/testing';
+import { html, fixture, expect, elementUpdated } from '@open-wc/testing';
 
 import '../lib/wired-datepicker-cell';
 
@@ -33,8 +33,9 @@ describe('WiredDatePickerCell', () => {
       <wired-datepicker-cell></wired-datepicker-cell>
     `);
     el.selected = true;
-
-    expect(el).to.have.class("selected");
+    await elementUpdated(el);
+    const root = el.shadowRoot.querySelector('div');
+    expect(root).to.have.class("selected");
   });
 
   it('has to add disabled class when disabled property is set to true', async () => {
@@ -42,25 +43,36 @@ describe('WiredDatePickerCell', () => {
       <wired-datepicker-cell></wired-datepicker-cell>
     `);
     el.disabled = true;
-
-    expect(el).to.have.class("disabled");
+    await elementUpdated(el);
+    const root = el.shadowRoot.querySelector('div');
+    expect(root).to.have.class("disabled");
   });
 
   it('has to remove disabled class when disabled property is set to false', async () => {
     const el = /** @type {WiredDatePickerCell} */ await fixture(html`
-      <wired-datepicker-cell class="disabled"></wired-datepicker-cell>
+      <wired-datepicker-cell
+        .disabled=${true}
+      ></wired-datepicker-cell>
     `);
+    let root = el.shadowRoot.querySelector('div');
+    expect(root).to.have.class("disabled");
     el.disabled = false;
-
-    expect(el).to.not.have.class("disabled");
+    await elementUpdated(el);
+    root = el.shadowRoot.querySelector('div');
+    expect(root).to.not.have.class("disabled");
   });
 
   it('has to remove selected class when selected property is set to false', async () => {
     const el = /** @type {WiredDatePickerCell} */ await fixture(html`
-      <wired-datepicker-cell class="selected"></wired-datepicker-cell>
+      <wired-datepicker-cell
+        .selected=${true}
+      ></wired-datepicker-cell>
     `);
+    let root = el.shadowRoot.querySelector('div');
+    expect(root).to.have.class("selected");
     el.selected = false;
-
-    expect(el).to.not.have.class("selected");
+    await elementUpdated(el);
+    root = el.shadowRoot.querySelector('div');
+    expect(root).to.not.have.class("selected");
   });
 });

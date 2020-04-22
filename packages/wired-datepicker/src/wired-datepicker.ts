@@ -282,7 +282,6 @@ export class WiredDatePicker extends WiredCard {
 
         return html`
             <wired-datepicker-grid
-                tabindex="0"
                 .dayCount=${dayCount}
                 .minEnabledIndex=${minEnabledIndex}
                 .maxEnabledIndex=${maxEnabledIndex}

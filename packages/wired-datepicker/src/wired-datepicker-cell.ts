@@ -1,100 +1,85 @@
 import { ellipse, Point } from 'wired-lib';
 import { customElement, css, TemplateResult, CSSResultArray, property, html } from 'lit-element';
+import { classMap } from 'lit-html/directives/class-map';
 import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
 
 @customElement('wired-datepicker-cell')
 export class WiredDatePickerCell extends WiredBase {
     @property({ type: Number }) index = 0;
-    @property({ type: Boolean, reflect: true }) 
-    get selected() {
-        return this.classList.contains('selected');
-    };
-
-    set selected(value: boolean) {
-        this.classList.toggle('selected', value);
-        if (this.svg) this.draw(this.svg, this.canvasSize());
-    }
-
-    @property({ type: Boolean, reflect: true }) 
-    get disabled() {
-        return this.classList.contains('disabled');
-    };
-
-    set disabled(value: boolean) {
-        this.classList.toggle('disabled', value);
-    }
-
-    private _hasFocus: boolean = false;
+    @property({ type: Boolean, reflect: true }) selected: boolean = false;
+    @property({ type: Boolean, reflect: true }) disabled: boolean = false;
+    @property({ type: Boolean, reflect: true }) hasFocus: boolean = false;
 
   static get styles(): CSSResultArray {
     return [
       BaseCSS,
       css`
+        #overlay {
+          top: -3;
+          left: -3;
+        }
         :host {
             display: inline-block;
             position: relative;
         }
-        :host path {
-            color: transparent;
-        }
-        :host(.selected), :host(.selected:hover) {
-            cursor: default;
-        }
-        :host(:not(.selected):not(.disabled):hover) {
-            cursor: pointer;
-            background-color: var(--wired-datepicker-cell-bg-hover-color, lightgray);
-        }
-        :host(:focus) path {
-            stroke: gray;
-            stroke-width: 1.5;
-            stroke-dasharray: 4;
-        }
         :host(:focus) {
-            outline: none;
+          outline: none;
         }
-        :host(.selected) path {
-            stroke: var(--wired-datepicker-selected-color, red);
-            stroke-width: 2.5;
-            stroke-dasharray: 1000;
-            stroke-dashoffset: 1000;
-            animation: dash 0.8s ease-in forwards;
+        .wrapper:not(.selected):not(.focus) path {
+          stroke: transparent;
         }
-        :host(.selected:focus) path {
-            stroke: var(--wired-datepicker-selected-color, red);
-            stroke-width: 2.5;
-        }
-        :host(.disabled), :host(.selected.disabled:hover) {
-            color: var(--wired-datepicker-cell-disabled, lightgray);
-            cursor: not-allowed;
+        .wrapper.selected path {
+          stroke: var(--wired-datepicker-selected-color, red);
+          stroke-width: 2.5;
+          stroke-dasharray: 1000;
+          stroke-dashoffset: 1000;
+          animation: dash 0.8s ease-in forwards;
         }
         @keyframes dash {
             to {
               stroke-dashoffset: 0;
             }
         }
-        #overlay {
-            top: -3;
-            left: -3;
+        .wrapper.disabled {
+          color: var(--wired-datepicker-cell-disabled, lightgray);
+          cursor: not-allowed;
         }
-      `
-    ];
-  }
+        .wrapper:not(.selected):not(.disabled):hover {
+          cursor: pointer;
+          background-color: var(--wired-datepicker-cell-bg-hover-color, lightgray);
+        }
+        `
+      ];
+    }
 
   constructor() {
     super();
     // We allow focus on cell programmatically
     this.tabIndex = -1;
-    this.addEventListener('focus', () => {this._hasFocus = true; this.wiredRender(true)});
-    this.addEventListener('blur', () => this._hasFocus = false);
+    this.addEventListener('focus', this.toggleFocus.bind(this));
+    this.addEventListener('blur', this.toggleFocus.bind(this));
   }
 
   render(): TemplateResult {
+    const classes = {
+      "wrapper": true,
+      "selected": this.selected,
+      "disabled": this.disabled,
+      "focus": this.hasFocus,
+    };
     return html`
-        <slot @slotchange="${this.wiredRender}"></slot>
-        <div id="overlay">
-            <svg></svg>
-        </div>
+      <div class=${classMap(classes)}>
+          <slot @slotchange="${this.wiredRender}"></slot>
+          <div id="overlay">
+              <svg></svg>
+          </div>
+      </div>
     `;
+  }
+
+  disconnectedCallback() {
+    this.removeEventListener('focus', this.toggleFocus.bind(this));
+    this.removeEventListener('blur', this.toggleFocus.bind(this));
   }
 
   /**
@@ -111,12 +96,6 @@ export class WiredDatePickerCell extends WiredBase {
    * @param size computed size of the canvas
    */
   protected draw(svg: SVGSVGElement, size: Point) {
-    if (!this.selected && !this._hasFocus) {
-      while (svg.hasChildNodes()) {
-        svg.removeChild(svg.lastChild!);
-      }
-      return;
-    }
     const width = size[0]*1.1;
     const height = size[1]*1.1;
     svg.setAttribute('width', `${width}`);
@@ -125,4 +104,11 @@ export class WiredDatePickerCell extends WiredBase {
     svg.appendChild(c);
   }
 
+  private toggleFocus(e: Event) {
+    if (e.type === 'focus') {
+      this.hasFocus = true;
+    } else {
+      this.hasFocus = false;
+    }
+  }
 }
