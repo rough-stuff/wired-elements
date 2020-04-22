@@ -15,6 +15,7 @@ import { giveFocus, removeFocus } from './aria.utils';
  */
 const Cell = (index: number, selected: boolean = false, disabled: boolean = false, handleSelect?: Function) => html`
     <wired-datepicker-cell
+        role="gridcell"
         index=${index}
         class=${classMap({"cell": true, "selected": selected, "disabled": disabled})}
         .selected=${selected}
@@ -48,15 +49,44 @@ export class WiredDatePickerGrid extends LitElement {
     /**
      * Index of selected day if it exists
      */
-    @property({ type: Number }) selectedDayIndex: number = -1;
+    @property({ type: Number }) 
+    get selectedDayIndex(): number {
+        return this._selectedDayIndex;
+    }
+    set selectedDayIndex(value: number) {
+        const oldValue = this._selectedDayIndex;
+        this._selectedDayIndex = value;
+        this._highlightedIndex = this._selectedDayIndex;
+        if (this._highlightedIndex < this.minEnabledIndex 
+            || this._highlightedIndex > this.maxEnabledIndex) {
+            this._highlightedIndex = this.minEnabledIndex;
+        }
+        this.requestUpdate('selectedDayIndex', oldValue);
+    }
     /**
      * Index after which days are enabled
      */
-    @property({ type: Number }) minEnabledIndex: number = -1;
+    @property({ type: Number }) 
+    get minEnabledIndex(): number {
+        return this._minEnabledIndex;
+    }
+    set minEnabledIndex(value: number) {
+        this._minEnabledIndex = value;
+        this._highlightedIndex = Math.max(this._minEnabledIndex, this._highlightedIndex);
+    }
     /**
      * Index before which days are enabled
      */
-    @property({ type: Number }) maxEnabledIndex: number = 32;
+    @property({ type: Number })
+    get maxEnabledIndex(): number {
+        return this._maxEnabledIndex;
+    }
+    set maxEnabledIndex(value: number) {
+        this._maxEnabledIndex = value;
+        if (this._highlightedIndex >= this._maxEnabledIndex) {
+            this._highlightedIndex = this._minEnabledIndex;
+        }
+    }
     /**
      * Number of day to display
      */
@@ -70,6 +100,10 @@ export class WiredDatePickerGrid extends LitElement {
      * Keep track of the focused cell
      */
     private _highlightedIndex: number = 0;
+
+    private _selectedDayIndex: number = -1;
+    private _minEnabledIndex: number = 0;
+    private _maxEnabledIndex: number = 32;
 
     static get styles(): CSSResult {
         return css`
@@ -88,6 +122,8 @@ export class WiredDatePickerGrid extends LitElement {
             this.setAttribute('tabindex', '0');
             this.tabIndex = 0;
         }
+        // Add ARIA role of grid
+        this.setAttribute('role', 'grid');
     }
 
     render(): TemplateResult {
@@ -146,35 +182,35 @@ export class WiredDatePickerGrid extends LitElement {
         switch(e.keyCode) {
             case VK_LEFT:
                 e.preventDefault();
-                if (this._highlightedIndex > 0) {
+                if (this._highlightedIndex-1 >= Math.max(0, this.minEnabledIndex)) {
                     newHighLightIndex = this._highlightedIndex-1;
                 }
                 break;
             case VK_RIGHT:
                 e.preventDefault();
-                if (this._highlightedIndex < cells.length-1) {
+                if (this._highlightedIndex+1 < Math.min(cells.length, this.maxEnabledIndex)) {
                     newHighLightIndex = this._highlightedIndex+1;
                 }
                 break;
             case VK_DOWN:
                 e.preventDefault();
-                if (this._highlightedIndex < cells.length-7) {
+                if (this._highlightedIndex+7 < Math.min(cells.length, this.maxEnabledIndex)) {
                     newHighLightIndex = this._highlightedIndex+7;
                 }
                 break;
             case VK_UP:
                 e.preventDefault();
-                if (this._highlightedIndex >= 7) {
+                if (this._highlightedIndex-7 >= Math.max(0, this.minEnabledIndex)) {
                     newHighLightIndex = this._highlightedIndex-7;
                 }
                 break;
             case VK_END:
                 e.preventDefault();
-                newHighLightIndex = cells.length-1;
+                newHighLightIndex = Math.min(cells.length, this.maxEnabledIndex)-1;
                 break;
             case VK_HOME:
                 e.preventDefault();
-                newHighLightIndex = 0;
+                newHighLightIndex = Math.max(0, this.minEnabledIndex);
                 break;
             case VK_SPACE:
             case VK_ENTER:
@@ -197,7 +233,7 @@ export class WiredDatePickerGrid extends LitElement {
      */
     private forwardFocusToCell() {
         const cells = this.shadowRoot?.querySelectorAll<WiredDatePickerCell>('wired-datepicker-cell');
-        if (cells) {
+        if (cells && this._highlightedIndex < this.maxEnabledIndex) {
             giveFocus(cells[this._highlightedIndex]);
         }
     }
@@ -209,12 +245,6 @@ export class WiredDatePickerGrid extends LitElement {
      * @param cellIndex Index of the selected cell
      */
     private onCellSelected(cellIndex: number) {
-        const cells = this.shadowRoot?.querySelectorAll<WiredDatePickerCell>('wired-datepicker-cell');
-        if (cells) {
-            removeFocus(cells[this._highlightedIndex]);
-            this._highlightedIndex = cellIndex;
-            giveFocus(cells[this._highlightedIndex]);
-        }
         fire(this, 'cell-selected', { day: cellIndex+1 });
     }
 }

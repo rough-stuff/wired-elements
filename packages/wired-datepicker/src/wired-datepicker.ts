@@ -255,8 +255,8 @@ export class WiredDatePicker extends WiredCard {
     private buildGrid(year: number, month: number): TemplateResult {
         const dayCount = daysInMonth(month, year);
         const firstDayOfMonthIndex = this.refDate.getDay();
-        let minEnabledIndex = -1;
-        let maxEnabledIndex = 32;
+        let minEnabledIndex = 0; // inclusive index
+        let maxEnabledIndex = 32; // exclusive index
         let selectedDayIndex = -1;
         const minDate = this._firstdate.date
         const maxDate = this._lastdate.date;

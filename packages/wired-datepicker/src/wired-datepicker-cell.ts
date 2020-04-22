@@ -1,6 +1,7 @@
 import { ellipse, Point } from 'wired-lib';
 import { customElement, css, TemplateResult, CSSResultArray, property, html } from 'lit-element';
 import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
+import { removeFocus } from './aria.utils';
 
 @customElement('wired-datepicker-cell')
 export class WiredDatePickerCell extends WiredBase {
@@ -73,6 +74,14 @@ export class WiredDatePickerCell extends WiredBase {
     `;
   }
 
+  firstUpdated() {
+    this.addEventListener('blur', this.onBlur.bind(this));
+  }
+
+  disconnectedCallback() {
+    this.removeEventListener('blur', this.onBlur.bind(this));
+  }
+
   protected canvasSize(): Point {
     const s = this.getBoundingClientRect();
     return [s.width, s.height];
@@ -92,5 +101,9 @@ export class WiredDatePickerCell extends WiredBase {
     svg.setAttribute('height', `${height}`);
     const c = ellipse(svg, width / 2, height / 2, width*0.9, height);
     svg.appendChild(c);
+  }
+
+  private onBlur() {
+    removeFocus(this);
   }
 }
