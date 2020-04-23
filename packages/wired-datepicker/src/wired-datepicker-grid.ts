@@ -12,9 +12,10 @@ import { WiredDatePickerCell } from './wired-datepicker-cell';
  * @param hasFocus if the cell is currently focused
  * @param handleSelect callback function when the cell is selected. Sends the index
  */
-const Cell = (index: number, selected: boolean = false, disabled: boolean = false, handleSelect?: Function) => html`
+const Cell = (index: number, selected: boolean = false, disabled: boolean = false, tabindex: number = -1, handleSelect?: Function) => html`
     <wired-datepicker-cell
         role="gridcell"
+        tabindex="${tabindex}"
         index=${index}
         class=${classMap({"cell": true, "selected": selected, "disabled": disabled})}
         .selected=${selected}
@@ -121,20 +122,19 @@ export class WiredDatePickerGrid extends LitElement {
     }
 
     render(): TemplateResult {
+        console.log('render');
         const additionnalStyle = gridOffset(this.gridOffset);
 
-        const isCellEnabled = (i: number) => i < this.maxEnabledIndex && i >= this.minEnabledIndex;
+        const isEnabled = (i: number) => i < this.maxEnabledIndex && i >= this.minEnabledIndex;
+        const tabindex = (i: number) => i === this._focusIndex ? 0: -1;
+        const isSelected = (i: number) => this.selectedDayIndex < 0 ? false: this.selectedDayIndex === i;
         const cells = [...Array(this.dayCount).keys()].map(i => {
-            const enabled =  isCellEnabled(i);
-            const onSelectCell = enabled ? this.onCellSelected.bind(this) : undefined;
-            return Cell(i, false, !enabled, onSelectCell);
+            const enabled =  isEnabled(i);
+            const selected = isSelected(i);
+            const onSelectCell = enabled && !selected ? this.onCellSelected.bind(this) : undefined;
+            return Cell(i, selected, !enabled, tabindex(i), onSelectCell);
         });
         
-        // Display the selected cell if it exists
-        if (this.selectedDayIndex >= 0) {
-            const enabled =  isCellEnabled(this.selectedDayIndex);
-            cells[this.selectedDayIndex] = Cell(this.selectedDayIndex, true, !enabled);
-        }
         return html`
             ${additionnalStyle}
             <div id="grid">
@@ -169,7 +169,17 @@ export class WiredDatePickerGrid extends LitElement {
         const VK_DOWN  = 40;
 
         const cells = this.shadowRoot?.querySelectorAll<WiredDatePickerCell>('wired-datepicker-cell');
+        const focusableCells = this.shadowRoot?.querySelectorAll<WiredDatePickerCell>('wired-datepicker-cell[tabindex="0"]');
         if (!cells) return;
+        if (focusableCells?.length && focusableCells.length > 1) {
+            // We are in a rare situation where several cells have tabindex = 0
+            // When user press tab / shift + tab... we just clean it
+            focusableCells.forEach(cell => {
+                if (cell.index !== this._focusIndex) {
+                    cell.tabIndex = -1;
+                }
+            });
+        }
         let newFocusIndex = this._focusIndex;
         switch(e.keyCode) {
             case VK_LEFT:
@@ -206,8 +216,10 @@ export class WiredDatePickerGrid extends LitElement {
         }
         if (newFocusIndex !== this._focusIndex) {
             cells[this._focusIndex].blur();
+            cells[this._focusIndex].tabIndex = -1;
             this._focusIndex = newFocusIndex;
             cells[this._focusIndex].focus();
+            cells[this._focusIndex].tabIndex = 0;
         }
     };
     
