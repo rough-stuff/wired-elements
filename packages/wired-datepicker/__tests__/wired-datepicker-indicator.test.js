@@ -12,12 +12,16 @@ describe('WiredDatePickerIndicator - Properties', () => {
       <wired-datepicker-indicator></wired-datepicker-indicator>
     `);
     expect(el).shadowDom.to.equal(`
-     <button class="month-selector-active">
+     <button class="month-selector-active"
+      aria-label="Show previous month"
+     >
         <<
       </button>
       <span>
       </span>
-      <button class="month-selector-active">
+      <button class="month-selector-active"
+        aria-label="Show next month"
+      >
         >>
       </button>
     `);
@@ -31,11 +35,15 @@ describe('WiredDatePickerIndicator - Properties', () => {
       </wired-datepicker-indicator>
     `);
     expect(el).shadowDom.to.equal(`
-      <button class="month-selector-active">
+      <button class="month-selector-active"
+        aria-label="Show previous month"
+      >
         <<
       </button>
       <span>yolo</span>
-      <button class="month-selector-active">
+      <button class="month-selector-active"
+        aria-label="Show next month"
+      >
         >>
       </button>
    `);

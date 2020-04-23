@@ -41,7 +41,7 @@ const gridOffset = (offset: number) => html`
 `;
 
 /**
- * Displays days in a grid
+ * Displays days in a grid and support tab navigation
  */
 @customElement('wired-datepicker-grid')
 export class WiredDatePickerGrid extends LitElement {
@@ -122,7 +122,6 @@ export class WiredDatePickerGrid extends LitElement {
     }
 
     render(): TemplateResult {
-        console.log('render');
         const additionnalStyle = gridOffset(this.gridOffset);
 
         const isEnabled = (i: number) => i < this.maxEnabledIndex && i >= this.minEnabledIndex;

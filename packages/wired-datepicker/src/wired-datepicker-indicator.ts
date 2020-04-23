@@ -7,9 +7,11 @@ import { fire } from 'wired-lib';
  * @param active if the selector can be activated
  * @param onChangeMonth callback function whe the selector is clicked
  * @param selector an html template to use to represent the selector
+ * @param label aria label for the button
  */
-const MonthSelector = (active: boolean, onChangeMonth: Function, selector: TemplateResult) => html` 
+const MonthSelector = (active: boolean, onChangeMonth: Function, selector: TemplateResult, label: string) => html` 
     <button
+        aria-label="${label}"
         class=${classMap({"month-selector-active": active, "month-selector-disabled": !active})}
         ?disabled=${!active}
         @click=${() => active ? onChangeMonth() : null}>
@@ -68,8 +70,16 @@ export class WiredDatePickerIndicator extends LitElement {
     }
 
     render(): TemplateResult {
-        const prevMonthSelector = MonthSelector(this.canGoPrev, () => this.onMonthSelected('prev'), html`&lt;&lt;`);
-        const nextMonthSelector = MonthSelector(this.canGoNext, () => this.onMonthSelected('next'), html`&gt;&gt;`);
+        const prevMonthSelector = MonthSelector(
+            this.canGoPrev,
+            () => this.onMonthSelected('prev'),
+            html`&lt;&lt;`,
+            'Show previous month');
+        const nextMonthSelector = MonthSelector(
+            this.canGoNext,
+            () => this.onMonthSelected('next'),
+            html`&gt;&gt;`,
+            'Show next month');
         return html`
             ${prevMonthSelector}
             <span>${this.header}</span>

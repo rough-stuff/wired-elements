@@ -28,7 +28,7 @@ export class WiredDatePickerCell extends WiredBase {
         .wrapper:not(.selected):not(.focus) path {
           stroke: transparent;
         }
-        .wrapper.selected path {
+        .wrapper.selected.focus path {
           stroke: var(--wired-datepicker-selected-color, red);
           stroke-width: 2.5;
           stroke-dasharray: 1000;
@@ -39,6 +39,10 @@ export class WiredDatePickerCell extends WiredBase {
             to {
               stroke-dashoffset: 0;
             }
+        }
+        .wrapper.selected path {
+          stroke: var(--wired-datepicker-selected-color, red);
+          stroke-width: 1.5;
         }
         .wrapper.disabled {
           color: var(--wired-datepicker-cell-disabled, lightgray);
