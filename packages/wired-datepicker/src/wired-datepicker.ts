@@ -1,6 +1,5 @@
 // TODO: great CSS API
 // TODO: datepicker.html + README
-// TODO: test disabled calendar
 // TODO: test full bundle impact
 import { customElement, property, TemplateResult, html } from 'lit-element';
 import { fire } from 'wired-lib';

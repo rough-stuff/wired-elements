@@ -110,6 +110,8 @@ export class WiredDatePickerCell extends WiredBase {
   }
 
   private toggleFocus(e: Event) {
+    if(this.disabled) return;
+
     if (e.type === 'focus') {
       this.hasFocus = true;
     } else {
