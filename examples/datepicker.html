@@ -6,7 +6,7 @@
   <link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
 
   <script type="module" src="../packages/wired-datepicker/lib/wired-datepicker.js"></script>
-  <script type="module" src="../packages/wired-datepicker/lib/wired-datepicker-grid.js"></script>
+  <script type="module" src="../packages/wired-button/lib/wired-button.js"></script>
 
   <style>
     body {
@@ -39,6 +39,19 @@
 			--wired-datepicker-disabled-color: darkred;
       width: 300px;
 		}
+
+    #calendar3 {
+      --wired-datepicker-primary-color: #0A2342;
+      --wired-datepicker-contrast-color: #A20021;
+      --wired-datepicker-disabled-color: #BBB5BD;
+    }
+
+    #calendar4 {
+      --wired-datepicker-primary-color: #6610F2;
+      --wired-datepicker-contrast-color: #F18805;
+      --wired-datepicker-secondary-color: #FFF8F0;
+      --wired-datepicker-disabled-color: #CAC9C0;
+    }
   </style>
 </head>
 
@@ -62,12 +75,19 @@
     <!-- Calendar with custom style and some parameters -->
     <div class="item_wrapper">
       <p>"de" locale</p>
-      <wired-datepicker id="calendar3" class="custom" firstdate="Apr 15, 2019" locale="de" initials>
+      <wired-datepicker
+        id="calendar3"
+        firstdate="Apr 15, 2019"
+        locale="de"
+        initials
+        fill="rgba(180,180,180,0.1)"
+      >
       </wired-datepicker>
     </div>
 
     <div class="item_wrapper">
       <wired-datepicker
+        id="calendar4"
         style="width: 500px;"
         locale="fr-FR"
         elevation="5"
@@ -81,50 +101,32 @@
   <hr>
   <!-- Calendar with javascript interactions (event and non-event driven) -->
   <section>
-    <p>"es-MX" locale with javascript interactions sample (event and non-event driven)</p>
-    <wired-datepicker id="calendar4" elevation="5" firstdate="Apr 15, 2019" lastdate="Jul 15, 2019" locale="es-MX"
-    disabled  
-    initials>
+    <p>Select a date in the calendar or select current date with the button<p>
+    <wired-datepicker
+      elevation="5"
+      locale="es-MX"
+      initials
+      id="calendar5"
+    >
     </wired-datepicker>
-    <p id="calendar4-result">Select a date in the calendar<p>
         <div style="margin-top: 16px;">
           <wired-button id="btn-today">Today</wired-button>
-          <wired-button id="btn-update">Update</wired-button>
         </div>
-        <p id="calendar4-update">No updated yet<p>
+        <p id="calendar5-update">Date not set yet.<p></p>
   </section>
 
   <script>
-    const myCalendar4 = document.getElementById('calendar4');
-    const myCalendar4result = document.getElementById('calendar4-result');
-    const myCalendar4update = document.getElementById('calendar4-update');
-    document.getElementById('btn-update').addEventListener('click', () => {
-      const today = new Date();
-      const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-      const updateTimeLeyend = ' <small>Updated at:' + time + '</small>';
+    const myCalendar = document.getElementById('calendar5');
+    const myCalendarUpdate = document.getElementById('calendar5-update');
 
-      const selectedObject = myCalendar4.value;
-      if (selectedObject && selectedObject.date) {
-        myCalendar4update.innerHTML = selectedObject.date.toLocaleDateString() + updateTimeLeyend;
-      } else {
-        myCalendar4update.innerHTML = 'No date selected yet.' + updateTimeLeyend;
-      }
-    });
     document.getElementById('btn-today').addEventListener('click', () => {
-      let today = new Date();
-      // Sample using optional internal date formatter
-      formatedDate = myCalendar4.format(today);
-      console.log('Set date to today = ', formatedDate);
-
-      // Set selected date using any format accepted by javascript Date object
-      myCalendar4.setSelectedDate(formatedDate);
+      const today = new Date();
+      myCalendar.selected = today.toDateString();
     });
-    myCalendar4.addEventListener('selected', () => {
-      let selectedObject = myCalendar4.value;
-      // `selectedObject.date` is a javascript Date object
-      // `selectedObject.text` is the formated text of the date
-      let formatedDate = selectedObject.text;
-      myCalendar4result.innerHTML = formatedDate + ' <br><small>Note: Internal date handling not affected by locale.</small>';
+    myCalendar.addEventListener('selected', (e) => {
+      const selectedObject = e.detail.selected;
+      const formatedDate = selectedObject.text;
+      myCalendarUpdate.innerHTML = `New date from event: ${formatedDate}`;
     });
 
   </script>

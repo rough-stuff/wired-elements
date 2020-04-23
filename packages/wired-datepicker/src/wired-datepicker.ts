@@ -1,6 +1,3 @@
-// TODO: great CSS API
-// TODO: datepicker.html + README
-// TODO: test full bundle impact
 import { customElement, property, TemplateResult, html } from 'lit-element';
 import { fire } from 'wired-lib';
 import { WiredCard } from 'wired-card';
