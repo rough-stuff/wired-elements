@@ -50,7 +50,8 @@ export class WiredDatePickerCell extends WiredBase {
         }
         .wrapper:not(.selected):not(.disabled):hover {
           cursor: pointer;
-          background-color: var(--wired-datepicker-cell-bg-hover-color, lightgray);
+          color: white;
+          background-color: var(--wired-datepicker-focus-color, black);
         }
         `
       ];

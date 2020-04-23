@@ -60,11 +60,21 @@ export class WiredDatePickerIndicator extends LitElement {
                 color: lightgray;
             }
             :host button {
-                padding: 0;
+                padding: 0 5 0 5;
                 border: none;
                 background: none;
                 font-family: inherit;
                 font-size: 1em;
+            }
+            :host button:active {
+                cursor: default;
+                transform: translateY(1px);
+            }
+            :host button:focus,
+            :host button:hover {
+                outline: none;
+                color: white;
+                background-color: var(--wired-datepicker-focus-color, black);
             }
         `;
     }
