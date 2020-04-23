@@ -41,6 +41,26 @@ const gridOffset = (offset: number) => html`
 `;
 
 /**
+ * Returns the index of the first cell in the same row
+ * @param index index of the current cell
+ * @param offset index offset of the grid
+ */
+const firstIndexOfSameRow = (index: number, offset: number) => {
+    const colIndex = (index+offset) % 7;
+    return index - colIndex;
+};
+
+/**
+ * Returns the index of the last cell in the same row
+ * @param index index of the current cell
+ * @param offset index offset of the grid
+ */
+const lastIndexOfSameRow = (index: number, offset: number) => {
+    // find first index of next row and remove 1
+    return firstIndexOfSameRow(index + 7, offset) -1;
+};
+
+/**
  * Displays days in a grid and support tab navigation
  */
 @customElement('wired-datepicker-grid')
@@ -94,7 +114,7 @@ export class WiredDatePickerGrid extends LitElement {
     /**
      * Offset for the first element of the grid
      */
-    @property({ type: Number }) gridOffset: number = 0;
+    @property({ type: Number }) gridOffset: number = 1;
 
     /**
      * Keep track of the focused cell
@@ -199,11 +219,22 @@ export class WiredDatePickerGrid extends LitElement {
                 break;
             case VK_END:
                 e.preventDefault();
-                newFocusIndex = Math.min(cells.length, this.maxEnabledIndex)-1;
+                if (e.ctrlKey) {
+                    newFocusIndex = Math.min(cells.length, this.maxEnabledIndex)-1;
+                } else {
+                    const limit = Math.min(cells.length, this.maxEnabledIndex)-1;
+                    newFocusIndex = lastIndexOfSameRow(this._focusIndex, this.gridOffset-1);
+                    newFocusIndex = Math.min(newFocusIndex, limit);
+                }
                 break;
             case VK_HOME:
                 e.preventDefault();
-                newFocusIndex = Math.max(0, this.minEnabledIndex);
+                if (e.ctrlKey) {
+                    newFocusIndex = Math.max(0, this.minEnabledIndex);
+                } else {
+                    newFocusIndex = firstIndexOfSameRow(this._focusIndex, this.gridOffset-1);
+                    newFocusIndex = Math.max(newFocusIndex, this.minEnabledIndex);
+                }
                 break;
             case VK_SPACE:
             case VK_ENTER:

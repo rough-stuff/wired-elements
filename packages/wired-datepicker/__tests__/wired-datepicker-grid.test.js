@@ -148,7 +148,9 @@ describe('WiredDatePickerGrid - Keyboard', () => {
   const enterEvent = new KeyboardEvent('keydown', { keyCode: VK_ENTER });
   const spaceEvent = new KeyboardEvent('keydown', { keyCode: VK_SPACE });
   const homeEvent = new KeyboardEvent('keydown', { keyCode: VK_HOME });
+  const ctrlHomeEvent = new KeyboardEvent('keydown', { keyCode: VK_HOME, ctrlKey: true });
   const endEvent = new KeyboardEvent('keydown', { keyCode: VK_END });
+  const ctrlEndEvent = new KeyboardEvent('keydown', { keyCode: VK_END, ctrlKey: true });
 
   it('should respond to right arrow and space keyboard event', async () => {
     const el = /** @type {WiredDatePickerGrid} */ await fixture(html`
@@ -236,6 +238,27 @@ describe('WiredDatePickerGrid - Keyboard', () => {
     expect(ev.detail.day).to.equal(8);
   });
 
+  it('should respond to ctrl+end and ctrl+home keyboard event', async () => {
+    const el = /** @type {WiredDatePickerGrid} */ await fixture(html`
+      <wired-datepicker-grid
+        dayCount="10"
+      ></wired-datepicker-grid>
+    `);
+
+    el.focus();
+    el.dispatchEvent(ctrlEndEvent);
+    setTimeout(() => el.dispatchEvent(enterEvent));
+    const ev = await oneEvent(el, 'cell-selected');
+    expect(ev).to.exist;
+    expect(ev.detail.day).to.equal(10);
+
+    el.dispatchEvent(ctrlHomeEvent);
+    setTimeout(() => el.dispatchEvent(enterEvent));
+    const ev2 = await oneEvent(el, 'cell-selected');
+    expect(ev2).to.exist;
+    expect(ev2.detail.day).to.equal(1);
+  });
+
   it('should respond to end and home keyboard event', async () => {
     const el = /** @type {WiredDatePickerGrid} */ await fixture(html`
       <wired-datepicker-grid
@@ -248,7 +271,7 @@ describe('WiredDatePickerGrid - Keyboard', () => {
     setTimeout(() => el.dispatchEvent(enterEvent));
     const ev = await oneEvent(el, 'cell-selected');
     expect(ev).to.exist;
-    expect(ev.detail.day).to.equal(10);
+    expect(ev.detail.day).to.equal(7);
 
     el.dispatchEvent(homeEvent);
     setTimeout(() => el.dispatchEvent(enterEvent));
@@ -257,11 +280,49 @@ describe('WiredDatePickerGrid - Keyboard', () => {
     expect(ev2.detail.day).to.equal(1);
   });
 
-  it('should focus the selected day if provided', async () => {
+  it('should handle offset with end/home keyboard event', async () => {
+    const el = /** @type {WiredDatePickerGrid} */ await fixture(html`
+      <wired-datepicker-grid
+        dayCount="10"
+        .gridOffset=${3}
+      ></wired-datepicker-grid>
+    `);
+
+    el.focus();
+    el.dispatchEvent(endEvent); // goto end of line
+    setTimeout(() => el.dispatchEvent(enterEvent));
+    const ev = await oneEvent(el, 'cell-selected');
+    expect(ev).to.exist;
+    expect(ev.detail.day).to.equal(5);
+
+    el.dispatchEvent(ctrlEndEvent); // goto end of grid (second row)
+    el.dispatchEvent(homeEvent); // goto begining of second row
+    setTimeout(() => el.dispatchEvent(enterEvent));
+    const ev2 = await oneEvent(el, 'cell-selected');
+    expect(ev2).to.exist;
+    expect(ev2.detail.day).to.equal(6);
+  });
+
+  it('should focus the selected day if provided as attribute', async () => {
     const el = /** @type {WiredDatePickerGrid} */ await fixture(html`
       <wired-datepicker-grid
         dayCount="10"
         selectedDayIndex="3"
+      ></wired-datepicker-grid>
+    `);
+
+    el.focus();
+    setTimeout(() => el.dispatchEvent(enterEvent));
+    const ev = await oneEvent(el, 'cell-selected');
+    expect(ev).to.exist;
+    expect(ev.detail.day).to.equal(4);
+  });
+
+  it('should focus the selected day if provided as property', async () => {
+    const el = /** @type {WiredDatePickerGrid} */ await fixture(html`
+      <wired-datepicker-grid
+        dayCount="10"
+        .selectedDayIndex=${3}
       ></wired-datepicker-grid>
     `);
 
