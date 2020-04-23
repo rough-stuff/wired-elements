@@ -41,6 +41,10 @@ export class WiredDatePickerIndicator extends LitElement {
     static get styles(): CSSResult {
         return css`
             :host {
+                --wired-datepicker-indicator-color: var(--wired-datepicker-primary-color, black);
+                --wired-datepicker-indicator-disabled-color: var(--wired-datepicker-disabled-color, lightgray);
+                --wired-datepicker-indicator-hover-bg-color: var(--wired-datepicker-primary-color, black);
+                --wired-datepicker-indicator-hover-color: var(--wired-datepicker-secondary-color, white);
                 display:flex;
                 justify-content: space-between;
                 aligh-items: center;
@@ -54,27 +58,28 @@ export class WiredDatePickerIndicator extends LitElement {
             }
             .month-selector-active {
                 cursor: pointer;
+                color: var(--wired-datepicker-indicator-color);
             }
             .month-selector-disabled {
                 cursor: not-allowed;
-                color: lightgray;
+                color: var(--wired-datepicker-indicator-disabled-color);
             }
             :host button {
                 padding: 0 5 0 5;
                 border: none;
                 background: none;
                 font-family: inherit;
-                font-size: 1em;
+                font-size: inherit;
             }
             :host button:active {
                 cursor: default;
                 transform: translateY(1px);
             }
-            :host button:focus,
-            :host button:hover {
+            .month-selector-active:focus,
+            .month-selector-active:hover {
                 outline: none;
-                color: white;
-                background-color: var(--wired-datepicker-focus-color, black);
+                color: var(--wired-datepicker-indicator-hover-color);
+                background-color: var(--wired-datepicker-indicator-hover-bg-color);
             }
         `;
     }

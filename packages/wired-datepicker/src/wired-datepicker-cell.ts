@@ -19,6 +19,13 @@ export class WiredDatePickerCell extends WiredBase {
           left: -3;
         }
         :host {
+            --wired-datepicker-cell-selected-stroke-color: var(--wired-datepicker-contrast-color, red);
+            --wired-datepicker-cell-selected-focus-stroke-color: var(--wired-datepicker-contrast-color, red);
+            --wired-datepicker-cell-selected-stroke-width: 1.5;
+            --wired-datepicker-cell-selected-focus-stroke-width: 2.5;
+            --wired-datepicker-cell-disabled-color: var(--wired-datepicker-disabled-color, lightgray);
+            --wired-datepicker-cell-hover-color: var(--wired-datepicker-secondary-color, white);
+            --wired-datepicker-cell-hover-bg-color: var(--wired-datepicker-primary-color, black);
             display: inline-block;
             position: relative;
         }
@@ -29,8 +36,8 @@ export class WiredDatePickerCell extends WiredBase {
           stroke: transparent;
         }
         .wrapper.selected.focus path {
-          stroke: var(--wired-datepicker-selected-color, red);
-          stroke-width: 2.5;
+          stroke: var(--wired-datepicker-cell-selected-focus-stroke-color);
+          stroke-width: var(--wired-datepicker-cell-selected-focus-stroke-width);
           stroke-dasharray: 1000;
           stroke-dashoffset: 1000;
           animation: dash 0.8s ease-in forwards;
@@ -41,17 +48,17 @@ export class WiredDatePickerCell extends WiredBase {
             }
         }
         .wrapper.selected path {
-          stroke: var(--wired-datepicker-selected-color, red);
-          stroke-width: 1.5;
+          stroke: var(--wired-datepicker-cell-selected-stroke-color);
+          stroke-width: var(--wired-datepicker-cell-selected-stroke-width);
         }
         .wrapper.disabled {
-          color: var(--wired-datepicker-cell-disabled, lightgray);
+          color: var(--wired-datepicker-cell-disabled-color);
           cursor: not-allowed;
         }
         .wrapper:not(.selected):not(.disabled):hover {
           cursor: pointer;
-          color: white;
-          background-color: var(--wired-datepicker-focus-color, black);
+          color: var(--wired-datepicker-cell-hover-color);
+          background-color: var(--wired-datepicker-cell-hover-bg-color);
         }
         `
       ];

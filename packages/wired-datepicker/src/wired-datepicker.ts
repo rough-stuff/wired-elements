@@ -31,16 +31,18 @@ const Calendar = (indicator: TemplateResult, days: TemplateResult, grid: Templat
         :host {
             display: inline-block;
             position: relative;
-            --wired-datepicker-color: black;
-            --wired-datepicker-focus-color: var(--wired-datepicker-color);
+            --wired-datepicker-primary-color: black;
+            --wired-datepicker-secondary-color: white;
+            --wired-datepicker-contrast-color: red;
+            --wired-datepicker-text-color: var(--wired-datepicker-primary-color);
+            --wired-datepicker-stroke-color: var(--wired-datepicker-primary-color);
+            --wired-datepicker-disabled-color: lightgray;
+            background-color: var(--wired-datepicker-secondary-color);
+            color: var(--wired-datepicker-primary-color);
         }
         :host path {
-            stroke: var(--wired-datepicker-color);
+            stroke: var(--wired-datepicker-stroke-color);
             stroke-width: 0.7;
-        }
-        :host(:focus) path {
-            stroke: var(--wired-datepicker-focus-color);
-            stroke-width: 1.5;
         }
     </style>
     ${indicator}
