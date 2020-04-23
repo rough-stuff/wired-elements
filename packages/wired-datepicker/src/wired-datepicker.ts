@@ -186,26 +186,6 @@ export class WiredDatePicker extends WiredCard {
     }
 
     /**
-     * Attach event listeners to cell selection in the grid.
-     * Attach event listeners to month selection in the indicator
-     */
-    firstUpdated() {
-        const grid = this.shadowRoot!.querySelector<WiredDatePickerGrid>('wired-datepicker-grid');
-        grid?.addEventListener('cell-selected', ((e: CustomEvent) => {
-            this.setSelectedDate(e.detail.day)
-        }) as EventListener);
-
-        const indicator = this.shadowRoot!.querySelector<WiredDatePickerIndicator>('wired-datepicker-indicator');
-        indicator?.addEventListener('month-selected', ((e: CustomEvent) => {
-            if (e.detail.selector === 'prev') {
-                this.loadPrevMonth()
-            } else {
-                this.loadNextMonth();
-            }
-        }) as EventListener);
-    }
-
-    /**
      * Renders the web component calendar for the selected/current month
      */
     render(): TemplateResult {
@@ -215,6 +195,19 @@ export class WiredDatePicker extends WiredCard {
         const indicator = this.buildIndicator(year, month);
         const grid = this.buildGrid(year, month);
         return Calendar(indicator, days, grid);
+    }
+
+    /**
+     * Attach event listeners to cell selection in the grid.
+     * Attach event listeners to month selection in the indicator
+     * No need to clean them as grid & indicator are children of the datepicker.
+     */
+    firstUpdated() {
+        const grid = this.shadowRoot!.querySelector<WiredDatePickerGrid>('wired-datepicker-grid');
+        grid?.addEventListener('cell-selected', (this.onCellSelected.bind(this)) as EventListener);
+
+        const indicator = this.shadowRoot!.querySelector<WiredDatePickerIndicator>('wired-datepicker-indicator');
+        indicator?.addEventListener('month-selected', (this.onMonthSelected.bind(this)) as EventListener);
     }
 
     /**
@@ -291,6 +284,28 @@ export class WiredDatePicker extends WiredCard {
                 .gridOffset=${firstDayOfMonthIndex+1}
             ></wired-datepicker-grid>
         `;
+    }
+
+    /**
+     * Handles the selected cell event
+     * @param e event triggered when cell is selected
+     */
+    private onCellSelected(e: CustomEvent) {
+        e.stopPropagation();
+        this.setSelectedDate(e.detail.day);
+    };
+
+    /**
+     * Handles the selected month event
+     * @param e event triggered when month selector is clicked
+     */
+    private onMonthSelected(e: CustomEvent) {
+        e.stopPropagation();
+        if (e.detail.selector === 'prev') {
+            this.loadPrevMonth()
+        } else {
+            this.loadNextMonth();
+        }
     }
 
     /**
