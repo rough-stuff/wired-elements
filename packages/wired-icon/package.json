@@ -23,14 +23,10 @@
     "url": "git+https://github.com/apennamen/wired-elements.git"
   },
   "scripts": {
-    "generate": "serve ./generate",
     "tsc": "tsc"
   },
   "bugs": {
     "url": "https://github.com/apennamen/wired-elements/issues"
-  },
-  "devDependencies": {
-    "serve": "^11.3.0"
   },
   "dependencies": {
     "lit-element": "^2.2.1",

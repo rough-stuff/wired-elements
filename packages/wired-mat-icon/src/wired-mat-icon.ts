@@ -1,6 +1,6 @@
 import { customElement, property } from 'lit-element';
-import { WiredIcon } from './wired-icon';
-import { iconsetLoader } from './iconset';
+import { WiredIcon } from 'wired-icon/lib/WiredIcon';
+import { iconsetLoader } from 'wired-icon/lib/iconset';
 import { ICON_SET } from './iconset/iconset-full';
 
 const findSvgPath = iconsetLoader(ICON_SET);
