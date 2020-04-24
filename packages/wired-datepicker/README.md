@@ -96,6 +96,9 @@ __Example__: To get the black and white calendar with yellow selected stroke, us
 
 **attr-error** event fired if a non parseable date string is given for selected, firstdate or lastdate attribute/property.
 
+## Final note
+Tested on Chrome 81.0.4044.122, Edge 81.0.416.64, Firefox 72.0.2
+
 
 ## License
 [MIT License](https://github.com/wiredjs/wired-elements/blob/master/LICENSE) (c) [Preet Shihn](https://twitter.com/preetster)
