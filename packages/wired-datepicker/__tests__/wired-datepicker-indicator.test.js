@@ -1,4 +1,4 @@
-import { html, fixture, expect, elementUpdated, oneEvent } from '@open-wc/testing';
+import { html, fixture, expect, elementUpdated, oneEvent, aTimeout } from '@open-wc/testing';
 
 import '../lib/wired-datepicker-indicator';
 
@@ -74,6 +74,10 @@ describe('WiredDatePickerIndicator - Properties', () => {
     `);
     const selectors = el.shadowRoot.querySelectorAll('.month-selector-disabled');
     expect(selectors.length).to.equal(1);
+    selectors[0].click();
+    // if aTimeout comes first, then ev was not triggered
+    const ev = await Promise.race([oneEvent(el, 'month-selected'), aTimeout('500')]);
+    expect(ev).to.be.undefined;
   });
 
   it('should disable next selector if .canGoNext=false', async () => {
@@ -84,6 +88,10 @@ describe('WiredDatePickerIndicator - Properties', () => {
     `);
     const selectors = el.shadowRoot.querySelectorAll('.month-selector-disabled');
     expect(selectors.length).to.equal(1);
+    selectors[0].click();
+    // if aTimeout comes first, then ev was not triggered
+    const ev = await Promise.race([oneEvent(el, 'month-selected'), aTimeout('500')]);
+    expect(ev).to.be.undefined;
   });
 
   it('should disable both selector if .canGoNext & .canGoPrev =false', async () => {

@@ -75,4 +75,36 @@ describe('WiredDatePickerCell', () => {
     root = el.shadowRoot.querySelector('div');
     expect(root).to.not.have.class("selected");
   });
+
+  it('should not toggle focus when disabled', async () => {
+    const el = /** @type {WiredDatePickerCell} */ await fixture(html`
+      <wired-datepicker-cell
+        .disabled=${true}
+      ></wired-datepicker-cell>
+    `);
+    el.focus();
+    expect(el.hasFocus).to.be.false;
+  });
+
+  it('should toggle focus to true on focus if not disabled', async () => {
+    const el = /** @type {WiredDatePickerCell} */ await fixture(html`
+      <wired-datepicker-cell></wired-datepicker-cell>
+    `);
+    el.focus();
+    await elementUpdated(el);
+    expect(el.hasFocus).to.be.true;
+  });
+
+  it('should toggle focus to false on blur if not disabled', async () => {
+    const el = /** @type {WiredDatePickerCell} */ await fixture(html`
+      <wired-datepicker-cell
+      ></wired-datepicker-cell>
+    `);
+    el.focus();
+    await elementUpdated(el);
+    expect(el.hasFocus).to.be.true;
+    el.blur();
+    await elementUpdated(el);
+    expect(el.hasFocus).to.be.false;
+  });
 });

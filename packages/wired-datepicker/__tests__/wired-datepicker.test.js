@@ -29,11 +29,9 @@ describe('WiredDatePicker - disabled', () => {
         const el = /** @type {WiredDatePicker} */ await fixture(html`
             <wired-datepicker disabled></wired-datepicker>
         `);
-        const days = el.shadowRoot.querySelectorAll('wired-datepicker-cell');
+        const grid = el.shadowRoot.querySelectorAll('wired-datepicker-grid');
 
-        for (let i = 0; i < days.length; i++) {
-            expect(days[i].disabled).to.be.true;
-        }
+        expect(grid.dayCount).to.equal(grid.minEnabledIndex);
     });
 });
 

@@ -217,10 +217,9 @@ export class WiredDatePicker extends WiredCard {
      */
     private buildIndicator(year: number, month: number): TemplateResult {
         const monthName = localizedMonths(this.locale)[month];
-        const header = `${monthName} ${year}`;
         return html`
             <wired-datepicker-indicator
-                .header=${header}
+                header="${monthName} ${year}"
                 .canGoPrev=${this.canGoPrev()}
                 .canGoNext=${this.canGoNext()}
             >
