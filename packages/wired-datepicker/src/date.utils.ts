@@ -4,7 +4,7 @@
  * @param year full year (1991, 2000)
  */
 export function daysInMonth (month: number, year: number): number {
-    return new Date(year, month+1, 0).getDate();
+    return new Date(Date.UTC(year, month+1, 0)).getDate();
 }
 
 export  function isDateInMonth (month: number, year: number, date: Date): boolean {

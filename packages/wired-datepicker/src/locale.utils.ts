@@ -31,7 +31,7 @@ export const localizedMonths = function(locale :string = 'en-US', variant: strin
  * @param variant long | short | narrow
  */
 export const localizedDays = function(locale :string = 'en-US', variant: string = 'short'): string[] {
-    const d = new Date(0,0,0); // 31 Dec 1899 was a sunday
+    const d = new Date(Date.UTC(0,0,0)); // 31 Dec 1899 was a sunday
     const days = [];
 
     // Compute weekday header texts (like "Sun", "Mon", "Tue", ...)
