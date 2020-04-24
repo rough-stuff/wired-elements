@@ -9,7 +9,7 @@ This library is the base for the other library **wired-mat-icon**. Use this libr
 For the complete set of wired-elements: [wiredjs.com](http://wiredjs.com/)
 
 ## Installation
-Add wired-icon to your project, then refer to either wired-icon:
+Simply Add wired-icon to your project:
 ```
 npm i wired-icon
 ```

@@ -6,6 +6,12 @@ WebComponent which allows you to easily create Hand drawn version of Material Ic
 
 Warning: This library will likely have a big impact on your bundle. Have fun with it, and consider optimizing with wired-icon component when you ship to production :)
 
+## Installation
+Simply Add wired-mat-icon to your project:
+```
+npm i wired-mat-icon
+```
+
 ## Wired Material Icon for fun!
 As you can have a hard time finding the right svg path, we bundled almost all the material icons in an iconset, that ships with the library! You can refer to the complete list on the website of [material.io](https://material.io/resources/icons/).
 

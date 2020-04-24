@@ -1,4 +1,4 @@
-# FAQ for maintaining wired-icon
+# FAQ for maintaining wired-mat-icon
 ## How to generate the iconset-full.ts ?
 Go to the generate folder and run:
 `npm run generate`
