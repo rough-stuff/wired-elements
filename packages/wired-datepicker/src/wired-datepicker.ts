@@ -1,6 +1,6 @@
 import { customElement, property, TemplateResult, html } from 'lit-element';
 import { fire } from 'wired-lib';
-import { WiredCard } from 'wired-card';
+import { WiredCard } from 'wired-card/lib/WiredCard';
 import './wired-datepicker-grid';
 import { WiredDatePickerGrid } from './wired-datepicker-grid';
 import './wired-datepicker-indicator';
