@@ -1,5 +1,6 @@
 import { customElement } from 'lit-element';
-import { WiredCard as Base } from './WiredCard';
+import { WiredCard } from './WiredCard';
 
-@customElement('wired-card')
-export class WiredCard extends Base {}
+customElement('wired-card')(WiredCard);
+
+export { WiredCard };
