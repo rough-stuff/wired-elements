@@ -47,7 +47,7 @@ Import into your module script:
 import { WiredButton, WiredInput } from "wired-elements"
 ```
 
-Alternatively, load a bundled version from the [dist folder](https://github.com/wiredjs/wired-elements/tree/master/packages/all/lib/) or from CDN:
+Alternatively, load a bundled version from the [dist folder](https://github.com/wiredjs/wired-elements/tree/master/packages/all/dist/) or from CDN:
 
 ```html
 <script src="https://unpkg.com/wired-elements@2.0.5/lib/wired-elements-bundled.js"></script>
