@@ -329,8 +329,8 @@ export class WiredCalendar extends LitElement {
       // Compute weekday header texts (like "Sun", "Mon", "Tue", ...)
       const weekDayOffset = d.getUTCDay();
       const daySunday = new Date(d.getTime() - DAY * weekDayOffset);
-      const weekdayDate = new Date(daySunday);
       for (let i = 0; i < 7; i++) {
+        const weekdayDate = new Date(daySunday);
         weekdayDate.setDate(daySunday.getDate() + i);
         this.weekdays_short[i] = weekdayDate.toLocaleString(this.locale, { weekday: 'short' });
       }
