@@ -75,16 +75,16 @@ You can use Wired Material Icon inside a Wired Button \o/
 ```
 
 ### Use with JavaScript
-For example, inside a view or a custom webcomponnet, you could use the properties of the wired-icon web component to handle it programatically. Property changes are reflected on the attributes.
+For example, inside a view or a custom webcomponent, you could use the properties of the wired-icon web component to handle it programatically. Property changes are reflected on the attributes.
 ```html
 <wired-mat-icon id="modifyme"></wired-mat-icon>
 ```
 ```javascript
-firstUpdated() {
-  const wiredMatIcon = this.shadowRoot.getElementById('modifyme');
+customElements.whenDefined('wired-mat-icon').then(() => {
+  const wiredMatIcon = document.getElementById('modifyme');
   wiredMatIcon.icon = 'flash_on';
   wiredMatIcon.config = {fill: 'red', fillWeight: 1};
-}
+});
 ```
 
 ## Troubleshooting
