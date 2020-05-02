@@ -24,6 +24,7 @@
   },
   "scripts": {
     "tsc": "tsc",
+    "tsc:watch": "tsc --watch",
     "generate": "serve ./generate"
   },
   "bugs": {

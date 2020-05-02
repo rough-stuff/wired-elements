@@ -1,56 +1,33 @@
-import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
-import { Point, Options, path, svgNode } from 'wired-lib/lib/wired-lib';
-import { TemplateResult, html, css, CSSResultArray, property } from 'lit-element';
+import { Options, wiredSvg } from 'wired-lib/lib/wired-lib';
+import { LitElement, css, CSSResultArray, property } from 'lit-element';
 
 const DEFAULT_CONFIG: Options = { 
   roughness: 0.1,
 };
 
-export class WiredIcon extends WiredBase {
-    @property({ type: Object, reflect: true }) config: Options = DEFAULT_CONFIG;
-    @property({ type: String, reflect: true }) path = '';
-    @property({ type: String, reflect: true }) aria = '';
-    @property({ type: String, reflect: true }) viewBox = '-1 0 26 24';
+export class WiredIcon extends LitElement {
+  @property({ type: Object, reflect: true }) config: Options = DEFAULT_CONFIG;
 
-    static get styles(): CSSResultArray {
-        return [
-          BaseCSS,
-          css`
-            :host {
-                display: block;
-            }
-          `
-        ];
-    }
-
-  render(): TemplateResult {
-    return html`<svg></svg>`;
+  static get styles(): CSSResultArray {
+      return [
+        css`
+          :host {
+              display: block;
+          }
+        `
+      ];
   }
 
-  protected canvasSize(): Point {
-    const s = this.getBoundingClientRect();
-    return [s.width, s.height];
-  }
-
-  protected draw(svg: SVGSVGElement, size: Point) {
-    if (!this.path) return;
-    const min = Math.min(size[0], size[1]);
-    svg.setAttribute('width', `${min}`);
-    svg.setAttribute('height', `${min}`);
-    svg.setAttribute('viewBox', this.viewBox);
-    this.addAriaLabel(svg, this.aria);
-    try {
-      path(this.path, svg, {...DEFAULT_CONFIG, ...this.config});
-    } catch (e) {
-      // Die in silence in case of failure
+  connectedCallback() {
+    super.connectedCallback();
+    const svg = this.querySelector('svg');
+    if (svg) {
+      wiredSvg(svg, {...DEFAULT_CONFIG, ...this.config});
     }
   }
 
-  private addAriaLabel(svg: SVGSVGElement, iconName: string) {
-    svg.setAttribute('aria-labelledby', 'title');
-    const titleNode = svgNode('title', {id : 'title'});
-    titleNode.innerHTML = `${iconName} icon`;
-    svg.appendChild(titleNode);
-
+  createRenderRoot() {
+    // No use for shadow DOM
+    return this;
   }
 }
