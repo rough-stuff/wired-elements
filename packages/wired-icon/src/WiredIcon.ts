@@ -1,5 +1,5 @@
 import { Options, wiredSvg } from 'wired-lib/lib/wired-lib';
-import { LitElement, css, CSSResultArray, property } from 'lit-element';
+import { LitElement, css, CSSResult, property } from 'lit-element';
 
 const DEFAULT_CONFIG: Options = { 
   roughness: 0.1,
@@ -8,14 +8,12 @@ const DEFAULT_CONFIG: Options = {
 export class WiredIcon extends LitElement {
   @property({ type: Object, reflect: true }) config: Options = DEFAULT_CONFIG;
 
-  static get styles(): CSSResultArray {
-      return [
-        css`
+  static get styles(): CSSResult {
+      return css`
           :host {
               display: block;
           }
-        `
-      ];
+        `;
   }
 
   connectedCallback() {
