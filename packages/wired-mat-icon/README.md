@@ -1,6 +1,6 @@
 # wired-mat-icon
 
-WebComponent which allows you to easily create Hand drawn version of Material Icons, and more!
+WebComponent which allows you to easily create Hand drawn version of Material Icons!
 
 ![image](https://user-images.githubusercontent.com/7101875/78978100-8391f100-7b19-11ea-943f-2842e2b5ea44.png)
 
@@ -18,18 +18,18 @@ As you can have a hard time finding the right svg path, we bundled almost all th
 ### Usage
 Import wired-mat-icon definition into your HTML page:
 ```html
-<script type="module" src="wired-icon/lib/wired-mat-icon.js"></script>
+<script type="module" src="wired-mat-icon/lib/wired-mat-icon.js"></script>
 ```
 Or into your module script:
 ```javascript
-import { WiredMatIcon } from "wired-icon/lib/wired-mat-icon"
+import "wired-mat-icon";
 ```
 
 Use it in your web page:
 ```html
 <wired-mat-icon
   icon="android"
-  config='{"fillStyle": "zigzag", "fill": "green", "hachureGap": "1.5", "fillWeight": "0.9"}'>
+  config='{"fillStyle": "zigzag", "fill": "#3B5998", "hachureGap": "1.5", "fillWeight": "0.9"}'>
 </wired-mat-icon>
 ```
 
@@ -37,16 +37,8 @@ Use it in your web page:
 
 **icon** - String representing a material icon. Refer to the complete list on [material.io](https://material.io/resources/icons/). It is also used for the aria label if the aria property is not defined. Note that if path is defined, this property will be ignored.
 
-The other attributes are the same as for WiredIcon, with 
-
 **config** - Optional object to configure the effect. You can refer to the complete list on [roughjs wiki](https://github.com/pshihn/rough/wiki#options). You can also see the examples for inspiration.
 Default rougness is set to 0.1, which seems to be the appropriate value most of the time.
-
-**path** - /!\ Shouldn't be set if icon is used. Consider using wired icon instead. If a path is set, then the icon property is ignored.
-
-**aria** - Gives a name for accessibility to your icon. If none is provide, the **icon** property is used.
-
-**viewBox** - /!\ DANGER ZONE /!\ you shouldn't be messing with this but at least it gives you control over the viewBox of the underlying svg element. I found that "-1 0 26 24" was a very good value for all the material icons, therefore it's the default value.
 
 
 ## Styling
