@@ -84,10 +84,10 @@ export class WiredTextarea extends WiredBase {
       const input = this.textarea;
       if (input) {
         input.value = v;
+        return;
       }
-    } else {
-      this.pendingValue = v;
     }
+    this.pendingValue = v;
   }
 
   firstUpdated() {
