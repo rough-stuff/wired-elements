@@ -1,5 +1,6 @@
 import resolve from 'rollup-plugin-node-resolve';
 import { terser } from "rollup-plugin-terser";
+import analyze from 'rollup-plugin-analyzer';
 
 const input = 'packages/all/lib/wired-elements.js';
 const outDir = 'packages/all/lib';
@@ -37,7 +38,8 @@ export default [
         output: {
           comments: false
         }
-      })
+      }),
+      analyze(),
     ]
   },
   {

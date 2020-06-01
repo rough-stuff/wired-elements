@@ -1,0 +1,42 @@
+<html>
+
+<head>
+  <script type="module">
+      import {ICON_SET} from  "../packages/wired-mat-icon/lib/iconset/iconset-full.js";
+
+      window.ICON_SET = ICON_SET;
+  </script>
+  <script type="module" src="../packages/wired-input/lib/wired-input.js"></script>
+  <script type="module" src="../packages/wired-button/lib/wired-button.js"></script>
+  <script type="module" src="../packages/wired-card/lib/wired-card.js"></script>
+
+  <style>
+    wired-card {
+        display: block;
+        width: 80%;
+        margin: 1em;
+    }
+  </style>
+</head>
+
+<body>
+    <wired-input id="input" placeholder="Enter icon name"></wired-input>
+    <wired-button onclick="getPath()">Get Path</wired-button>
+    <wired-card>
+        <h4>Corresponding Path:</h4>
+        <p id="result">
+          No path found.
+        </p>
+      </wired-card>
+    <script>
+        function getPath() {
+            const input = document.getElementById('input');
+            const result = document.getElementById('result');
+
+            const path = window.ICON_SET[input.value];
+            result.innerHTML = path || 'No path found.';
+        }
+    </script>
+</body>
+
+</html>
