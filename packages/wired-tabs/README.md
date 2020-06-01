@@ -58,7 +58,7 @@ Use it in your web page:
 
 **name** - Unique identifier for that tab. Used for selection. 
 
-**label** - Text to show in the tab. Defaulst to the **name** property.
+**label** - Text to show in the tab. Defaults to the **name** property.
 
 ## Custom CSS Variables
 

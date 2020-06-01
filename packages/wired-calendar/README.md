@@ -44,10 +44,10 @@ Use it in your web page:
 **initials** - Boolean value to use initials in weekdays names. Default value is false.
 
 **value** - javascript object that contains the selected Date object and the
-corresponing formated text.
+corresponding formatted text.
 
 **format** - gets/sets the javascript function to format a Date object into a
-formated text.
+formatted text.
 
 
 ## Custom CSS Variables
