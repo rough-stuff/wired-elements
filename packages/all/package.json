@@ -2,9 +2,8 @@
   "name": "wired-elements",
   "version": "2.0.5",
   "description": "Collection of hand-drawn sketchy web components",
-  "main": "lib/wired-elements-bundled.cjs.js",
+  "main": "lib/wired-elements.js",
   "module": "lib/wired-elements.js",
-  "browser": "lib/wired-elements-bundled.js",
   "types": "lib/wired-elements.d.ts",
   "directories": {
     "lib": "lib"
