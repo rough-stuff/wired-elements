@@ -6,7 +6,7 @@
   "module": "lib/wired-item.js",
   "types": "lib/wired-item.d.ts",
   "scripts": {
-    "tsc": "tsc",
+    "build": "rm -rf lib && tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

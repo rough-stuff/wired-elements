@@ -35,7 +35,7 @@ export class WiredRadioGroup extends LitElement {
   }
 
   disconnectedCallback() {
-    if (super.disconnectedCallback) super.disconnectedCallback();
+    super.disconnectedCallback();
     this.removeEventListener('change', this.checkListener);
   }
 

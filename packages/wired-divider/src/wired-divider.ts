@@ -1,6 +1,6 @@
 import { customElement, property, css, TemplateResult, html, CSSResultArray } from 'lit-element';
-import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
-import { line, Point } from 'wired-lib';
+import { WiredBase, BaseCSS, Point } from 'wired-lib/lib/wired-base';
+import { line } from 'wired-lib';
 
 @customElement('wired-divider')
 export class WiredDivider extends WiredBase {

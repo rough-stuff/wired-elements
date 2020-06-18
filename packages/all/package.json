@@ -10,7 +10,7 @@
     "lib": "lib"
   },
   "scripts": {
-    "tsc": "tsc",
+    "build": "rm -rf lib && tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

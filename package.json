@@ -10,7 +10,7 @@
   "scripts": {
     "bootstrap": "npm install && npm run hoist",
     "hoist": "lerna bootstrap --hoist",
-    "tsc": "lerna run tsc",
+    "build": "lerna run build",
     "watch": "tsc --build packages/**/tsconfig.json -w",
     "dev": "polyserve --npm --module-resolution=node",
     "lernaupdate": "lernaupdate",

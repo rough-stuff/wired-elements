@@ -6,7 +6,7 @@
   "module": "lib/wired-radio-group.js",
   "types": "lib/wired-radio-group.d.ts",
   "scripts": {
-    "tsc": "tsc",
+    "build": "rm -rf lib && tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

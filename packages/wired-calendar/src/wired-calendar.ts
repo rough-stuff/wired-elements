@@ -75,7 +75,7 @@ export class WiredCalendar extends LitElement {
   }
 
   disconnectedCallback() {
-    if (super.disconnectedCallback) super.disconnectedCallback();
+    super.disconnectedCallback();
     if (this.resizeHandler) {
       window.removeEventListener('resize', this.resizeHandler);
       delete this.resizeHandler;
