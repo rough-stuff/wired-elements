@@ -10,7 +10,7 @@
     "lib": "lib"
   },
   "scripts": {
-    "build": "rm -rf lib && tsc",
+    "build": "rm -rf lib && tsc && rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -42,7 +42,6 @@
     "wired-dialog": "^2.0.2",
     "wired-divider": "^2.0.2",
     "wired-fab": "^2.0.2",
-    "wired-icon": "^0.0.1",
     "wired-icon-button": "^2.0.2",
     "wired-image": "^2.0.2",
     "wired-input": "^2.0.2",
@@ -61,5 +60,10 @@
     "wired-textarea": "^2.0.2",
     "wired-toggle": "^2.0.2",
     "wired-video": "^2.0.2"
+  },
+  "devDependencies": {
+    "rollup": "^2.12.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^6.1.0"
   }
 }
