@@ -33,7 +33,7 @@
   },
   "homepage": "https://github.com/wiredjs/wired-elements#readme",
   "dependencies": {
-    "lit-element": "^2.2.1",
+    "lit-element": "^2.3.1",
     "wired-button": "^2.0.2",
     "wired-calendar": "^2.0.2",
     "wired-card": "^2.0.2",
