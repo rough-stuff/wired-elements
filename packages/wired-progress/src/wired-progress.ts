@@ -1,6 +1,6 @@
-import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
+import { WiredBase, BaseCSS, Point } from 'wired-lib/lib/wired-base';
 import { customElement, property, css, TemplateResult, html, CSSResultArray } from 'lit-element';
-import { rectangle, hachureFill, Point } from 'wired-lib';
+import { rectangle, hachureFill } from 'wired-lib';
 
 @customElement('wired-progress')
 export class WiredProgress extends WiredBase {
@@ -87,7 +87,7 @@ export class WiredProgress extends WiredBase {
   }
 
   protected draw(svg: SVGSVGElement, size: Point) {
-    rectangle(svg, 2, 2, size[0] - 2, size[1] - 2);
+    rectangle(svg, 2, 2, size[0] - 2, size[1] - 2, this.seed);
   }
 
   private refreshProgressFill() {
@@ -108,7 +108,7 @@ export class WiredProgress extends WiredBase {
           [progWidth, 0],
           [progWidth, s.height],
           [0, s.height]
-        ]);
+        ], this.seed);
         this.svg!.appendChild(this.progBox);
         this.progBox.classList.add('progbox');
       }

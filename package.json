@@ -38,15 +38,15 @@
   "homepage": "https://github.com/wiredjs/wired-elements#readme",
   "devDependencies": {
     "@material/mwc-icon": "^0.10.0",
-    "@rollup/plugin-typescript": "^4.0.0",
-    "lerna": "^3.20.2",
-    "lerna-update-wizard": "^0.17.7",
+    "@rollup/plugin-typescript": "^4.1.2",
+    "lerna": "^3.22.1",
+    "lerna-update-wizard": "^0.17.8",
     "polyserve": "^0.27.15",
     "rollup": "^1.32.1",
-    "rollup-plugin-analyzer": "^3.2.2",
+    "rollup-plugin-analyzer": "^3.2.3",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-terser": "^5.3.0",
     "tslint": "^5.20.1",
-    "typescript": "^3.8.3"
+    "typescript": "^3.9.5"
   }
 }

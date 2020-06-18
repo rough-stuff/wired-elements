@@ -1,6 +1,6 @@
 import { LitElement, query, css, PropertyValues } from 'lit-element';
-import { Point } from './wired-lib';
 
+export type Point = [number, number];
 export type ResizeObserver = any;
 
 export const BaseCSS = css`
@@ -33,7 +33,9 @@ path {
 
 export abstract class WiredBase extends LitElement {
   @query('svg') protected svg?: SVGSVGElement;
+
   protected lastSize: Point = [0, 0];
+  protected seed = Math.floor(Math.random() * 2 ** 31);
 
   updated(_changed?: PropertyValues) {
     this.wiredRender();
@@ -58,4 +60,21 @@ export abstract class WiredBase extends LitElement {
 
   protected abstract canvasSize(): Point;
   protected abstract draw(svg: SVGSVGElement, size: Point): void;
+}
+
+export function fire(element: HTMLElement, name: string, detail?: any, bubbles: boolean = true, composed: boolean = true) {
+  if (name) {
+    const init: any = {
+      bubbles: (typeof bubbles === 'boolean') ? bubbles : true,
+      composed: (typeof composed === 'boolean') ? composed : true
+    };
+    if (detail) {
+      init.detail = detail;
+    }
+    element.dispatchEvent(new CustomEvent(name, init));
+  }
+}
+
+export function randomSeed(): number {
+  return Math.floor(Math.random() * 2 ** 31);
 }

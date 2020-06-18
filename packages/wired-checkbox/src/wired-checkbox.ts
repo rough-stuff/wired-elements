@@ -1,5 +1,5 @@
-import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
-import { rectangle, line, Point, svgNode, fire } from 'wired-lib';
+import { WiredBase, BaseCSS, Point, fire } from 'wired-lib/lib/wired-base';
+import { rectangle, line, svgNode } from 'wired-lib';
 import { customElement, property, query, css, TemplateResult, html, CSSResultArray } from 'lit-element';
 
 @customElement('wired-checkbox')
@@ -95,11 +95,11 @@ export class WiredCheckbox extends WiredBase {
   }
 
   protected draw(svg: SVGSVGElement, size: Point) {
-    rectangle(svg, 0, 0, size[0], size[1]);
+    rectangle(svg, 0, 0, size[0], size[1], this.seed);
     this.svgCheck = svgNode('g');
     svg.appendChild(this.svgCheck);
-    line(this.svgCheck, size[0] * 0.3, size[1] * 0.4, size[0] * 0.5, size[1] * 0.7);
-    line(this.svgCheck, size[0] * 0.5, size[1] * 0.7, size[0] + 5, -5);
+    line(this.svgCheck, size[0] * 0.3, size[1] * 0.4, size[0] * 0.5, size[1] * 0.7, this.seed);
+    line(this.svgCheck, size[0] * 0.5, size[1] * 0.7, size[0] + 5, -5, this.seed);
   }
 
   private refreshCheckVisibility() {

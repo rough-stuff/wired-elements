@@ -1,5 +1,5 @@
-import { rectangle, Point, fire, ellipse, svgNode, line } from 'wired-lib';
-import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
+import { rectangle, ellipse, svgNode, line } from 'wired-lib';
+import { WiredBase, BaseCSS, Point, fire } from 'wired-lib/lib/wired-base';
 import { customElement, property, query, css, TemplateResult, html, CSSResultArray } from 'lit-element';
 
 @customElement('wired-search-input')
@@ -129,19 +129,19 @@ export class WiredSearchInput extends WiredBase {
   }
 
   protected draw(svg: SVGSVGElement, size: Point) {
-    rectangle(svg, 2, 2, size[0] - 2, size[1] - 2);
+    rectangle(svg, 2, 2, size[0] - 2, size[1] - 2, this.seed);
 
     this.searchIcon = svgNode('g');
     this.searchIcon.classList.add('thicker');
     svg.appendChild(this.searchIcon);
-    ellipse(this.searchIcon, size[0] - 30, (size[1] - 30) / 2 + 10, 20, 20);
-    line(this.searchIcon, size[0] - 10, (size[1] - 30) / 2 + 30, size[0] - 25, (size[1] - 30) / 2 + 15);
+    ellipse(this.searchIcon, size[0] - 30, (size[1] - 30) / 2 + 10, 20, 20, this.seed);
+    line(this.searchIcon, size[0] - 10, (size[1] - 30) / 2 + 30, size[0] - 25, (size[1] - 30) / 2 + 15, this.seed);
 
     this.closeIcon = svgNode('g');
     this.closeIcon.classList.add('thicker');
     svg.appendChild(this.closeIcon);
-    line(this.closeIcon, size[0] - 33, (size[1] - 30) / 2 + 2, size[0] - 7, (size[1] - 30) / 2 + 28);
-    line(this.closeIcon, size[0] - 7, (size[1] - 30) / 2 + 2, size[0] - 33, (size[1] - 30) / 2 + 28);
+    line(this.closeIcon, size[0] - 33, (size[1] - 30) / 2 + 2, size[0] - 7, (size[1] - 30) / 2 + 28, this.seed);
+    line(this.closeIcon, size[0] - 7, (size[1] - 30) / 2 + 2, size[0] - 33, (size[1] - 30) / 2 + 28, this.seed);
   }
 
   private refreshIconState() {

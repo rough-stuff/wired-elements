@@ -1,5 +1,5 @@
 import { LitElement, customElement, property, css, TemplateResult, html, CSSResult } from 'lit-element';
-import { fire } from 'wired-lib';
+import { fire } from 'wired-lib/lib/wired-base';
 
 interface RadioItem extends HTMLElement {
   name: string;

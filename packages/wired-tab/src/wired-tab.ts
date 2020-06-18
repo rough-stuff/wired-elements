@@ -1,6 +1,6 @@
 import { customElement, property, css, TemplateResult, html, CSSResultArray } from 'lit-element';
-import { WiredBase, BaseCSS, ResizeObserver } from 'wired-lib/lib/wired-base';
-import { rectangle, Point } from 'wired-lib';
+import { WiredBase, BaseCSS, ResizeObserver, Point } from 'wired-lib/lib/wired-base';
+import { rectangle } from 'wired-lib';
 import 'wired-item/lib/wired-item.js';
 
 @customElement('wired-tab')
@@ -76,6 +76,6 @@ export class WiredTab extends WiredBase {
   }
 
   protected draw(svg: SVGSVGElement, s: Point) {
-    rectangle(svg, 2, 2, s[0] - 4, s[1] - 4);
+    rectangle(svg, 2, 2, s[0] - 4, s[1] - 4, this.seed);
   }
 }

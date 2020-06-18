@@ -1,6 +1,6 @@
 import { customElement, property, css, TemplateResult, html, CSSResultArray, query } from 'lit-element';
-import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
-import { line, Point } from 'wired-lib';
+import { WiredBase, BaseCSS, Point } from 'wired-lib/lib/wired-base';
+import { line } from 'wired-lib';
 
 @customElement('wired-link')
 export class WiredLink extends WiredBase {
@@ -71,8 +71,8 @@ export class WiredLink extends WiredBase {
       height: size[1] - ((elev - 1) * 2)
     };
     for (let i = 0; i < elev; i++) {
-      line(svg, 0, s.height + (i * 2) - 2, s.width, s.height + (i * 2) - 2);
-      line(svg, 0, s.height + (i * 2) - 2, s.width, s.height + (i * 2) - 2);
+      line(svg, 0, s.height + (i * 2) - 2, s.width, s.height + (i * 2) - 2, this.seed);
+      line(svg, 0, s.height + (i * 2) - 2, s.width, s.height + (i * 2) - 2, this.seed);
     }
   }
 }

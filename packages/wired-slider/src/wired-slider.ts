@@ -1,6 +1,6 @@
-import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
+import { WiredBase, BaseCSS, Point, fire } from 'wired-lib/lib/wired-base';
 import { customElement, property, query, css, TemplateResult, html, CSSResultArray } from 'lit-element';
-import { Point, line, ellipse, fire } from 'wired-lib';
+import { line, ellipse } from 'wired-lib';
 
 @customElement('wired-slider')
 export class WiredSlider extends WiredBase {
@@ -159,8 +159,8 @@ export class WiredSlider extends WiredBase {
   protected draw(svg: SVGSVGElement, size: Point) {
     this.canvasWidth = size[0];
     const midY = Math.round(size[1] / 2);
-    line(svg, 0, midY, size[0], midY).classList.add('bar');
-    this.knob = ellipse(svg, 10, midY, 20, 20);
+    line(svg, 0, midY, size[0], midY, this.seed).classList.add('bar');
+    this.knob = ellipse(svg, 10, midY, 20, 20, this.seed);
     this.knob.classList.add('knob');
   }
 

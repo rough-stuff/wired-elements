@@ -31,7 +31,7 @@ export class WiredDivider extends WiredBase {
   protected draw(svg: SVGSVGElement, size: Point) {
     const elev = Math.min(Math.max(1, this.elevation), 5);
     for (let i = 0; i < elev; i++) {
-      line(svg, 0, (i * 6) + 3, size[0], (i * 6) + 3);
+      line(svg, 0, (i * 6) + 3, size[0], (i * 6) + 3, this.seed);
     }
   }
 }

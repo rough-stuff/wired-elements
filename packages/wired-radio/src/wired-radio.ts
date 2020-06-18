@@ -1,6 +1,6 @@
-import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
+import { WiredBase, BaseCSS, Point, fire } from 'wired-lib/lib/wired-base';
 import { customElement, property, css, TemplateResult, html, CSSResultArray, query } from 'lit-element';
-import { ellipse, Point, svgNode, fire } from 'wired-lib';
+import { ellipse, svgNode } from 'wired-lib';
 
 @customElement('wired-radio')
 export class WiredRadio extends WiredBase {
@@ -97,12 +97,12 @@ export class WiredRadio extends WiredBase {
   }
 
   protected draw(svg: SVGSVGElement, size: Point) {
-    ellipse(svg, size[0] / 2, size[1] / 2, size[0], size[1]);
+    ellipse(svg, size[0] / 2, size[1] / 2, size[0], size[1], this.seed);
     this.svgCheck = svgNode('g');
     svg.appendChild(this.svgCheck);
     const iw = Math.max(size[0] * 0.6, 5);
     const ih = Math.max(size[1] * 0.6, 5);
-    ellipse(this.svgCheck, size[0] / 2, size[1] / 2, iw, ih);
+    ellipse(this.svgCheck, size[0] / 2, size[1] / 2, iw, ih, this.seed);
   }
 
   private refreshCheckVisibility() {

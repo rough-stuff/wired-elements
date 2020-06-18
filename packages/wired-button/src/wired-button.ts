@@ -1,5 +1,5 @@
-import { WiredBase, BaseCSS, ResizeObserver } from 'wired-lib/lib/wired-base';
-import { rectangle, line, Point } from 'wired-lib';
+import { WiredBase, BaseCSS, ResizeObserver, Point } from 'wired-lib/lib/wired-base';
+import { rectangle, line } from 'wired-lib';
 import { customElement, property, query, css, TemplateResult, html, CSSResultArray } from 'lit-element';
 
 @customElement('wired-button')
@@ -103,12 +103,12 @@ export class WiredButton extends WiredBase {
       width: size[0] - ((elev - 1) * 2),
       height: size[1] - ((elev - 1) * 2)
     };
-    rectangle(svg, 0, 0, s.width, s.height);
+    rectangle(svg, 0, 0, s.width, s.height, this.seed);
     for (let i = 1; i < elev; i++) {
-      (line(svg, (i * 2), s.height + (i * 2), s.width + (i * 2), s.height + (i * 2))).style.opacity = `${(75 - (i * 10)) / 100}`;
-      (line(svg, s.width + (i * 2), s.height + (i * 2), s.width + (i * 2), i * 2)).style.opacity = `${(75 - (i * 10)) / 100}`;
-      (line(svg, (i * 2), s.height + (i * 2), s.width + (i * 2), s.height + (i * 2))).style.opacity = `${(75 - (i * 10)) / 100}`;
-      (line(svg, s.width + (i * 2), s.height + (i * 2), s.width + (i * 2), i * 2)).style.opacity = `${(75 - (i * 10)) / 100}`;
+      (line(svg, (i * 2), s.height + (i * 2), s.width + (i * 2), s.height + (i * 2), this.seed)).style.opacity = `${(75 - (i * 10)) / 100}`;
+      (line(svg, s.width + (i * 2), s.height + (i * 2), s.width + (i * 2), i * 2, this.seed)).style.opacity = `${(75 - (i * 10)) / 100}`;
+      (line(svg, (i * 2), s.height + (i * 2), s.width + (i * 2), s.height + (i * 2), this.seed)).style.opacity = `${(75 - (i * 10)) / 100}`;
+      (line(svg, s.width + (i * 2), s.height + (i * 2), s.width + (i * 2), i * 2, this.seed)).style.opacity = `${(75 - (i * 10)) / 100}`;
     }
   }
 
