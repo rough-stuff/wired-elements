@@ -6,7 +6,7 @@
   "module": "lib/wired-icon-button.js",
   "types": "lib/wired-icon-button.d.ts",
   "scripts": {
-    "tsc": "tsc",
+    "build": "rm -rf lib && tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -26,7 +26,7 @@
   "author": "Preet Shihn <preetshihn@gmail.com> (https://twitter.com/preetster)",
   "license": "MIT",
   "dependencies": {
-    "lit-element": "^2.2.1",
+    "lit-element": "^2.3.1",
     "wired-lib": "^2.0.0"
   }
 }

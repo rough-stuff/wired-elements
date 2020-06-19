@@ -1,5 +1,6 @@
 import { customElement, property, query, css, TemplateResult, html, LitElement, CSSResult, PropertyValues } from 'lit-element';
-import { rectangle, polygon, fire } from 'wired-lib';
+import { rectangle, polygon } from 'wired-lib';
+import { fire, randomSeed } from 'wired-lib/lib/wired-base';
 
 interface WiredComboItem extends HTMLElement {
   value: string;
@@ -20,6 +21,7 @@ export class WiredCombo extends LitElement {
   @query('svg') private svg?: SVGSVGElement;
   @query('#card') private card?: HTMLDivElement;
 
+  private seed = randomSeed();
   private cardShowing = false;
   private itemNodes: WiredComboItem[] = [];
   private lastSelectedItem?: WiredComboItem;
@@ -185,15 +187,15 @@ export class WiredCombo extends LitElement {
     svg.setAttribute('height', `${s.height}`);
     const textBounds = this.shadowRoot!.getElementById('textPanel')!.getBoundingClientRect();
     this.shadowRoot!.getElementById('dropPanel')!.style.minHeight = textBounds.height + 'px';
-    rectangle(svg, 0, 0, textBounds.width, textBounds.height);
+    rectangle(svg, 0, 0, textBounds.width, textBounds.height, this.seed);
     const dropx = textBounds.width - 4;
-    rectangle(svg, dropx, 0, 34, textBounds.height);
+    rectangle(svg, dropx, 0, 34, textBounds.height, this.seed);
     const dropOffset = Math.max(0, Math.abs((textBounds.height - 24) / 2));
     const poly = polygon(svg, [
       [dropx + 8, 5 + dropOffset],
       [dropx + 26, 5 + dropOffset],
       [dropx + 17, dropOffset + Math.min(textBounds.height, 18)]
-    ]);
+    ], this.seed);
     poly.style.fill = 'currentColor';
     poly.style.pointerEvents = this.disabled ? 'none' : 'auto';
     poly.style.cursor = 'pointer';

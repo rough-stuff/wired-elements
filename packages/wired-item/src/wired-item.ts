@@ -1,6 +1,6 @@
-import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
+import { WiredBase, BaseCSS, Point } from 'wired-lib/lib/wired-base';
 import { customElement, property, css, TemplateResult, html, CSSResultArray } from 'lit-element';
-import { Point, hachureFill } from 'wired-lib';
+import { hachureFill } from 'wired-lib';
 
 @customElement('wired-item')
 export class WiredItem extends WiredBase {
@@ -99,7 +99,7 @@ export class WiredItem extends WiredBase {
       [size[0], 0],
       [size[0], size[1]],
       [0, size[1]]
-    ]);
+    ], this.seed);
     svg.appendChild(g);
   }
 }

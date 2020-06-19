@@ -1,6 +1,6 @@
-import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
+import { WiredBase, BaseCSS, Point, fire } from 'wired-lib/lib/wired-base';
 import { customElement, property, query, css, TemplateResult, html, CSSResultArray } from 'lit-element';
-import { rectangle, Point, fire } from 'wired-lib';
+import { rectangle } from 'wired-lib';
 
 @customElement('wired-textarea')
 export class WiredTextarea extends WiredBase {
@@ -101,7 +101,7 @@ export class WiredTextarea extends WiredBase {
   }
 
   protected draw(svg: SVGSVGElement, size: Point) {
-    rectangle(svg, 4, 4, size[0] - 4, size[1] - 4);
+    rectangle(svg, 4, 4, size[0] - 4, size[1] - 4, this.seed);
   }
 
   private refire(event: Event) {

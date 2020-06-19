@@ -2,11 +2,11 @@
   "name": "wired-lib",
   "version": "2.0.0",
   "description": "Core sketchy rendering lib used by wired components",
-  "main": "lib/wired-lib.js",
-  "module": "lib/wired-lib.js",
+  "main": "lib/wired-lib.esm.js",
+  "module": "lib/wired-lib.esm.js",
   "types": "lib/wired-lib.d.ts",
   "scripts": {
-    "tsc": "tsc",
+    "build": "rm -rf ./lib && tsc && rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -22,7 +22,12 @@
   "author": "Preet Shihn <preetshihn@gmail.com> (https://twitter.com/preetster)",
   "license": "MIT",
   "dependencies": {
-    "lit-element": "^2.2.1",
-    "roughjs": "^3.1.0"
+    "lit-element": "^2.3.1"
+  },
+  "devDependencies": {
+    "roughjs": "^4.3.1",
+    "rollup": "^2.12.0",
+    "@rollup/plugin-node-resolve": "^8.0.1",
+    "rollup-plugin-terser": "^6.1.0"
   }
 }

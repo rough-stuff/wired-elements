@@ -6,7 +6,7 @@
   "module": "lib/wired-video.js",
   "types": "lib/wired-video.d.ts",
   "scripts": {
-    "tsc": "tsc",
+    "build": "rm -rf lib && tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -28,7 +28,7 @@
   "author": "Preet Shihn <preetshihn@gmail.com> (https://twitter.com/preetster)",
   "license": "MIT",
   "dependencies": {
-    "lit-element": "^2.2.1",
+    "lit-element": "^2.3.1",
     "wired-icon-button": "^2.0.2",
     "wired-lib": "^2.0.0",
     "wired-progress": "^2.0.2",

@@ -1,5 +1,6 @@
 import { LitElement, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'lit-element';
-import { ellipse, line, rectangle, fire } from 'wired-lib';
+import { ellipse, line, rectangle } from 'wired-lib';
+import { fire, randomSeed } from 'wired-lib/lib/wired-base';
 
 interface AreaSize {
   width: number;
@@ -55,6 +56,8 @@ export class WiredCalendar extends LitElement {
   private monthYear: string = '';
   private weeks: CalendarCell[][] = [[]];
 
+  private seed = randomSeed();
+
   connectedCallback() {
     super.connectedCallback();
     if (!this.resizeHandler) {
@@ -72,7 +75,7 @@ export class WiredCalendar extends LitElement {
   }
 
   disconnectedCallback() {
-    if (super.disconnectedCallback) super.disconnectedCallback();
+    super.disconnectedCallback();
     if (this.resizeHandler) {
       window.removeEventListener('resize', this.resizeHandler);
       delete this.resizeHandler;
@@ -268,12 +271,12 @@ export class WiredCalendar extends LitElement {
     const h = s.height + ((elev - 1) * 2);
     svg.setAttribute('width', `${w}`);
     svg.setAttribute('height', `${h}`);
-    rectangle(svg, 2, 2, s.width - 4, s.height - 4);
+    rectangle(svg, 2, 2, s.width - 4, s.height - 4, this.seed);
     for (let i = 1; i < elev; i++) {
-      (line(svg, (i * 2), s.height - 4 + (i * 2), s.width - 4 + (i * 2), s.height - 4 + (i * 2))).style.opacity = `${(85 - (i * 10)) / 100}`;
-      (line(svg, s.width - 4 + (i * 2), s.height - 4 + (i * 2), s.width - 4 + (i * 2), i * 2)).style.opacity = `${(85 - (i * 10)) / 100}`;
-      (line(svg, (i * 2), s.height - 4 + (i * 2), s.width - 4 + (i * 2), s.height - 4 + (i * 2))).style.opacity = `${(85 - (i * 10)) / 100}`;
-      (line(svg, s.width - 4 + (i * 2), s.height - 4 + (i * 2), s.width - 4 + (i * 2), i * 2)).style.opacity = `${(85 - (i * 10)) / 100}`;
+      (line(svg, (i * 2), s.height - 4 + (i * 2), s.width - 4 + (i * 2), s.height - 4 + (i * 2), this.seed)).style.opacity = `${(85 - (i * 10)) / 100}`;
+      (line(svg, s.width - 4 + (i * 2), s.height - 4 + (i * 2), s.width - 4 + (i * 2), i * 2, this.seed)).style.opacity = `${(85 - (i * 10)) / 100}`;
+      (line(svg, (i * 2), s.height - 4 + (i * 2), s.width - 4 + (i * 2), s.height - 4 + (i * 2), this.seed)).style.opacity = `${(85 - (i * 10)) / 100}`;
+      (line(svg, s.width - 4 + (i * 2), s.height - 4 + (i * 2), s.width - 4 + (i * 2), i * 2, this.seed)).style.opacity = `${(85 - (i * 10)) / 100}`;
     }
 
     // Redraw sketchy red circle `selected` cell
@@ -284,7 +287,7 @@ export class WiredCalendar extends LitElement {
       }
       const iw = Math.max(this.tblColWidth * 1.0, 20);
       const ih = Math.max(this.tblRowHeight * 0.9, 18);
-      const c = ellipse(svgTD, this.tblColWidth / 2, this.tblRowHeight / 2, iw, ih);
+      const c = ellipse(svgTD, this.tblColWidth / 2, this.tblRowHeight / 2, iw, ih, this.seed);
       svgTD.appendChild(c);
     }
 

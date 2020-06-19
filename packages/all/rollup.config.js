@@ -1,9 +1,7 @@
-import resolve from 'rollup-plugin-node-resolve';
+import resolve from '@rollup/plugin-node-resolve';
 import { terser } from "rollup-plugin-terser";
-import analyze from 'rollup-plugin-analyzer';
 
-const input = 'packages/all/lib/wired-elements.js';
-const outDir = 'packages/all/lib';
+const input = 'lib/wired-elements.js';
 
 function onwarn(warning) {
   if (warning.code === 'THIS_IS_UNDEFINED')
@@ -15,19 +13,23 @@ export default [
   {
     input,
     output: {
-      file: `${outDir}/wired-elements-bundled-full.js`,
-      format: 'iife',
-      name: 'WiredElements'
+      file: 'lib/wired-elements-esm.js',
+      format: 'esm'
     },
     onwarn,
     plugins: [
-      resolve()
+      resolve(),
+      terser({
+        output: {
+          comments: false
+        }
+      })
     ]
   },
   {
     input,
     output: {
-      file: `${outDir}/wired-elements-bundled.js`,
+      file: 'lib/wired-elements-iife.js',
       format: 'iife',
       name: 'WiredElements'
     },
@@ -38,14 +40,13 @@ export default [
         output: {
           comments: false
         }
-      }),
-      analyze(),
+      })
     ]
   },
   {
     input,
     output: {
-      file: `${outDir}/wired-elements-bundled.cjs.js`,
+      file: 'lib/wired-elements-cjs.js',
       format: 'cjs'
     },
     onwarn,

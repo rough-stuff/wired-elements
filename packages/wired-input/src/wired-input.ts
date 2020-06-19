@@ -1,5 +1,5 @@
-import { rectangle, Point, fire } from 'wired-lib';
-import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
+import { rectangle } from 'wired-lib';
+import { WiredBase, BaseCSS, Point, fire } from 'wired-lib/lib/wired-base';
 import { customElement, property, query, css, TemplateResult, html, CSSResultArray } from 'lit-element';
 
 @customElement('wired-input')
@@ -56,6 +56,9 @@ export class WiredInput extends WiredBase {
           color: inherit;
           padding: 6px;
         }
+        input:focus + div path {
+          stroke-width: 1.5;
+        }
       `
     ];
   }
@@ -104,11 +107,19 @@ export class WiredInput extends WiredBase {
   }
 
   protected draw(svg: SVGSVGElement, size: Point) {
-    rectangle(svg, 2, 2, size[0] - 2, size[1] - 2);
+    rectangle(svg, 2, 2, size[0] - 2, size[1] - 2, this.seed);
   }
 
   private refire(event: Event) {
     event.stopPropagation();
     fire(this, event.type, { sourceEvent: event });
+  }
+
+  focus() {
+    if (this.textInput) {
+      this.textInput.focus();
+    } else {
+      super.focus();
+    }
   }
 }

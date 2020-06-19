@@ -23,7 +23,7 @@
     "url": "git+https://github.com/wiredjs/wired-elements.git"
   },
   "scripts": {
-    "tsc": "tsc",
+    "build": "rm -rf lib && tsc",
     "tsc:watch": "tsc --watch",
     "generate": "serve ./generate"
   },

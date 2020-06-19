@@ -1,5 +1,5 @@
-import { WiredBase, BaseCSS, ResizeObserver } from 'wired-lib/lib/wired-base';
-import { rectangle, Point } from 'wired-lib';
+import { WiredBase, BaseCSS, ResizeObserver, Point } from 'wired-lib/lib/wired-base';
+import { rectangle } from 'wired-lib';
 import { customElement, property, css, TemplateResult, html, CSSResultArray, query } from 'lit-element';
 import { WiredProgress } from 'wired-progress';
 import { WiredSlider } from 'wired-slider';
@@ -188,7 +188,7 @@ export class WiredVideo extends WiredBase {
   }
 
   protected draw(svg: SVGSVGElement, size: Point) {
-    rectangle(svg, 2, 2, size[0] - 4, size[1] - 4);
+    rectangle(svg, 2, 2, size[0] - 4, size[1] - 4, this.seed);
   }
 
   private updateTime() {

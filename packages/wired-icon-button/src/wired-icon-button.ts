@@ -1,6 +1,6 @@
-import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
+import { WiredBase, BaseCSS, Point } from 'wired-lib/lib/wired-base';
 import { customElement, property, query, css, TemplateResult, html, CSSResultArray } from 'lit-element';
-import { ellipse, Point } from 'wired-lib';
+import { ellipse } from 'wired-lib';
 
 @customElement('wired-icon-button')
 export class WiredIconButton extends WiredBase {
@@ -80,6 +80,6 @@ export class WiredIconButton extends WiredBase {
     const min = Math.min(size[0], size[1]);
     svg.setAttribute('width', `${min}`);
     svg.setAttribute('height', `${min}`);
-    ellipse(svg, min / 2, min / 2, min, min);
+    ellipse(svg, min / 2, min / 2, min, min, this.seed);
   }
 }

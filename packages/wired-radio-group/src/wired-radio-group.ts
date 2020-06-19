@@ -1,5 +1,5 @@
 import { LitElement, customElement, property, css, TemplateResult, html, CSSResult } from 'lit-element';
-import { fire } from 'wired-lib';
+import { fire } from 'wired-lib/lib/wired-base';
 
 interface RadioItem extends HTMLElement {
   name: string;
@@ -35,7 +35,7 @@ export class WiredRadioGroup extends LitElement {
   }
 
   disconnectedCallback() {
-    if (super.disconnectedCallback) super.disconnectedCallback();
+    super.disconnectedCallback();
     this.removeEventListener('change', this.checkListener);
   }
 

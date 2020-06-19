@@ -1,6 +1,6 @@
-import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
+import { WiredBase, BaseCSS, Point } from 'wired-lib/lib/wired-base';
 import { customElement, property, query, css, TemplateResult, html, CSSResultArray } from 'lit-element';
-import { hachureEllipseFill, Point } from 'wired-lib';
+import { hachureEllipseFill } from 'wired-lib';
 
 @customElement('wired-fab')
 export class WiredFab extends WiredBase {
@@ -85,7 +85,7 @@ export class WiredFab extends WiredBase {
 
   protected draw(svg: SVGSVGElement, size: Point) {
     const min = Math.min(size[0], size[1]);
-    const g = hachureEllipseFill(min / 2, min / 2, min, min);
+    const g = hachureEllipseFill(min / 2, min / 2, min, min, this.seed);
     svg.appendChild(g);
   }
 }

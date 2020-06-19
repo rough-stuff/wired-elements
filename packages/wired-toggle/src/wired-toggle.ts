@@ -1,6 +1,6 @@
-import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
+import { WiredBase, BaseCSS, Point, fire } from 'wired-lib/lib/wired-base';
 import { customElement, property, css, TemplateResult, html, CSSResultArray, query } from 'lit-element';
-import { rectangle, hachureEllipseFill, ellipse, Point, svgNode, fire } from 'wired-lib';
+import { rectangle, hachureEllipseFill, ellipse, svgNode } from 'wired-lib';
 
 @customElement('wired-toggle')
 export class WiredToggle extends WiredBase {
@@ -48,14 +48,14 @@ export class WiredToggle extends WiredBase {
       .knob.checked {
         transform: translateX(48px);
       }
-      .knobfill path {
+      path.knobfill {
         stroke-width: 3 !important;
         fill: transparent;
       }
-      .knob.unchecked .knobfill path {
+      .knob.unchecked path.knobfill {
         stroke: var(--wired-toggle-off-color, gray);
       }
-      .knob.checked .knobfill path {
+      .knob.checked path.knobfill {
         stroke: var(--wired-toggle-on-color, rgb(63, 81, 181));
       }
       `
@@ -95,14 +95,15 @@ export class WiredToggle extends WiredBase {
   }
 
   protected draw(svg: SVGSVGElement, size: Point) {
-    rectangle(svg, 16, 8, size[0] - 32, 18);
+    const rect = rectangle(svg, 16, 8, size[0] - 32, 18, this.seed);
+    rect.classList.add('toggle-bar');
     this.knob = svgNode('g');
     this.knob.classList.add('knob');
     svg.appendChild(this.knob);
-    const knobFill = hachureEllipseFill(16, 16, 32, 32);
+    const knobFill = hachureEllipseFill(16, 16, 32, 32, this.seed);
     knobFill.classList.add('knobfill');
     this.knob.appendChild(knobFill);
-    ellipse(this.knob, 16, 16, 32, 32);
+    ellipse(this.knob, 16, 16, 32, 32, this.seed);
   }
 
   private refreshKnob() {

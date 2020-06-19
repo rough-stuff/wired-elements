@@ -1,6 +1,6 @@
 import { customElement, property, css, TemplateResult, html, CSSResultArray } from 'lit-element';
-import { WiredBase, BaseCSS } from 'wired-lib/lib/wired-base';
-import { rectangle, Point, fire } from 'wired-lib';
+import { WiredBase, BaseCSS, Point, fire } from 'wired-lib/lib/wired-base';
+import { rectangle } from 'wired-lib';
 
 interface WiredComboItem extends HTMLElement {
   value: string;
@@ -196,6 +196,6 @@ export class WiredListbox extends WiredBase {
   }
 
   protected draw(svg: SVGSVGElement, size: Point) {
-    rectangle(svg, 0, 0, size[0], size[1]);
+    rectangle(svg, 0, 0, size[0], size[1], this.seed);
   }
 }

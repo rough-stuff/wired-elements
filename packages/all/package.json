@@ -2,15 +2,14 @@
   "name": "wired-elements",
   "version": "2.0.5",
   "description": "Collection of hand-drawn sketchy web components",
-  "main": "lib/wired-elements-bundled.cjs.js",
+  "main": "lib/wired-elements.js",
   "module": "lib/wired-elements.js",
-  "browser": "lib/wired-elements-bundled.js",
   "types": "lib/wired-elements.d.ts",
   "directories": {
     "lib": "lib"
   },
   "scripts": {
-    "tsc": "tsc",
+    "build": "rm -rf lib && tsc && rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -33,7 +32,7 @@
   },
   "homepage": "https://github.com/wiredjs/wired-elements#readme",
   "dependencies": {
-    "lit-element": "^2.2.1",
+    "lit-element": "^2.3.1",
     "wired-button": "^2.0.2",
     "wired-calendar": "^2.0.2",
     "wired-card": "^2.0.2",
@@ -42,7 +41,6 @@
     "wired-dialog": "^2.0.2",
     "wired-divider": "^2.0.2",
     "wired-fab": "^2.0.2",
-    "wired-icon": "^0.0.1",
     "wired-icon-button": "^2.0.2",
     "wired-image": "^2.0.2",
     "wired-input": "^2.0.2",
@@ -61,5 +59,10 @@
     "wired-textarea": "^2.0.2",
     "wired-toggle": "^2.0.2",
     "wired-video": "^2.0.2"
+  },
+  "devDependencies": {
+    "rollup": "^2.12.0",
+    "@rollup/plugin-node-resolve": "^8.0.1",
+    "rollup-plugin-terser": "^6.1.0"
   }
 }

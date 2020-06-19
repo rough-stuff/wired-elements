@@ -23,14 +23,14 @@
     "url": "git+https://github.com/apennamen/wired-elements.git"
   },
   "scripts": {
-    "tsc": "tsc",
+    "build": "rm -rf lib && tsc",
     "tsc:watch": "tsc --watch"
   },
   "bugs": {
     "url": "https://github.com/apennamen/wired-elements/issues"
   },
   "dependencies": {
-    "lit-element": "^2.2.1",
+    "lit-element": "^2.3.1",
     "wired-lib": "^2.0.0"
   }
 }
