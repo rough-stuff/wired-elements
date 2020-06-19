@@ -9,15 +9,15 @@ Wired Elements is a series of basic UI Elements that have a hand drawn look. The
 ## Try now
 Play with wired-elements:
 
-[Wired Elements](https://codesandbox.io/s/p77jkn13nq)
+[Wired Elements](https://glitch.com/~we-vanilla)
 
 #### Try it with a framework
 
-[Wired Elements in Vue](https://glitch.com/~wired-elements-vue)
+[Wired Elements in React](https://codesandbox.io/s/xrll5wyl8w)
 
-[Wired Elements in React](https://codesandbox.io/embed/xrll5wyl8w)
+[Wired Elements in Vue](https://codesandbox.io/s/vj389y9375)
 
-[Wired Elements in Svelte](https://svelte.dev/repl?version=3.0.0&gist=abf635c032a20c3e18b510c7a15eaac5)
+[Wired Elements in Svelte](https://codesandbox.io/s/wired-elements-svelte-4hfkb)
 
 [Wired Elements in Angular](https://ng-run.com/edit/TRjDTfMDLaa1d7GRoXQd)
 
