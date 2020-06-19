@@ -11,7 +11,6 @@
     "bootstrap": "npm install && npm run hoist",
     "hoist": "lerna bootstrap --hoist",
     "build": "lerna run build",
-    "serve": "es-dev-server --node-resolve --open",
     "lernaupdate": "lernaupdate",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -35,7 +34,6 @@
   },
   "homepage": "https://github.com/wiredjs/wired-elements#readme",
   "devDependencies": {
-    "es-dev-server": "^1.55.0",
     "lerna": "^3.22.1",
     "lerna-update-wizard": "^0.17.8",
     "tslint": "^5.20.1",
