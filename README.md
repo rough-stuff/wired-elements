@@ -5,7 +5,6 @@ Wired Elements is a series of basic UI Elements that have a hand drawn look. The
 
 ![alt Preview](https://i.imgur.com/qttPllg.png)
 
-The elements are drawn with enough randomness that no two renderings will be exactly the same - just like two separate hand drawn shapes. 
 
 ## Try now
 Play with wired-elements:
@@ -39,6 +38,18 @@ npm i wired-button
 npm i wired-input
 ```
 
+Or load the ES module directly through unpkg
+
+```html
+<script type="module" src="https://unpkg.com/wired-button?module"></script>
+```
+
+To load all elements there are bundled versions available: 
+
+ES module: https://unpkg.com/wired-elements/lib/wired-elements-esm.js
+IIFE: https://unpkg.com/wired-elements/lib/wired-elements-iife.js
+Common JS: https://unpkg.com/wired-elements/lib/wired-elements-cjs.js
+
 
 ## Usage
 
@@ -47,10 +58,14 @@ Import into your module script:
 import { WiredButton, WiredInput } from "wired-elements"
 ```
 
-Alternatively, load a bundled version from CDN:
+```javascript
+import { WiredButton } from "https://unpkg.com/wired-button?module"
+```
+
+Alternatively, load a bundled iife version on the page and start using it in HTML
 
 ```html
-<script src="https://unpkg.com/wired-elements@latest/lib/wired-elements-bundled.js"></script>
+<script src="https://unpkg.com/wired-elements/lib/wired-elements-iife.js"></script>
 ```
 
 #### Use it in your web page:
@@ -69,10 +84,6 @@ To view details of each component - properties, events, css-properties, etc, are
 ## Demo
 
 Demo of all components is available at [wiredjs.com](https://wiredjs.com/showcase.html).
-
-## Dev Environment
-
-View the [Dev environment page](https://github.com/wiredjs/wired-elements/wiki/Dev-Environment) for instructions.
 
 ## License
 [MIT License](https://github.com/wiredjs/wired-elements/blob/master/LICENSE) (c) [Preet Shihn](https://twitter.com/preetster)
