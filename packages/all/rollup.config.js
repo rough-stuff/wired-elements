@@ -1,4 +1,4 @@
-import resolve from 'rollup-plugin-node-resolve';
+import resolve from '@rollup/plugin-node-resolve';
 import { terser } from "rollup-plugin-terser";
 
 const input = 'lib/wired-elements.js';
