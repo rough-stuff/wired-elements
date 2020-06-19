@@ -47,7 +47,9 @@ Or load the ES module directly through unpkg
 To load all elements there are bundled versions available: 
 
 ES module: https://unpkg.com/wired-elements/lib/wired-elements-esm.js
+
 IIFE: https://unpkg.com/wired-elements/lib/wired-elements-iife.js
+
 Common JS: https://unpkg.com/wired-elements/lib/wired-elements-cjs.js
 
 
