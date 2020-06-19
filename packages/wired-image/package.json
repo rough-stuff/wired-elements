@@ -1,6 +1,6 @@
 {
   "name": "wired-image",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "description": "Hand-drawn sketchy card web component",
   "main": "lib/wired-image.js",
   "module": "lib/wired-image.js",
@@ -27,6 +27,6 @@
   "license": "MIT",
   "dependencies": {
     "lit-element": "^2.3.1",
-    "wired-lib": "^2.0.0"
+    "wired-lib": "^2.1.0"
   }
 }

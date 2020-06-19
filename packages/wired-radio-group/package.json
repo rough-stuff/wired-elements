@@ -1,6 +1,6 @@
 {
   "name": "wired-radio-group",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "description": "Allows user to select at most one radio button from a set. Works with wired-radio.",
   "main": "lib/wired-radio-group.js",
   "module": "lib/wired-radio-group.js",
@@ -29,6 +29,6 @@
   "license": "MIT",
   "dependencies": {
     "lit-element": "^2.3.1",
-    "wired-lib": "^2.0.0"
+    "wired-lib": "^2.1.0"
   }
 }
