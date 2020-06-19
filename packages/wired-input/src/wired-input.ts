@@ -56,6 +56,9 @@ export class WiredInput extends WiredBase {
           color: inherit;
           padding: 6px;
         }
+        input:focus + div path {
+          stroke-width: 1.5;
+        }
       `
     ];
   }
@@ -110,5 +113,13 @@ export class WiredInput extends WiredBase {
   private refire(event: Event) {
     event.stopPropagation();
     fire(this, event.type, { sourceEvent: event });
+  }
+
+  focus() {
+    if (this.textInput) {
+      this.textInput.focus();
+    } else {
+      super.focus();
+    }
   }
 }

@@ -35,7 +35,7 @@ export class WiredProgress extends WiredBase {
         border-radius: 4px;
         letter-spacing: 1.25px;
       }
-      .progbox path {
+      path.progbox {
         stroke: var(--wired-progress-color, rgba(0, 0, 200, 0.8));
         stroke-width: 2.75;
         fill: none;

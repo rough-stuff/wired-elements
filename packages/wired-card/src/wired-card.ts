@@ -29,7 +29,7 @@ export class WiredCard extends WiredBase {
           position: relative;
           padding: 10px;
         }
-        .cardFill path {
+        path.cardFill {
           stroke-width: 3.5;
           stroke: var(--wired-card-background-fill);
         }

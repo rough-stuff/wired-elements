@@ -8,7 +8,7 @@ import {
   doubleLineFillOps,
   generateEllipseParams
 } from 'roughjs/bin/renderer';
-import { HachureFiller } from 'roughjs/bin/fillers/hachure-filler';
+import { ZigZagFiller } from 'roughjs/bin/fillers/zigzag-filler';
 import { RenderHelper } from 'roughjs/bin/fillers/filler-interface';
 
 type Params = { [name: string]: string };
@@ -39,12 +39,12 @@ function options(seed: number): ResolvedOptions {
     curveFitting: 0.95,
     curveStepCount: 9,
     fillStyle: 'hachure',
-    fillWeight: -1,
+    fillWeight: 3.5,
     hachureAngle: -41,
-    hachureGap: -1,
+    hachureGap: 5,
     dashOffset: -1,
     dashGap: -1,
-    zigzagOffset: -1,
+    zigzagOffset: 0,
     combineNestedSvgPaths: false,
     disableMultiStroke: false,
     disableMultiStrokeFill: false,
@@ -52,12 +52,15 @@ function options(seed: number): ResolvedOptions {
   };
 }
 
-function opsToPath(drawing: OpSet): string {
+function opsToPath(drawing: OpSet, joinPaths: boolean): string {
   let path = '';
   for (const item of drawing.ops) {
     const data = item.data;
     switch (item.op) {
       case 'move':
+        if (joinPaths && path) {
+          break;
+        }
         path += `M${data[0]} ${data[1]} `;
         break;
       case 'bcurveTo':
@@ -81,8 +84,8 @@ export function svgNode(tagName: string, attributes?: Params): SVGElement {
   return n;
 }
 
-function createPathNode(ops: OpSet, parent: SVGElement | null): SVGPathElement {
-  const path = svgNode('path', { d: opsToPath(ops) });
+function createPathNode(ops: OpSet, parent: SVGElement | null, joinPaths = false): SVGPathElement {
+  const path = svgNode('path', { d: opsToPath(ops, joinPaths) });
   if (parent) {
     parent.appendChild(path);
   }
@@ -98,7 +101,7 @@ export function line(parent: SVGElement, x1: number, y1: number, x2: number, y2:
 }
 
 export function polygon(parent: SVGElement, vertices: Point[], seed: number): SVGElement {
-  return createPathNode(roughPolygon(vertices, options(seed)), parent);
+  return createPathNode(roughPolygon(vertices, options(seed)), parent, true);
 }
 
 export function ellipse(parent: SVGElement, x: number, y: number, width: number, height: number, seed: number): SVGElement {
@@ -108,7 +111,7 @@ export function ellipse(parent: SVGElement, x: number, y: number, width: number,
 }
 
 export function hachureFill(points: Point[], seed: number): SVGElement {
-  const hf = new HachureFiller(fillHelper);
+  const hf = new ZigZagFiller(fillHelper);
   const ops = hf.fillPolygon(points, options(seed));
   return createPathNode(ops, null);
 }
