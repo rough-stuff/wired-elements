@@ -1,6 +1,6 @@
 {
   "name": "wired-calendar",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Hand-drawn sketchy selector/combo-box web component",
   "main": "lib/wired-calendar.js",
   "module": "lib/wired-calendar.js",
