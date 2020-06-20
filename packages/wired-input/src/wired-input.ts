@@ -1,5 +1,5 @@
 import { rectangle } from 'wired-lib';
-import { WiredBase, BaseCSS, Point, fire } from 'wired-lib/lib/wired-base';
+import { WiredBase, BaseCSS, Point, fire, ResizeObserver } from 'wired-lib/lib/wired-base';
 import { customElement, property, query, css, TemplateResult, html, CSSResultArray } from 'lit-element';
 
 @customElement('wired-input')
@@ -23,6 +23,18 @@ export class WiredInput extends WiredBase {
 
   @query('input') private textInput?: HTMLInputElement;
   private pendingValue?: string;
+  private resizeObserver?: ResizeObserver;
+
+  constructor() {
+    super();
+    if ((window as any).ResizeObserver) {
+      this.resizeObserver = new (window as any).ResizeObserver(() => {
+        if (this.svg) {
+          this.wiredRender(true);
+        }
+      });
+    }
+  }
 
   static get styles(): CSSResultArray {
     return [
@@ -120,6 +132,27 @@ export class WiredInput extends WiredBase {
       this.textInput.focus();
     } else {
       super.focus();
+    }
+  }
+
+  updated() {
+    super.updated();
+    this.attachResizeListener();
+  }
+
+  disconnectedCallback() {
+    this.detachResizeListener();
+  }
+
+  private attachResizeListener() {
+    if (this.textInput && this.resizeObserver && this.resizeObserver.observe) {
+      this.resizeObserver.observe(this.textInput);
+    }
+  }
+
+  private detachResizeListener() {
+    if (this.textInput && this.resizeObserver && this.resizeObserver.unobserve) {
+      this.resizeObserver.unobserve(this.textInput);
     }
   }
 }
