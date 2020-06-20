@@ -62,7 +62,7 @@ export class WiredCalendar extends LitElement {
     super.connectedCallback();
     if (!this.resizeHandler) {
       this.resizeHandler = this.debounce(this.resized.bind(this), 200, false, this);
-      window.addEventListener('resize', this.resizeHandler);
+      window.addEventListener('resize', this.resizeHandler, { passive: true });
     }
 
     // Initial setup (now that `wired-calendar` element is ready in DOM)
