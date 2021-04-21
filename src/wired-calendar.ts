@@ -1,6 +1,7 @@
-import { LitElement, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'lit-element';
-import { ellipse, line, rectangle } from 'wired-lib';
-import { fire, randomSeed } from 'wired-lib/lib/wired-base';
+import { rectangle, line, ellipse } from './wired-lib';
+import { randomSeed, fireEvent } from './wired-base';
+import { css, TemplateResult, html, LitElement, PropertyValues } from 'lit';
+import { customElement, property } from 'lit/decorators';
 
 interface AreaSize {
   width: number;
@@ -82,7 +83,7 @@ export class WiredCalendar extends LitElement {
     }
   }
 
-  static get styles(): CSSResult {
+  static get styles() {
     return css`
     :host {
       display: inline-block;
@@ -433,7 +434,7 @@ export class WiredCalendar extends LitElement {
   private fireSelected() {
     if (this.selected) {
       this.value = { date: new Date(this.selected), text: this.selected };
-      fire(this, 'selected', { selected: this.selected });
+      fireEvent(this, 'selected', { selected: this.selected });
     }
   }
 
