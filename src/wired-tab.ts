@@ -1,7 +1,9 @@
-import { customElement, property, css, TemplateResult, html, CSSResultArray } from 'lit-element';
-import { WiredBase, BaseCSS, ResizeObserver, Point } from 'wired-lib/lib/wired-base';
-import { rectangle } from 'wired-lib';
-import 'wired-item/lib/wired-item.js';
+import { WiredBase, BaseCSS, Point } from './wired-base';
+import { rectangle } from './wired-lib';
+import { css, TemplateResult, html, CSSResultArray } from 'lit';
+import { customElement, property } from 'lit/decorators';
+
+import './wired-item.js';
 
 @customElement('wired-tab')
 export class WiredTab extends WiredBase {

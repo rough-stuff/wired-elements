@@ -1,5 +1,6 @@
-import { LitElement, customElement, property, css, TemplateResult, html, CSSResultArray, query } from 'lit-element';
-import { BaseCSS } from 'wired-lib/lib/wired-base';
+import { BaseCSS } from './wired-base';
+import { css, TemplateResult, html, CSSResultArray, LitElement } from 'lit';
+import { customElement, property, query } from 'lit/decorators';
 
 interface WiredTabItem extends HTMLElement {
   name: string;
