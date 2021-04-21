@@ -1,6 +1,7 @@
-import { WiredBase, BaseCSS, Point, fire } from 'wired-lib/lib/wired-base';
-import { customElement, property, query, css, TemplateResult, html, CSSResultArray } from 'lit-element';
-import { rectangle } from 'wired-lib';
+import { WiredBase, BaseCSS, Point } from './wired-base';
+import { rectangle } from './wired-lib';
+import { css, TemplateResult, html, CSSResultArray } from 'lit';
+import { customElement, property, query } from 'lit/decorators';
 
 @customElement('wired-textarea')
 export class WiredTextarea extends WiredBase {
@@ -106,6 +107,6 @@ export class WiredTextarea extends WiredBase {
 
   private refire(event: Event) {
     event.stopPropagation();
-    fire(this, event.type, { sourceEvent: event });
+    this.fire(event.type, { sourceEvent: event });
   }
 }
