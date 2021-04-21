@@ -1,6 +1,7 @@
-import { WiredBase, BaseCSS, ResizeObserver, Point } from 'wired-lib/lib/wired-base';
-import { rectangle, line } from 'wired-lib';
-import { customElement, property, css, TemplateResult, html, CSSResultArray } from 'lit-element';
+import { WiredBase, BaseCSS, Point } from './wired-base';
+import { rectangle, line } from './wired-lib';
+import { css, TemplateResult, html, CSSResultArray } from 'lit';
+import { customElement, property } from 'lit/decorators';
 
 const EMPTY_IMAGE = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
 
@@ -10,6 +11,7 @@ export class WiredImage extends WiredBase {
   @property({ type: String }) src: string = EMPTY_IMAGE;
   private resizeObserver?: ResizeObserver;
   private windowResizeHandler?: EventListenerOrEventListenerObject;
+  private roAttached = false;
 
   constructor() {
     super();
@@ -62,11 +64,14 @@ export class WiredImage extends WiredBase {
   }
 
   private attachResizeListener() {
-    if (this.resizeObserver && this.resizeObserver.observe) {
-      this.resizeObserver.observe(this);
-    } else if (!this.windowResizeHandler) {
-      this.windowResizeHandler = () => this.wiredRender();
-      window.addEventListener('resize', this.windowResizeHandler, { passive: true });
+    if (!this.roAttached) {
+      if (this.resizeObserver && this.resizeObserver.observe) {
+        this.resizeObserver.observe(this);
+      } else if (!this.windowResizeHandler) {
+        this.windowResizeHandler = () => this.wiredRender();
+        window.addEventListener('resize', this.windowResizeHandler, { passive: true });
+      }
+      this.roAttached = true;
     }
   }
 
@@ -77,6 +82,7 @@ export class WiredImage extends WiredBase {
     if (this.windowResizeHandler) {
       window.removeEventListener('resize', this.windowResizeHandler);
     }
+    this.roAttached = false;
   }
 
   protected canvasSize(): Point {
