@@ -1,11 +1,10 @@
-import { WiredBase, BaseCSS, ResizeObserver, Point } from 'wired-lib/lib/wired-base';
-import { rectangle } from 'wired-lib';
-import { customElement, property, css, TemplateResult, html, CSSResultArray, query } from 'lit-element';
-import { WiredProgress } from 'wired-progress';
-import { WiredSlider } from 'wired-slider';
-import 'wired-progress';
-import 'wired-icon-button';
-import 'wired-slider';
+import { WiredBase, BaseCSS, Point } from './wired-base';
+import { rectangle } from './wired-lib';
+import { css, TemplateResult, html, CSSResultArray } from 'lit';
+import { customElement, property, query } from 'lit/decorators';
+import { WiredProgress } from './wired-progress.js';
+import { WiredSlider } from './wired-slider';
+// import './wired-icon-button';
 
 @customElement('wired-video')
 export class WiredVideo extends WiredBase {
