@@ -1,6 +1,7 @@
-import { rectangle } from 'wired-lib';
-import { WiredBase, BaseCSS, Point, fire, ResizeObserver } from 'wired-lib/lib/wired-base';
-import { customElement, property, query, css, TemplateResult, html, CSSResultArray } from 'lit-element';
+import { WiredBase, BaseCSS, Point } from './wired-base';
+import { rectangle } from './wired-lib';
+import { css, TemplateResult, html, CSSResultArray } from 'lit';
+import { customElement, property, query } from 'lit/decorators';
 
 @customElement('wired-input')
 export class WiredInput extends WiredBase {
@@ -24,6 +25,7 @@ export class WiredInput extends WiredBase {
   @query('input') private textInput?: HTMLInputElement;
   private pendingValue?: string;
   private resizeObserver?: ResizeObserver;
+  private roAttached = false;
 
   constructor() {
     super();
@@ -124,7 +126,7 @@ export class WiredInput extends WiredBase {
 
   private refire(event: Event) {
     event.stopPropagation();
-    fire(this, event.type, { sourceEvent: event });
+    this.fire(event.type, { sourceEvent: event });
   }
 
   focus() {
@@ -145,14 +147,18 @@ export class WiredInput extends WiredBase {
   }
 
   private attachResizeListener() {
-    if (this.textInput && this.resizeObserver && this.resizeObserver.observe) {
-      this.resizeObserver.observe(this.textInput);
+    if (!this.roAttached) {
+      if (this.textInput && this.resizeObserver) {
+        this.resizeObserver.observe(this.textInput);
+      }
+      this.roAttached = true;
     }
   }
 
   private detachResizeListener() {
-    if (this.textInput && this.resizeObserver && this.resizeObserver.unobserve) {
+    if (this.textInput && this.resizeObserver) {
       this.resizeObserver.unobserve(this.textInput);
     }
+    this.roAttached = false;
   }
 }
