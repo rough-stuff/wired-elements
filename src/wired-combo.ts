@@ -1,6 +1,10 @@
-import { customElement, property, query, css, TemplateResult, html, LitElement, CSSResult, PropertyValues } from 'lit-element';
-import { rectangle, polygon } from 'wired-lib';
-import { fire, randomSeed } from 'wired-lib/lib/wired-base';
+import { css, TemplateResult, html, PropertyValues, LitElement } from 'lit';
+import { customElement, property, query } from 'lit/decorators';
+import { rectangle, polygon } from './wired-lib';
+import { randomSeed, fireEvent } from './wired-base';
+
+import './wired-card';
+import './wired-item';
 
 interface WiredComboItem extends HTMLElement {
   value: string;
@@ -26,7 +30,7 @@ export class WiredCombo extends LitElement {
   private itemNodes: WiredComboItem[] = [];
   private lastSelectedItem?: WiredComboItem;
 
-  static get styles(): CSSResult {
+  static get styles() {
     return css`
       :host {
         display: inline-block;
@@ -286,7 +290,7 @@ export class WiredCombo extends LitElement {
   }
 
   private fireSelected() {
-    fire(this, 'selected', { selected: this.selected });
+    fireEvent(this, 'selected', { selected: this.selected });
   }
 
   private selectPrevious() {

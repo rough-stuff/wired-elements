@@ -1,14 +1,15 @@
-import { customElement, property, css, TemplateResult, html, CSSResult, LitElement, query } from 'lit-element';
-import { WiredCard } from 'wired-card/lib/wired-card.js';
-import 'wired-card/lib/wired-card.js';
+import { css, TemplateResult, html, LitElement } from 'lit';
+import { customElement, property, query } from 'lit/decorators';
+import { WiredCard } from './wired-card';
 
 @customElement('wired-dialog')
 export class WiredDialog extends LitElement {
   @property({ type: Number }) elevation = 5;
   @property({ type: Boolean, reflect: true }) open = false;
+
   @query('wired-card') private card?: WiredCard;
 
-  static get styles(): CSSResult {
+  static get styles() {
     return css`
       #container {
         position: fixed;

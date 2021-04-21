@@ -1,6 +1,7 @@
-import { WiredBase, BaseCSS, ResizeObserver, Point } from 'wired-lib/lib/wired-base';
-import { rectangle, line } from 'wired-lib';
-import { customElement, property, query, css, TemplateResult, html, CSSResultArray } from 'lit-element';
+import { WiredBase, BaseCSS, Point } from './wired-base';
+import { rectangle, line } from './wired-lib';
+import { css, TemplateResult, html, CSSResultArray } from 'lit';
+import { customElement, property, query } from 'lit/decorators';
 
 @customElement('wired-button')
 export class WiredButton extends WiredBase {
@@ -8,13 +9,13 @@ export class WiredButton extends WiredBase {
   @property({ type: Boolean, reflect: true }) disabled = false;
 
   @query('button') private button?: HTMLButtonElement;
-
-  private resizeObserver?: ResizeObserver;
+  private ro?: ResizeObserver;
+  private roAttached = false;
 
   constructor() {
     super();
     if ((window as any).ResizeObserver) {
-      this.resizeObserver = new (window as any).ResizeObserver(() => {
+      this.ro = new (window as any).ResizeObserver(() => {
         if (this.svg) {
           this.wiredRender(true);
         }
@@ -114,7 +115,9 @@ export class WiredButton extends WiredBase {
 
   updated() {
     super.updated();
-    this.attachResizeListener();
+    if (!this.roAttached) {
+      this.attachResizeListener();
+    }
   }
 
   disconnectedCallback() {
@@ -122,14 +125,16 @@ export class WiredButton extends WiredBase {
   }
 
   private attachResizeListener() {
-    if (this.button && this.resizeObserver && this.resizeObserver.observe) {
-      this.resizeObserver.observe(this.button);
+    if (this.button && this.ro) {
+      this.ro.observe(this.button);
+      this.roAttached = true;
     }
   }
 
   private detachResizeListener() {
-    if (this.button && this.resizeObserver && this.resizeObserver.unobserve) {
-      this.resizeObserver.unobserve(this.button);
+    if (this.button && this.ro) {
+      this.ro.unobserve(this.button);
     }
+    this.roAttached = false;
   }
 }

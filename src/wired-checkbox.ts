@@ -1,18 +1,19 @@
-import { WiredBase, BaseCSS, Point, fire } from 'wired-lib/lib/wired-base';
-import { rectangle, line, svgNode } from 'wired-lib';
-import { customElement, property, query, css, TemplateResult, html, CSSResultArray } from 'lit-element';
+import { WiredBase, BaseCSS, Point } from './wired-base';
+import { rectangle, line, svgNode } from './wired-lib';
+import { css, TemplateResult, html } from 'lit';
+import { customElement, property, query, state } from 'lit/decorators';
 
 @customElement('wired-checkbox')
 export class WiredCheckbox extends WiredBase {
   @property({ type: Boolean }) checked = false;
   @property({ type: Boolean, reflect: true }) disabled = false;
-  @property() private focused = false;
+  @state() private focused = false;
 
   @query('input') private input?: HTMLInputElement;
 
   private svgCheck?: SVGElement;
 
-  static get styles(): CSSResultArray {
+  static get styles() {
     return [
       BaseCSS,
       css`
@@ -87,7 +88,7 @@ export class WiredCheckbox extends WiredBase {
   private onChange() {
     this.checked = this.input!.checked;
     this.refreshCheckVisibility();
-    fire(this, 'change', { checked: this.checked });
+    this.fire('change', { checked: this.checked });
   }
 
   protected canvasSize(): Point {

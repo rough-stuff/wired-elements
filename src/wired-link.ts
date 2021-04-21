@@ -1,6 +1,7 @@
-import { customElement, property, css, TemplateResult, html, CSSResultArray, query } from 'lit-element';
-import { WiredBase, BaseCSS, Point } from 'wired-lib/lib/wired-base';
-import { line } from 'wired-lib';
+import { WiredBase, BaseCSS, Point } from './wired-base';
+import { line } from './wired-lib';
+import { css, TemplateResult, html, CSSResultArray } from 'lit';
+import { customElement, property, query } from 'lit/decorators';
 
 @customElement('wired-link')
 export class WiredLink extends WiredBase {
