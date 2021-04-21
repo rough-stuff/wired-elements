@@ -4,7 +4,7 @@ import { css, TemplateResult, html, CSSResultArray } from 'lit';
 import { customElement, property, query } from 'lit/decorators';
 import { WiredProgress } from './wired-progress.js';
 import { WiredSlider } from './wired-slider';
-// import './wired-icon-button';
+import './wired-icon-button.js';
 
 @customElement('wired-video')
 export class WiredVideo extends WiredBase {
