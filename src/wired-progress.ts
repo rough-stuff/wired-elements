@@ -1,6 +1,7 @@
-import { WiredBase, BaseCSS, Point } from 'wired-lib/lib/wired-base';
-import { customElement, property, css, TemplateResult, html, CSSResultArray } from 'lit-element';
-import { rectangle, hachureFill } from 'wired-lib';
+import { WiredBase, BaseCSS, Point } from './wired-base';
+import { rectangle, hachureFill } from './wired-lib';
+import { css, TemplateResult, html, CSSResultArray } from 'lit';
+import { customElement, property } from 'lit/decorators';
 
 @customElement('wired-progress')
 export class WiredProgress extends WiredBase {
