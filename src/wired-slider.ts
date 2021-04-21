@@ -1,6 +1,7 @@
-import { WiredBase, BaseCSS, Point, fire } from 'wired-lib/lib/wired-base';
-import { customElement, property, query, css, TemplateResult, html, CSSResultArray } from 'lit-element';
-import { line, ellipse } from 'wired-lib';
+import { WiredBase, BaseCSS, Point } from './wired-base';
+import { line, ellipse } from './wired-lib';
+import { css, TemplateResult, html, CSSResultArray } from 'lit';
+import { customElement, property, query } from 'lit/decorators';
 
 @customElement('wired-slider')
 export class WiredSlider extends WiredBase {
@@ -142,7 +143,7 @@ export class WiredSlider extends WiredBase {
     e.stopPropagation();
     this.updateThumbPosition();
     if (this.input) {
-      fire(this, 'change', { value: +this.input.value });
+      this.fire('change', { value: +this.input.value });
     }
   }
 
