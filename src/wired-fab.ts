@@ -1,6 +1,7 @@
-import { WiredBase, BaseCSS, Point } from 'wired-lib/lib/wired-base';
-import { customElement, property, query, css, TemplateResult, html, CSSResultArray } from 'lit-element';
-import { hachureEllipseFill } from 'wired-lib';
+import { WiredBase, BaseCSS, Point } from './wired-base';
+import { hachureEllipseFill } from './wired-lib';
+import { css, TemplateResult, html, CSSResultArray } from 'lit';
+import { customElement, property, query } from 'lit/decorators';
 
 @customElement('wired-fab')
 export class WiredFab extends WiredBase {
