@@ -1,6 +1,7 @@
-import { WiredBase, BaseCSS, Point } from 'wired-lib/lib/wired-base';
-import { customElement, property, query, css, TemplateResult, html, CSSResultArray } from 'lit-element';
-import { ellipse } from 'wired-lib';
+import { WiredBase, BaseCSS, Point } from './wired-base';
+import { ellipse } from './wired-lib';
+import { css, TemplateResult, html, CSSResultArray } from 'lit';
+import { customElement, property, query } from 'lit/decorators';
 
 @customElement('wired-icon-button')
 export class WiredIconButton extends WiredBase {
