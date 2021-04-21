@@ -1,6 +1,7 @@
-import { customElement, property, css, TemplateResult, html, CSSResultArray } from 'lit-element';
-import { WiredBase, BaseCSS, Point, fire } from 'wired-lib/lib/wired-base';
-import { rectangle } from 'wired-lib';
+import { WiredBase, BaseCSS, Point } from './wired-base';
+import { rectangle } from './wired-lib';
+import { css, TemplateResult, html, CSSResultArray } from 'lit';
+import { customElement, property } from 'lit/decorators';
 
 interface WiredComboItem extends HTMLElement {
   value: string;
@@ -141,7 +142,7 @@ export class WiredListbox extends WiredBase {
   }
 
   private fireSelected() {
-    fire(this, 'selected', { selected: this.selected });
+    this.fire('selected', { selected: this.selected });
   }
 
   private selectPrevious() {
