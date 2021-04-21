@@ -1,6 +1,7 @@
-import { WiredBase, BaseCSS, Point, fire } from 'wired-lib/lib/wired-base';
-import { customElement, property, css, TemplateResult, html, CSSResultArray, query } from 'lit-element';
-import { ellipse, svgNode } from 'wired-lib';
+import { WiredBase, BaseCSS, Point } from './wired-base';
+import { ellipse, svgNode } from './wired-lib';
+import { css, TemplateResult, html, CSSResultArray } from 'lit';
+import { customElement, property, query } from 'lit/decorators';
 
 @customElement('wired-radio')
 export class WiredRadio extends WiredBase {
@@ -89,7 +90,7 @@ export class WiredRadio extends WiredBase {
   private onChange() {
     this.checked = this.input!.checked;
     this.refreshCheckVisibility();
-    fire(this, 'change', { checked: this.checked });
+    this.fire('change', { checked: this.checked });
   }
 
   protected canvasSize(): Point {

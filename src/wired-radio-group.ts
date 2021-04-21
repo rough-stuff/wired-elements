@@ -1,5 +1,6 @@
-import { LitElement, customElement, property, css, TemplateResult, html, CSSResult } from 'lit-element';
-import { fire } from 'wired-lib/lib/wired-base';
+import { fireEvent } from './wired-base';
+import { css, TemplateResult, html, LitElement } from 'lit';
+import { customElement, property } from 'lit/decorators';
 
 interface RadioItem extends HTMLElement {
   name: string;
@@ -12,7 +13,7 @@ export class WiredRadioGroup extends LitElement {
   private radioNodes: RadioItem[] = [];
   private checkListener = this.handleChecked.bind(this);
 
-  static get styles(): CSSResult {
+  static get styles() {
     return css`
       :host {
         display: inline-block;
@@ -161,6 +162,6 @@ export class WiredRadioGroup extends LitElement {
   }
 
   private fireSelected() {
-    fire(this, 'selected', { selected: this.selected });
+    fireEvent(this, 'selected', { selected: this.selected });
   }
 }
