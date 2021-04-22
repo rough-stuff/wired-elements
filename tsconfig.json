@@ -8,6 +8,8 @@
       "dom"
     ],
     "declaration": true,
+    "outDir": "./lib",
+    "baseUrl": ".",
     "strict": true,
     "strictNullChecks": true,
     "noImplicitAny": true,
@@ -16,9 +18,10 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true
   },
-  "exclude": [
-    "node_modules"
+  "include": [
+    "src/**/*.ts"
   ]
 }

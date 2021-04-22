@@ -5,8 +5,8 @@
 
   <link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
 
-  <script type="module" src="../packages/wired-calendar/lib/wired-calendar.js"></script>
-  <script type="module" src="../packages/wired-button/lib/wired-button.js"></script>
+  <script type="module" src="../lib/wired-calendar.js"></script>
+  <script type="module" src="../lib/wired-button.js"></script>
 
   <style>
     body {
@@ -80,12 +80,14 @@
     <wired-calendar id="calendar4" elevation="5" firstdate="Apr 15, 2019" lastdate="Jul 15, 2019" locale="es-MX"
       initials>
     </wired-calendar>
-    <p id="calendar4-result">Select a date in the calendar<p>
-        <div style="margin-top: 16px;">
-          <wired-button id="btn-today">Today</wired-button>
-          <wired-button id="btn-update">Update</wired-button>
-        </div>
-        <p id="calendar4-update">No updated yet<p>
+    <p id="calendar4-result">Select a date in the calendar
+    <p>
+    <div style="margin-top: 16px;">
+      <wired-button id="btn-today">Today</wired-button>
+      <wired-button id="btn-update">Update</wired-button>
+    </div>
+    <p id="calendar4-update">No updated yet
+    <p>
   </section>
 
   <script>
