@@ -88,7 +88,8 @@
     }
   },
   "scripts": {
-    "build": "rm -rf lib && tsc"
+    "build": "rm -rf lib && tsc",
+    "serve": "es-dev-server --node-resolve --dedupe --preserve-symlinks"
   },
   "repository": {
     "type": "git",
@@ -110,6 +111,7 @@
   },
   "homepage": "https://github.com/wiredjs/wired-elements#readme",
   "devDependencies": {
+    "es-dev-server": "^2.1.0",
     "tslint": "^6.1.3",
     "typescript": "^4.2.4"
   },
