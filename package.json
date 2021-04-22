@@ -1,10 +1,11 @@
 {
   "name": "wired-elements",
-  "version": "3.0.0",
+  "version": "3.0.0-rc.1",
   "description": "Collection of hand-drawn sketchy web components",
   "main": "wired-elements.js",
-  "private": true,
-  "scripts": {},
+  "scripts": {
+    "build": "rm -rf bin && tsc"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/wiredjs/wired-elements.git"
