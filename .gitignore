@@ -1,8 +1,2 @@
 node_modules
-bower_components
-build
-bin
-demo
-lerna-debug.log
-npm-debug.log
-packages/*/lib
+lib
