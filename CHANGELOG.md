@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.0] - April 21, 2021
+* Moved from lit-elment to lit 2.0 as the base Web Component class
+* Moved multi-package monorepo to a single package that has all the elements exported
+
 ## [2.0.0] - October 19, 2019
 * New component: **wired-video** Video player with the hand-drawn look
 * New component: **wired-calendar** is a calendar component contributed by [@elingerojo](https://github.com/elingerojo)
