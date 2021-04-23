@@ -1,6 +1,6 @@
 {
   "name": "wired-elements",
-  "version": "3.0.0-rc.1",
+  "version": "3.0.0-rc.2",
   "description": "Collection of hand-drawn sketchy web components",
   "main": "lib/wired-elements.js",
   "types": "lib/wired-elements.d.ts",
@@ -8,83 +8,8 @@
     ".": {
       "default": "./lib/wired-elements.js"
     },
-    "./wired-button.js": {
-      "default": "./lib/wired-button.js"
-    },
-    "./wired-calendar.js": {
-      "default": "./lib/wired-calendar.js"
-    },
-    "./wired-card.js": {
-      "default": "./lib/wired-card.js"
-    },
-    "./wired-checkbox.js": {
-      "default": "./lib/wired-checkbox.js"
-    },
-    "./wired-combo.js": {
-      "default": "./lib/wired-combo.js"
-    },
-    "./wired-dialog.js": {
-      "default": "./lib/wired-dialog.js"
-    },
-    "./wired-divider.js": {
-      "default": "./lib/wired-divider.js"
-    },
-    "./wired-elements.js": {
-      "default": "./lib/wired-elements.js"
-    },
-    "./wired-fab.js": {
-      "default": "./lib/wired-fab.js"
-    },
-    "./wired-icon-button.js": {
-      "default": "./lib/wired-icon-button.js"
-    },
-    "./wired-image.js": {
-      "default": "./lib/wired-image.js"
-    },
-    "./wired-input.js": {
-      "default": "./lib/wired-input.js"
-    },
-    "./wired-item.js": {
-      "default": "./lib/wired-item.js"
-    },
-    "./wired-link.js": {
-      "default": "./lib/wired-link.js"
-    },
-    "./wired-listbox.js": {
-      "default": "./lib/wired-listbox.js"
-    },
-    "./wired-progress.js": {
-      "default": "./lib/wired-progress.js"
-    },
-    "./wired-radio-group.js": {
-      "default": "./lib/wired-radio-group.js"
-    },
-    "./wired-radio.js": {
-      "default": "./lib/wired-radio.js"
-    },
-    "./wired-search-input.js": {
-      "default": "./lib/wired-search-input.js"
-    },
-    "./wired-slider.js": {
-      "default": "./lib/wired-slider.js"
-    },
-    "./wired-spinner.js": {
-      "default": "./lib/wired-spinner.js"
-    },
-    "./wired-tab.js": {
-      "default": "./lib/wired-tab.js"
-    },
-    "./wired-tabs.js": {
-      "default": "./lib/wired-tabs.js"
-    },
-    "./wired-textarea.js": {
-      "default": "./lib/wired-textarea.js"
-    },
-    "./wired-toggle.js": {
-      "default": "./lib/wired-toggle.js"
-    },
-    "./wired-video.js": {
-      "default": "./lib/wired-video.js"
+    "./*": {
+      "default": "./lib/*"
     }
   },
   "scripts": {
