@@ -28,27 +28,13 @@ Add wired-elements to your project:
 ```
 npm i wired-elements
 ```
-or add individual controls
-```
-npm i wired-button
-```
-```
-npm i wired-input
-```
+
 
 Or load the ES module directly through unpkg
 
 ```html
-<script type="module" src="https://unpkg.com/wired-button?module"></script>
+<script type="module" src="https://unpkg.com/wired-elements"></script>
 ```
-
-To load all elements there are bundled versions available: 
-
-ES module: https://unpkg.com/wired-elements/lib/wired-elements-esm.js
-
-IIFE: https://unpkg.com/wired-elements/lib/wired-elements-iife.js
-
-Common JS: https://unpkg.com/wired-elements/lib/wired-elements-cjs.js
 
 
 ## Usage
@@ -58,17 +44,14 @@ Import into your module script:
 import { WiredButton, WiredInput } from "wired-elements"
 ```
 
+or 
+
 ```javascript
-import { WiredButton } from "https://unpkg.com/wired-button?module"
+import { WiredButton } from 'wired-elements/lib/wired-button.js';
+import { WiredInput } from 'wired-elements/lib/wired-input.js';
 ```
 
-Alternatively, load a bundled iife version on the page and start using it in HTML
-
-```html
-<script src="https://unpkg.com/wired-elements/lib/wired-elements-iife.js"></script>
-```
-
-#### Use it in your web page:
+#### Use it in your HTML:
 ```html
 <wired-input placeholder="Enter name"></wired-input>
 <wired-button>Click Me</wired-button>
@@ -78,8 +61,7 @@ Learn about web components [here](https://developer.mozilla.org/en-US/docs/Web/W
 
 ## Component API
 
-To view details of each component - properties, events, css-properties, etc, are provided in their package folder. 
-[List of all packages](https://github.com/wiredjs/wired-elements/tree/master/packages)
+To view details of each component - properties, events, css-properties, etc, are provided in the [docs folder](https://github.com/rough-stuff/wired-elements/tree/master/docs).
 
 ## Demo
 
