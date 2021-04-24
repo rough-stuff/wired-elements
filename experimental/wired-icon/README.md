@@ -138,7 +138,7 @@ We recommand specifying an aria label in your svg for accessibility. Here is how
 ```
 
 ## License
-[MIT License](https://github.com/wiredjs/wired-elements/blob/master/LICENSE) (c) [Preet Shihn](https://twitter.com/preetster)
+[MIT License](https://github.com/rough-stuff/wired-elements/blob/master/LICENSE) (c) [Preet Shihn](https://twitter.com/preetster)
 
 #### Contributor
 
