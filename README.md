@@ -65,6 +65,10 @@ To view details of each component - properties, events, css-properties, etc, are
 
 Demo of all components is available at [wiredjs.com](https://wiredjs.com/showcase.html).
 
+## Credits
+
+wired-elements was built using [RoughJS](https://roughjs.com/) and [Lit](https://lit.dev/).
+
 ## Contributors
 
 Become a sponsor of the [Rough suite of libraries](https://github.com/rough-stuff)
