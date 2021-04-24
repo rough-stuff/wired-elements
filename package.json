@@ -1,15 +1,12 @@
 {
   "name": "wired-elements",
-  "version": "3.0.0-rc.2",
+  "version": "3.0.0-rc.3",
   "description": "Collection of hand-drawn sketchy web components",
   "main": "lib/wired-elements.js",
   "types": "lib/wired-elements.d.ts",
   "exports": {
     ".": {
       "default": "./lib/wired-elements.js"
-    },
-    "./*": {
-      "default": "./lib/*"
     }
   },
   "scripts": {
