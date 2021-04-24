@@ -20,7 +20,7 @@ import { WiredCheckbox } from 'wired-elements/lib/wired-checkbox.js';
 
 Or load directly into your HTML page:
 ```html
-<script type="module" src="https://unpkg.com/wired-elements/lib/wired-checkbox.js"></script>
+<script type="module" src="https://unpkg.com/wired-elements/lib/wired-checkbox.js?module"></script>
 ```
 
 Use it in your HTML:

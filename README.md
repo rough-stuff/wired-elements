@@ -33,7 +33,7 @@ npm i wired-elements
 Or load the ES module directly through unpkg
 
 ```html
-<script type="module" src="https://unpkg.com/wired-elements"></script>
+<script type="module" src="https://unpkg.com/wired-elements?module"></script>
 ```
 
 

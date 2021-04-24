@@ -21,7 +21,7 @@ import { WiredListbox } from 'wired-elements/lib/wired-listbox.js';
 
 Or load directly into your HTML page:
 ```html
-<script type="module" src="https://unpkg.com/wired-elements/lib/wired-listbox.js"></script>
+<script type="module" src="https://unpkg.com/wired-elements/lib/wired-listbox.js?module"></script>
 ```
 
 Use it in your HTML:

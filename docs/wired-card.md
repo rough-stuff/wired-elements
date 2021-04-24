@@ -21,7 +21,7 @@ import { WiredCard } from 'wired-elements/lib/wired-card.js';
 
 Or load directly into your HTML page:
 ```html
-<script type="module" src="https://unpkg.com/wired-elements/lib/wired-card.js"></script>
+<script type="module" src="https://unpkg.com/wired-elements/lib/wired-card.js?module"></script>
 ```
 
 Use it in your HTML:

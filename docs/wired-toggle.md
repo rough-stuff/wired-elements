@@ -20,7 +20,7 @@ import { WiredToggle } from 'wired-elements/lib/wired-toggle.js';
 
 Or load directly into your HTML page:
 ```html
-<script type="module" src="https://unpkg.com/wired-elements/lib/wired-toggle.js"></script>
+<script type="module" src="https://unpkg.com/wired-elements/lib/wired-toggle.js?module"></script>
 ```
 
 Use it in your HTML:

@@ -20,7 +20,7 @@ import { WiredDialog } from 'wired-elements/lib/wired-dialog.js';
 
 Or load directly into your HTML page:
 ```html
-<script type="module" src="https://unpkg.com/wired-elements/lib/wired-dialog.js"></script>
+<script type="module" src="https://unpkg.com/wired-elements/lib/wired-dialog.js?module"></script>
 ```
 
 Use it in your HTML:
@@ -48,4 +48,4 @@ Use it in your HTML:
 
 
 ## License
-[MIT License](https://github.com/rough-stuff/wired-elements/blob/master/LICENSE) (c) [Preet Shihn](https://twitter.com/preetster)
+[MIT License](https://github.com/wiredjs/wired-elements/blob/master/LICENSE) (c) [Preet Shihn](https://twitter.com/preetster)

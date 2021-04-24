@@ -23,7 +23,7 @@ import { WiredSlider } from 'wired-elements/lib/wired-slider.js';
 
 Or load directly into your HTML page:
 ```html
-<script type="module" src="https://unpkg.com/wired-elements/lib/wired-slider.js"></script>
+<script type="module" src="https://unpkg.com/wired-elements/lib/wired-slider.js?module"></script>
 ```
 
 Use it in your HTML:

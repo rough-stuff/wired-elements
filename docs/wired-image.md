@@ -21,7 +21,7 @@ import { WiredImage } from 'wired-elements/lib/wired-image.js';
 
 Or load directly into your HTML page:
 ```html
-<script type="module" src="https://unpkg.com/wired-elements/lib/wired-image.js"></script>
+<script type="module" src="https://unpkg.com/wired-elements/lib/wired-image.js?module"></script>
 ```
 
 Use it in your HTML:

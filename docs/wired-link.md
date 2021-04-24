@@ -20,7 +20,7 @@ import { WiredLink } from 'wired-elements/lib/wired-link.js';
 
 Or load directly into your HTML page:
 ```html
-<script type="module" src="https://unpkg.com/wired-elements/lib/wired-link.js"></script>
+<script type="module" src="https://unpkg.com/wired-elements/lib/wired-link.js?module"></script>
 ```
 
 Use it in your HTML:

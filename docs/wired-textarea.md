@@ -20,7 +20,7 @@ import { WiredTextarea } from 'wired-elements/lib/wired-textarea.js';
 
 Or load directly into your HTML page:
 ```html
-<script type="module" src="https://unpkg.com/wired-elements/lib/wired-textarea.js"></script>
+<script type="module" src="https://unpkg.com/wired-elements/lib/wired-textarea.js?module"></script>
 ```
 
 Use it in your HTML:

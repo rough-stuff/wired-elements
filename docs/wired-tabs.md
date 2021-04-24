@@ -20,7 +20,7 @@ import { WiredTabs, WiredTab } from 'wired-elements/lib/wired-tabs.js';
 
 Or load directly into your HTML page:
 ```html
-<script type="module" src="https://unpkg.com/wired-elements/lib/wired-tabs.js"></script>
+<script type="module" src="https://unpkg.com/wired-elements/lib/wired-tabs.js?module"></script>
 ```
 
 Use it in your HTML:
