@@ -87,7 +87,7 @@ __signal_wifi_statusbar_1_bar, signal_wifi_statusbar_2_bar, signal_wifi_statusba
 3. Ask for help in an issue!
 
 ## License
-[MIT License](https://github.com/wiredjs/wired-elements/blob/master/LICENSE) (c) [Preet Shihn](https://twitter.com/preetster)
+[MIT License](https://github.com/rough-stuff/wired-elements/blob/master/LICENSE) (c) [Preet Shihn](https://twitter.com/preetster)
 
 #### Contributor
 
