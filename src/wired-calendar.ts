@@ -1,7 +1,7 @@
 import { rectangle, line, ellipse } from './wired-lib';
 import { randomSeed, fireEvent } from './wired-base';
 import { css, TemplateResult, html, LitElement, PropertyValues } from 'lit';
-import { customElement, property } from 'lit/decorators';
+import { customElement, property } from 'lit/decorators.js';
 
 interface AreaSize {
   width: number;

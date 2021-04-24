@@ -1,6 +1,6 @@
 import { fireEvent } from './wired-base';
 import { css, TemplateResult, html, LitElement } from 'lit';
-import { customElement, property } from 'lit/decorators';
+import { customElement, property } from 'lit/decorators.js';
 
 interface RadioItem extends HTMLElement {
   name: string;

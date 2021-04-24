@@ -1,6 +1,6 @@
 import { BaseCSS } from './wired-base';
 import { css, TemplateResult, html, CSSResultArray, LitElement } from 'lit';
-import { customElement, property, query } from 'lit/decorators';
+import { customElement, property, query } from 'lit/decorators.js';
 
 interface WiredTabItem extends HTMLElement {
   name: string;

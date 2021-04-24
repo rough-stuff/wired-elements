@@ -1,7 +1,7 @@
 import { WiredBase, BaseCSS, Point } from './wired-base';
 import { ellipse, hachureEllipseFill } from './wired-lib';
 import { css, TemplateResult, html, CSSResultArray } from 'lit';
-import { customElement, property } from 'lit/decorators';
+import { customElement, property } from 'lit/decorators.js';
 
 @customElement('wired-spinner')
 export class WiredSpinner extends WiredBase {

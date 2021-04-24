@@ -1,7 +1,7 @@
 import { WiredBase, BaseCSS, Point } from './wired-base';
 import { rectangle, line } from './wired-lib';
 import { css, TemplateResult, html, CSSResultArray } from 'lit';
-import { customElement, property, query } from 'lit/decorators';
+import { customElement, property, query } from 'lit/decorators.js';
 
 @customElement('wired-button')
 export class WiredButton extends WiredBase {

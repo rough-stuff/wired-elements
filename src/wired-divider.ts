@@ -1,7 +1,7 @@
 import { WiredBase, BaseCSS, Point } from './wired-base';
 import { line } from './wired-lib';
 import { css, TemplateResult, html, CSSResultArray } from 'lit';
-import { customElement, property } from 'lit/decorators';
+import { customElement, property } from 'lit/decorators.js';
 
 @customElement('wired-divider')
 export class WiredDivider extends WiredBase {

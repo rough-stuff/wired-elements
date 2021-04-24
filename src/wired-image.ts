@@ -1,7 +1,7 @@
 import { WiredBase, BaseCSS, Point } from './wired-base';
 import { rectangle, line } from './wired-lib';
 import { css, TemplateResult, html, CSSResultArray } from 'lit';
-import { customElement, property } from 'lit/decorators';
+import { customElement, property } from 'lit/decorators.js';
 
 const EMPTY_IMAGE = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
 

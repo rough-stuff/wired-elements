@@ -1,5 +1,5 @@
 import { css, TemplateResult, html, PropertyValues, LitElement } from 'lit';
-import { customElement, property, query } from 'lit/decorators';
+import { customElement, property, query } from 'lit/decorators.js';
 import { rectangle, polygon } from './wired-lib';
 import { randomSeed, fireEvent } from './wired-base';
 

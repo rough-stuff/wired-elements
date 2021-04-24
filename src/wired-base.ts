@@ -1,5 +1,5 @@
 import { LitElement, css, PropertyValues } from 'lit';
-import { query } from 'lit/decorators';
+import { query } from 'lit/decorators.js';
 
 export type Point = [number, number];
 

@@ -1,7 +1,7 @@
 import { WiredBase, BaseCSS, Point } from './wired-base';
 import { rectangle, line, svgNode } from './wired-lib';
 import { css, TemplateResult, html } from 'lit';
-import { customElement, property, query, state } from 'lit/decorators';
+import { customElement, property, query, state } from 'lit/decorators.js';
 
 @customElement('wired-checkbox')
 export class WiredCheckbox extends WiredBase {

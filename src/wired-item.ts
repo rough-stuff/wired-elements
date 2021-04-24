@@ -1,6 +1,6 @@
 import { WiredBase, BaseCSS, Point } from './wired-base';
 import { css, TemplateResult, html, CSSResultArray } from 'lit';
-import { customElement, property } from 'lit/decorators';
+import { customElement, property } from 'lit/decorators.js';
 import { hachureFill } from './wired-lib';
 
 @customElement('wired-item')

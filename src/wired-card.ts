@@ -1,7 +1,7 @@
 import { WiredBase, BaseCSS, Point } from './wired-base';
 import { rectangle, line, hachureFill, } from './wired-lib';
 import { css, TemplateResult, html, PropertyValues } from 'lit';
-import { customElement, property } from 'lit/decorators';
+import { customElement, property } from 'lit/decorators.js';
 
 @customElement('wired-card')
 export class WiredCard extends WiredBase {
