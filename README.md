@@ -69,6 +69,8 @@ Demo of all components is available at [wiredjs.com](https://wiredjs.com/showcas
 
 ## Contributors
 
+Become a sponsor of the [Rough suite of libraries](https://github.com/rough-stuff)
+
 ### Financial Contributors
 
 Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/rough/contribute)]
