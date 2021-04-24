@@ -10,17 +10,17 @@ Add wired-elements to your JavaScript project:
 npm i wired-elements
 ```
 
-Or load directly into your HTML page:
-```html
-<script type="module" src="https://unpkg.com/wired-elements/lib/wired-button.js"></script>
-```
-
 Import module in your code:
 
 ```javascript
 import { WiredButton } from 'wired-elements';
 // or
 import { WiredButton } from 'wired-elements/lib/wired-button.js';
+```
+
+Or load directly into your HTML page:
+```html
+<script type="module" src="https://unpkg.com/wired-elements/lib/wired-button.js"></script>
 ```
 
 Use it in your HTML:
