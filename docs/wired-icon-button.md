@@ -1,6 +1,6 @@
 # wired-icon-button
 
-This is a hand-drawn sketchy round button with an image placed at the center. Image could also be in icon, more specifically an icon as [@material/mwc-icon](https://www.npmjs.com/package/@material/mwc-icon).
+This is a hand-drawn sketchy round button with an image placed at the center. Image could also be in icon, like [@material/mwc-icon](https://www.npmjs.com/package/@material/mwc-icon).
 
 For demo and view the complete set of wired-elememts: [wiredjs.com](http://wiredjs.com/)
 
@@ -26,8 +26,12 @@ Or load directly into your HTML page:
 
 Use it in your HTML:
 ```html
-<wired-icon-button>favorite</wired-icon-button>
-<wired-icon-button class="red">favorite</wired-icon-button>
+<wired-icon-button>
+  <mwc-icon>favorite</mwc-icon>
+</wired-icon-button>
+<wired-icon-button class="red">
+  <mwc-icon>favorite</mwc-icon>
+</wired-icon-button>
 ```
 
 ## Properties

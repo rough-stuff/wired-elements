@@ -25,8 +25,12 @@ Or load directly into your HTML page:
 
 Use it in your HTML:
 ```html
-<wired-fab id="btn1">favorite</wired-fab>
-<wired-fab id="btn2" class="red">close</wired-fab>
+<wired-fab id="btn1">
+  <mwc-icon>favorite</mwc-icon>
+</wired-fab>
+<wired-fab id="btn2" class="red">
+  <mwc-icon>close</mwc-icon>
+</wired-fab>
 ```
 
 ## Properties
