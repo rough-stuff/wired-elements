@@ -1,7 +1,8 @@
 {
   "name": "wired-elements",
-  "version": "3.0.0-rc.6",
+  "version": "3.0.0-rc.7",
   "description": "Collection of hand-drawn sketchy web components",
+  "type": "module",
   "main": "lib/wired-elements.js",
   "module": "lib/wired-elements.js",
   "types": "lib/wired-elements.d.ts",
