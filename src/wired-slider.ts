@@ -84,6 +84,7 @@ export class WiredSlider extends WiredBase {
       }
       .bar {
         stroke: var(--wired-slider-bar-color, rgb(0, 0, 0));
+        stroke-width: 1;
       }
       input:focus + div svg .knob {
         stroke: var(--wired-slider-knob-outline-color, #000);
