@@ -22,3 +22,4 @@ export * from './wired-tabs';
 export * from './wired-textarea';
 export * from './wired-toggle';
 export * from './wired-video';
+export * from './wired-progress-ring';

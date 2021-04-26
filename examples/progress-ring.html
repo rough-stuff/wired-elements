@@ -1,0 +1,67 @@
+<html>
+
+<head>
+  <script type="module" src="../lib/wired-progress-ring.js"></script>
+  <script type="module" src="../lib/wired-button.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 10px;
+      font-family: sans-serif;
+      line-height: 1.5;
+    }
+
+    wired-progress-ring {
+      margin: 16px 0;
+    }
+
+    #wp2 {
+      --wired-progress-color: red;
+    }
+
+    wired-button {
+      margin: 0 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <wired-progress-ring value="25" hideLabel></wired-progress-ring>
+  <br>
+  <wired-progress-ring id="wp2" min="-100" max="100" value="0"></wired-progress-ring>
+  <br>
+  <section style="margin-top: 16px;">
+    <wired-progress-ring id="progress" showLabelAsPercent></wired-progress-ring>
+    <div style="margin-top: 16px;">
+      <wired-button id="btns">Start</wired-button>
+      <wired-button id="btnr">Stop</wired-button>
+    </div>
+  </section>
+
+  <script>
+    const prog = document.getElementById('progress')
+    let timer = 0;
+    document.getElementById('btns').addEventListener('click', () => {
+      if (timer) {
+        window.clearInterval(timer);
+      }
+      timer = window.setInterval(() => {
+        if (prog.value >= 100) {
+          prog.value = 0;
+        } else {
+          prog.value = prog.value + 1;
+        }
+      }, 100);
+    });
+    document.getElementById('btnr').addEventListener('click', () => {
+      if (timer) {
+        window.clearInterval(timer);
+        timer = 0;
+      }
+      prog.value = 0;
+    });
+  </script>
+</body>
+
+</html>

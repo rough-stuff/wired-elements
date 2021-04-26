@@ -16,8 +16,6 @@ npm i wired-elements
 Import module in your code:
 
 ```javascript
-import { WiredCalendar } from 'wired-elements';
-// or
 import { WiredCalendar } from 'wired-elements/lib/wired-calendar.js';
 ```
 
