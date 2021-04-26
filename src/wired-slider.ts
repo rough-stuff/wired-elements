@@ -63,8 +63,8 @@ export class WiredSlider extends WiredBase {
         cursor: pointer;
         border: none;
         margin: 0;
-        height: 20px;
-        width: 20px;
+        height: 24px;
+        width: 24px;
         line-height: 1;
       }
       input[type=range]::-webkit-slider-thumb {
@@ -73,8 +73,8 @@ export class WiredSlider extends WiredBase {
         background: none;
         cursor: pointer;
         border: none;
-        height: 20px;
-        width: 20px;
+        height: 24px;
+        width: 24px;
         margin: 0;
         line-height: 1;
       }
@@ -84,6 +84,7 @@ export class WiredSlider extends WiredBase {
       }
       .bar {
         stroke: var(--wired-slider-bar-color, rgb(0, 0, 0));
+        stroke-width: 1;
       }
       input:focus + div svg .knob {
         stroke: var(--wired-slider-knob-outline-color, #000);
@@ -161,7 +162,7 @@ export class WiredSlider extends WiredBase {
     this.canvasWidth = size[0];
     const midY = Math.round(size[1] / 2);
     line(svg, 0, midY, size[0], midY, this.seed).classList.add('bar');
-    this.knob = ellipse(svg, 10, midY, 20, 20, this.seed);
+    this.knob = ellipse(svg, 12, midY, 24, 24, this.seed);
     this.knob.classList.add('knob');
   }
 
@@ -171,7 +172,7 @@ export class WiredSlider extends WiredBase {
       const delta = Math.max(this.step, this.max - this.min);
       const pct = (value - this.min) / delta;
       if (this.knob) {
-        this.knob.style.transform = `translateX(${pct * (this.canvasWidth - 20)}px)`;
+        this.knob.style.transform = `translateX(${pct * (this.canvasWidth - 24)}px)`;
       }
     }
   }
