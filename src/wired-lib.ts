@@ -5,6 +5,7 @@ import {
   rectangle as roughRectangle,
   ellipse as roughEllipse,
   polygon as roughPolygon,
+  arc as roughArc,
   doubleLineFillOps,
   generateEllipseParams
 } from 'roughjs/bin/renderer';
@@ -108,6 +109,12 @@ export function ellipse(parent: SVGElement, x: number, y: number, width: number,
   width = Math.max(width > 10 ? width - 4 : width - 1, 1);
   height = Math.max(height > 10 ? height - 4 : height - 1, 1);
   return createPathNode(roughEllipse(x, y, width, height, options(seed)), parent);
+}
+
+export function arc(parent: SVGElement, x: number, y: number, width: number, height: number, start: number, stop: number, seed: number): SVGElement {
+  width = Math.max(width > 10 ? width - 4 : width - 1, 1);
+  height = Math.max(height > 10 ? height - 4 : height - 1, 1);
+  return createPathNode(roughArc(x, y, width, height, start, stop, false, false, options(seed)), parent);
 }
 
 export function hachureFill(points: Point[], seed: number): SVGElement {
