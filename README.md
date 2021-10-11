@@ -20,7 +20,7 @@ Play with wired-elements:
 
 ## Install
 
-The package (wired-elements) exports all components in the **_wired_** category. List of all wired elements can be found [here](https://github.com/wiredjs/wired-elements/tree/master/packages).
+The package (wired-elements) exports all components in the **_wired_** category. List of all wired elements can be found [here](https://github.com/rough-stuff/wired-elements/tree/master/src).
 
 Add wired-elements to your project:
 ```
