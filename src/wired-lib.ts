@@ -119,7 +119,7 @@ export function arc(parent: SVGElement, x: number, y: number, width: number, hei
 
 export function hachureFill(points: Point[], seed: number): SVGElement {
   const hf = new ZigZagFiller(fillHelper);
-  const ops = hf.fillPolygon(points, options(seed));
+  const ops = hf.fillPolygons([points], options(seed));
   return createPathNode(ops, null);
 }
 
