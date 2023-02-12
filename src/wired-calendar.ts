@@ -45,6 +45,7 @@ export class WiredCalendar extends LitElement {
 
   private resizeHandler?: EventListenerOrEventListenerObject;
 
+  private localeWeekdayOffset: number = 0;     // Days distance from Sunday (when locale first day of week is Monday, offset will change to 1)
   private firstOfMonthDate: Date = new Date(); // Only month and year relevant
   private fDate: Date | undefined = undefined; // Date obj for firstdate string
   private lDate: Date | undefined = undefined; // Date obj for lastdate string
@@ -328,11 +329,43 @@ export class WiredCalendar extends LitElement {
     // Replace localized calendar texts when not `en-US` or not `en`
     const l = (this.locale || '').toLowerCase();
     if (l !== 'en-us' && l !== 'en') {
+      // Get locale first day of the week (Sunday for most America but Monday for most Europe)
+      //
+      // Option #1 using Intl.Locale (not supported by all modern browser yet on Feb, 2023)
+      // const il = new Intl.Locale(this.locale as string) as any;
+      // const localeFirstWeekday = (il.weekInfo?.firstDay || 0) % 7; // default to Sunday
+      // End-of-option-#1
+      //
+      // Option #2 (workaround) using regex and hardcoded data (use this option until Intl.Locale is fully supported)
+      const re = /^(?:(en-GB-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|i-klingon|i-lux|i-mingo|i-navajo|i-pwn|i-tao|i-tay|i-tsu|sgn-BE-FR|sgn-BE-NL|sgn-CH-DE)|(art-lojban|cel-gaulish|no-bok|no-nyn|zh-guoyu|zh-hakka|zh-min|zh-min-nan|zh-xiang))$|^((?:[a-z]{2,3}(?:(?:-[a-z]{3}){1,3})?)|[a-z]{4}|[a-z]{5,8})(?:-([a-z]{4}))?(?:-([a-z]{2}|\d{3}))?((?:-(?:[\da-z]{5,8}|\d[\da-z]{3}))*)?((?:-[\da-wy-z](?:-[\da-z]{2,8})+)*)?(-x(?:-[\da-z]{1,8})+)?$|^(x(?:-[\da-z]{1,8})+)$/i;
+      const matches = re.exec(this.locale as string) || [,,,,"US"]; // [,,,,"US"] hack to avoid undefined
+      const region = matches[5] as string; // element #5 is always the locale region like 'GB', 'CN', 'FR', even 'US'
+      const wsr = { // weekday start by region (Sunday = 0, Monday = 1, ...)
+        "001":1,"AD":1,"AE":6,"AF":6,"AG":0,"AI":1,"AL":1,"AM":1,"AN":1,"AR":1,"AS":0,"AT":1,"AU":0,"AX":1,"AZ":1,"BA":1,"BD":0,
+        "BE":1,"BG":1,"BH":6,"BM":1,"BN":1,"BR":0,"BS":0,"BT":0,"BW":0,"BY":1,"BZ":0,"CA":0,"CH":1,"CL":1,"CM":1,"CN":0,"CO":0,
+        "CR":1,"CY":1,"CZ":1,"DE":1,"DJ":6,"DK":1,"DM":0,"DO":0,"DZ":6,"EC":1,"EE":1,"EG":6,"ES":1,"ET":0,"FI":1,"FJ":1,"FO":1,
+        "FR":1,"GB":1,"GE":1,"GF":1,"GP":1,"GR":1,"GT":0,"GU":0,"HK":0,"HN":0,"HR":1,"HU":1,"ID":0,"IE":1,"IL":0,"IN":0,"IQ":6,
+        "IR":6,"IS":1,"IT":1,"JM":0,"JO":6,"JP":0,"KE":0,"KG":1,"KH":0,"KR":0,"KW":6,"KZ":1,"LA":0,"LB":1,"LI":1,"LK":1,"LT":1,
+        "LU":1,"LV":1,"LY":6,"MC":1,"MD":1,"ME":1,"MH":0,"MK":1,"MM":0,"MN":1,"MO":0,"MQ":1,"MT":0,"MV":5,"MX":0,"MY":1,"MZ":0,
+        "NI":0,"NL":1,"NO":1,"NP":0,"NZ":1,"OM":6,"PA":0,"PE":0,"PH":0,"PK":0,"PL":1,"PR":0,"PT":0,"PY":0,"QA":6,"RE":1,"RO":1,
+        "RS":1,"RU":1,"SA":0,"SD":6,"SE":1,"SG":0,"SI":1,"SK":1,"SM":1,"SV":0,"SY":6,"TH":0,"TJ":1,"TM":1,"TR":1,"TT":0,"TW":0,
+        "UA":1,"UM":0,"US":0,"UY":1,"UZ":1,"VA":1,"VE":0,"VI":0,"VN":1,"WS":0,"XK":1,"YE":0,"ZA":0,"ZW":0
+      };
+      const localeFirstWeekday = wsr[region as keyof typeof wsr];
+      // End-of-option-#2
+
+      // Set offset distance from Sunday (Saturday as -1 day and Monday as +1 day)
+       if (localeFirstWeekday != 0) {
+        const distanceToRight = localeFirstWeekday;
+        const distanceTooLeft = (7 - localeFirstWeekday) % 7;
+        this.localeWeekdayOffset = distanceTooLeft < distanceToRight ? -1 : +1;
+      }
+      
       const d = new Date();
 
       // Compute weekday header texts (like "Sun", "Mon", "Tue", ...)
       const weekDayOffset = d.getUTCDay();
-      const daySunday = new Date(d.getTime() - DAY * weekDayOffset);
+      const daySunday = new Date(d.getTime() - DAY * (weekDayOffset - this.localeWeekdayOffset));
       for (let i = 0; i < 7; i++) {
         const weekdayDate = new Date(daySunday);
         weekdayDate.setDate(daySunday.getDate() + i);
@@ -452,7 +485,7 @@ export class WiredCalendar extends LitElement {
       this.weeks[weekIndex] = [];
       for (let dayOfWeekIndex = 0; dayOfWeekIndex < 7; dayOfWeekIndex++) {
         // Compute day date (using an incrementing offset)
-        const day = new Date(first_day_in_month.getTime() + DAY * dayInMonthOffset);
+        const day = new Date(first_day_in_month.getTime() + DAY * (dayInMonthOffset + this.localeWeekdayOffset));
 
         const formatedDate: string = this.format(day);
 
