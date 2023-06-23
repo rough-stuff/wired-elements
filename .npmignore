@@ -1,6 +1,8 @@
 node_modules
 examples
+demo
 .github
 tsconfig.json
 tslint.json
 packages
+src
