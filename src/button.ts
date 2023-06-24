@@ -129,19 +129,31 @@ export class WiredButton extends WiredBase {
   protected draw(svg: SVGSVGElement): void {
     if (this._button) {
       const { width, height } = this._button.getBoundingClientRect();
-      const ops = rectangle([2, 2], width - 4, height - 4, this._randomizer);
-      renderSvgPath(svg, ops);
-
       const elev = Math.min(Math.max(1, this.elevation), 5);
-      const offset = 2;
-      for (let i = 1; i < elev; i++) {
-        [
-          line([i * offset, height + (i * 2)], [width + (i * 2), height + (i * 2)], this._randomizer, true, 0.5),
-          line([width + (i * 2), height + (i * 2)], [width + (i * 2), i * offset], this._randomizer, true, 0.5)
-        ].forEach((ops) => {
-          renderSvgPath(svg, ops).style.strokeOpacity = `${(100 - (i * 10)) / 100}`;
-        });
+      const elevOffset = 2;
+
+      if (this.rounded) {
+        const radius = height / 2;
+        const radiusOffset = radius - 10;
+        renderSvgPath(svg, line([radiusOffset, 2], [width - radiusOffset, 2], this._randomizer));
+        renderSvgPath(svg, line([radiusOffset, height - 2], [width - radiusOffset, height - 2], this._randomizer));
+        for (let i = 1; i < elev; i++) {
+          renderSvgPath(svg, line([radiusOffset + (i * elevOffset), height + (i * 2)], [width - radiusOffset - (i * elevOffset), height + (i * 2)], this._randomizer, true, 0.5))
+            .style.strokeOpacity = `${(100 - (i * 10)) / 100}`;
+        }
+
+      } else {
+        renderSvgPath(svg, rectangle([2, 2], width - 4, height - 4, this._randomizer));
+        for (let i = 1; i < elev; i++) {
+          [
+            line([i * elevOffset, height + (i * 2)], [width + (i * 2), height + (i * 2)], this._randomizer, true, 0.5),
+            line([width + (i * 2), height + (i * 2)], [width + (i * 2), i * elevOffset], this._randomizer, true, 0.5)
+          ].forEach((ops) => {
+            renderSvgPath(svg, ops).style.strokeOpacity = `${(100 - (i * 10)) / 100}`;
+          });
+        }
       }
+
     }
   }
 }

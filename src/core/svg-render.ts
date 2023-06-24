@@ -1,4 +1,4 @@
-import { Op } from './api';
+import { RenderOps, Op } from './graphics';
 
 const SVGNS = 'http://www.w3.org/2000/svg';
 
@@ -24,10 +24,20 @@ function _opsToPath(ops: Op[]): string {
   return path.trim();
 }
 
-export function renderSvgPath(parent: SVGElement, ops: Op[]) {
+export function renderSvgPath(parent: SVGElement, ops: RenderOps) {
+  const { shape, overlay } = ops;
   const doc = parent.ownerDocument || window.document;
-  const path = doc.createElementNS(SVGNS, 'path');
-  path.setAttribute('d', _opsToPath(ops));
-  parent.appendChild(path);
-  return path;
+  const g = doc.createElementNS(SVGNS, 'g');
+  if (shape.length) {
+    const path = doc.createElementNS(SVGNS, 'path');
+    path.setAttribute('d', _opsToPath(shape));
+    g.appendChild(path);
+  }
+  if (overlay.length) {
+    const path = doc.createElementNS(SVGNS, 'path');
+    path.setAttribute('d', _opsToPath(overlay));
+    g.appendChild(path);
+  }
+  parent.appendChild(g);
+  return g;
 }

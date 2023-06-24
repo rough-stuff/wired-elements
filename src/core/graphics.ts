@@ -8,12 +8,20 @@ export interface Op {
   data: number[];
 }
 
-export function line(p1: Point, p2: Point, randomizer: Randomizer, doubleStroke = true, roughness = 1): Op[] {
+export interface RenderOps {
+  shape: Op[];
+  overlay: Op[];
+}
+
+export function line(p1: Point, p2: Point, randomizer: Randomizer, doubleStroke = true, roughness = 1): RenderOps {
   const [x1, y1] = p1;
   const [x2, y2] = p2;
   const length = lineLength([p1, p2]);
   if (length === 0) {
-    return [];
+    return {
+      shape: [],
+      overlay: []
+    };
   }
   const center = centerPoint(p1, p2);
   const slope = Math.atan2(y2 - y1, x2 - x1);
@@ -64,33 +72,45 @@ export function line(p1: Point, p2: Point, randomizer: Randomizer, doubleStroke 
       });
     }
   }
-  return [...ops, ...overlayOps];
+  return {
+    shape: ops,
+    overlay: overlayOps
+  };
 }
 
-export function linearPath(points: Point[], close: boolean, randomizer: Randomizer, doubleStroke = true, roughness = 1): Op[] {
+export function linearPath(points: Point[], close: boolean, randomizer: Randomizer, doubleStroke = true, roughness = 1): RenderOps {
   const len = (points || []).length;
   if (len > 2) {
     const ops: Op[] = [];
+    const overlayOps: Op[] = [];
     for (let i = 0; i < (len - 1); i++) {
-      const l = line(points[i], points[i + 1], randomizer, doubleStroke, roughness);
-      ops.push(...l);
+      const { shape, overlay } = line(points[i], points[i + 1], randomizer, doubleStroke, roughness);
+      ops.push(...shape);
+      overlayOps.push(...overlay);
     }
     if (close) {
-      const l = line(points[len - 1], points[0], randomizer, doubleStroke, roughness);
-      ops.push(...l);
+      const { shape, overlay } = line(points[len - 1], points[0], randomizer, doubleStroke, roughness);
+      ops.push(...shape);
+      overlayOps.push(...overlay);
     }
-    return ops;
+    return {
+      shape: ops,
+      overlay: overlayOps
+    };
   } else if (len === 2) {
     return line(points[0], points[1], randomizer, doubleStroke, roughness);
   }
-  return [];
+  return {
+    shape: [],
+    overlay: []
+  };
 }
 
-export function polygon(points: Point[], randomizer: Randomizer, doubleStroke = true, roughness = 1): Op[] {
+export function polygon(points: Point[], randomizer: Randomizer, doubleStroke = true, roughness = 1): RenderOps {
   return linearPath(points, true, randomizer, doubleStroke, roughness);
 }
 
-export function rectangle(topLeft: Point, width: number, height: number, randomizer: Randomizer, doubleStroke = true, roughness = 1): Op[] {
+export function rectangle(topLeft: Point, width: number, height: number, randomizer: Randomizer, doubleStroke = true, roughness = 1): RenderOps {
   const points: Point[] = [
     topLeft,
     [topLeft[0] + width, topLeft[1]],
