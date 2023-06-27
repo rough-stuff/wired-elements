@@ -24,7 +24,7 @@ function _opsToPath(ops: Op[]): string {
   return path.trim();
 }
 
-export function renderSvgPath(parent: SVGElement, ops: RenderOps) {
+export function renderSvgPath(parent: SVGElement, ops: RenderOps): SVGElement {
   const { shape, overlay } = ops;
   const doc = parent.ownerDocument || window.document;
   const g = doc.createElementNS(SVGNS, 'g');
@@ -38,6 +38,19 @@ export function renderSvgPath(parent: SVGElement, ops: RenderOps) {
     path.setAttribute('d', _opsToPath(overlay));
     g.appendChild(path);
   }
+  parent.appendChild(g);
+  return g;
+}
+
+export function fillSvgPath(parent: SVGElement, shape: Op[]): SVGElement {
+  const doc = parent.ownerDocument || window.document;
+  const g = doc.createElementNS(SVGNS, 'g');
+  if (shape.length) {
+    const path = doc.createElementNS(SVGNS, 'path');
+    path.setAttribute('d', _opsToPath(shape));
+    g.appendChild(path);
+  }
+  g.setAttribute('class', 'wired-fill-shape');
   parent.appendChild(g);
   return g;
 }

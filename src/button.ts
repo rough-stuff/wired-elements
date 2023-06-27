@@ -1,7 +1,7 @@
 import { WiredBase, ce, html, TemplateResult, css, property, query, Point } from './core/base-element.js';
 import { styleMap, StyleInfo } from 'lit/directives/style-map.js';
-import { rectangle, line, roundedRectangle } from './core/graphics.js';
-import { renderSvgPath } from './core/svg-render.js';
+import { rectangle, line, roundedRectangle, RenderOps, Op } from './core/graphics.js';
+import { renderSvgPath, fillSvgPath } from './core/svg-render.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -30,6 +30,9 @@ export class WiredButton extends WiredBase {
       }
       #overlay {
         pointer-events: initial;
+      }
+      #content {
+        position: relative;
       }
       path {
         transition: transform 0.05s ease;
@@ -61,6 +64,7 @@ export class WiredButton extends WiredBase {
         cursor: initial;
         pointer-events: none;
         opacity: 0.6 !important;
+        --wired-fill-color: var(--wired-button-disabled-bg, rgba(0, 0, 0, 0.07));
         background: var(--wired-button-disabled-bg, rgba(0, 0, 0, 0.07));
         pointer-events: none;
       }
@@ -93,9 +97,11 @@ export class WiredButton extends WiredBase {
     return html`
     <div id="container" style="${styleMap(containerStyles)}">
       <button ?disabled="${this.disabled}">
-        <slot @slotchange="${() => this._wiredRender()}"></slot>
         <div id="overlay">
           <svg></svg>
+        </div>
+        <div id="content">
+          <slot @slotchange="${() => this._wiredRender()}"></slot>
         </div>
       </button>
       
@@ -132,6 +138,18 @@ export class WiredButton extends WiredBase {
     return this._lastSize;
   }
 
+  private _mergedShape(rect: RenderOps): Op[] {
+    return (rect.overlay.length ? rect.overlay : rect.shape).filter((d, i) => {
+      if (i === 0) {
+        return true;
+      }
+      if (d.op === 'move') {
+        return false;
+      }
+      return true;
+    });
+  }
+
   protected draw(svg: SVGSVGElement): void {
     if (this._button) {
       const { width, height } = this._button.getBoundingClientRect();
@@ -141,18 +159,22 @@ export class WiredButton extends WiredBase {
       if (this.rounded) {
         const radius = (height / 2);
         const radiusOffset = radius - 10;
-        // renderSvgPath(svg, line([radiusOffset, 2], [width - radiusOffset, 2], this._randomizer));
-        // renderSvgPath(svg, line([radiusOffset, height - 2], [width - radiusOffset, height - 2], this._randomizer));
-        // renderSvgPath(svg, arc([radiusOffset, height / 2], radius - 2, Math.PI / 2, Math.PI * 1.5, this._randomizer));
-
-        renderSvgPath(svg, roundedRectangle([2, 2], width - 4, height - 4, radius, this._randomizer));
+        const rect = roundedRectangle([2, 2], width - 4, height - 4, radius, this._randomizer);
+        if (this.type === 'solid') {
+          fillSvgPath(svg, rect.overlay.length ? rect.overlay : rect.shape);
+        }
+        renderSvgPath(svg, rect);
         for (let i = 1; i < elev; i++) {
           renderSvgPath(svg, line([radiusOffset + (i * elevOffset), height + (i * 2)], [width - radiusOffset - (i * elevOffset), height + (i * 2)], this._randomizer, true, 0.5))
             .style.strokeOpacity = `${(100 - (i * 10)) / 100}`;
         }
 
       } else {
-        renderSvgPath(svg, rectangle([2, 2], width - 4, height - 4, this._randomizer));
+        const rect = rectangle([2, 2], width - 4, height - 4, this._randomizer);
+        if (this.type === 'solid') {
+          fillSvgPath(svg, this._mergedShape(rect));
+        }
+        renderSvgPath(svg, rect);
         for (let i = 1; i < elev; i++) {
           [
             line([i * elevOffset, height + (i * 2)], [width + (i * 2), height + (i * 2)], this._randomizer, true, 0.5),

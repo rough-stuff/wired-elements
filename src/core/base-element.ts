@@ -58,6 +58,10 @@ export abstract class WiredBase extends LitElement {
       stroke-linejoin: round;
       stroke-linecap: round;
     }
+    .wired-fill-shape path {
+      stroke: none;
+      fill: var(--wired-fill-color, #64B5F6);
+    }
   `;
 
   connectedCallback(): void {

@@ -123,62 +123,66 @@ export function rectangle(topLeft: Point, width: number, height: number, randomi
 export function roundedRectangle(topLeft: Point, width: number, height: number, radius: number, randomizer: Randomizer, doubleStroke = true, roughness = 1): RenderOps {
   const radiusOffset = radius - 8;
   const l1 = line([topLeft[0] + radiusOffset, topLeft[1]], [topLeft[0] + width - radiusOffset, topLeft[1]], randomizer, doubleStroke, roughness);
-  const l2 = line([topLeft[0] + radiusOffset, topLeft[1] + height], [topLeft[0] + width - radiusOffset, topLeft[1] + height], randomizer, doubleStroke, roughness);
-  const arcOps: Op[] = [];
-  const overlayArcOps: Op[] = [];
+  const l2 = line([topLeft[0] + width - radiusOffset, topLeft[1] + height], [topLeft[0] + radiusOffset, topLeft[1] + height], randomizer, doubleStroke, roughness);
+  const shape: Op[] = [...l1.shape];
+  const overlay: Op[] = [...l1.overlay];
   {
-    let p1 = l1.shape[0].data;
-    let p2 = l2.shape[0].data;
-    let pMid = randomizer.point([
-      (2 * topLeft[0]) - (p1[0] / 2) - (p2[0] / 2),
-      (2 * (topLeft[1] + (height / 2))) - (p1[1] / 2) - (p2[1] / 2)
-    ], 2, roughness);
-    arcOps.push(
-      { op: 'move', data: [...p1] },
-      { op: 'qcurveTo', data: [...pMid, ...p2] }
-    );
-
     const p1Data = l1.shape[l1.shape.length - 1].data;
-    p1 = [p1Data[4], p1Data[5]];
-    const p2Data = l2.shape[l2.shape.length - 1].data;
-    p2 = [p2Data[4], p2Data[5]];
-    pMid = randomizer.point([
+    const p1 = [p1Data[4], p1Data[5]];
+    const p2 = l2.shape[0].data;
+    const pMid = randomizer.point([
       (2 * (topLeft[0] + width)) - (p1[0] / 2) - (p2[0] / 2),
       (2 * (topLeft[1] + (height / 2))) - (p1[1] / 2) - (p2[1] / 2)
     ], 2, roughness);
-    arcOps.push(
-      { op: 'move', data: [...p1] },
-      { op: 'qcurveTo', data: [...pMid, ...p2] }
-    );
-  }
-  if (doubleStroke) {
-    let p1 = l1.overlay[0].data;
-    let p2 = l2.overlay[0].data;
-    let pMid = randomizer.point([
-      (2 * topLeft[0]) - (p1[0] / 2) - (p2[0] / 2),
-      (2 * (topLeft[1] + (height / 2))) - (p1[1] / 2) - (p2[1] / 2)
-    ], 2, roughness);
-    overlayArcOps.push(
-      { op: 'move', data: [...p1] },
+    shape.push(
       { op: 'qcurveTo', data: [...pMid, ...p2] }
     );
 
-    const p1Data = l1.overlay[l1.overlay.length - 1].data;
-    p1 = [p1Data[4], p1Data[5]];
-    const p2Data = l2.overlay[l2.overlay.length - 1].data;
-    p2 = [p2Data[4], p2Data[5]];
-    pMid = randomizer.point([
-      (2 * (topLeft[0] + width)) - (p1[0] / 2) - (p2[0] / 2),
+    if (doubleStroke) {
+      const p1Data = l1.overlay[l1.overlay.length - 1].data;
+      const p1 = [p1Data[4], p1Data[5]];
+      const p2 = l2.overlay[0].data;
+      const pMid = randomizer.point([
+        (2 * (topLeft[0] + width)) - (p1[0] / 2) - (p2[0] / 2),
+        (2 * (topLeft[1] + (height / 2))) - (p1[1] / 2) - (p2[1] / 2)
+      ], 2, roughness);
+      overlay.push(
+        { op: 'qcurveTo', data: [...pMid, ...p2] }
+      );
+    }
+  }
+  l2.shape.shift();
+  l2.overlay.shift()
+  shape.push(...l2.shape);
+  overlay.push(...l2.overlay);
+  {
+    const p1Data = l2.shape[l2.shape.length - 1].data;
+    const p1 = [p1Data[4], p1Data[5]];
+    const p2 = l1.shape[0].data;
+    const pMid = randomizer.point([
+      (2 * topLeft[0]) - (p1[0] / 2) - (p2[0] / 2),
       (2 * (topLeft[1] + (height / 2))) - (p1[1] / 2) - (p2[1] / 2)
     ], 2, roughness);
-    overlayArcOps.push(
-      { op: 'move', data: [...p1] },
+    shape.push(
       { op: 'qcurveTo', data: [...pMid, ...p2] }
     );
+
+    if (doubleStroke) {
+      const p1Data = l2.overlay[l2.overlay.length - 1].data;
+      const p1 = [p1Data[4], p1Data[5]];
+      const p2 = l1.overlay[0].data;
+      const pMid = randomizer.point([
+        (2 * topLeft[0]) - (p1[0] / 2) - (p2[0] / 2),
+        (2 * (topLeft[1] + (height / 2))) - (p1[1] / 2) - (p2[1] / 2)
+      ], 2, roughness);
+      overlay.push(
+        { op: 'qcurveTo', data: [...pMid, ...p2] }
+      );
+    }
   }
   return {
-    shape: [...l1.shape, ...l2.shape, ...arcOps],
-    overlay: [...l1.overlay, ...l2.overlay, ...overlayArcOps]
+    shape,
+    overlay
   };
 }
 
