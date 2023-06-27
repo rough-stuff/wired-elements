@@ -1,6 +1,6 @@
 import { WiredBase, ce, html, TemplateResult, css, property, query, Point } from './core/base-element.js';
 import { styleMap, StyleInfo } from 'lit/directives/style-map.js';
-import { rectangle, line } from './core/graphics.js';
+import { rectangle, line, roundedRectangle } from './core/graphics.js';
 import { renderSvgPath } from './core/svg-render.js';
 
 declare global {
@@ -27,6 +27,9 @@ export class WiredButton extends WiredBase {
         font-size: 14px;
         min-width: 64px;
         text-transform: uppercase;
+      }
+      #overlay {
+        pointer-events: initial;
       }
       path {
         transition: transform 0.05s ease;
@@ -61,6 +64,9 @@ export class WiredButton extends WiredBase {
         background: var(--wired-button-disabled-bg, rgba(0, 0, 0, 0.07));
         pointer-events: none;
       }
+      button[disabled] #overlay {
+        pointer-events: none;
+      }
       button:active path {
         transform: scale(0.97) translate(1.5%, 1.5%);
       }
@@ -81,7 +87,7 @@ export class WiredButton extends WiredBase {
   render(): TemplateResult {
     const padding = Math.max(0, (this.elevation - 1) * 3);
     const containerStyles: StyleInfo = {
-      padding: padding ? `0 ${padding}px ${padding}px 0` : undefined
+      padding: padding ? `0 ${this.rounded ? 0 : padding}px ${padding}px 0` : undefined
     };
 
     return html`
@@ -133,10 +139,13 @@ export class WiredButton extends WiredBase {
       const elevOffset = 2;
 
       if (this.rounded) {
-        const radius = height / 2;
+        const radius = (height / 2);
         const radiusOffset = radius - 10;
-        renderSvgPath(svg, line([radiusOffset, 2], [width - radiusOffset, 2], this._randomizer));
-        renderSvgPath(svg, line([radiusOffset, height - 2], [width - radiusOffset, height - 2], this._randomizer));
+        // renderSvgPath(svg, line([radiusOffset, 2], [width - radiusOffset, 2], this._randomizer));
+        // renderSvgPath(svg, line([radiusOffset, height - 2], [width - radiusOffset, height - 2], this._randomizer));
+        // renderSvgPath(svg, arc([radiusOffset, height / 2], radius - 2, Math.PI / 2, Math.PI * 1.5, this._randomizer));
+
+        renderSvgPath(svg, roundedRectangle([2, 2], width - 4, height - 4, radius, this._randomizer));
         for (let i = 1; i < elev; i++) {
           renderSvgPath(svg, line([radiusOffset + (i * elevOffset), height + (i * 2)], [width - radiusOffset - (i * elevOffset), height + (i * 2)], this._randomizer, true, 0.5))
             .style.strokeOpacity = `${(100 - (i * 10)) / 100}`;
