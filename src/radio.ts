@@ -1,17 +1,20 @@
 import { WiredBase, ce, html, TemplateResult, css, property, query, Point, PropertyValues, state } from './core/base-element.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { rectangle, linearPath, mergedShape } from './core/graphics.js';
 import { renderSvgPath, fillSvgPath } from './core/svg-render.js';
 
 declare global {
   interface HTMLElementTagNameMap {
-    'wired-checkbox': WiredCheckbox;
+    'wired-radio': WiredRadio;
   }
 }
 
-@ce('wired-checkbox')
-export class WiredCheckbox extends WiredBase {
+@ce('wired-radio')
+export class WiredRadio extends WiredBase {
   @property({ type: Boolean, reflect: true }) disabled = false;
   @property({ type: Boolean, reflect: true }) checked = false;
+  @property() value?: string;
+
   @state() private _focused = false;
 
   @query('input') private _input?: HTMLInputElement;
@@ -37,8 +40,8 @@ export class WiredCheckbox extends WiredBase {
       width: 28px;
       height: 28px;
       opacity: 0;
-      outline: none;
       cursor: pointer;
+      outline: none;
     }
     label {
       gap: 12px;
@@ -72,8 +75,9 @@ export class WiredCheckbox extends WiredBase {
   render(): TemplateResult {
     return html`
     <label class="horiz center ${this._focused ? 'focused' : ''}">
-      <input type="checkbox" 
-        .checked="${this.checked}" 
+      <input type="radio" 
+        .checked="${this.checked}"
+        value="${ifDefined(this.value)}"
         ?disabled="${this.disabled}" 
         @change="${this._onChange}"
         @focus="${() => this._focused = true}"
