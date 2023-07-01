@@ -52,7 +52,7 @@ export abstract class WiredBase extends LitElement {
       display: block;
     }
     path {
-      stroke: var(--wired-stroke-color, currentColor);
+      stroke: var(--wired-stroke-color, #000);
       stroke-width: 0.7;
       fill: transparent;
       stroke-linejoin: round;
