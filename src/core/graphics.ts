@@ -198,36 +198,126 @@ export function roundedRectangle(topLeft: Point, width: number, height: number, 
   };
 }
 
-// export function arc(center: Point, radius: number, startAngle: number, endAngle: number, randomizer: Randomizer, doubleStroke = true, roughness = 1) {
-//   const p1 = randomizer.point([
-//     center[0] + radius * Math.cos(startAngle),
-//     center[1] + radius * Math.sin(startAngle)
-//   ], 2, roughness);
-//   const p2 = randomizer.point([
-//     center[0] + radius * Math.cos(endAngle),
-//     center[1] + radius * Math.sin(endAngle)
-//   ], 2, roughness);
-//   const pMid = randomizer.point([
-//     center[0] + radius * Math.cos((endAngle + startAngle) / 2),
-//     center[1] + radius * Math.sin((endAngle + startAngle) / 2)
-//   ], 2, roughness);
-//   const ops: Op[] = [
-//     { op: 'move', data: p1 },
-//     { op: 'qcurveTo', data: [...pMid, ...p2] }
-//   ];
-//   const overlayOps: Op[] = [
-//     { op: 'move', data: p1 },
-//     {
-//       op: 'qcurveTo', data: [
-//         ...randomizer.point([
-//           center[0] + radius * Math.cos((endAngle + startAngle) / 2),
-//           center[1] + radius * Math.sin((endAngle + startAngle) / 2),
-//         ], 2, roughness),
-//         ...p2]
-//     }
-//   ];
-//   return {
-//     shape: ops,
-//     overlay: overlayOps
-//   };
-// }
+export function ellipse(center: Point, width: number, height: number, randomizer: Randomizer, doubleStroke = true, roughness = 1): RenderOps {
+  const a = width / 2;
+  const b = height / 2;
+  if (a <= 0 || b <= 0) {
+    return {
+      shape: [],
+      overlay: []
+    };
+  }
+  const pointCount = 6;
+  const startAngle = randomizer.next() * Math.PI * 2;
+
+  const ellipsePoints: Point[] = [];
+  const overlayEllipsePoints: Point[] = [];
+  const bowing = 2;
+  const r = roughness / 2;
+  for (let i = 0; i < pointCount; i++) {
+    const angle = startAngle + (i / pointCount) * 2 * Math.PI;
+    const x = center[0] + (a * Math.cos(angle));
+    const y = center[1] + (b * Math.sin(angle));
+    overlayEllipsePoints[i] = [x + randomizer.valueOffset(bowing, r), y + randomizer.valueOffset(bowing, r)];
+    ellipsePoints[i] = [x + randomizer.valueOffset(bowing, r), y + randomizer.valueOffset(bowing, r)];
+  }
+  if (pointCount > 1) {
+    overlayEllipsePoints.push([...overlayEllipsePoints[0]]);
+    overlayEllipsePoints.push([...overlayEllipsePoints[1]]);
+  }
+
+  return {
+    shape: _curve(ellipsePoints).ops,
+    overlay: doubleStroke ? _curve(overlayEllipsePoints).ops : []
+  };
+}
+
+function _controlPoints(p: Point[]) {
+  const t = 1 / 5;
+  const cpoints: [Point, Point][] = [];
+  for (let i = 1; i < p.length - 1; i++) {
+    const dx = p[i - 1][0] - p[i + 1][0]; // difference x
+    const dy = p[i - 1][1] - p[i + 1][1]; // difference y
+    // the first control point
+    const x1 = p[i][0] - (dx * t);
+    const y1 = p[i][1] - (dy * t);
+    const o1: Point = [x1, y1];
+
+    // the second control point
+    const x2 = p[i][0] + (dx * t);
+    const y2 = p[i][1] + (dy * t);
+    const o2: Point = [x2, y2];
+
+    // building the control points array
+    cpoints[i] = [o1, o2];
+  }
+  return cpoints;
+}
+
+function _curve(points: Point[]) {
+  const len = points.length;
+  const ops: Op[] = [];
+  const curvePoints: ([Point, Point, Point] | [Point, Point, Point, Point])[] = [];
+  if (len > 3) {
+    const cp = _controlPoints(points);
+    ops.push({ op: 'move', data: [...points[0]] });
+    ops.push({
+      op: 'qcurveTo', data: [
+        ...cp[1][1],
+        ...points[1],
+      ]
+    });
+    curvePoints.push([
+      [...points[0]],
+      [...cp[1][1]],
+      [...points[1]]
+    ]);
+    let lastPoint: Point = points[1];
+    for (let i = 1; i < (len - 2); i++) {
+      ops.push({
+        op: 'bcurveTo', data: [
+          ...cp[i][0],
+          ...cp[i + 1][1],
+          ...points[i + 1]
+        ]
+      });
+      curvePoints.push([
+        [...lastPoint],
+        [...cp[i][0]],
+        [...cp[i + 1][1]],
+        [...points[i + 1]]
+      ]);
+      lastPoint = points[i + 1];
+    }
+    ops.push({
+      op: 'qcurveTo', data: [
+        ...cp[len - 2][0],
+        ...points[len - 1],
+      ]
+    });
+    curvePoints.push([
+      [...lastPoint],
+      [...cp[len - 2][0]],
+      [...points[len - 1]]
+    ]);
+  } else if (len === 3) {
+    ops.push({ op: 'move', data: [...points[0]] });
+    ops.push({
+      op: 'bcurveTo',
+      data: [
+        ...points[1],
+        ...points[2],
+        ...points[2]
+      ],
+    });
+    curvePoints.push([
+      [...points[0]],
+      [...points[1]],
+      [...points[2]],
+    ]);
+  }
+  return {
+    ops,
+    curvePoints
+  };
+}

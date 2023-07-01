@@ -1,6 +1,6 @@
 import { WiredBase, ce, html, TemplateResult, css, property, query, Point, PropertyValues, state } from './core/base-element.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import { rectangle, linearPath, mergedShape } from './core/graphics.js';
+import { ellipse } from './core/graphics.js';
 import { renderSvgPath, fillSvgPath } from './core/svg-render.js';
 
 declare global {
@@ -115,19 +115,11 @@ export class WiredRadio extends WiredBase {
   protected draw(svg: SVGSVGElement, size: Point): void {
     const [width, height] = size;
     const randomizer = this._randomizer();
-    const rect = rectangle([2, 5], width - 7, height - 7, randomizer);
+    renderSvgPath(svg, ellipse([width / 2, height / 2], width - 4, height - 4, randomizer));
     if (this.checked) {
-      fillSvgPath(svg, mergedShape(rect)).classList.add('backdrop');
+      const infill = ellipse([width / 2, height / 2], width * 0.6, height * 0.6, randomizer);
+      fillSvgPath(svg, infill.shape);
     }
-    renderSvgPath(svg, rect);
-    if (this.checked) {
-      for (let i = 0; i < 2; i++) {
-        renderSvgPath(svg, linearPath([
-          [width * 0.3, height * 0.5],
-          [width * 0.5, height * 0.7],
-          [width, 0]
-        ], false, randomizer));
-      }
-    }
+
   }
 }
