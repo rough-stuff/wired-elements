@@ -1,6 +1,6 @@
 import { WiredBase, ce, html, TemplateResult, css, property, query, Point, PropertyValues } from './core/base-element.js';
 import { styleMap, StyleInfo } from 'lit/directives/style-map.js';
-import { rectangle, line, roundedRectangle, RenderOps, Op } from './core/graphics.js';
+import { rectangle, line, roundedRectangle, mergedShape } from './core/graphics.js';
 import { renderSvgPath, fillSvgPath } from './core/svg-render.js';
 
 declare global {
@@ -14,7 +14,7 @@ export class WiredButton extends WiredBase {
   @property({ type: Number }) elevation = 1;
   @property({ type: Boolean, reflect: true }) disabled = false;
   @property({ type: Boolean, reflect: true }) rounded = false;
-  @property() type: 'outlined' | 'filled' | 'solid' = 'outlined';
+  @property() type: 'outlined' | 'solid' = 'outlined';
 
   @query('button') private _button?: HTMLButtonElement;
   @query('#container') private _container?: HTMLElement;
@@ -142,18 +142,6 @@ export class WiredButton extends WiredBase {
     return this._lastSize;
   }
 
-  private _mergedShape(rect: RenderOps): Op[] {
-    return (rect.overlay.length ? rect.overlay : rect.shape).filter((d, i) => {
-      if (i === 0) {
-        return true;
-      }
-      if (d.op === 'move') {
-        return false;
-      }
-      return true;
-    });
-  }
-
   protected draw(svg: SVGSVGElement): void {
     if (this._button) {
       const { width, height } = this._button.getBoundingClientRect();
@@ -177,7 +165,7 @@ export class WiredButton extends WiredBase {
       } else {
         const rect = rectangle([2, 2], width - 4, height - 4, randomizer);
         if (this.type === 'solid') {
-          fillSvgPath(svg, this._mergedShape(rect));
+          fillSvgPath(svg, mergedShape(rect));
         }
         renderSvgPath(svg, rect);
         for (let i = 1; i < elev; i++) {

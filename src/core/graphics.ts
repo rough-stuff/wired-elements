@@ -13,6 +13,18 @@ export interface RenderOps {
   overlay: Op[];
 }
 
+export function mergedShape(rect: RenderOps): Op[] {
+  return (rect.overlay.length ? rect.overlay : rect.shape).filter((d, i) => {
+    if (i === 0) {
+      return true;
+    }
+    if (d.op === 'move') {
+      return false;
+    }
+    return true;
+  });
+}
+
 export function line(p1: Point, p2: Point, randomizer: Randomizer, doubleStroke = true, roughness = 1): RenderOps {
   const [x1, y1] = p1;
   const [x2, y2] = p2;
