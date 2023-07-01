@@ -6,24 +6,24 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 
 declare global {
   interface HTMLElementTagNameMap {
-    'wired-textfield': WiredTextfield;
+    'wired-textarea': WiredTextarea;
   }
 }
 
-@ce('wired-textfield')
-export class WiredTextfield extends WiredBase {
+@ce('wired-textarea')
+export class WiredTextarea extends WiredBase {
   @property({ type: Boolean, reflect: true }) disabled = false;
-  @property({ type: String, reflect: true }) type = 'text';
+  @property({ type: Boolean, reflect: true }) resizable = false;
+  @property({ type: Number }) rows = 2;
   @property() label = '';
   @property() placeholder = '';
   @property() name?: string;
   @property() autocomplete = '';
-  @property({ type: Boolean, attribute: 'end-align' }) endAlign = false;
 
   @state() private _focused = false;
   @state() private _hasText = false;
 
-  @query('input') private _input!: HTMLInputElement;
+  @query('textarea') private _input!: HTMLTextAreaElement;
   @query('label') private _label!: HTMLInputElement;
   @query('#obcenter') private _obcenter!: HTMLElement;
 
@@ -61,6 +61,7 @@ export class WiredTextfield extends WiredBase {
       flex-direction: column;
       width: 280px;
       font-size: 1rem;
+      line-height: 1.5;
     }
     :host([disabled]) label {
       pointer-events: none;
@@ -69,21 +70,17 @@ export class WiredTextfield extends WiredBase {
     label {
       display: block;
       width: 100%;
-      padding: 0 16px 0;
-      height: 56px;
+      padding: 16px;
+      min-height: 56px;
       position: relative;
+      border-radius: 0;
+      text-overflow: clip;
+      transform-origin: left center;
     }
-    label.nolabel {
-      padding-top: 0;
-      padding-bottom: 0;
-    }
-    label.nolabel input {
-      height: 100%;
-    }
-    label.nolabel input::placeholder {
+    label.nolabel textarea::placeholder {
       opacity: 0.7;
     }
-    label.focused input::placeholder {
+    label.focused textarea::placeholder {
       opacity: 0.7;
     }
     label.focused #label {
@@ -91,44 +88,37 @@ export class WiredTextfield extends WiredBase {
       opacity: 1;
     }
     label.notched #label {
-      transform: translateY(-37.25px) scale(0.75);
+      transform: translateY(-28.25px) scale(0.75);
     }
-    input {
+    textarea {
       color: inherit;
-      border: none;
-      display: block;
-      width: 100%;
-      font-family: inherit;
-      font-size: inherit;
-      font-weight: inherit;
-      letter-spacing: inherit;
-      text-transform: inherit;
-      margin: 0;
-      padding: 0;
-      appearance: none;
-      background-color: transparent;
-      caret-color: var(--wired-primary, #0D47A1);
-      border-radius: 0;
-      outline: none;
-      height: 28px;
+        border: none;
+        display: block;
+        width: 100% !important;
+        font-family: inherit;
+        font-size: inherit;
+        font-weight: inherit;
+        letter-spacing: inherit;
+        text-transform: inherit;
+        line-height: inherit;
+        margin: 0;
+        padding: 0;
+        appearance: none;
+        caret-color: var(--wired-primary, #0D47A1);
+        border-radius: 0;
+        outline: none;
+        resize: none;
+        background: transparent;
     }
-    input[type=number]::-webkit-inner-spin-button, 
-    input[type=number]::-webkit-outer-spin-button { 
-      -webkit-appearance: none; 
-      margin: 0; 
-    }
-    input[type=number] {
-      -moz-appearance: textfield;
-    }
-    input:disabled {
+    textarea:disabled {
       background: inherit;
     }
-    input::placeholder {
+    textarea::placeholder {
       transition: opacity 67ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
       opacity: 0;
     }
-    input.endalign {
-      text-align: right;
+    textarea.resizable {
+      resize: vertical;
     }
     .textlabel {
       font-family: var(--wired-label-font-family, inherit);
@@ -142,19 +132,17 @@ export class WiredTextfield extends WiredBase {
     }
     #label {
       position: absolute;
-      top: 50%;
+      top: 19px;
       left: 16px;
-      transform: translateY(-50%);
       pointer-events: none;
       color: inherit;
       opacity: 0.6;
+      transform-origin: left top;
       text-overflow: ellipsis;
       cursor: text;
       overflow: hidden;
       will-change: transform;
       transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1) 0s, color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0s;
-      text-overflow: clip;
-      transform-origin: left center;
     }
     #outlineBorder {
       position: absolute;
@@ -215,24 +203,24 @@ export class WiredTextfield extends WiredBase {
       hastext: this._hasText
     };
     const inputCC: ClassInfo = {
-      endalign: this.endAlign
+      resizable: this.resizable
     };
     return html`
     <label class="horiz center ${classMap(cc)}">
       ${this.label ? html`<span id="label" class="textlabel">${this.label}</span>` : null}
 
-      <input 
+      <textarea 
         class="${classMap(inputCC)}"
         name="${ifDefined(this.name)}"
-        type="${this.type}"
         ?disabled="${this.disabled}"
+        rows="${ifDefined(this.rows)}"
         autocomplete="${this.autocomplete}"
         placeholder="${this.placeholder}"
         aria-labelledby="label"
         @change=${this._onChange}
         @input=${this._onInput}
         @focus=${this._onFocus}
-        @blur=${this._onBlur}>
+        @blur=${this._onBlur}></textarea>
 
       <div id="outlineBorder" class="horiz">
         <span id="obleft"></span>
