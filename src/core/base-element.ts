@@ -1,5 +1,5 @@
-import { LitElement, css, CSSResultGroup } from 'lit';
-export { html, css, TemplateResult } from 'lit';
+import { LitElement, css, CSSResultGroup, PropertyValues } from 'lit';
+export { html, css, TemplateResult, PropertyValues } from 'lit';
 export { property, query, state, customElement as ce } from 'lit/decorators.js';
 import { query } from 'lit/decorators/query.js';
 import { Randomizer } from './random';
@@ -23,7 +23,7 @@ export abstract class WiredBase extends LitElement {
   protected _lastSize: Point = [0, 0];
   protected _ro?: ResizeObserver;
   protected _roAttached = false;
-  protected _randomizer = new Randomizer(Math.floor(Math.random() * 2 ** 31));
+  private _seed = Math.floor(Math.random() * 2 ** 31);
 
   static styles: CSSResultGroup = css`
     * {box-sizing: border-box;}
@@ -69,7 +69,7 @@ export abstract class WiredBase extends LitElement {
     if ('ResizeObserver' in window) {
       this._ro = new ResizeObserver(() => {
         if (this.svg) {
-          this._wiredRender(false);
+          this._wiredRender();
         }
       });
     }
@@ -111,8 +111,8 @@ export abstract class WiredBase extends LitElement {
     }
   }
 
-  updated() {
-    this._wiredRender();
+  updated(changed: PropertyValues) {
+    this._wiredRender(this._forceRenderOnChange(changed));
     this._attachResizeListener();
   }
 
@@ -137,6 +137,15 @@ export abstract class WiredBase extends LitElement {
       this._ro.unobserve(node);
     }
     this._roAttached = false;
+  }
+
+  protected _randomizer() {
+    return new Randomizer(this._seed);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected _forceRenderOnChange(_changed: PropertyValues): boolean {
+    return false;
   }
 
   protected abstract _sizedNode(): HTMLElement | null;

@@ -1,6 +1,6 @@
-import { WiredBase, ce, html, TemplateResult, css, property, state, query, Point } from './core/base-element.js';
-// import { rectangle, line, roundedRectangle, RenderOps, Op } from './core/graphics.js';
-// import { renderSvgPath, fillSvgPath } from './core/svg-render.js';
+import { WiredBase, ce, html, TemplateResult, css, property, state, query, Point, PropertyValues } from './core/base-element.js';
+import { rectangle, linearPath } from './core/graphics.js';
+import { renderSvgPath } from './core/svg-render.js';
 import { classMap, ClassInfo } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 
@@ -25,8 +25,13 @@ export class WiredTextfield extends WiredBase {
 
   @query('input') private _input!: HTMLInputElement;
   @query('label') private _label!: HTMLInputElement;
+  @query('#obcenter') private _obcenter!: HTMLElement;
 
   private _pendingValue?: string;
+
+  protected _forceRenderOnChange(changed: PropertyValues): boolean {
+    return changed.has('label') || changed.has('_focused') || changed.has('_hasText');
+  }
 
   @property()
   get value(): string {
@@ -67,9 +72,6 @@ export class WiredTextfield extends WiredBase {
       padding: 0 16px 0;
       height: 56px;
       position: relative;
-      border-top-left-radius: var(--nv-textfield-border-radius, 4px);
-      border-top-right-radius: var(--nv-textfield-border-radius, 4px);
-      border-radius: var(--nv-textfield-border-radius, 4px);
     }
     label.nolabel {
       padding-top: 0;
@@ -89,7 +91,7 @@ export class WiredTextfield extends WiredBase {
       opacity: 0.7;
     }
     label.focused #label {
-      color: var(--nv-primary, #6200ee);
+      color: var(--wired-primary, #0D47A1);
       opacity: 1;
     }
     label.notched #label {
@@ -109,7 +111,7 @@ export class WiredTextfield extends WiredBase {
       padding: 0;
       appearance: none;
       background-color: transparent;
-      caret-color: var(--nv-primary, #6200ee);
+      caret-color: var(--wired-primary, #0D47A1);
       border-radius: 0;
       outline: none;
       height: 28px;
@@ -133,13 +135,13 @@ export class WiredTextfield extends WiredBase {
       text-align: right;
     }
     .textlabel {
-      font-family: var(--nv-label-font-family, inherit);
-      font-size: var(--nv-label-font-size, inherit);
-      font-weight: var(--nv-label-font-weight, inherit);
-      letter-spacing: var(--nv-label-letter-spacing, inherit);
-      text-transform: var(--nv-label-text-transform, inherit);
+      font-family: var(--wired-label-font-family, inherit);
+      font-size: var(--wired-label-font-size, inherit);
+      font-weight: var(--wired-label-font-weight, inherit);
+      letter-spacing: var(--wired-label-letter-spacing, inherit);
+      text-transform: var(--wired-label-text-transform, inherit);
       white-space: nowrap;
-      line-height: var(--nv-label-text-line-height, 1.15);
+      line-height: var(--wired-label-text-line-height, 1.15);
       text-align: left;
     }
     #label {
@@ -168,24 +170,24 @@ export class WiredTextfield extends WiredBase {
     }
     #obleft {
       width: 12px;
-      border-radius: var(--nv-textfield-border-radius, 4px) 0 0 var(--nv-textfield-border-radius, 4px);
+      border-radius: 4px 0 0 4px;
       border-left: 1px solid;
       border-top: 1px solid;
       border-bottom: 1px solid;
-      border-color: var(--nv-textfield-line-color, rgba(0, 0, 0, 0.42));
+      border-color: transparent;
     }
     #obright {
-      border-radius: 0 var(--nv-textfield-border-radius, 4px) var(--nv-textfield-border-radius, 4px) 0;
+      border-radius: 0 4px 4px 0;
       border-right: 1px solid;
       border-top: 1px solid;
       border-bottom: 1px solid;
-      border-color: var(--nv-textfield-line-color, rgba(0, 0, 0, 0.42));
+      border-color: transparent;
     }
     #obcenter {
       padding: 0 4px;
       border-top: 1px solid;
       border-bottom: 1px solid;
-      border-color: var(--nv-textfield-line-color, rgba(0, 0, 0, 0.42));
+      border-color: transparent;
     }
     #oblabel {
       font-size: 0.75em;
@@ -193,26 +195,17 @@ export class WiredTextfield extends WiredBase {
       display: block;
       opacity: 0;
     }
-    label.focused #obleft,
-    label.focused #obcenter,
-    label.focused #obright {
-      border-color: var(--nv-primary, #6200ee);
-      border-width: 2px;
-    }
     label.notched #obcenter {
       border-top: none;
     }
+    label.focused path {
+      stroke-width: 1.35;
+      --wired-stroke-color: var(--wired-primary, #0D47A1);
+    }
 
     @media (hover: hover) {
-      label:hover #obright,
-      label:hover #obcenter,
-      label:hover #obleft {
-        border-color: var(--nv-textfield-line-color, rgba(0, 0, 0, 0.6));
-      }
-      label.focused:hover #obright,
-      label.focused:hover #obcenter,
-      label.focused:hover #obleft {
-        border-color: var(--nv-primary, #6200ee);
+      label:hover path {
+        stroke-width: 1;
       }
     }
     `
@@ -315,41 +308,24 @@ export class WiredTextfield extends WiredBase {
     return this._lastSize;
   }
 
-  protected draw(svg: SVGSVGElement): void {
-    // if (this._button) {
-    //   const { width, height } = this._button.getBoundingClientRect();
-    //   const elev = Math.min(Math.max(1, this.elevation), 5);
-    //   const elevOffset = 2;
-
-    //   if (this.rounded) {
-    //     const radius = (height / 2);
-    //     const radiusOffset = radius - 10;
-    //     const rect = roundedRectangle([2, 2], width - 4, height - 4, radius, this._randomizer);
-    //     if (this.type === 'solid') {
-    //       fillSvgPath(svg, rect.overlay.length ? rect.overlay : rect.shape);
-    //     }
-    //     renderSvgPath(svg, rect);
-    //     for (let i = 1; i < elev; i++) {
-    //       renderSvgPath(svg, line([radiusOffset + (i * elevOffset), height + (i * 2)], [width - radiusOffset - (i * elevOffset), height + (i * 2)], this._randomizer, true, 0.5))
-    //         .style.strokeOpacity = `${(100 - (i * 10)) / 100}`;
-    //     }
-
-    //   } else {
-    //     const rect = rectangle([2, 2], width - 4, height - 4, this._randomizer);
-    //     if (this.type === 'solid') {
-    //       fillSvgPath(svg, this._mergedShape(rect));
-    //     }
-    //     renderSvgPath(svg, rect);
-    //     for (let i = 1; i < elev; i++) {
-    //       [
-    //         line([i * elevOffset, height + (i * 2)], [width + (i * 2), height + (i * 2)], this._randomizer, true, 0.5),
-    //         line([width + (i * 2), height + (i * 2)], [width + (i * 2), i * elevOffset], this._randomizer, true, 0.5)
-    //       ].forEach((ops) => {
-    //         renderSvgPath(svg, ops).style.strokeOpacity = `${(100 - (i * 10)) / 100}`;
-    //       });
-    //     }
-    //   }
-
-    // }
+  protected draw(svg: SVGSVGElement, size: Point): void {
+    const [width, height] = size;
+    const notched = !!(this.label && (this._focused || this._hasText));
+    const randomizer = this._randomizer();
+    if (notched) {
+      const labelWidth = this._obcenter.getBoundingClientRect().width;
+      const path = linearPath([
+        [12, 2],
+        [2, 2],
+        [2, height - 2],
+        [width - 2, height - 2],
+        [width - 2, 2],
+        [labelWidth + 14, 2]
+      ], false, randomizer);
+      renderSvgPath(svg, path);
+    } else {
+      const rect = rectangle([2, 2], width - 4, height - 4, randomizer);
+      renderSvgPath(svg, rect);
+    }
   }
 }

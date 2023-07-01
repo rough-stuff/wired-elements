@@ -1,4 +1,4 @@
-import { WiredBase, ce, html, TemplateResult, css, property, query, Point } from './core/base-element.js';
+import { WiredBase, ce, html, TemplateResult, css, property, query, Point, PropertyValues } from './core/base-element.js';
 import { styleMap, StyleInfo } from 'lit/directives/style-map.js';
 import { rectangle, line, roundedRectangle, RenderOps, Op } from './core/graphics.js';
 import { renderSvgPath, fillSvgPath } from './core/svg-render.js';
@@ -18,6 +18,10 @@ export class WiredButton extends WiredBase {
 
   @query('button') private _button?: HTMLButtonElement;
   @query('#container') private _container?: HTMLElement;
+
+  protected _forceRenderOnChange(changed: PropertyValues): boolean {
+    return (changed.has('rounded') || changed.has('type'));
+  }
 
   static styles = [
     WiredBase.styles,
@@ -155,30 +159,31 @@ export class WiredButton extends WiredBase {
       const { width, height } = this._button.getBoundingClientRect();
       const elev = Math.min(Math.max(1, this.elevation), 5);
       const elevOffset = 2;
+      const randomizer = this._randomizer();
 
       if (this.rounded) {
         const radius = (height / 2);
         const radiusOffset = radius - 10;
-        const rect = roundedRectangle([2, 2], width - 4, height - 4, radius, this._randomizer);
+        const rect = roundedRectangle([2, 2], width - 4, height - 4, radius, randomizer);
         if (this.type === 'solid') {
           fillSvgPath(svg, rect.overlay.length ? rect.overlay : rect.shape);
         }
         renderSvgPath(svg, rect);
         for (let i = 1; i < elev; i++) {
-          renderSvgPath(svg, line([radiusOffset + (i * elevOffset), height + (i * 2)], [width - radiusOffset - (i * elevOffset), height + (i * 2)], this._randomizer, true, 0.5))
+          renderSvgPath(svg, line([radiusOffset + (i * elevOffset), height + (i * 2)], [width - radiusOffset - (i * elevOffset), height + (i * 2)], randomizer, true, 0.5))
             .style.strokeOpacity = `${(100 - (i * 10)) / 100}`;
         }
 
       } else {
-        const rect = rectangle([2, 2], width - 4, height - 4, this._randomizer);
+        const rect = rectangle([2, 2], width - 4, height - 4, randomizer);
         if (this.type === 'solid') {
           fillSvgPath(svg, this._mergedShape(rect));
         }
         renderSvgPath(svg, rect);
         for (let i = 1; i < elev; i++) {
           [
-            line([i * elevOffset, height + (i * 2)], [width + (i * 2), height + (i * 2)], this._randomizer, true, 0.5),
-            line([width + (i * 2), height + (i * 2)], [width + (i * 2), i * elevOffset], this._randomizer, true, 0.5)
+            line([i * elevOffset, height + (i * 2)], [width + (i * 2), height + (i * 2)], randomizer, true, 0.5),
+            line([width + (i * 2), height + (i * 2)], [width + (i * 2), i * elevOffset], randomizer, true, 0.5)
           ].forEach((ops) => {
             renderSvgPath(svg, ops).style.strokeOpacity = `${(100 - (i * 10)) / 100}`;
           });
