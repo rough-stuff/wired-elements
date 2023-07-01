@@ -221,10 +221,10 @@ export function ellipse(center: Point, width: number, height: number, randomizer
     overlayEllipsePoints[i] = [x + randomizer.valueOffset(bowing, r), y + randomizer.valueOffset(bowing, r)];
     ellipsePoints[i] = [x + randomizer.valueOffset(bowing, r), y + randomizer.valueOffset(bowing, r)];
   }
-  if (pointCount > 1) {
-    overlayEllipsePoints.push([...overlayEllipsePoints[0]]);
-    overlayEllipsePoints.push([...overlayEllipsePoints[1]]);
-  }
+  overlayEllipsePoints.push([...overlayEllipsePoints[0]]);
+  overlayEllipsePoints.push([...overlayEllipsePoints[1]]);
+  ellipsePoints.push([...ellipsePoints[0]]);
+  ellipsePoints.push([...ellipsePoints[1]]);
 
   return {
     shape: _curve(ellipsePoints).ops,
