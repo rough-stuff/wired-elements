@@ -118,7 +118,7 @@ export class WiredCheckbox extends WiredBase {
     if (this.checked) {
       for (let i = 0; i < 2; i++) {
         renderSvgPath(svg, linearPath([
-          [width * 0.3, height * 0.4],
+          [width * 0.3, height * 0.5],
           [width * 0.5, height * 0.7],
           [width, 0]
         ], false, randomizer));
