@@ -80,7 +80,7 @@ export class WiredList extends WiredBase {
   get selected(): string | null {
     const item = this._selectedItem;
     if (item) {
-      return item.value || item.name || '';
+      return item.value || item.name || this.textContent;
     }
     return null;
   }

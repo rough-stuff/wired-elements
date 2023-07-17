@@ -16,7 +16,6 @@ export class WiredPopover extends WiredBase {
   @property({ type: Number }) elevation = 1;
   @property() pin: WiredPopoverPin = 'top-start';
   @property() direction: WiredPopoverDirection = 'down';
-  @property({ type: Boolean, attribute: 'full-width' }) fullWidth = false;
   @property({ type: Boolean, attribute: 'manual-close' }) manualClose = false;
   @property({ type: Number }) x = 0;
   @property({ type: Number }) y = 0;
@@ -43,9 +42,6 @@ export class WiredPopover extends WiredBase {
       background: var(--wired-surface, #fff);
       color: var(--wired-on-surface, #000);
       box-shadow: var(--wired-popover-shadow, 0 3px 3px -2px rgb(0 0 0 / 20%), 0 3px 4px 0 rgb(0 0 0 / 14%), 0 1px 8px 0 rgb(0 0 0 / 12%));
-    }
-    #surface.full-width {
-      min-width: 100%;
     }
     #container {
       position: relative;
@@ -155,9 +151,6 @@ export class WiredPopover extends WiredBase {
     const surfaceClasses: string[] = [this.direction, ...this.pin.split('-')];
     if (this._open) {
       surfaceClasses.push('open');
-    }
-    if (this.fullWidth) {
-      surfaceClasses.push('full-width');
     }
 
     let centerTransform = '';

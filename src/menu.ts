@@ -78,13 +78,14 @@ export class WiredMenu extends WiredPopover {
     if (relatedNode) {
       this._attachToNode(relatedNode);
     }
-    this.addEventListener('select', this._selectListener);
+    this.addEventListener('item-click', this._selectListener);
+    this.style.setProperty('--wired-card-padding', '0');
   }
 
   disconnectedCallback(): void {
     this._connected = false;
     this._detachNode();
-    this.removeEventListener('select', this._selectListener);
+    this.removeEventListener('item-click', this._selectListener);
     super.disconnectedCallback();
   }
 }
