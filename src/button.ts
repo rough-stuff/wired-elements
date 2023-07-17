@@ -49,7 +49,6 @@ export class WiredButton extends WiredBase {
         display: block;
         cursor: pointer;
         outline: none;
-        border-radius: 4px;
         overflow: hidden;
         color: inherit;
         user-select: none;
