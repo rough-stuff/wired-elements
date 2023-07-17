@@ -102,6 +102,8 @@ export class WiredCombo extends LitElement {
         z-index: 1;
         box-shadow: 1px 5px 15px -6px rgba(0, 0, 0, 0.8);
         padding: 8px;
+        overflow: clip scroll;
+        max-height: 40vh;
       }
   
       ::slotted(wired-item) {
