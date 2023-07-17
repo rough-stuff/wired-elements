@@ -27,6 +27,7 @@ export class WiredItem extends WiredBase {
       :host {
         display: inline-block;
         font-size: 14px;
+        text-align: left;
       }
       #overlay {
         pointer-events: initial;
@@ -42,6 +43,7 @@ export class WiredItem extends WiredBase {
         position: relative;
       }
       button {
+        text-align: inherit;
         position: relative;
         display: block;
         cursor: pointer;
@@ -50,7 +52,6 @@ export class WiredItem extends WiredBase {
         color: inherit;
         user-select: none;
         font-family: inherit;
-        text-align: center;
         font-size: inherit;
         letter-spacing: 1.25px;
         line-height: 1;
@@ -110,7 +111,7 @@ export class WiredItem extends WiredBase {
 
   render(): TemplateResult {
     return html`
-    <button ?disabled="${this.disabled}">
+    <button ?disabled="${this.disabled}" @click="${this._onItemClick}">
       <div id="overlay"><svg></svg></div>
       <div id="content">
         <slot @slotchange="${() => this._wiredRender()}"></slot>
@@ -153,6 +154,12 @@ export class WiredItem extends WiredBase {
       const randomizer = this._randomizer();
       const rect = rectangle([2, 2], width - 4, height - 4, randomizer);
       fillSvgPath(svg, mergedShape(rect));
+    }
+  }
+
+  private _onItemClick() {
+    if (!this.disabled) {
+      this._fire('item-click');
     }
   }
 }
