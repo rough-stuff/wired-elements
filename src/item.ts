@@ -97,6 +97,9 @@ export class WiredItem extends WiredBase {
       button:focus::after {
         opacity: 0.1;
       }
+      button:active::after {
+        opacity: 0.2;
+      }
       @media (hover: hover) {
         button:hover::before {
           opacity: 0.05;
