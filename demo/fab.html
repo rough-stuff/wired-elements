@@ -1,0 +1,64 @@
+<html>
+
+<head>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,1,0" />
+  <script type="module" src="../components/fab.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 10px;
+      font-family: sans-serif;
+      line-height: 1.5;
+    }
+
+    .red {
+      color: red;
+      --wired-fill-color: pink;
+    }
+
+    .dense {
+      --wired-button-padding: 5px;
+    }
+
+    .big {
+      --wired-button-padding: 20px;
+    }
+
+    .big .material-symbols-outlined {
+      font-size: 40px;
+    }
+  </style>
+</head>
+
+<body>
+  <p>
+    <wired-fab>
+      <span class="material-symbols-outlined">favorite</span>
+    </wired-fab>
+    <wired-fab disabled>
+      <span class="material-symbols-outlined">favorite</span>
+    </wired-fab>
+    <wired-fab class="red">
+      <span class="material-symbols-outlined">favorite</span>
+    </wired-fab>
+    <wired-fab class="dense">
+      <span class="material-symbols-outlined">favorite</span>
+    </wired-fab>
+    <wired-fab class="big">
+      <span class="material-symbols-outlined">favorite</span>
+    </wired-fab>
+    <!-- <wired-icon-button class="red">
+        <span class="material-symbols-outlined">favorite</span>
+      </wired-icon-button>
+      <wired-icon-button class="dense">
+        <span class="material-symbols-outlined">favorite</span>
+      </wired-icon-button>
+      <wired-icon-button class="big">
+        <span class="material-symbols-outlined">favorite</span>
+      </wired-icon-button> -->
+  </p>
+</body>
+
+</html>

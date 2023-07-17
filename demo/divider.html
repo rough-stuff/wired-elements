@@ -1,0 +1,81 @@
+<html>
+
+<head>
+  <script type="module" src="../components/divider.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 10px;
+      font-family: sans-serif;
+      line-height: 1.5;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .horiz {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .vert {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .center {
+      align-items: center;
+    }
+
+    .center2 {
+      justify-content: center;
+      align-items: center;
+    }
+
+    .flex {
+      flex: 1;
+    }
+
+    .panel {
+      display: inline-flex;
+      padding: 10px;
+      border: solid 1px gray;
+      gap: 8px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="vert panel">
+    <span>This is Item One</span>
+    <span>This is Item Two</span>
+    <wired-divider></wired-divider>
+    <span>This is Item Three</span>
+    <span>This is Item Four</span>
+  </div>
+  <div class="vert panel">
+    <span>This is Item One</span>
+    <span>This is Item Two</span>
+    <wired-divider style="--wired-divider-width: 4"></wired-divider>
+    <span>This is Item Three</span>
+    <span>This is Item Four</span>
+  </div>
+  <br>
+  <div class="horiz panel" style="font-size: 40px; margin: 1rem 0;">
+    <span>Item One</span>
+    <wired-divider vertical></wired-divider>
+    <span>Item Two</span>
+    <wired-divider vertical></wired-divider>
+    <span>Item Three</span>
+    <wired-divider vertical></wired-divider>
+    <span>Item Four</span>
+  </div>
+</body>
+
+</html>

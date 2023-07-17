@@ -1,0 +1,115 @@
+<html>
+
+<head>
+  <script type="module" src="../components/popover.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 10px;
+      font-family: sans-serif;
+      line-height: 1.5;
+    }
+
+    section {
+      padding: 8px;
+    }
+
+    div {
+      display: inline-block;
+      position: relative;
+      margin: 16px;
+    }
+
+    div.content {
+      display: block;
+      margin: 0;
+      width: 200px;
+    }
+
+    button {
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 8px;
+    }
+  </style>
+</head>
+
+<body>
+  <section>
+    <h4>DOWN</h4>
+    <div>
+      <button>Top start</button>
+      <wired-popover>
+        <div class="content">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+          magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat.
+        </div>
+      </wired-popover>
+    </div>
+    <div>
+      <button>Top end</button>
+      <wired-popover pin="top-end">
+        <div class="content">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+          magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat.
+        </div>
+      </wired-popover>
+    </div>
+    <div>
+      <button>Top start UP</button>
+      <wired-popover direction="up">
+        <div class="content">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+          magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat.
+        </div>
+      </wired-popover>
+    </div>
+    <div>
+      <button>Top start</button>
+      <wired-popover x="10" y="10">
+        <div class="content">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+          magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat.
+        </div>
+      </wired-popover>
+    </div>
+  </section>
+  <section>
+    <h4>MAX height</h4>
+    <div>
+      <button>Max height</button>
+      <wired-popover max-height="250">
+        <div class="content">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+          magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat.<br><br>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+          magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat.
+        </div>
+      </wired-popover>
+    </div>
+  </section>
+
+
+  <script>
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach((button) => {
+      const pop = button.parentElement.querySelector('wired-popover');
+      if (button.dataset.anchor === 'true') {
+        console.log('anchor', pop, button);
+        pop.anchor = button;
+      }
+      button.addEventListener('click', () => {
+        pop.open = !pop.open;
+      });
+    });
+  </script>
+</body>
+
+</html>

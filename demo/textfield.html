@@ -1,0 +1,38 @@
+<html>
+
+<head>
+  <script type="module" src="../components/textfield.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 10px;
+      font-family: sans-serif;
+      line-height: 1.5;
+    }
+
+    #styled {
+      background: yellow;
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+  <p>
+    <wired-textfield></wired-textfield>
+    <wired-textfield placeholder="Placehodler text" value="Some text"></wired-textfield>
+  </p>
+  <p>
+    <wired-textfield label="Your Name"></wired-textfield>
+    <wired-textfield label="Your Name" value="Some text" placeholder="Placehodler text" end-align></wired-textfield>
+  </p>
+  <p>
+    <wired-textfield type="password" label="Password"></wired-textfield>
+  </p>
+  <p>
+    <wired-textfield label="Disabled" disabled></wired-textfield>
+  </p>
+</body>
+
+</html>

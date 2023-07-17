@@ -1,0 +1,53 @@
+<html>
+
+<head>
+  <script type="module" src="../components/list.js"></script>
+  <script type="module" src="../components/item.js"></script>
+  <script type="module" src="../components/divider.js"></script>
+  <script type="module" src="../components/menu.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 10px;
+      font-family: sans-serif;
+      line-height: 1.5;
+    }
+
+    section {
+      padding: 8px;
+    }
+
+    div {
+      display: inline-block;
+      position: relative;
+      margin: 16px;
+    }
+
+    button {
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 8px;
+    }
+  </style>
+</head>
+
+<body>
+  <section>
+    <h4>DOWN</h4>
+    <div>
+      <button>Menu Button</button>
+      <wired-menu direction="centered">
+        <wired-list selectable>
+          <wired-item>Item One</wired-item>
+          <wired-item>Item Two</wired-item>
+          <wired-item>Item Three</wired-item>
+          <wired-item>Item Four</wired-item>
+        </wired-list>
+      </wired-menu>
+    </div>
+  </section>
+
+</body>
+
+</html>

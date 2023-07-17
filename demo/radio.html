@@ -1,0 +1,48 @@
+<html>
+
+<head>
+  <script type="module" src="../components/radio-group.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 10px;
+      font-family: sans-serif;
+      line-height: 1.5;
+    }
+
+    p {
+      margin-bottom: 3em;
+    }
+  </style>
+</head>
+
+<body>
+  <p>
+    <wired-radio-group>
+      <wired-radio value="huey">Huey</wired-radio>
+      <wired-radio value="dewey">Dewey</wired-radio>
+      <wired-radio value="louie">Louie</wired-radio>
+      <wired-radio value="disabled" disabled>Disabled</wired-radio>
+    </wired-radio-group>
+  </p>
+
+  <p>
+    <wired-radio-group>
+      <wired-radio value="huey">Huey</wired-radio>
+      <wired-radio value="dewey" checked>Dewey</wired-radio>
+      <wired-radio value="louie">Louie</wired-radio>
+    </wired-radio-group>
+  </p>
+
+  <p>
+    <wired-radio-group vertical>
+      <wired-radio value="huey">Huey</wired-radio>
+      <wired-radio value="dewey" checked>Dewey</wired-radio>
+      <wired-radio value="louie">Louie</wired-radio>
+    </wired-radio-group>
+  </p>
+
+</body>
+
+</html>

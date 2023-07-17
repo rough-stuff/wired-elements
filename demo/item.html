@@ -1,0 +1,34 @@
+<html>
+
+<head>
+  <script type="module" src="../components/item.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 10px;
+      font-family: sans-serif;
+      line-height: 1.5;
+    }
+
+    #list {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="list">
+    <wired-item>Item One</wired-item>
+    <wired-item>Item Two</wired-item>
+    <wired-item selected>Item Three</wired-item>
+    <wired-item>Item Four</wired-item>
+    <wired-item disabled>Item Disabled</wired-item>
+    <wired-item selected disabled>Item Disabled</wired-item>
+  </div>
+
+</body>
+
+</html>
