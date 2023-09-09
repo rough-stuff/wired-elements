@@ -1,4 +1,4 @@
-import { WiredBase, ce, html, TemplateResult, css, property, query, Point, PropertyValues } from './core/base-element.js';
+import { WiredBase, ce, html, TemplateResult, css, property, query, Point, PropertyValues, state } from './core/base-element.js';
 import { rectangle, mergedShape } from './core/graphics.js';
 import { fillSvgPath } from './core/svg-render.js';
 
@@ -14,6 +14,7 @@ export class WiredItem extends WiredBase {
   @property() name = '';
   @property({ type: Boolean }) selected = false;
   @property({ type: Boolean, reflect: true }) disabled = false;
+  @state() _focusable = true;
 
   protected _forceRenderOnChange(changed: PropertyValues): boolean {
     return changed.has('selected');
@@ -96,10 +97,10 @@ export class WiredItem extends WiredBase {
         opacity: 0;
       }
       button:focus::after {
-        opacity: 0.1;
+        opacity: 0.2;
       }
       button:active::after {
-        opacity: 0.2;
+        opacity: 0.3;
       }
       @media (hover: hover) {
         button:hover::before {
@@ -111,7 +112,10 @@ export class WiredItem extends WiredBase {
 
   render(): TemplateResult {
     return html`
-    <button ?disabled="${this.disabled}" @click="${this._onItemClick}">
+    <button 
+      ?disabled="${this.disabled}" 
+      tabindex="${this._focusable ? 0 : -1}"
+      @click="${this._onItemClick}">
       <div id="overlay"><svg></svg></div>
       <div id="content">
         <slot @slotchange="${() => this._wiredRender()}"></slot>

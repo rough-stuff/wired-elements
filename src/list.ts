@@ -17,6 +17,8 @@ export class WiredList extends WiredBase {
 
   @queryAssignedNodes() private _slotted!: Node[];
 
+  private _focusIn = false;
+
   protected _forceRenderOnChange(changed: PropertyValues): boolean {
     return changed.has('horizontal');
   }
@@ -43,6 +45,12 @@ export class WiredList extends WiredBase {
       </div>
     </wired-card>`;
   }
+
+  connectedCallback(): void {
+    super.connectedCallback();
+    this.addEventListener('focusin', this._handleFocusin);
+  }
+
   protected _sizedNode(): HTMLElement | null {
     return null;
   }
@@ -83,5 +91,111 @@ export class WiredList extends WiredBase {
       return item.value || item.name || this.textContent;
     }
     return null;
+  }
+
+  private _handleFocusin = (): void => {
+    if (!this._focusIn) {
+      this._focusIn = true;
+      this.addEventListener('focusout', this._handleFocusout);
+      this.addEventListener('keydown', this._handleKeydown);
+    }
+  };
+
+  private _handleFocusout = (event: FocusEvent): void => {
+    const related = event.relatedTarget as Node;
+    if (related && this.contains(related)) {
+      return;
+    }
+    this._focusIn = false;
+    this.removeEventListener('keydown', this._handleKeydown);
+    this.removeEventListener('focusout', this._handleFocusout);
+  };
+
+  private _handleKeydown = (event: KeyboardEvent): void => {
+    const activeElement = (this.getRootNode() as Document).activeElement as WiredItem;
+    if (!activeElement) {
+      return;
+    }
+    const index = this._items.indexOf(activeElement);
+    if (index < 0) {
+      return;
+    }
+    const focusIndex = (n: number, forward: boolean, iteration: number): void => {
+      const count = this._items.length;
+      if (iteration > count) {
+        return;
+      }
+      if (count) {
+        const i = n < 0 ? (count - 1) : (n % count);
+        const btn = this._items[i];
+        if (btn.disabled) {
+          if (forward) {
+            focusIndex(i + 1, forward, iteration + 1);
+          } else {
+            focusIndex(i - 1, forward, iteration + 1);
+          }
+          return;
+        }
+        this._focusItem(btn);
+      }
+    };
+
+    switch (event.code) {
+      case 'ArrowUp':
+      case 'ArrowLeft':
+        focusIndex(index - 1, false, 0);
+        event.preventDefault();
+        break;
+      case 'ArrowRight':
+      case 'ArrowDown':
+        focusIndex(index + 1, true, 1);
+        event.preventDefault();
+        break;
+      case 'End':
+        focusIndex(this._items.length - 1, false, 0);
+        event.preventDefault();
+        break;
+      case 'Home':
+        focusIndex(0, true, 0);
+        event.preventDefault();
+        break;
+      case 'Escape':
+      case 'Backspace':
+        this._fire('key-escape');
+        event.preventDefault();
+        break;
+    }
+  };
+
+  focus(): void {
+    for (let i = 0; i < this._items.length; i++) {
+      const item = this._items[i];
+      if (item._focusable) {
+        item.focus();
+        return;
+      }
+    }
+  }
+
+  private _focusItem(item: WiredItem | null) {
+    if (item) {
+      for (const r of this._items) {
+        if (r === item) {
+          r._focusable = true;
+        } else {
+          r._focusable = false;
+        }
+      }
+      item.focus();
+    } else {
+      for (let i = 0; i < this._items.length; i++) {
+        const r = this._items[i];
+        if (i === 0) {
+          r._focusable = true;
+        } else {
+          r._focusable = false;
+        }
+      }
+    }
   }
 }
