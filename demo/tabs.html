@@ -1,0 +1,53 @@
+<html>
+
+<head>
+  <script type="module" src="../components/tabs.js"></script>
+  <script type="module" src="../components/item.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 10px;
+      font-family: sans-serif;
+      line-height: 1.5;
+    }
+
+    wired-tabs {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+
+<body>
+  <wired-tabs>
+    <wired-item slot="tab" name="one" selected>Item One</wired-item>
+    <wired-item slot="tab" name="two">Item Two</wired-item>
+    <wired-item slot="tab" name="three">Item Three</wired-item>
+    <wired-item slot="tab" name="four">Item Four</wired-item>
+    <wired-item disabled slot="tab" name="five">Disabled</wired-item>
+
+    <div name="one">
+      These are the contents of tab one.
+    </div>
+    <div name="two">
+      These are the contents of tab two.
+    </div>
+    <div name="three">
+      These are the contents of tab three.
+    </div>
+    <div name="four">
+      These are the contents of tab four.<br>
+      These are the contents of tab four.<br>
+      These are the contents of tab four.<br>
+      These are the contents of tab four.<br>
+      These are the contents of tab four.<br>
+    </div>
+    <div name="five">
+      These are the contents of tab five.
+    </div>
+  </wired-tabs>
+
+</body>
+
+</html>

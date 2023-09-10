@@ -15,9 +15,10 @@ export class WiredList extends WiredBase {
   @property({ type: Boolean }) horizontal = false;
   @property({ type: Boolean }) selectable = false;
 
-  @queryAssignedNodes() private _slotted!: Node[];
+  @queryAssignedNodes({ flatten: true }) private _slotted!: Node[];
 
   private _focusIn = false;
+  private _lastActiveItem?: WiredItem;
 
   protected _forceRenderOnChange(changed: PropertyValues): boolean {
     return changed.has('horizontal');
@@ -33,6 +34,9 @@ export class WiredList extends WiredBase {
     }
     #container {
       gap: 2px;
+    }
+    #surface {
+      display: block;
     }
     `
   ];
@@ -93,6 +97,22 @@ export class WiredList extends WiredBase {
     return null;
   }
 
+  set selected(value: string) {
+    if (this.selectable) {
+      const current = this._selectedItem;
+      const selected = this._items.find((item) => {
+        return (item.value === value) || (item.name === value);
+      });
+      if (current === selected) {
+        return;
+      }
+      this._items.forEach((item) => {
+        item.selected = (item === selected);
+      });
+      this._fire('change');
+    }
+  }
+
   private _handleFocusin = (): void => {
     if (!this._focusIn) {
       this._focusIn = true;
@@ -112,7 +132,10 @@ export class WiredList extends WiredBase {
   };
 
   private _handleKeydown = (event: KeyboardEvent): void => {
-    const activeElement = (this.getRootNode() as Document).activeElement as WiredItem;
+    let activeElement = (this.getRootNode() as Document).activeElement as WiredItem;
+    if (!activeElement) {
+      activeElement = this._lastActiveItem || this._selectedItem || this._items[0];
+    }
     if (!activeElement) {
       return;
     }
@@ -137,6 +160,7 @@ export class WiredList extends WiredBase {
           return;
         }
         this._focusItem(btn);
+        this._lastActiveItem = btn;
       }
     };
 
@@ -172,6 +196,7 @@ export class WiredList extends WiredBase {
       const item = this._items[i];
       if (item._focusable) {
         item.focus();
+        this._lastActiveItem = item;
         return;
       }
     }
