@@ -34,6 +34,9 @@ export class WiredTabs extends WiredBase {
     #surface {
       margin-top: -2px;
     }
+    wired-list {
+      --wired-stroke-color: transparent;
+    }
     `
   ];
 

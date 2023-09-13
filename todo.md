@@ -1,4 +1,3 @@
-* Tabs
 * Tooltip
 * select
 * switch
