@@ -24,7 +24,7 @@ export class WiredTextfield extends WiredBase {
   @state() private _hasText = false;
 
   @query('input') private _input!: HTMLInputElement;
-  @query('label') private _label!: HTMLInputElement;
+  @query('label') private _label!: HTMLLabelElement;
   @query('#obcenter') private _obcenter!: HTMLElement;
 
   private _pendingValue?: string;

@@ -1,0 +1,49 @@
+<html>
+
+<head>
+  <script type="module" src="../components/select.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 10px;
+      font-family: sans-serif;
+      line-height: 1.5;
+    }
+
+    #styled {
+      background: yellow;
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+  <p>
+    <wired-select label="Pick a Number">
+      <option value=""></option>
+      <option value="one">One</option>
+      <option value="two">Two</option>
+      <option value="three">Three</option>
+      <option value="four">Four</option>
+    </wired-select>
+  </p>
+  <p>
+    <wired-select label="Pick a Number" value="two">
+      <option value="one">One</option>
+      <option value="two">Two</option>
+      <option value="three">Three</option>
+      <option value="four">Four</option>
+    </wired-select>
+  </p>
+  <p>
+    <wired-select value="one" direction="centered">
+      <option value="one">One</option>
+      <option value="two">Two</option>
+      <option value="three">Three</option>
+      <option value="four">Four</option>
+    </wired-select>
+  </p>
+</body>
+
+</html>
