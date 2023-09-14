@@ -216,6 +216,13 @@ export class WiredSelect extends WiredBase {
       label.focused #drop-arrow {
         --wired-fill-color: var(--wired-primary, #0D47A1);
       }
+      wired-menu {
+        --wired-surface-min-width: 100%;
+      }
+      wired-menu > wired-list {
+        width: 100%;
+        display: block;
+      }
   
       @media (hover: hover) {
         label:hover path {
@@ -393,7 +400,6 @@ export class WiredSelect extends WiredBase {
       const { width, height } = this._label.getBoundingClientRect();
       return [width, height];
     }
-    console.log(this._lastSize);
     return this._lastSize;
   }
 
