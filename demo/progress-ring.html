@@ -1,0 +1,66 @@
+<html>
+
+<head>
+  <script type="module" src="../components/progress-ring.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 10px;
+      font-family: sans-serif;
+      line-height: 1.5;
+    }
+
+    #bar2 {
+      height: 200px;
+      width: 200px;
+      --wired-fill-color: orange;
+    }
+
+    #bar4,
+    #bar3 {
+      width: 60%;
+    }
+
+    #bar3 {
+      margin-top: 50px;
+    }
+
+    #bar4 {
+      --wired-fill-color: red;
+      --wired-progress-ring-animation-duration: 3s;
+    }
+  </style>
+</head>
+
+<body>
+  <p>
+    <wired-progress-ring id="bar1" value="0.3"></wired-progress-ring>
+  </p>
+  <p>
+    <wired-progress-ring id="bar2" value="0.7"></wired-progress-ring>
+  </p>
+  <p>
+    <input id="range1" type="range" min="0" max="100" value="0" />
+  </p>
+  <!-- <p>
+    <wired-progress-ring id="bar3" indeterminate></wired-progress-ring>
+  </p>
+  <p>
+    <wired-progress-ring id="bar4" indeterminate></wired-progress-ring>
+  </p> -->
+
+  <script>
+    const bar1 = document.getElementById('bar1');
+    const bar2 = document.getElementById('bar2');
+    const range1 = document.getElementById('range1');
+    range1.addEventListener('input', (event) => {
+      bar1.value = (+event.target.value) / 100;
+      bar2.value = (+event.target.value) / 100;
+    });
+  </script>
+
+
+</body>
+
+</html>
