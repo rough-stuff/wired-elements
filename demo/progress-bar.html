@@ -1,0 +1,69 @@
+<html>
+
+<head>
+  <script type="module" src="../components/progress-bar.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 10px;
+      font-family: sans-serif;
+      line-height: 1.5;
+    }
+
+    wired-progress-bar {
+      width: 400px;
+    }
+
+    #bar2 {
+      height: 40px;
+      --wired-fill-color: orange;
+    }
+
+    #bar4,
+    #bar3 {
+      width: 60%;
+    }
+
+    #bar3 {
+      margin-top: 50px;
+    }
+
+    #bar4 {
+      --wired-fill-color: red;
+      --wired-progress-bar-animation-duration: 3s;
+    }
+  </style>
+</head>
+
+<body>
+  <p>
+    <wired-progress-bar id="bar1" value="0.3"></wired-progress-bar>
+  </p>
+  <p>
+    <wired-progress-bar id="bar2" value="0.7"></wired-progress-bar>
+  </p>
+  <p>
+    <input id="range1" type="range" min="0" max="100" value="0" />
+  </p>
+  <p>
+    <wired-progress-bar id="bar3" indeterminate></wired-progress-bar>
+  </p>
+  <p>
+    <wired-progress-bar id="bar4" indeterminate></wired-progress-bar>
+  </p>
+
+  <script>
+    const bar1 = document.getElementById('bar1');
+    const bar2 = document.getElementById('bar2');
+    const range1 = document.getElementById('range1');
+    range1.addEventListener('input', (event) => {
+      bar1.value = (+event.target.value) / 100;
+      bar2.value = (+event.target.value) / 100;
+    });
+  </script>
+
+
+</body>
+
+</html>
