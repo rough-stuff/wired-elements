@@ -1,6 +1,6 @@
 import { WiredBase, ce, html, TemplateResult, css, property, query, Point, PropertyValues } from './core/base-element.js';
-import { rectangle, line, mergedShape, ellipse, arc } from './core/graphics.js';
-import { renderSvgPath, fillSvgPath, createGroup } from './core/svg-render.js';
+import { ellipse, arc } from './core/graphics.js';
+import { renderSvgPath } from './core/svg-render.js';
 import { classMap, ClassInfo } from 'lit/directives/class-map.js';
 
 declare global {
@@ -39,6 +39,18 @@ export class WiredProgressRing extends WiredBase {
       }
       #progressValueArc path {
         stroke-width: var(--wired-progress-value-width, 6);
+      }
+      #progressValueArc.indeterminate path {
+        transform-origin: center center;
+        animation: progress-indeterminate-translate var(--wired-progress-ring-animation-duration, 1s) infinite linear;
+      }
+      @keyframes progress-indeterminate-translate {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
       }
       `
   ];
@@ -80,13 +92,12 @@ export class WiredProgressRing extends WiredBase {
       const valueArc = arc([width / 2, height / 2], (diameter / 2) - (this.indicatorWidth / 2) - 2, -(Math.PI / 2), value * 2 * Math.PI - (Math.PI / 2), randomizer);
       renderSvgPath(svg, valueArc).setAttribute('id', 'progressValueArc');
     }
-    // if (this.indeterminate) {
-    //   const v = 0.333;
-    //   const g = createGroup(svg, 'progressBarMarker');
-    //   const valueFill = rectangle([2, 2], v * (width - 4), height - 4, randomizer);
-    //   fillSvgPath(g, mergedShape(valueFill));
-    //   renderSvgPath(g, line([2, 2], [2, height - 2], randomizer));
-    //   renderSvgPath(g, line([v * (width - 2), 2], [v * (width - 2), height - 2], randomizer));
-    // }
+    if (this.indeterminate) {
+      const v = 0.2;
+      const valueArc = arc([width / 2, height / 2], (diameter / 2) - (this.indicatorWidth / 2) - 2, -(Math.PI / 2), v * 2 * Math.PI - (Math.PI / 2), randomizer);
+      const g = renderSvgPath(svg, valueArc);
+      g.setAttribute('id', 'progressValueArc');
+      g.classList.add('indeterminate');
+    }
   }
 }
