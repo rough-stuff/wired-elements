@@ -207,13 +207,13 @@ export function ellipse(center: Point, width: number, height: number, randomizer
       overlay: []
     };
   }
-  const pointCount = 6;
+  const pointCount = (Math.max(a, b) > 50) ? 10 : 6;
   const startAngle = randomizer.next() * Math.PI * 2;
 
   const ellipsePoints: Point[] = [];
   const overlayEllipsePoints: Point[] = [];
   const bowing = 2;
-  const r = roughness / 2;
+  const r = roughness / ((Math.max(a, b) > 50) ? 1.25 : 2);
   for (let i = 0; i < pointCount; i++) {
     const angle = startAngle + (i / pointCount) * 2 * Math.PI;
     const x = center[0] + (a * Math.cos(angle));
@@ -221,103 +221,70 @@ export function ellipse(center: Point, width: number, height: number, randomizer
     overlayEllipsePoints[i] = [x + randomizer.valueOffset(bowing, r), y + randomizer.valueOffset(bowing, r)];
     ellipsePoints[i] = [x + randomizer.valueOffset(bowing, r), y + randomizer.valueOffset(bowing, r)];
   }
-  overlayEllipsePoints.push([...overlayEllipsePoints[0]]);
-  overlayEllipsePoints.push([...overlayEllipsePoints[1]]);
-  ellipsePoints.push([...ellipsePoints[0]]);
-  ellipsePoints.push([...ellipsePoints[1]]);
-
   return {
-    shape: _curve(ellipsePoints).ops,
-    overlay: doubleStroke ? _curve(overlayEllipsePoints).ops : []
+    shape: _spline(ellipsePoints),
+    overlay: doubleStroke ? _spline(overlayEllipsePoints) : []
   };
 }
 
-function _controlPoints(p: Point[]) {
-  const t = 1 / 5;
-  const cpoints: [Point, Point][] = [];
-  for (let i = 1; i < p.length - 1; i++) {
-    const dx = p[i - 1][0] - p[i + 1][0]; // difference x
-    const dy = p[i - 1][1] - p[i + 1][1]; // difference y
-    // the first control point
-    const x1 = p[i][0] - (dx * t);
-    const y1 = p[i][1] - (dy * t);
-    const o1: Point = [x1, y1];
+function _formatSplinePoints(input: Point[], close: boolean) {
+  const points = [...input];
 
-    // the second control point
-    const x2 = p[i][0] + (dx * t);
-    const y2 = p[i][1] + (dy * t);
-    const o2: Point = [x2, y2];
+  if (close) {
+    const lastPoint = points[points.length - 1];
+    const secondToLastPoint = points[points.length - 2];
 
-    // building the control points array
-    cpoints[i] = [o1, o2];
+    const firstPoint = points[0];
+    const secondPoint = points[1];
+
+    points.unshift(lastPoint);
+    points.unshift(secondToLastPoint);
+
+    points.push(firstPoint);
+    points.push(secondPoint);
   }
-  return cpoints;
+
+  return points.flat();
 }
 
-function _curve(points: Point[]) {
-  const len = points.length;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function _spline(input: Point[] = [], tension = 1, close = true): Op[] {
+  const points = _formatSplinePoints(input, close);
   const ops: Op[] = [];
-  const curvePoints: ([Point, Point, Point] | [Point, Point, Point, Point])[] = [];
-  if (len > 3) {
-    const cp = _controlPoints(points);
-    ops.push({ op: 'move', data: [...points[0]] });
-    ops.push({
-      op: 'qcurveTo', data: [
-        ...cp[1][1],
-        ...points[1],
-      ]
-    });
-    curvePoints.push([
-      [...points[0]],
-      [...cp[1][1]],
-      [...points[1]]
-    ]);
-    let lastPoint: Point = points[1];
-    for (let i = 1; i < (len - 2); i++) {
-      ops.push({
-        op: 'bcurveTo', data: [
-          ...cp[i][0],
-          ...cp[i + 1][1],
-          ...points[i + 1]
-        ]
-      });
-      curvePoints.push([
-        [...lastPoint],
-        [...cp[i][0]],
-        [...cp[i + 1][1]],
-        [...points[i + 1]]
-      ]);
-      lastPoint = points[i + 1];
-    }
-    ops.push({
-      op: 'qcurveTo', data: [
-        ...cp[len - 2][0],
-        ...points[len - 1],
-      ]
-    });
-    curvePoints.push([
-      [...lastPoint],
-      [...cp[len - 2][0]],
-      [...points[len - 1]]
-    ]);
-  } else if (len === 3) {
-    ops.push({ op: 'move', data: [...points[0]] });
-    ops.push({
-      op: 'bcurveTo',
-      data: [
-        ...points[1],
-        ...points[2],
-        ...points[2]
-      ],
-    });
-    curvePoints.push([
-      [...points[0]],
-      [...points[1]],
-      [...points[2]],
-    ]);
+
+  const size = points.length;
+  const last = size - 4;
+
+  const startPointX = close ? points[2] : points[0];
+  const startPointY = close ? points[3] : points[1];
+
+  ops.push({ op: 'move', data: [startPointX, startPointY] });
+
+  const startIteration = close ? 2 : 0;
+  const maxIteration = close ? size - 4 : size - 2;
+  const inc = 2;
+
+  for (let i = startIteration; i < maxIteration; i += inc) {
+    const x0 = i ? points[i - 2] : points[0];
+    const y0 = i ? points[i - 1] : points[1];
+
+    const x1 = points[i + 0];
+    const y1 = points[i + 1];
+
+    const x2 = points[i + 2];
+    const y2 = points[i + 3];
+
+    const x3 = i !== last ? points[i + 4] : x2;
+    const y3 = i !== last ? points[i + 5] : y2;
+
+    const cp1x = x1 + ((x2 - x0) / 6) * tension;
+    const cp1y = y1 + ((y2 - y0) / 6) * tension;
+
+    const cp2x = x2 - ((x3 - x1) / 6) * tension;
+    const cp2y = y2 - ((y3 - y1) / 6) * tension;
+
+    ops.push({ op: 'bcurveTo', data: [cp1x, cp1y, cp2x, cp2y, x2, y2] });
   }
-  return {
-    ops,
-    curvePoints
-  };
+
+  return ops;
 }
