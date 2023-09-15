@@ -1,5 +1,5 @@
 import { WiredBase, ce, html, TemplateResult, css, property, query, Point, PropertyValues } from './core/base-element.js';
-import { rectangle, line, mergedShape, ellipse } from './core/graphics.js';
+import { rectangle, line, mergedShape, ellipse, arc } from './core/graphics.js';
 import { renderSvgPath, fillSvgPath, createGroup } from './core/svg-render.js';
 import { classMap, ClassInfo } from 'lit/directives/class-map.js';
 
@@ -13,6 +13,7 @@ declare global {
 export class WiredProgressRing extends WiredBase {
   @property({ type: Boolean, reflect: true }) indeterminate = false;
   @property({ type: Number }) value = 0;
+  @property({ type: Number, attribute: 'indicator-width' }) indicatorWidth = 6;
 
   @query('#container') private _container?: HTMLElement;
 
@@ -33,16 +34,11 @@ export class WiredProgressRing extends WiredBase {
         height: 100%;
         position: relative;
       }
-      #progressBarMarker {
-        animation: progress-indeterminate-translate var(--wired-progress-ring-animation-duration, 2s) infinite linear;
+      #progressValueArc {
+        --wired-stroke-color: var(--wired-primary, #0D47A1);
       }
-      @keyframes progress-indeterminate-translate {
-        from {
-          transform: translateX(-35%);
-        }
-        to {
-          transform: translateX(100%);
-        }
+      #progressValueArc path {
+        stroke-width: var(--wired-progress-value-width, 6);
       }
       `
   ];
@@ -52,7 +48,7 @@ export class WiredProgressRing extends WiredBase {
       indeterminate: this.indeterminate
     };
     return html`
-    <div id="container" class="${classMap(cc)}">
+    <div id="container" class="${classMap(cc)}" style="--wired-progress-value-width: ${this.indicatorWidth};">
       <div id="overlay">
         <svg></svg>
       </div>
@@ -79,14 +75,11 @@ export class WiredProgressRing extends WiredBase {
     const randomizer = this._randomizer();
     const track = ellipse([width / 2, height / 2], diameter - 4, diameter - 4, randomizer);
     renderSvgPath(svg, track);
-
-    // if (this.value && (!this.indeterminate)) {
-    //   const value = Math.max(0, Math.min(this.value || 0, 1));
-    //   const valueFill = rectangle([2, 2], value * (width - 4), height - 4, randomizer);
-    //   fillSvgPath(svg, mergedShape(valueFill));
-    //   const valueMarker = line([value * (width - 2), 2], [value * (width - 2), height - 2], randomizer);
-    //   renderSvgPath(svg, valueMarker);
-    // }
+    if (this.value && (!this.indeterminate)) {
+      const value = Math.max(0, Math.min(this.value || 0, 1));
+      const valueArc = arc([width / 2, height / 2], (diameter / 2) - (this.indicatorWidth / 2) - 2, -(Math.PI / 2), value * 2 * Math.PI - (Math.PI / 2), randomizer);
+      renderSvgPath(svg, valueArc).setAttribute('id', 'progressValueArc');
+    }
     // if (this.indeterminate) {
     //   const v = 0.333;
     //   const g = createGroup(svg, 'progressBarMarker');

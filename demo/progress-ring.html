@@ -14,12 +14,7 @@
     #bar2 {
       height: 200px;
       width: 200px;
-      --wired-fill-color: orange;
-    }
-
-    #bar4,
-    #bar3 {
-      width: 60%;
+      --wired-primary: orange;
     }
 
     #bar3 {
@@ -27,7 +22,9 @@
     }
 
     #bar4 {
-      --wired-fill-color: red;
+      height: 200px;
+      width: 200px;
+      --wired-primary: red;
       --wired-progress-ring-animation-duration: 3s;
     }
   </style>
@@ -35,20 +32,20 @@
 
 <body>
   <p>
-    <wired-progress-ring id="bar1" value="0.3"></wired-progress-ring>
+    <wired-progress-ring id="bar1"></wired-progress-ring>
   </p>
   <p>
-    <wired-progress-ring id="bar2" value="0.7"></wired-progress-ring>
+    <wired-progress-ring id="bar2" indicator-width="20"></wired-progress-ring>
   </p>
   <p>
     <input id="range1" type="range" min="0" max="100" value="0" />
   </p>
-  <!-- <p>
+  <p>
     <wired-progress-ring id="bar3" indeterminate></wired-progress-ring>
   </p>
   <p>
     <wired-progress-ring id="bar4" indeterminate></wired-progress-ring>
-  </p> -->
+  </p>
 
   <script>
     const bar1 = document.getElementById('bar1');

@@ -227,6 +227,26 @@ export function ellipse(center: Point, width: number, height: number, randomizer
   };
 }
 
+export function arc(center: Point, radius: number, startAngle: number, endAngle: number, randomizer: Randomizer, doubleStroke = true, roughness = 1): RenderOps {
+  const pointCount = radius > 50 ? 10 : 6;
+  const arcPoints: Point[] = [];
+  const overlayPoints: Point[] = [];
+  const bowing = 2;
+  const r = roughness / ((radius > 50) ? 1.25 : 2);
+  const step = (endAngle - startAngle) / pointCount;
+  for (let i = 0; i <= pointCount; i++) {
+    const angle = startAngle + (i * step);
+    const x = center[0] + (radius * Math.cos(angle));
+    const y = center[1] + (radius * Math.sin(angle));
+    overlayPoints[i] = [x + randomizer.valueOffset(bowing, r), y + randomizer.valueOffset(bowing, r)];
+    arcPoints[i] = [x + randomizer.valueOffset(bowing, r), y + randomizer.valueOffset(bowing, r)];
+  }
+  return {
+    shape: _spline(arcPoints, 1, false),
+    overlay: doubleStroke ? _spline(overlayPoints, 1, false) : []
+  };
+}
+
 function _formatSplinePoints(input: Point[], close: boolean) {
   const points = [...input];
 
