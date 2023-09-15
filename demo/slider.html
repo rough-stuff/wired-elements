@@ -1,0 +1,38 @@
+<html>
+
+<head>
+  <script type="module" src="../components/slider.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 10px;
+      font-family: sans-serif;
+      line-height: 1.5;
+    }
+
+    section {
+      padding: 8px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    wired-slider {
+      margin: 16px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <section>
+    <wired-slider></wired-slider>
+    <wired-slider value="150" min="100" max="200"></wired-slider>
+    <wired-slider step="10" min="100" max="200"></wired-slider>
+    <wired-slider step="10" markers value="150" min="100" max="200"></wired-slider>
+    <wired-slider disabled value="25"></wired-slider>
+  </section>
+
+
+</body>
+
+</html>
