@@ -1,3 +1,1 @@
 * Tooltip
-* slider
-* range-slider

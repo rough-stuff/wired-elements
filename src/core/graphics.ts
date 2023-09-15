@@ -198,6 +198,8 @@ export function roundedRectangle(topLeft: Point, width: number, height: number, 
   };
 }
 
+const POINT_COUNT_MARKER = 20;
+
 export function ellipse(center: Point, width: number, height: number, randomizer: Randomizer, doubleStroke = true, roughness = 1): RenderOps {
   const a = width / 2;
   const b = height / 2;
@@ -207,13 +209,13 @@ export function ellipse(center: Point, width: number, height: number, randomizer
       overlay: []
     };
   }
-  const pointCount = (Math.max(a, b) > 50) ? 10 : 6;
+  const pointCount = (Math.max(a, b) > POINT_COUNT_MARKER) ? 10 : 6;
   const startAngle = randomizer.next() * Math.PI * 2;
 
   const ellipsePoints: Point[] = [];
   const overlayEllipsePoints: Point[] = [];
   const bowing = 2;
-  const r = roughness / ((Math.max(a, b) > 50) ? 1.25 : 2);
+  const r = roughness / ((Math.max(a, b) > POINT_COUNT_MARKER) ? 1.25 : 2);
   for (let i = 0; i < pointCount; i++) {
     const angle = startAngle + (i / pointCount) * 2 * Math.PI;
     const x = center[0] + (a * Math.cos(angle));
@@ -228,11 +230,11 @@ export function ellipse(center: Point, width: number, height: number, randomizer
 }
 
 export function arc(center: Point, radius: number, startAngle: number, endAngle: number, randomizer: Randomizer, doubleStroke = true, roughness = 1): RenderOps {
-  const pointCount = radius > 50 ? 10 : 6;
+  const pointCount = radius > POINT_COUNT_MARKER ? 10 : 6;
   const arcPoints: Point[] = [];
   const overlayPoints: Point[] = [];
   const bowing = 2;
-  const r = roughness / ((radius > 50) ? 1.25 : 2);
+  const r = roughness / ((radius > POINT_COUNT_MARKER) ? 1.25 : 2);
   const step = (endAngle - startAngle) / pointCount;
   for (let i = 0; i <= pointCount; i++) {
     const angle = startAngle + (i * step);
