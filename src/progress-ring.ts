@@ -85,18 +85,22 @@ export class WiredProgressRing extends WiredBase {
     const [width, height] = size;
     const diameter = Math.min(width, height);
     const randomizer = this._randomizer();
-    const track = ellipse([width / 2, height / 2], diameter - 4, diameter - 4, randomizer);
+    const shapeWidth = diameter - this.indicatorWidth - 4;
+    const track = ellipse([width / 2, height / 2], shapeWidth, shapeWidth, randomizer);
     renderSvgPath(svg, track);
     if (this.value && (!this.indeterminate)) {
       const value = Math.max(0, Math.min(this.value || 0, 1));
-      const valueArc = arc([width / 2, height / 2], (diameter / 2) - (this.indicatorWidth / 2) - 2, -(Math.PI / 2), value * 2 * Math.PI - (Math.PI / 2), randomizer);
-      renderSvgPath(svg, valueArc).setAttribute('id', 'progressValueArc');
+      const valueArc = arc([width / 2, height / 2], shapeWidth / 2, -(Math.PI / 2), value * 2 * Math.PI - (Math.PI / 2), randomizer);
+      const node = renderSvgPath(svg, valueArc);
+      node.setAttribute('id', 'progressValueArc');
+      node.removeAttribute('filter');
     }
     if (this.indeterminate) {
       const v = 0.2;
-      const valueArc = arc([width / 2, height / 2], (diameter / 2) - (this.indicatorWidth / 2) - 2, -(Math.PI / 2), v * 2 * Math.PI - (Math.PI / 2), randomizer);
+      const valueArc = arc([width / 2, height / 2], shapeWidth / 2, -(Math.PI / 2), v * 2 * Math.PI - (Math.PI / 2), randomizer);
       const g = renderSvgPath(svg, valueArc);
       g.setAttribute('id', 'progressValueArc');
+      g.removeAttribute('filter');
       g.classList.add('indeterminate');
     }
   }

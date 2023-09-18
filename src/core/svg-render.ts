@@ -47,6 +47,7 @@ export function renderSvgPath(parent: SVGElement, ops: RenderOps): SVGElement {
     g.appendChild(path);
   }
   parent.appendChild(g);
+  g.setAttribute('filter', 'url(#wiredTexture)');
   return g;
 }
 

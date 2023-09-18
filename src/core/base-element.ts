@@ -3,6 +3,7 @@ export { html, css, TemplateResult, PropertyValues } from 'lit';
 export { property, query, state, customElement as ce } from 'lit/decorators.js';
 import { query } from 'lit/decorators/query.js';
 import { Randomizer } from './random';
+import { property } from 'lit/decorators.js';
 
 export type Point = [number, number];
 
@@ -17,7 +18,10 @@ export class UIEvent<T> extends Event {
   }
 }
 
+export type TextureType = 'default' | 'pencil' | 'inherit';
+
 export abstract class WiredBase extends LitElement {
+  @property() texture: TextureType = 'inherit';
   @query('svg') protected svg?: SVGSVGElement;
 
   protected _lastSize: Point = [0, 0];
@@ -79,6 +83,14 @@ export abstract class WiredBase extends LitElement {
     this.dispatchEvent(new UIEvent(name, detail));
   }
 
+  protected _resolvedTexture(): TextureType {
+    if ((!this.texture) || (this.texture === 'inherit')) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return (window as any)._wired_texture || 'default';
+    }
+    return this.texture;
+  }
+
   protected _resetSvg(size: Point, svg?: SVGSVGElement) {
     if (!svg) {
       svg = this.svg;
@@ -91,6 +103,25 @@ export abstract class WiredBase extends LitElement {
     }
     svg.setAttribute('width', `${size[0]}`);
     svg.setAttribute('height', `${size[1]}`);
+
+    const texture = this._resolvedTexture();
+    console.log('reset svg ', this.texture);
+    if (texture === 'pencil') {
+      svg.innerHTML = `<defs>
+        <filter x="0%" y="0%" width="100%" height="100%" filterUnits="objectBoundingBox" id="wiredTexture">
+          <feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="5" stitchTiles="stitch" result="f1">
+          </feTurbulence>
+          <feColorMatrix type="matrix" values="0 0 0 0 0, 0 0 0 0 0, 0 0 0 0 0, 0 0 0 -1.5 1.5" result="f2">
+          </feColorMatrix>
+          <feComposite operator="in" in2="f2b" in="SourceGraphic" result="f3">
+          </feComposite>
+          <feTurbulence type="fractalNoise" baseFrequency="1.2" numOctaves="3" result="noise">
+          </feTurbulence>
+          <feDisplacementMap xChannelSelector="R" yChannelSelector="G" scale="2" in="f3" result="f4">
+          </feDisplacementMap>
+        </filter>
+      </defs>`;
+    }
     return svg;
   }
 
