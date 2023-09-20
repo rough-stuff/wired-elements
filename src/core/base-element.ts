@@ -105,7 +105,6 @@ export abstract class WiredBase extends LitElement {
     svg.setAttribute('height', `${size[1]}`);
 
     const texture = this._resolvedTexture();
-    console.log('reset svg ', this.texture);
     if (texture === 'pencil') {
       svg.innerHTML = `<defs>
         <filter x="0%" y="0%" width="100%" height="100%" filterUnits="objectBoundingBox" id="wiredTexture">
