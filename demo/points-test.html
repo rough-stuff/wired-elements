@@ -1,0 +1,62 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>path-data-parser demo</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      font-size: 13px;
+    }
+
+    section {
+      display: block;
+      padding: 30px 16px;
+      box-sizing: border-box;
+    }
+
+    canvas {
+      display: block;
+      margin: 10px 0 0;
+    }
+
+    .horizontal {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .center {
+      align-items: center;
+    }
+
+    .flex {
+      flex: 1;
+    }
+
+    input {
+      margin: 0 8px;
+    }
+  </style>
+</head>
+
+<body>
+  <section>
+    <div class="horizontal center">
+      <label>Tolerance</label>
+      <input id="tin2" type="range" min="0.001" max="1" step="0.001" value="0.25">
+      <span id="t2"></span>
+    </div>
+    <div class="horizontal center">
+      <label>Distance</label>
+      <input id="din" type="range" min="0" max="3" step="0.001" value="2">
+      <span id="d"></span>
+    </div>
+    <canvas id="c2" width="400" height="300"></canvas>
+  </section>
+
+  <script type="module" src="../components/points-test.js"></script>
+</body>
+
+</html>

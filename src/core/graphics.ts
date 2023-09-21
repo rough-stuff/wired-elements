@@ -270,7 +270,7 @@ function _formatSplinePoints(input: Point[], close: boolean) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function _spline(input: Point[] = [], tension = 1, close = true): Op[] {
+export function _spline(input: Point[] = [], tension = 1, close = true): Op[] {
   const points = _formatSplinePoints(input, close);
   const ops: Op[] = [];
 
