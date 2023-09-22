@@ -11,6 +11,7 @@ export interface Op {
 export interface RenderOps {
   shape: Op[];
   overlay: Op[];
+  markerOps?: Op[][];
 }
 
 export function mergedShape(rect: RenderOps): Op[] {
@@ -25,7 +26,7 @@ export function mergedShape(rect: RenderOps): Op[] {
   });
 }
 
-export function line(p1: Point, p2: Point, randomizer: Randomizer, doubleStroke = true, roughness = 1): RenderOps {
+export function _line(p1: Point, p2: Point, randomizer: Randomizer, doubleStroke = true, roughness = 1): RenderOps {
   const [x1, y1] = p1;
   const [x2, y2] = p2;
   const length = lineLength([p1, p2]);
@@ -96,12 +97,12 @@ export function linearPath(points: Point[], close: boolean, randomizer: Randomiz
     const ops: Op[] = [];
     const overlayOps: Op[] = [];
     for (let i = 0; i < (len - 1); i++) {
-      const { shape, overlay } = line(points[i], points[i + 1], randomizer, doubleStroke, roughness);
+      const { shape, overlay } = _line(points[i], points[i + 1], randomizer, doubleStroke, roughness);
       ops.push(...shape);
       overlayOps.push(...overlay);
     }
     if (close) {
-      const { shape, overlay } = line(points[len - 1], points[0], randomizer, doubleStroke, roughness);
+      const { shape, overlay } = _line(points[len - 1], points[0], randomizer, doubleStroke, roughness);
       ops.push(...shape);
       overlayOps.push(...overlay);
     }
@@ -110,7 +111,7 @@ export function linearPath(points: Point[], close: boolean, randomizer: Randomiz
       overlay: overlayOps
     };
   } else if (len === 2) {
-    return line(points[0], points[1], randomizer, doubleStroke, roughness);
+    return _line(points[0], points[1], randomizer, doubleStroke, roughness);
   }
   return {
     shape: [],
@@ -122,7 +123,7 @@ export function polygon(points: Point[], randomizer: Randomizer, doubleStroke = 
   return linearPath(points, true, randomizer, doubleStroke, roughness);
 }
 
-export function rectangle(topLeft: Point, width: number, height: number, randomizer: Randomizer, doubleStroke = true, roughness = 1): RenderOps {
+export function _rectangle(topLeft: Point, width: number, height: number, randomizer: Randomizer, doubleStroke = true, roughness = 1): RenderOps {
   const points: Point[] = [
     topLeft,
     [topLeft[0] + width, topLeft[1]],
@@ -134,8 +135,8 @@ export function rectangle(topLeft: Point, width: number, height: number, randomi
 
 export function roundedRectangle(topLeft: Point, width: number, height: number, radius: number, randomizer: Randomizer, doubleStroke = true, roughness = 1): RenderOps {
   const radiusOffset = radius - 8;
-  const l1 = line([topLeft[0] + radiusOffset, topLeft[1]], [topLeft[0] + width - radiusOffset, topLeft[1]], randomizer, doubleStroke, roughness);
-  const l2 = line([topLeft[0] + width - radiusOffset, topLeft[1] + height], [topLeft[0] + radiusOffset, topLeft[1] + height], randomizer, doubleStroke, roughness);
+  const l1 = _line([topLeft[0] + radiusOffset, topLeft[1]], [topLeft[0] + width - radiusOffset, topLeft[1]], randomizer, doubleStroke, roughness);
+  const l2 = _line([topLeft[0] + width - radiusOffset, topLeft[1] + height], [topLeft[0] + radiusOffset, topLeft[1] + height], randomizer, doubleStroke, roughness);
   const shape: Op[] = [...l1.shape];
   const overlay: Op[] = [...l1.overlay];
   {

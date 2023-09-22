@@ -1,7 +1,8 @@
 import { WiredBase, ce, html, TemplateResult, css, property, Point, query } from './core/base-element.js';
 import { styleMap, StyleInfo } from 'lit/directives/style-map.js';
-import { rectangle, line, mergedShape } from './core/graphics.js';
-import { renderSvgPath, fillSvgPath } from './core/svg-render.js';
+import { mergedShape } from './core/graphics.js';
+import { fillSvgPath } from './core/svg-render.js';
+import { rectangle, line } from './core/renderer.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -70,17 +71,17 @@ export class WiredCard extends WiredBase {
     if (this._inner) {
       const { width, height } = this._inner.getBoundingClientRect();
       const elev = Math.min(Math.max(1, this.elevation), 5);
-      const elevOffset = 2;
+      const elevOffset = 2 * (this.renderStyle !== 'classic' ? 10 : 1);
       const randomizer = this._randomizer();
-      const rect = rectangle([2, 2], width - 4, height - 4, randomizer);
+      const rect = rectangle([2, 2], width - 4, height - 4, randomizer, this.renderStyle);
       fillSvgPath(svg, mergedShape(rect));
-      renderSvgPath(svg, rect);
+      this._renderPath(svg, rect);
       for (let i = 1; i < elev; i++) {
         [
-          line([i * elevOffset, height + (i * 2)], [width + (i * 2), height + (i * 2)], randomizer, true, 0.5),
-          line([width + (i * 2), height + (i * 2)], [width + (i * 2), i * elevOffset], randomizer, true, 0.5)
+          line([i * elevOffset, height + (i * 2)], [width + (i * 2), height + (i * 2)], randomizer, this.renderStyle, 0.5),
+          line([width + (i * 2), height + (i * 2)], [width + (i * 2), i * elevOffset], randomizer, this.renderStyle, 0.5)
         ].forEach((ops) => {
-          renderSvgPath(svg, ops).style.strokeOpacity = `${(100 - (i * 10)) / 100}`;
+          this._renderPath(svg, ops).style.strokeOpacity = `${(100 - (i * 10)) / 100}`;
         });
       }
     }

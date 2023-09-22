@@ -1,7 +1,8 @@
 import { WiredBase, ce, html, TemplateResult, css, property, query, Point, PropertyValues } from './core/base-element.js';
 import { styleMap, StyleInfo } from 'lit/directives/style-map.js';
-import { rectangle, line, roundedRectangle, mergedShape } from './core/graphics.js';
-import { renderSvgPath, fillSvgPath } from './core/svg-render.js';
+import { roundedRectangle, mergedShape } from './core/graphics.js';
+import { fillSvgPath } from './core/svg-render.js';
+import { rectangle, line } from './core/renderer.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -155,24 +156,24 @@ export class WiredButton extends WiredBase {
         if (this.type === 'solid') {
           fillSvgPath(svg, rect.overlay.length ? rect.overlay : rect.shape);
         }
-        renderSvgPath(svg, rect);
+        this._renderPath(svg, rect);
         for (let i = 1; i < elev; i++) {
-          renderSvgPath(svg, line([radiusOffset + (i * elevOffset), height + (i * 2)], [width - radiusOffset - (i * elevOffset), height + (i * 2)], randomizer, true, 0.5))
-            .style.strokeOpacity = `${(100 - (i * 10)) / 100}`;
+          const l = line([radiusOffset + (i * elevOffset), height + (i * 2)], [width - radiusOffset - (i * elevOffset), height + (i * 2)], randomizer, this.renderStyle, 0.5);
+          this._renderPath(svg, l).style.strokeOpacity = `${(100 - (i * 10)) / 100}`;
         }
 
       } else {
-        const rect = rectangle([2, 2], width - 4, height - 4, randomizer);
+        const rect = rectangle([2, 2], width - 4, height - 4, randomizer, this.renderStyle);
         if (this.type === 'solid') {
           fillSvgPath(svg, mergedShape(rect));
         }
-        renderSvgPath(svg, rect);
+        this._renderPath(svg, rect);
         for (let i = 1; i < elev; i++) {
           [
-            line([i * elevOffset, height + (i * 2)], [width + (i * 2), height + (i * 2)], randomizer, true, 0.5),
-            line([width + (i * 2), height + (i * 2)], [width + (i * 2), i * elevOffset], randomizer, true, 0.5)
+            line([i * elevOffset, height + (i * 2)], [width + (i * 2), height + (i * 2)], randomizer, this.renderStyle, 0.5),
+            line([width + (i * 2), height + (i * 2)], [width + (i * 2), i * elevOffset], randomizer, this.renderStyle, 0.5)
           ].forEach((ops) => {
-            renderSvgPath(svg, ops).style.strokeOpacity = `${(100 - (i * 10)) / 100}`;
+            this._renderPath(svg, ops).style.strokeOpacity = `${(100 - (i * 10)) / 100}`;
           });
         }
       }

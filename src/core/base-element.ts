@@ -4,6 +4,9 @@ export { property, query, state, customElement as ce } from 'lit/decorators.js';
 import { query } from 'lit/decorators/query.js';
 import { Randomizer } from './random';
 import { property } from 'lit/decorators.js';
+import { RenderStyle } from './renderer.js';
+import { RenderOps } from './graphics';
+import { createGroup, fillSvgPath, renderSvgPath } from './svg-render';
 
 export type Point = [number, number];
 
@@ -19,9 +22,11 @@ export class UIEvent<T> extends Event {
 }
 
 export type TextureType = 'default' | 'pencil' | 'inherit';
+export type RenderType = 'classic' | 'marker' | 'inherit';
 
 export abstract class WiredBase extends LitElement {
   @property() texture: TextureType = 'inherit';
+  @property() renderer: RenderType = 'inherit';
   @query('svg') protected svg?: SVGSVGElement;
 
   protected _lastSize: Point = [0, 0];
@@ -66,6 +71,14 @@ export abstract class WiredBase extends LitElement {
       stroke: none;
       fill: var(--wired-fill-color, #64B5F6);
     }
+    .wired-fill-shape-as-stroke path {
+      stroke: none;
+      fill: var(--wired-stroke-color, #000);
+    }
+    .wired-fill-shape-as-stroke-group {
+      transform: scale(0.99);
+      transform-origin: center center;
+    }
   `;
 
   connectedCallback(): void {
@@ -89,6 +102,14 @@ export abstract class WiredBase extends LitElement {
       return (window as any)._wired_texture || 'default';
     }
     return this.texture;
+  }
+
+  protected get renderStyle(): RenderStyle {
+    if ((!this.renderer) || (this.renderer === 'inherit')) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return (window as any)._wired_renderer || 'classic';
+    }
+    return this.renderer;
   }
 
   protected _resetSvg(size: Point, svg?: SVGSVGElement) {
@@ -177,6 +198,20 @@ export abstract class WiredBase extends LitElement {
   protected _forceRenderOnChange(_changed: PropertyValues): boolean {
     return false;
   }
+
+  protected _renderPath(svg: SVGElement, ops: RenderOps) {
+    if (this.renderStyle === 'marker') {
+      const g = createGroup(svg);
+      g.classList.add('wired-fill-shape-as-stroke-group');
+      for (const mops of (ops.markerOps || [])) {
+        fillSvgPath(g, mops, true);
+      }
+      return g;
+    } else {
+      return renderSvgPath(svg, ops);
+    }
+  }
+
 
   protected abstract _sizedNode(): HTMLElement | null;
 

@@ -24,10 +24,12 @@ function _opsToPath(ops: Op[]): string {
   return path.trim();
 }
 
-export function createGroup(parent: SVGElement, id: string): SVGElement {
+export function createGroup(parent: SVGElement, id?: string): SVGElement {
   const doc = parent.ownerDocument || window.document;
   const g = doc.createElementNS(SVGNS, 'g');
-  g.setAttribute('id', id);
+  if (id) {
+    g.setAttribute('id', id);
+  }
   parent.appendChild(g);
   return g;
 }
@@ -51,7 +53,7 @@ export function renderSvgPath(parent: SVGElement, ops: RenderOps): SVGElement {
   return g;
 }
 
-export function fillSvgPath(parent: SVGElement, shape: Op[]): SVGElement {
+export function fillSvgPath(parent: SVGElement, shape: Op[], asStroke = false): SVGElement {
   const doc = parent.ownerDocument || window.document;
   const g = doc.createElementNS(SVGNS, 'g');
   if (shape.length) {
@@ -59,7 +61,12 @@ export function fillSvgPath(parent: SVGElement, shape: Op[]): SVGElement {
     path.setAttribute('d', _opsToPath(shape));
     g.appendChild(path);
   }
-  g.setAttribute('class', 'wired-fill-shape');
+  if (asStroke) {
+    g.setAttribute('filter', 'url(#wiredTexture)');
+    g.setAttribute('class', 'wired-fill-shape-as-stroke');
+  } else {
+    g.setAttribute('class', 'wired-fill-shape');
+  }
   parent.appendChild(g);
   return g;
 }
