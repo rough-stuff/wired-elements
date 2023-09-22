@@ -146,7 +146,7 @@ export class WiredButton extends WiredBase {
     if (this._button) {
       const { width, height } = this._button.getBoundingClientRect();
       const elev = Math.min(Math.max(1, this.elevation), 5);
-      const elevOffset = 2;
+      const elevOffset = 2 * (this.renderStyle !== 'classic' ? 2 : 1);
       const randomizer = this._randomizer();
 
       if (this.rounded) {
