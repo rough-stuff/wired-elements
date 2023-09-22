@@ -91,7 +91,7 @@ export function _line(p1: Point, p2: Point, randomizer: Randomizer, doubleStroke
   };
 }
 
-export function linearPath(points: Point[], close: boolean, randomizer: Randomizer, doubleStroke = true, roughness = 1): RenderOps {
+export function _linearPath(points: Point[], close: boolean, randomizer: Randomizer, doubleStroke = true, roughness = 1): RenderOps {
   const len = (points || []).length;
   if (len > 2) {
     const ops: Op[] = [];
@@ -120,7 +120,7 @@ export function linearPath(points: Point[], close: boolean, randomizer: Randomiz
 }
 
 export function polygon(points: Point[], randomizer: Randomizer, doubleStroke = true, roughness = 1): RenderOps {
-  return linearPath(points, true, randomizer, doubleStroke, roughness);
+  return _linearPath(points, true, randomizer, doubleStroke, roughness);
 }
 
 export function _rectangle(topLeft: Point, width: number, height: number, randomizer: Randomizer, doubleStroke = true, roughness = 1): RenderOps {
