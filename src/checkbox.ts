@@ -1,6 +1,7 @@
 import { WiredBase, ce, html, TemplateResult, css, property, query, Point, PropertyValues, state } from './core/base-element.js';
-import { rectangle, linearPath, mergedShape } from './core/graphics.js';
-import { renderSvgPath, fillSvgPath } from './core/svg-render.js';
+import { mergedShape } from './core/graphics.js';
+import { fillSvgPath } from './core/svg-render.js';
+import { rectangle, linearPath } from './core/renderer.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -111,18 +112,18 @@ export class WiredCheckbox extends WiredBase {
   protected draw(svg: SVGSVGElement, size: Point): void {
     const [width, height] = size;
     const randomizer = this._randomizer();
-    const rect = rectangle([2, 5], width - 7, height - 7, randomizer);
+    const rect = rectangle([2, 5], width - 7, height - 7, randomizer, this.renderStyle);
     if (this.checked) {
       fillSvgPath(svg, mergedShape(rect)).classList.add('backdrop');
     }
-    renderSvgPath(svg, rect);
+    this._renderPath(svg, rect);
     if (this.checked) {
       for (let i = 0; i < 2; i++) {
-        renderSvgPath(svg, linearPath([
+        this._renderPath(svg, linearPath([
           [width * 0.3, height * 0.5],
           [width * 0.5, height * 0.7],
           [width, 0]
-        ], false, randomizer));
+        ], false, randomizer, this.renderStyle));
       }
     }
   }

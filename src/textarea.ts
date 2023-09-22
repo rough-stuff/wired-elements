@@ -1,8 +1,7 @@
 import { WiredBase, ce, html, TemplateResult, css, property, state, query, Point, PropertyValues } from './core/base-element.js';
-import { rectangle, linearPath } from './core/graphics.js';
-import { renderSvgPath } from './core/svg-render.js';
 import { classMap, ClassInfo } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { rectangle, linearPath } from './core/renderer.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -305,11 +304,11 @@ export class WiredTextarea extends WiredBase {
         [width - 2, height - 2],
         [width - 2, 2],
         [labelWidth + 14, 2]
-      ], false, randomizer);
-      renderSvgPath(svg, path);
+      ], false, randomizer, this.renderStyle);
+      this._renderPath(svg, path);
     } else {
-      const rect = rectangle([2, 2], width - 4, height - 4, randomizer);
-      renderSvgPath(svg, rect);
+      const rect = rectangle([2, 2], width - 4, height - 4, randomizer, this.renderStyle);
+      this._renderPath(svg, rect);
     }
   }
 }
