@@ -1,6 +1,5 @@
 import { WiredBase, ce, html, TemplateResult, css, property, Point, PropertyValues } from './core/base-element.js';
-import { line } from './core/graphics.js';
-import { renderSvgPath } from './core/svg-render.js';
+import { line } from './core/renderer.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -56,9 +55,9 @@ export class WiredDivider extends WiredBase {
     const { width, height } = this.getBoundingClientRect();
     const randomizer = this._randomizer();
     if (this.vertical) {
-      renderSvgPath(svg, line([width / 2, 0], [width / 2, height], randomizer));
+      this._renderPath(svg, line([width / 2, 0], [width / 2, height], randomizer, this.renderStyle));
     } else {
-      renderSvgPath(svg, line([0, height / 2], [width, height / 2], randomizer));
+      this._renderPath(svg, line([0, height / 2], [width, height / 2], randomizer, this.renderStyle));
     }
   }
 }

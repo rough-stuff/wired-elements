@@ -1,7 +1,8 @@
 import { WiredBase, ce, html, TemplateResult, css, property, state, query, Point, PropertyValues } from './core/base-element.js';
-import { rectangle, ellipse } from './core/graphics.js';
-import { renderSvgPath, fillSvgPath, createGroup } from './core/svg-render.js';
+import { ellipse } from './core/graphics.js';
+import { fillSvgPath, createGroup } from './core/svg-render.js';
 import { classMap, ClassInfo } from 'lit/directives/class-map.js';
+import { rectangle } from './core/renderer.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -136,11 +137,11 @@ export class WiredSwitch extends WiredBase {
   protected draw(svg: SVGSVGElement, size: Point): void {
     const [width, height] = size;
     const randomizer = this._randomizer();
-    const rect = rectangle([14, (height / 2) - 6], width - 28, 12, randomizer);
-    renderSvgPath(svg, rect);
+    const rect = rectangle([14, (height / 2) - 6], width - 28, 12, randomizer, this.renderStyle);
+    this._renderPath(svg, rect);
     const circle = ellipse([14, height / 2], 24, 24, randomizer);
     const knob = createGroup(svg, 'switchKnob');
     fillSvgPath(knob, circle.shape);
-    renderSvgPath(knob, circle);
+    this._renderPath(knob, circle);
   }
 }

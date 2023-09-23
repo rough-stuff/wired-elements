@@ -1,7 +1,6 @@
 import { WiredBase, ce, html, TemplateResult, css, property, query, Point, PropertyValues } from './core/base-element.js';
-import { line } from './core/graphics.js';
-import { renderSvgPath } from './core/svg-render.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { line } from './core/renderer.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -103,7 +102,7 @@ export class WiredLink extends WiredBase {
     const elev = Math.min(Math.max(1, this.elevation), 5);
     const randomizer = this._randomizer();
     for (let i = 0; i < elev; i++) {
-      renderSvgPath(svg, line([0, height - ((i + 1) * 2)], [width, height - ((i + 1) * 2)], randomizer, true, 0.5))
+      this._renderPath(svg, line([0, height - ((i + 1) * 2)], [width, height - ((i + 1) * 2)], randomizer, this.renderStyle, 0.5))
         .style.strokeOpacity = `${(100 - (i * 10)) / 100}`;
     }
   }

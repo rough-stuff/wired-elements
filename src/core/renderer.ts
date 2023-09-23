@@ -1,5 +1,5 @@
 import { Point, Line, lineLength } from './geometry.js';
-import { RenderOps, Op, _rectangle, _line, _spline, _linearPath } from './graphics.js';
+import { RenderOps, Op, _rectangle, _line, _spline, _linearPath, ResolvedRenderStyle } from './graphics.js';
 import { Randomizer } from './random';
 import { pointsOnBezierCurves } from 'points-on-curve';
 
@@ -8,28 +8,26 @@ const TOLERANCE_DISTANCE = 0.125;
 const MAX_STROKE_WIDTH = 1.5;
 const MIN_STROKE_WIDTH = 0.8;
 
-export type RenderStyle = 'classic' | 'marker';
-
-export function linearPath(points: Point[], close: boolean, randomizer: Randomizer, style: RenderStyle, roughness = 1): RenderOps {
+export function linearPath(points: Point[], close: boolean, randomizer: Randomizer, style: ResolvedRenderStyle, roughness = 1): RenderOps {
   const ops = _linearPath(points, close, randomizer, style === 'classic', roughness);
   if (style !== 'classic') {
-    ops.markerOps = _renderOutilneCurve(ops.shape);
+    ops.textured = _renderOutilneCurve(ops.shape);
   }
   return ops;
 }
 
-export function rectangle(topLeft: Point, width: number, height: number, randomizer: Randomizer, style: RenderStyle, roughness = 1): RenderOps {
+export function rectangle(topLeft: Point, width: number, height: number, randomizer: Randomizer, style: ResolvedRenderStyle, roughness = 1): RenderOps {
   const ops = _rectangle(topLeft, width, height, randomizer, style === 'classic', roughness);
   if (style !== 'classic') {
-    ops.markerOps = _renderOutilneCurve(ops.shape);
+    ops.textured = _renderOutilneCurve(ops.shape);
   }
   return ops;
 }
 
-export function line(p1: Point, p2: Point, randomizer: Randomizer, style: RenderStyle, roughness = 1): RenderOps {
+export function line(p1: Point, p2: Point, randomizer: Randomizer, style: ResolvedRenderStyle, roughness = 1): RenderOps {
   const ops = _line(p1, p2, randomizer, style === 'classic', roughness);
   if (style !== 'classic') {
-    ops.markerOps = _renderOutilneCurve(ops.shape);
+    ops.textured = _renderOutilneCurve(ops.shape);
   }
   return ops;
 }
@@ -48,8 +46,8 @@ function _extractCurves(ops: Op[]): Point[][] {
   const curves: Point[][] = [];
   let current: Point[] = [];
   for (const item of ops) {
-    const { op, data } = item;
-    switch (op) {
+    const { type, data } = item;
+    switch (type) {
       case 'move':
         if (current.length >= 4) {
           curves.push(current);

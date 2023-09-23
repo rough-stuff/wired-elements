@@ -1,17 +1,20 @@
 import { Point, lineLength, rotatePoints, centerPoint } from './geometry';
 import { Randomizer } from './random';
 
-export declare type OpType = 'move' | 'bcurveTo' | 'qcurveTo' | 'lineTo' | 'ellipse';
+export type ResolvedRenderStyle = 'classic' | 'pen' | 'pencil'
+export type RenderStyle = ResolvedRenderStyle | 'inherit';
+
+export type OpType = 'move' | 'bcurveTo' | 'qcurveTo' | 'lineTo' | 'ellipse';
 
 export interface Op {
-  op: OpType;
+  type: OpType;
   data: number[];
 }
 
 export interface RenderOps {
   shape: Op[];
   overlay: Op[];
-  markerOps?: Op[][];
+  textured?: Op[][];
 }
 
 export function mergedShape(rect: RenderOps): Op[] {
@@ -19,7 +22,7 @@ export function mergedShape(rect: RenderOps): Op[] {
     if (i === 0) {
       return true;
     }
-    if (d.op === 'move') {
+    if (d.type === 'move') {
       return false;
     }
     return true;
@@ -59,11 +62,11 @@ export function _line(p1: Point, p2: Point, randomizer: Randomizer, doubleStroke
 
   // collate ops
   const overlayOps: Op[] = [];
-  const ops: Op[] = [{ op: 'move', data: randomizer.point(p1, 2, roughness) }];
+  const ops: Op[] = [{ type: 'move', data: randomizer.point(p1, 2, roughness) }];
   for (let i = 0; i < controlPointCount; i++) {
     const endPoint = randomizer.point(p2, 2, roughness);
     ops.push({
-      op: 'bcurveTo',
+      type: 'bcurveTo',
       data: [
         ...controls[i * 2],
         ...controls[i * 2 + 1],
@@ -72,11 +75,11 @@ export function _line(p1: Point, p2: Point, randomizer: Randomizer, doubleStroke
     });
   }
   if (doubleStroke) {
-    overlayOps.push({ op: 'move', data: randomizer.point(p1, 2, roughness) });
+    overlayOps.push({ type: 'move', data: randomizer.point(p1, 2, roughness) });
     for (let i = 0; i < controlPointCount; i++) {
       const endPoint = randomizer.point(p2, 2, roughness);
       overlayOps.push({
-        op: 'bcurveTo',
+        type: 'bcurveTo',
         data: [
           ...overlayControls[i * 2],
           ...overlayControls[i * 2 + 1],
@@ -148,7 +151,7 @@ export function roundedRectangle(topLeft: Point, width: number, height: number, 
       (2 * (topLeft[1] + (height / 2))) - (p1[1] / 2) - (p2[1] / 2)
     ], 2, roughness);
     shape.push(
-      { op: 'qcurveTo', data: [...pMid, ...p2] }
+      { type: 'qcurveTo', data: [...pMid, ...p2] }
     );
 
     if (doubleStroke) {
@@ -160,12 +163,12 @@ export function roundedRectangle(topLeft: Point, width: number, height: number, 
         (2 * (topLeft[1] + (height / 2))) - (p1[1] / 2) - (p2[1] / 2)
       ], 2, roughness);
       overlay.push(
-        { op: 'qcurveTo', data: [...pMid, ...p2] }
+        { type: 'qcurveTo', data: [...pMid, ...p2] }
       );
     }
   }
   l2.shape.shift();
-  l2.overlay.shift()
+  l2.overlay.shift();
   shape.push(...l2.shape);
   overlay.push(...l2.overlay);
   {
@@ -177,7 +180,7 @@ export function roundedRectangle(topLeft: Point, width: number, height: number, 
       (2 * (topLeft[1] + (height / 2))) - (p1[1] / 2) - (p2[1] / 2)
     ], 2, roughness);
     shape.push(
-      { op: 'qcurveTo', data: [...pMid, ...p2] }
+      { type: 'qcurveTo', data: [...pMid, ...p2] }
     );
 
     if (doubleStroke) {
@@ -189,7 +192,7 @@ export function roundedRectangle(topLeft: Point, width: number, height: number, 
         (2 * (topLeft[1] + (height / 2))) - (p1[1] / 2) - (p2[1] / 2)
       ], 2, roughness);
       overlay.push(
-        { op: 'qcurveTo', data: [...pMid, ...p2] }
+        { type: 'qcurveTo', data: [...pMid, ...p2] }
       );
     }
   }
@@ -281,7 +284,7 @@ export function _spline(input: Point[] = [], tension = 1, close = true): Op[] {
   const startPointX = close ? points[2] : points[0];
   const startPointY = close ? points[3] : points[1];
 
-  ops.push({ op: 'move', data: [startPointX, startPointY] });
+  ops.push({ type: 'move', data: [startPointX, startPointY] });
 
   const startIteration = close ? 2 : 0;
   const maxIteration = close ? size - 4 : size - 2;
@@ -306,7 +309,7 @@ export function _spline(input: Point[] = [], tension = 1, close = true): Op[] {
     const cp2x = x2 - ((x3 - x1) / 6) * tension;
     const cp2y = y2 - ((y3 - y1) / 6) * tension;
 
-    ops.push({ op: 'bcurveTo', data: [cp1x, cp1y, cp2x, cp2y, x2, y2] });
+    ops.push({ type: 'bcurveTo', data: [cp1x, cp1y, cp2x, cp2y, x2, y2] });
   }
 
   return ops;

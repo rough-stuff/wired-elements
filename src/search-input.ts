@@ -1,8 +1,8 @@
 import { WiredBase, ce, html, TemplateResult, css, property, state, query, Point, PropertyValues } from './core/base-element.js';
-import { roundedRectangle, line, ellipse } from './core/graphics.js';
-import { renderSvgPath } from './core/svg-render.js';
+import { roundedRectangle, ellipse } from './core/graphics.js';
 import { classMap, ClassInfo } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { line } from './core/renderer.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -199,14 +199,14 @@ export class WiredSearchInput extends WiredBase {
     const [width, height] = size;
     const randomizer = this._randomizer();
     const rect = roundedRectangle([2, 2], width - 4, height - 4, height / 2, randomizer);
-    renderSvgPath(svg, rect);
+    this._renderPath(svg, rect);
     const yo = (height - 30) / 2;
     if (this.icon === 'clear') {
-      renderSvgPath(svg, line([width - 44, yo], [width - 20, yo + 24], randomizer));
-      renderSvgPath(svg, line([width - 20, yo], [width - 44, yo + 24], randomizer));
+      this._renderPath(svg, line([width - 44, yo], [width - 20, yo + 24], randomizer, this.renderStyle));
+      this._renderPath(svg, line([width - 20, yo], [width - 44, yo + 24], randomizer, this.renderStyle));
     } else {
-      renderSvgPath(svg, ellipse([width - 36, height - 34], 16, 16, randomizer));
-      renderSvgPath(svg, line([width - 32, height - 28], [width - 20, height - 16], randomizer));
+      this._renderPath(svg, ellipse([width - 36, height - 34], 16, 16, randomizer));
+      this._renderPath(svg, line([width - 32, height - 28], [width - 20, height - 16], randomizer, this.renderStyle));
     }
   }
 

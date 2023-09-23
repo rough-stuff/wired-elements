@@ -1,6 +1,6 @@
 import { WiredBase, ce, html, TemplateResult, css, property, state, query, Point, PropertyValues } from './core/base-element.js';
-import { rectangle, linearPath, polygon, mergedShape } from './core/graphics.js';
-import { renderSvgPath, fillSvgPath } from './core/svg-render.js';
+import { polygon, mergedShape } from './core/graphics.js';
+import { fillSvgPath } from './core/svg-render.js';
 import { classMap, ClassInfo } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { WiredPopoverDirection } from './popover.js';
@@ -8,6 +8,7 @@ import { WiredItem } from './item.js';
 import { WiredMenu } from './menu.js';
 import { queryAll } from 'lit/decorators/query-all.js';
 import { queryAssignedNodes } from 'lit/decorators/query-assigned-nodes.js';
+import { rectangle, linearPath } from './core/renderer.js';
 
 import './menu.js';
 import './list.js';
@@ -416,11 +417,11 @@ export class WiredSelect extends WiredBase {
         [width - 2, height - 2],
         [width - 2, 2],
         [labelWidth + 14, 2]
-      ], false, randomizer);
-      renderSvgPath(svg, path);
+      ], false, randomizer, this.renderStyle);
+      this._renderPath(svg, path);
     } else {
-      const rect = rectangle([2, 2], width - 4, height - 4, randomizer);
-      renderSvgPath(svg, rect);
+      const rect = rectangle([2, 2], width - 4, height - 4, randomizer, this.renderStyle);
+      this._renderPath(svg, rect);
 
     }
     if (this._menuShowing) {

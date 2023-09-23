@@ -91,10 +91,10 @@ const draw = (canvas: HTMLCanvasElement) => {
     ctx.fillStyle = 'rgba(0,0,0,1)';
     ctx.beginPath();
     for (const item of ops) {
-      const { op, data } = item;
-      if (op === 'move') {
+      const { type, data } = item;
+      if (type === 'move') {
         ctx.moveTo(data[0], data[1]);
-      } else if (op === 'bcurveTo') {
+      } else if (type === 'bcurveTo') {
         ctx.bezierCurveTo(data[0], data[1], data[2], data[3], data[4], data[5]);
       }
     }

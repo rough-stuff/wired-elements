@@ -4,8 +4,7 @@ export { property, query, state, customElement as ce } from 'lit/decorators.js';
 import { query } from 'lit/decorators/query.js';
 import { Randomizer } from './random';
 import { property } from 'lit/decorators.js';
-import { RenderStyle } from './renderer.js';
-import { RenderOps } from './graphics';
+import { RenderOps, RenderStyle, ResolvedRenderStyle } from './graphics';
 import { createGroup, fillSvgPath, renderSvgPath } from './svg-render';
 
 export type Point = [number, number];
@@ -21,12 +20,8 @@ export class UIEvent<T> extends Event {
   }
 }
 
-export type TextureType = 'default' | 'pencil' | 'inherit';
-export type RenderType = 'classic' | 'marker' | 'inherit';
-
 export abstract class WiredBase extends LitElement {
-  @property() texture: TextureType = 'inherit';
-  @property() renderer: RenderType = 'inherit';
+  @property() renderer: RenderStyle = 'inherit';
   @query('svg') protected svg?: SVGSVGElement;
 
   protected _lastSize: Point = [0, 0];
@@ -96,15 +91,7 @@ export abstract class WiredBase extends LitElement {
     this.dispatchEvent(new UIEvent(name, detail));
   }
 
-  protected _resolvedTexture(): TextureType {
-    if ((!this.texture) || (this.texture === 'inherit')) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return (window as any)._wired_texture || 'default';
-    }
-    return this.texture;
-  }
-
-  protected get renderStyle(): RenderStyle {
+  protected get renderStyle(): ResolvedRenderStyle {
     if ((!this.renderer) || (this.renderer === 'inherit')) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return (window as any)._wired_renderer || 'classic';
@@ -125,8 +112,7 @@ export abstract class WiredBase extends LitElement {
     svg.setAttribute('width', `${size[0]}`);
     svg.setAttribute('height', `${size[1]}`);
 
-    const texture = this._resolvedTexture();
-    if (texture === 'pencil') {
+    if (this.renderStyle === 'pencil') {
       svg.innerHTML = `<defs>
         <filter x="0%" y="0%" width="100%" height="100%" filterUnits="objectBoundingBox" id="wiredTexture">
           <feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="5" stitchTiles="stitch" result="f1">
@@ -163,7 +149,7 @@ export abstract class WiredBase extends LitElement {
   }
 
   updated(changed: PropertyValues) {
-    this._wiredRender(this._forceRenderOnChange(changed));
+    this._wiredRender(this._forceRenderOnChange(changed) || changed.has('renderer'));
     this._attachResizeListener();
   }
 
@@ -200,10 +186,10 @@ export abstract class WiredBase extends LitElement {
   }
 
   protected _renderPath(svg: SVGElement, ops: RenderOps) {
-    if (this.renderStyle === 'marker') {
+    if (this.renderStyle !== 'classic') {
       const g = createGroup(svg);
       g.classList.add('wired-fill-shape-as-stroke-group');
-      for (const mops of (ops.markerOps || [])) {
+      for (const mops of (ops.textured || [])) {
         fillSvgPath(g, mops, true);
       }
       return g;

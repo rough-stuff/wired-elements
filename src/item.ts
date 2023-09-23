@@ -1,6 +1,7 @@
 import { WiredBase, ce, html, TemplateResult, css, property, query, Point, PropertyValues, state } from './core/base-element.js';
-import { rectangle, mergedShape } from './core/graphics.js';
+import { mergedShape } from './core/graphics.js';
 import { fillSvgPath } from './core/svg-render.js';
+import { rectangle } from './core/renderer.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -156,7 +157,7 @@ export class WiredItem extends WiredBase {
     if (this.selected) {
       const [width, height] = size;
       const randomizer = this._randomizer();
-      const rect = rectangle([2, 2], width - 4, height - 4, randomizer);
+      const rect = rectangle([2, 2], width - 4, height - 4, randomizer, this.renderStyle);
       fillSvgPath(svg, mergedShape(rect));
     }
   }

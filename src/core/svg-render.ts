@@ -6,7 +6,7 @@ function _opsToPath(ops: Op[]): string {
   let path = '';
   for (const item of ops) {
     const data = item.data;
-    switch (item.op) {
+    switch (item.type) {
       case 'move':
         path += `M${data[0]} ${data[1]} `;
         break;
