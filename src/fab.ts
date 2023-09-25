@@ -1,6 +1,6 @@
 import { WiredBase, ce, html, TemplateResult, css, property, query, Point } from './core/base-element.js';
-import { ellipse } from './core/graphics.js';
-import { fillSvgPath, renderSvgPath } from './core/svg-render.js';
+import { fillSvgPath } from './core/svg-render.js';
+import { ellipse } from './core/renderer.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -112,9 +112,9 @@ export class WiredFab extends WiredBase {
     if (this._button) {
       const [width, height] = size;
       const randomizer = this._randomizer();
-      const shape = ellipse([width / 2, height / 2], width - 4, height - 4, randomizer)
+      const shape = ellipse([width / 2, height / 2], width - 4, height - 4, randomizer, 'classic');
       fillSvgPath(svg, shape.overlay);
-      renderSvgPath(svg, ellipse([width / 2, height / 2], width - 4, height - 4, randomizer));
+      this._renderPath(svg, ellipse([width / 2, height / 2], width - 4, height - 4, randomizer, this.renderStyle));
     }
   }
 }

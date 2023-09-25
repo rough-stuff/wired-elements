@@ -1,6 +1,5 @@
 import { WiredBase, ce, html, TemplateResult, css, property, query, Point } from './core/base-element.js';
-import { ellipse } from './core/graphics.js';
-import { renderSvgPath } from './core/svg-render.js';
+import { ellipse } from './core/renderer.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -104,7 +103,7 @@ export class WiredIconButton extends WiredBase {
     if (this._button) {
       const [width, height] = size;
       const randomizer = this._randomizer();
-      renderSvgPath(svg, ellipse([width / 2, height / 2], width - 4, height - 4, randomizer));
+      this._renderPath(svg, ellipse([width / 2, height / 2], width - 4, height - 4, randomizer, this.renderStyle));
     }
   }
 }

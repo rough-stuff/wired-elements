@@ -1,5 +1,5 @@
 import { Point, Line, lineLength } from './geometry.js';
-import { RenderOps, Op, _rectangle, _line, _spline, _linearPath, ResolvedRenderStyle, _roundedRectangle } from './graphics.js';
+import { RenderOps, Op, _rectangle, _line, _spline, _linearPath, _ellipse, _ellipsePoints, ResolvedRenderStyle, _roundedRectangle } from './graphics.js';
 import { Randomizer } from './random';
 import { pointsOnBezierCurves } from 'points-on-curve';
 
@@ -40,11 +40,26 @@ export function roundedRectangle(topLeft: Point, width: number, height: number, 
   return ops;
 }
 
+export function ellipse(center: Point, width: number, height: number, randomizer: Randomizer, style: ResolvedRenderStyle, roughness = 1): RenderOps {
+  if (style === 'classic') {
+    return _ellipse(center, width, height, randomizer, true, roughness);
+  } else {
+    const { ellipsePoints } = _ellipsePoints(center, width, height, randomizer, false, roughness);
+    ellipsePoints.push([...ellipsePoints[0]]);
+    const { outer, inner } = _curveOutline(ellipsePoints, false);
+    return {
+      textured: [_spline(outer.concat(inner.reverse()), 1, false)],
+      shape: [],
+      overlay: []
+    };
+  }
+}
+
 function _renderOutilneCurve(ops: Op[]): Op[][] {
   const curves = _extractCurves(ops);
   const out: Op[][] = [];
   for (const curve of curves) {
-    const { outer, inner } = _curveOutline(curve);
+    const { outer, inner } = _curveOutline(curve, true);
     out.push(_spline(outer.concat(inner.reverse()), 1, true));
   }
   return out;
@@ -76,10 +91,10 @@ function _extractCurves(ops: Op[]): Point[][] {
   return curves;
 }
 
-export function _curveOutline(curve: Point[]): { outer: Point[], inner: Point[] } {
+export function _curveOutline(curve: Point[], bezier: boolean): { outer: Point[], inner: Point[] } {
   const outer: Point[] = [];
   const inner: Point[] = [];
-  const points = pointsOnBezierCurves(curve, TOLERANCE, TOLERANCE_DISTANCE);
+  const points = bezier ? pointsOnBezierCurves(curve, TOLERANCE, TOLERANCE_DISTANCE) : curve;
   if (points.length > 1) {
     let maxD = 0;
     let minD = Number.MAX_VALUE;

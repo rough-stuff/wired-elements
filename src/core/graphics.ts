@@ -208,13 +208,13 @@ export function _roundedRectangle(topLeft: Point, width: number, height: number,
 
 const POINT_COUNT_MARKER = 20;
 
-export function ellipse(center: Point, width: number, height: number, randomizer: Randomizer, doubleStroke = true, roughness = 1): RenderOps {
+export function _ellipsePoints(center: Point, width: number, height: number, randomizer: Randomizer, doubleStroke = true, roughness = 1) {
   const a = width / 2;
   const b = height / 2;
   if (a <= 0 || b <= 0) {
     return {
-      shape: [],
-      overlay: []
+      ellipsePoints: [],
+      overlayEllipsePoints: []
     };
   }
   const pointCount = (Math.max(a, b) > POINT_COUNT_MARKER) ? 10 : 6;
@@ -228,9 +228,24 @@ export function ellipse(center: Point, width: number, height: number, randomizer
     const angle = startAngle + (i / pointCount) * 2 * Math.PI;
     const x = center[0] + (a * Math.cos(angle));
     const y = center[1] + (b * Math.sin(angle));
-    overlayEllipsePoints[i] = [x + randomizer.valueOffset(bowing, r), y + randomizer.valueOffset(bowing, r)];
+    if (doubleStroke) {
+      overlayEllipsePoints[i] = [x + randomizer.valueOffset(bowing, r), y + randomizer.valueOffset(bowing, r)];
+    }
     ellipsePoints[i] = [x + randomizer.valueOffset(bowing, r), y + randomizer.valueOffset(bowing, r)];
   }
+  return { ellipsePoints, overlayEllipsePoints };
+}
+
+export function _ellipse(center: Point, width: number, height: number, randomizer: Randomizer, doubleStroke = true, roughness = 1): RenderOps {
+  const a = width / 2;
+  const b = height / 2;
+  if (a <= 0 || b <= 0) {
+    return {
+      shape: [],
+      overlay: []
+    };
+  }
+  const { ellipsePoints, overlayEllipsePoints } = _ellipsePoints(center, width, height, randomizer, doubleStroke, roughness);
   return {
     shape: _spline(ellipsePoints),
     overlay: doubleStroke ? _spline(overlayEllipsePoints) : []
