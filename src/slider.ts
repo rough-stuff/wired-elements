@@ -1,10 +1,10 @@
 import { WiredBase, ce, html, TemplateResult, css, property, state, query, Point, PropertyValues } from './core/base-element.js';
-import { mergedShape, ellipse } from './core/graphics.js';
+import { mergedShape } from './core/graphics.js';
 import { fillSvgPath, createGroup } from './core/svg-render.js';
 import { PointerTrackerHandler, Pointer, InputEvent, PointerTracker } from './core/pointers.js';
 import { classMap, ClassInfo } from 'lit/directives/class-map.js';
 import { styleMap, StyleInfo } from 'lit/directives/style-map.js';
-import { rectangle } from './core/renderer.js';
+import { rectangle, ellipse } from './core/renderer.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -399,12 +399,13 @@ export class WiredSlider extends WiredBase implements PointerTrackerHandler {
 
     if (this._pct > 0) {
       const activeTrackRect = rectangle([12, (height / 2) - 3], (width - 24) * (this._pct / 100), 6, randomizer, this.renderStyle);
-      fillSvgPath(svg, mergedShape(activeTrackRect)).setAttribute('id', 'sliderActiveTrack');
+      const fillShape = fillSvgPath(svg, mergedShape(activeTrackRect));
+      fillShape.setAttribute('id', 'sliderActiveTrack');
+      fillShape.setAttribute('filter', 'url(#wiredTexture)');
     }
 
-    const circle = ellipse([12 + ((width - 24) * (this._pct / 100)), height / 2], 18, 18, randomizer);
     const knob = createGroup(svg, 'sliderKnob');
-    fillSvgPath(knob, circle.shape);
-    this._renderPath(knob, circle);
+    fillSvgPath(knob, ellipse([12 + ((width - 24) * (this._pct / 100)), height / 2], 18, 18, randomizer, 'classic').shape);
+    this._renderPath(knob, ellipse([12 + ((width - 24) * (this._pct / 100)), height / 2], 18, 18, randomizer, this.renderStyle));
   }
 }

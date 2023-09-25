@@ -1,8 +1,7 @@
 import { WiredBase, ce, html, TemplateResult, css, property, state, query, Point, PropertyValues } from './core/base-element.js';
-import { ellipse } from './core/graphics.js';
 import { classMap, ClassInfo } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import { line, roundedRectangle } from './core/renderer.js';
+import { line, roundedRectangle, ellipse } from './core/renderer.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -205,7 +204,7 @@ export class WiredSearchInput extends WiredBase {
       this._renderPath(svg, line([width - 44, yo], [width - 20, yo + 24], randomizer, this.renderStyle));
       this._renderPath(svg, line([width - 20, yo], [width - 44, yo + 24], randomizer, this.renderStyle));
     } else {
-      this._renderPath(svg, ellipse([width - 36, height - 34], 16, 16, randomizer));
+      this._renderPath(svg, ellipse([width - 36, height - 34], 16, 16, randomizer, this.renderStyle));
       this._renderPath(svg, line([width - 32, height - 28], [width - 20, height - 16], randomizer, this.renderStyle));
     }
   }

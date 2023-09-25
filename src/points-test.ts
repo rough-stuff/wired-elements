@@ -73,7 +73,7 @@ const draw = (canvas: HTMLCanvasElement) => {
     // ctx.bezierCurveTo(...curve[1], ...curve[2], ...curve[3]);
     // ctx.stroke();
 
-    const { outer, inner } = _curveOutline(curve);
+    const { outer, inner } = _curveOutline(curve, true);
     // outer.forEach((p) => {
     //   ctx.fillStyle = 'red';
     //   ctx.beginPath();

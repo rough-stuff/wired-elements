@@ -1,7 +1,7 @@
 import { WiredBase, ce, html, TemplateResult, css, property, query, Point, PropertyValues } from './core/base-element.js';
-import { ellipse, arc } from './core/graphics.js';
-import { renderSvgPath } from './core/svg-render.js';
+import { arc } from './core/graphics.js';
 import { classMap, ClassInfo } from 'lit/directives/class-map.js';
+import { ellipse } from './core/renderer.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -86,19 +86,21 @@ export class WiredProgressRing extends WiredBase {
     const diameter = Math.min(width, height);
     const randomizer = this._randomizer();
     const shapeWidth = diameter - this.indicatorWidth - 4;
-    const track = ellipse([width / 2, height / 2], shapeWidth, shapeWidth, randomizer);
-    renderSvgPath(svg, track);
+    const track = ellipse([width / 2, height / 2], shapeWidth, shapeWidth, randomizer, this.renderStyle);
+    this._renderPath(svg, track);
     if (this.value && (!this.indeterminate)) {
       const value = Math.max(0, Math.min(this.value || 0, 1));
       const valueArc = arc([width / 2, height / 2], shapeWidth / 2, -(Math.PI / 2), value * 2 * Math.PI - (Math.PI / 2), randomizer);
-      const node = renderSvgPath(svg, valueArc);
+      valueArc.textured = [valueArc.shape];
+      const node = this._renderPath(svg, valueArc);
       node.setAttribute('id', 'progressValueArc');
       node.removeAttribute('filter');
     }
     if (this.indeterminate) {
       const v = 0.2;
       const valueArc = arc([width / 2, height / 2], shapeWidth / 2, -(Math.PI / 2), v * 2 * Math.PI - (Math.PI / 2), randomizer);
-      const g = renderSvgPath(svg, valueArc);
+      valueArc.textured = [valueArc.shape];
+      const g = this._renderPath(svg, valueArc);
       g.setAttribute('id', 'progressValueArc');
       g.removeAttribute('filter');
       g.classList.add('indeterminate');
