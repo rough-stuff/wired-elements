@@ -4,7 +4,7 @@ import { Randomizer } from './random';
 export type ResolvedRenderStyle = 'classic' | 'pen' | 'pencil'
 export type RenderStyle = ResolvedRenderStyle | 'inherit';
 
-export type OpType = 'move' | 'bcurveTo' | 'qcurveTo' | 'lineTo' | 'ellipse';
+export type OpType = 'move' | 'bcurveTo' | 'lineTo' | 'ellipse';
 
 export interface Op {
   type: OpType;
@@ -136,7 +136,7 @@ export function _rectangle(topLeft: Point, width: number, height: number, random
   return polygon(points, randomizer, doubleStroke, roughness);
 }
 
-export function roundedRectangle(topLeft: Point, width: number, height: number, radius: number, randomizer: Randomizer, doubleStroke = true, roughness = 1): RenderOps {
+export function _roundedRectangle(topLeft: Point, width: number, height: number, radius: number, randomizer: Randomizer, doubleStroke = true, roughness = 1): RenderOps {
   const radiusOffset = radius - 8;
   const l1 = _line([topLeft[0] + radiusOffset, topLeft[1]], [topLeft[0] + width - radiusOffset, topLeft[1]], randomizer, doubleStroke, roughness);
   const l2 = _line([topLeft[0] + width - radiusOffset, topLeft[1] + height], [topLeft[0] + radiusOffset, topLeft[1] + height], randomizer, doubleStroke, roughness);
@@ -144,27 +144,29 @@ export function roundedRectangle(topLeft: Point, width: number, height: number, 
   const overlay: Op[] = [...l1.overlay];
   {
     const p1Data = l1.shape[l1.shape.length - 1].data;
-    const p1 = [p1Data[4], p1Data[5]];
-    const p2 = l2.shape[0].data;
-    const pMid = randomizer.point([
-      (2 * (topLeft[0] + width)) - (p1[0] / 2) - (p2[0] / 2),
-      (2 * (topLeft[1] + (height / 2))) - (p1[1] / 2) - (p2[1] / 2)
-    ], 2, roughness);
-    shape.push(
-      { type: 'qcurveTo', data: [...pMid, ...p2] }
-    );
+    const p1: Point = [p1Data[4], p1Data[5]];
+    const p2 = l2.shape[0].data as Point;
+    const p3: Point = [topLeft[0] + width, (p1[1] + p2[1]) / 2];
+    const center: Point = [(p1[0] + p2[0]) / 2, (p1[1] + p2[1]) / 2];
+    const r = topLeft[0] + width - ((p1[0] + p2[0]) / 2);
+    const pa: Point = [center[0] + r * Math.cos(-Math.PI / 4), center[1] + r * Math.sin(-Math.PI / 4)];
+    const pb: Point = [center[0] + r * Math.cos(Math.PI / 4), center[1] + r * Math.sin(Math.PI / 4)];
+    const sops = _spline([p1, pa, p3, pb, p2], 1, false);
+    sops.shift();
+    shape.push(...sops);
 
     if (doubleStroke) {
       const p1Data = l1.overlay[l1.overlay.length - 1].data;
-      const p1 = [p1Data[4], p1Data[5]];
-      const p2 = l2.overlay[0].data;
-      const pMid = randomizer.point([
-        (2 * (topLeft[0] + width)) - (p1[0] / 2) - (p2[0] / 2),
-        (2 * (topLeft[1] + (height / 2))) - (p1[1] / 2) - (p2[1] / 2)
-      ], 2, roughness);
-      overlay.push(
-        { type: 'qcurveTo', data: [...pMid, ...p2] }
-      );
+      const p1: Point = [p1Data[4], p1Data[5]];
+      const p2 = l2.overlay[0].data as Point;
+      const p3: Point = randomizer.point([topLeft[0] + width, (p1[1] + p2[1]) / 2], 1, roughness);
+      const center: Point = [(p1[0] + p2[0]) / 2, (p1[1] + p2[1]) / 2];
+      const r = topLeft[0] + width - ((p1[0] + p2[0]) / 2);
+      const pa: Point = [center[0] + r * Math.cos(-Math.PI / 4), center[1] + r * Math.sin(-Math.PI / 4)];
+      const pb: Point = [center[0] + r * Math.cos(Math.PI / 4), center[1] + r * Math.sin(Math.PI / 4)];
+      const sops = _spline([p1, pa, p3, pb, p2], 1, false);
+      sops.shift();
+      overlay.push(...sops);
     }
   }
   l2.shape.shift();
@@ -173,27 +175,29 @@ export function roundedRectangle(topLeft: Point, width: number, height: number, 
   overlay.push(...l2.overlay);
   {
     const p1Data = l2.shape[l2.shape.length - 1].data;
-    const p1 = [p1Data[4], p1Data[5]];
-    const p2 = l1.shape[0].data;
-    const pMid = randomizer.point([
-      (2 * topLeft[0]) - (p1[0] / 2) - (p2[0] / 2),
-      (2 * (topLeft[1] + (height / 2))) - (p1[1] / 2) - (p2[1] / 2)
-    ], 2, roughness);
-    shape.push(
-      { type: 'qcurveTo', data: [...pMid, ...p2] }
-    );
+    const p1: Point = [p1Data[4], p1Data[5]];
+    const p2 = l1.shape[0].data as Point;
+    const p3: Point = [topLeft[0], (p1[1] + p2[1]) / 2];
+    const center: Point = [(p1[0] + p2[0]) / 2, (p1[1] + p2[1]) / 2];
+    const r = Math.abs(topLeft[0] - ((p1[0] + p2[0]) / 2));
+    const pa: Point = [center[0] + r * Math.cos(3 * Math.PI / 4), center[1] + r * Math.sin(3 * Math.PI / 4)];
+    const pb: Point = [center[0] + r * Math.cos(5 * Math.PI / 4), center[1] + r * Math.sin(5 * Math.PI / 4)];
+    const sops = _spline([p1, pa, p3, pb, p2], 1, false);
+    sops.shift();
+    shape.push(...sops);
 
     if (doubleStroke) {
       const p1Data = l2.overlay[l2.overlay.length - 1].data;
-      const p1 = [p1Data[4], p1Data[5]];
-      const p2 = l1.overlay[0].data;
-      const pMid = randomizer.point([
-        (2 * topLeft[0]) - (p1[0] / 2) - (p2[0] / 2),
-        (2 * (topLeft[1] + (height / 2))) - (p1[1] / 2) - (p2[1] / 2)
-      ], 2, roughness);
-      overlay.push(
-        { type: 'qcurveTo', data: [...pMid, ...p2] }
-      );
+      const p1: Point = [p1Data[4], p1Data[5]];
+      const p2 = l1.overlay[0].data as Point;
+      const p3: Point = [topLeft[0], (p1[1] + p2[1]) / 2];
+      const center: Point = [(p1[0] + p2[0]) / 2, (p1[1] + p2[1]) / 2];
+      const r = Math.abs(topLeft[0] - ((p1[0] + p2[0]) / 2));
+      const pa: Point = [center[0] + r * Math.cos(3 * Math.PI / 4), center[1] + r * Math.sin(3 * Math.PI / 4)];
+      const pb: Point = [center[0] + r * Math.cos(5 * Math.PI / 4), center[1] + r * Math.sin(5 * Math.PI / 4)];
+      const sops = _spline([p1, pa, p3, pb, p2], 1, false);
+      sops.shift();
+      overlay.push(...sops);
     }
   }
   return {

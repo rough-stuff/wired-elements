@@ -1,5 +1,5 @@
 import { Point, Line, lineLength } from './geometry.js';
-import { RenderOps, Op, _rectangle, _line, _spline, _linearPath, ResolvedRenderStyle } from './graphics.js';
+import { RenderOps, Op, _rectangle, _line, _spline, _linearPath, ResolvedRenderStyle, _roundedRectangle } from './graphics.js';
 import { Randomizer } from './random';
 import { pointsOnBezierCurves } from 'points-on-curve';
 
@@ -26,6 +26,14 @@ export function rectangle(topLeft: Point, width: number, height: number, randomi
 
 export function line(p1: Point, p2: Point, randomizer: Randomizer, style: ResolvedRenderStyle, roughness = 1): RenderOps {
   const ops = _line(p1, p2, randomizer, style === 'classic', roughness);
+  if (style !== 'classic') {
+    ops.textured = _renderOutilneCurve(ops.shape);
+  }
+  return ops;
+}
+
+export function roundedRectangle(topLeft: Point, width: number, height: number, radius: number, randomizer: Randomizer, style: ResolvedRenderStyle, roughness = 1): RenderOps {
+  const ops = _roundedRectangle(topLeft, width, height, radius, randomizer, style === 'classic', roughness);
   if (style !== 'classic') {
     ops.textured = _renderOutilneCurve(ops.shape);
   }

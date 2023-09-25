@@ -1,8 +1,8 @@
 import { WiredBase, ce, html, TemplateResult, css, property, query, Point, PropertyValues } from './core/base-element.js';
 import { styleMap, StyleInfo } from 'lit/directives/style-map.js';
-import { roundedRectangle, mergedShape } from './core/graphics.js';
+import { mergedShape } from './core/graphics.js';
 import { fillSvgPath } from './core/svg-render.js';
-import { rectangle, line } from './core/renderer.js';
+import { rectangle, line, roundedRectangle } from './core/renderer.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -152,7 +152,7 @@ export class WiredButton extends WiredBase {
       if (this.rounded) {
         const radius = (height / 2);
         const radiusOffset = radius - 10;
-        const rect = roundedRectangle([2, 2], width - 4, height - 4, radius, randomizer);
+        const rect = roundedRectangle([2, 2], width - 4, height - 4, radius, randomizer, this.renderStyle);
         if (this.type === 'solid') {
           fillSvgPath(svg, rect.overlay.length ? rect.overlay : rect.shape);
         }
