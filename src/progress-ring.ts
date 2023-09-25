@@ -91,16 +91,14 @@ export class WiredProgressRing extends WiredBase {
     if (this.value && (!this.indeterminate)) {
       const value = Math.max(0, Math.min(this.value || 0, 1));
       const valueArc = arc([width / 2, height / 2], shapeWidth / 2, -(Math.PI / 2), value * 2 * Math.PI - (Math.PI / 2), randomizer);
-      valueArc.textured = [valueArc.shape];
-      const node = this._renderPath(svg, valueArc);
+      const node = this._renderPath(svg, valueArc, 'classic');
       node.setAttribute('id', 'progressValueArc');
       node.removeAttribute('filter');
     }
     if (this.indeterminate) {
       const v = 0.2;
       const valueArc = arc([width / 2, height / 2], shapeWidth / 2, -(Math.PI / 2), v * 2 * Math.PI - (Math.PI / 2), randomizer);
-      valueArc.textured = [valueArc.shape];
-      const g = this._renderPath(svg, valueArc);
+      const g = this._renderPath(svg, valueArc, 'classic');
       g.setAttribute('id', 'progressValueArc');
       g.removeAttribute('filter');
       g.classList.add('indeterminate');

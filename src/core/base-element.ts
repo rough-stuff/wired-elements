@@ -185,8 +185,8 @@ export abstract class WiredBase extends LitElement {
     return false;
   }
 
-  protected _renderPath(svg: SVGElement, ops: RenderOps) {
-    if (this.renderStyle !== 'classic') {
+  protected _renderPath(svg: SVGElement, ops: RenderOps, overrideStyle?: ResolvedRenderStyle) {
+    if ((overrideStyle || this.renderStyle) !== 'classic') {
       const g = createGroup(svg);
       g.classList.add('wired-fill-shape-as-stroke-group');
       for (const mops of (ops.textured || [])) {
