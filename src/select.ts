@@ -430,14 +430,18 @@ export class WiredSelect extends WiredBase {
         [width - 12, 40],
         [width - 24, 16]
       ], randomizer);
-      fillSvgPath(svg, mergedShape(icon)).setAttribute('id', 'drop-arrow');
+      const arrow = fillSvgPath(svg, mergedShape(icon));
+      arrow.setAttribute('id', 'drop-arrow');
+      arrow.setAttribute('filter', 'url(#wiredTexture)');
     } else {
       const icon = polygon([
         [width - 36, 16],
         [width - 12, 16],
         [width - 24, 40]
       ], randomizer);
-      fillSvgPath(svg, mergedShape(icon)).setAttribute('id', 'drop-arrow');
+      const arrow = fillSvgPath(svg, mergedShape(icon));
+      arrow.setAttribute('id', 'drop-arrow');
+      arrow.setAttribute('filter', 'url(#wiredTexture)');
     }
   }
 }
