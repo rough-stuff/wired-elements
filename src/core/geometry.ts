@@ -26,7 +26,3 @@ export function lineLength(line: Line): number {
 export function centerPoint(p1: Point, p2: Point): Point {
   return [(p1[0] + p2[0]) / 2, (p1[1] + p2[1]) / 2];
 }
-
-export function ellipseParameter(a: number, b: number) {
-  return Math.PI * ((3 * (a + b)) - Math.sqrt(((3 * a) + b) * ((a + 3 * b))));
-}

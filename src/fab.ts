@@ -41,7 +41,7 @@ export class WiredFab extends WiredBase {
       color: inherit;
       outline: none;
       border-radius: 50%;
-      box-shadow: var(--nv-fab-shadow, 0px 3px 5px -1px rgb(0 0 0 / 20%), 0px 6px 10px 0px rgb(0 0 0 / 14%), 0px 1px 18px 0px rgb(0 0 0 / 12%));
+      box-shadow: var(--wired-fab-shadow, 0px 3px 5px -1px rgb(0 0 0 / 20%), 0px 6px 10px 0px rgb(0 0 0 / 14%), 0px 1px 18px 0px rgb(0 0 0 / 12%));
     }
     button[disabled] {
       opacity: 0.6 !important;
