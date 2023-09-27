@@ -186,7 +186,7 @@ __decorate([
     __metadata("design:type", Object)
 ], WiredButton.prototype, "rounded", void 0);
 __decorate([
-    property(),
+    property({ reflect: true }),
     __metadata("design:type", String)
 ], WiredButton.prototype, "type", void 0);
 __decorate([

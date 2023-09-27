@@ -15,7 +15,7 @@ export class WiredButton extends WiredBase {
   @property({ type: Number }) elevation = 1;
   @property({ type: Boolean, reflect: true }) disabled = false;
   @property({ type: Boolean, reflect: true }) rounded = false;
-  @property() type: 'outlined' | 'solid' = 'outlined';
+  @property({ reflect: true }) type: 'outlined' | 'solid' = 'outlined';
 
   @query('button') private _button?: HTMLButtonElement;
   @query('#container') private _container?: HTMLElement;
