@@ -33,9 +33,13 @@ export function line(p1: Point, p2: Point, randomizer: Randomizer, style: Resolv
 }
 
 export function roundedRectangle(topLeft: Point, width: number, height: number, radius: number, randomizer: Randomizer, style: ResolvedRenderStyle, roughness = 1): RenderOps {
-  const ops = _roundedRectangle(topLeft, width, height, radius, randomizer, style === 'classic', roughness);
+  const ops = _roundedRectangle(topLeft, width, height, radius, randomizer, style === 'classic', roughness, style !== 'classic');
   if (style !== 'classic') {
     ops.textured = _renderOutilneCurve(ops.shape);
+    for (const ac of (ops.adjacentCurveList || [])) {
+      const { outer, inner } = _curveOutline(ac, false);
+      ops.textured.push(_spline(outer.concat(inner.reverse()), 1, true));
+    }
   }
   return ops;
 }

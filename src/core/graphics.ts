@@ -15,6 +15,7 @@ export interface RenderOps {
   shape: Op[];
   overlay: Op[];
   textured?: Op[][];
+  adjacentCurveList?: Point[][];
 }
 
 export function mergedShape(rect: RenderOps): Op[] {
@@ -136,12 +137,13 @@ export function _rectangle(topLeft: Point, width: number, height: number, random
   return polygon(points, randomizer, doubleStroke, roughness);
 }
 
-export function _roundedRectangle(topLeft: Point, width: number, height: number, radius: number, randomizer: Randomizer, doubleStroke = true, roughness = 1): RenderOps {
+export function _roundedRectangle(topLeft: Point, width: number, height: number, radius: number, randomizer: Randomizer, doubleStroke = true, roughness = 1, ignoreAdjacentCurves: boolean): RenderOps {
   const radiusOffset = radius - 8;
   const l1 = _line([topLeft[0] + radiusOffset, topLeft[1]], [topLeft[0] + width - radiusOffset, topLeft[1]], randomizer, doubleStroke, roughness);
   const l2 = _line([topLeft[0] + width - radiusOffset, topLeft[1] + height], [topLeft[0] + radiusOffset, topLeft[1] + height], randomizer, doubleStroke, roughness);
   const shape: Op[] = [...l1.shape];
   const overlay: Op[] = [...l1.overlay];
+  const adjacentCurveList: Point[][] = [];
   {
     const p1Data = l1.shape[l1.shape.length - 1].data;
     const p1: Point = [p1Data[4], p1Data[5]];
@@ -151,9 +153,12 @@ export function _roundedRectangle(topLeft: Point, width: number, height: number,
     const r = topLeft[0] + width - ((p1[0] + p2[0]) / 2);
     const pa: Point = [center[0] + r * Math.cos(-Math.PI / 4), center[1] + r * Math.sin(-Math.PI / 4)];
     const pb: Point = [center[0] + r * Math.cos(Math.PI / 4), center[1] + r * Math.sin(Math.PI / 4)];
-    const sops = _spline([p1, pa, p3, pb, p2], 1, false);
-    sops.shift();
-    shape.push(...sops);
+    adjacentCurveList.push([p1, pa, p3, pb, p2]);
+    if (!ignoreAdjacentCurves) {
+      const sops = _spline([p1, pa, p3, pb, p2], 1, false);
+      sops.shift();
+      shape.push(...sops);
+    }
 
     if (doubleStroke) {
       const p1Data = l1.overlay[l1.overlay.length - 1].data;
@@ -169,8 +174,10 @@ export function _roundedRectangle(topLeft: Point, width: number, height: number,
       overlay.push(...sops);
     }
   }
-  l2.shape.shift();
-  l2.overlay.shift();
+  if (!ignoreAdjacentCurves) {
+    l2.shape.shift();
+    l2.overlay.shift();
+  }
   shape.push(...l2.shape);
   overlay.push(...l2.overlay);
   {
@@ -182,9 +189,12 @@ export function _roundedRectangle(topLeft: Point, width: number, height: number,
     const r = Math.abs(topLeft[0] - ((p1[0] + p2[0]) / 2));
     const pa: Point = [center[0] + r * Math.cos(3 * Math.PI / 4), center[1] + r * Math.sin(3 * Math.PI / 4)];
     const pb: Point = [center[0] + r * Math.cos(5 * Math.PI / 4), center[1] + r * Math.sin(5 * Math.PI / 4)];
-    const sops = _spline([p1, pa, p3, pb, p2], 1, false);
-    sops.shift();
-    shape.push(...sops);
+    adjacentCurveList.push([p1, pa, p3, pb, p2]);
+    if (!ignoreAdjacentCurves) {
+      const sops = _spline([p1, pa, p3, pb, p2], 1, false);
+      sops.shift();
+      shape.push(...sops);
+    }
 
     if (doubleStroke) {
       const p1Data = l2.overlay[l2.overlay.length - 1].data;
@@ -202,7 +212,8 @@ export function _roundedRectangle(topLeft: Point, width: number, height: number,
   }
   return {
     shape,
-    overlay
+    overlay,
+    adjacentCurveList
   };
 }
 
