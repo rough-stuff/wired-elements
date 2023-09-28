@@ -99,7 +99,7 @@ let WiredList = class WiredList extends WiredBase {
     }
     render() {
         return html `
-    <wired-card elevation="1" id="surface">
+    <wired-card elevation="1" id="surface" .renderer="${this.renderStyle}">
       <div id="container" class="${this.horizontal ? 'horiz' : 'vert'}" @item-click="${this._onItemClick}">
         <slot></slot>
       </div>
@@ -222,6 +222,11 @@ __decorate([
     queryAssignedNodes({ flatten: true }),
     __metadata("design:type", Array)
 ], WiredList.prototype, "_slotted", void 0);
+__decorate([
+    property({ type: String }),
+    __metadata("design:type", String),
+    __metadata("design:paramtypes", [String])
+], WiredList.prototype, "selected", null);
 WiredList = __decorate([
     ce('wired-list')
 ], WiredList);

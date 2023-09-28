@@ -43,7 +43,7 @@ export class WiredList extends WiredBase {
 
   render(): TemplateResult {
     return html`
-    <wired-card elevation="1" id="surface">
+    <wired-card elevation="1" id="surface" .renderer="${this.renderStyle}">
       <div id="container" class="${this.horizontal ? 'horiz' : 'vert'}" @item-click="${this._onItemClick}">
         <slot></slot>
       </div>
@@ -89,6 +89,7 @@ export class WiredList extends WiredBase {
     }
   }
 
+  @property({ type: String })
   get selected(): string | null {
     const item = this._selectedItem;
     if (item) {
