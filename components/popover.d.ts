@@ -8,7 +8,6 @@ declare global {
 export type WiredPopoverPin = 'top-start' | 'top-end' | 'top-center' | 'top-beforestart' | 'top-afterend' | 'bottom-start' | 'bottom-end' | 'bottom-center' | 'bottom-beforestart' | 'bottom-afterend';
 export type WiredPopoverDirection = 'down' | 'up' | 'centered';
 export declare class WiredPopover extends WiredBase {
-    elevation: number;
     pin: WiredPopoverPin;
     direction: WiredPopoverDirection;
     manualClose: boolean;

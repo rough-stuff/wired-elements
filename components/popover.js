@@ -13,7 +13,6 @@ import './card.js';
 let WiredPopover = class WiredPopover extends WiredBase {
     constructor() {
         super(...arguments);
-        this.elevation = 1;
         this.pin = 'top-start';
         this.direction = 'down';
         this.manualClose = false;
@@ -205,7 +204,7 @@ let WiredPopover = class WiredPopover extends WiredBase {
             '--wired-popover-content-max-height': this.maxHeight ? `${this.maxHeight}px` : null
         };
         return html `
-    <wired-card elevation="1" id="surface" class="${surfaceClasses.join(' ')}" style="${styleMap(surfaceStyles)}">
+    <wired-card .renderer="${this.renderStyle}" id="surface" class="${surfaceClasses.join(' ')}" style="${styleMap(surfaceStyles)}">
       <div id="container" class="${this.maxHeight ? 'maxxed' : ''}" @click="${this._containerClick}">
           <slot></slot>
         </div>
@@ -386,10 +385,6 @@ WiredPopover.styles = [
     }
     `
 ];
-__decorate([
-    property({ type: Number }),
-    __metadata("design:type", Object)
-], WiredPopover.prototype, "elevation", void 0);
 __decorate([
     property(),
     __metadata("design:type", String)

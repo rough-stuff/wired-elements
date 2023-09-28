@@ -13,7 +13,6 @@ export type WiredPopoverDirection = 'down' | 'up' | 'centered';
 
 @ce('wired-popover')
 export class WiredPopover extends WiredBase {
-  @property({ type: Number }) elevation = 1;
   @property() pin: WiredPopoverPin = 'top-start';
   @property() direction: WiredPopoverDirection = 'down';
   @property({ type: Boolean, attribute: 'manual-close' }) manualClose = false;
@@ -331,7 +330,7 @@ export class WiredPopover extends WiredBase {
     };
 
     return html`
-    <wired-card elevation="1" id="surface" class="${surfaceClasses.join(' ')}" style="${styleMap(surfaceStyles)}">
+    <wired-card .renderer="${this.renderStyle}" id="surface" class="${surfaceClasses.join(' ')}" style="${styleMap(surfaceStyles)}">
       <div id="container" class="${this.maxHeight ? 'maxxed' : ''}" @click="${this._containerClick}">
           <slot></slot>
         </div>
