@@ -108,6 +108,7 @@ WiredCheckbox.styles = [
     }
     .backdrop {
       opacity: 0.1;
+      --wired-fill-color: var(--wired-primary, #0D47A1);
     }
     label.focused .backdrop {
       opacity: 0.5;
