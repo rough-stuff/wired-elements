@@ -26,10 +26,10 @@ let WiredTabs = class WiredTabs extends WiredBase {
     render() {
         return html `
     <div id="container" class="vert">
-      <wired-list horizontal selectable @change="${this._handleTabChange}">
+      <wired-list .renderer="${this.renderStyle}" horizontal selectable @change="${this._handleTabChange}">
         <slot name="tab"></slot>
       </wired-list>
-      <wired-card id="surface">
+      <wired-card id="surface" .renderer="${this.renderStyle}">
         <wired-node-selector selected="${this._selectedName}">
           <slot></slot>
         </wired-node-selector>
