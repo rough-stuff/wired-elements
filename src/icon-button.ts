@@ -25,6 +25,7 @@ export class WiredIconButton extends WiredBase {
       transition: transform 0.05s ease;
     }
     button {
+      line-height: 1;
       position: relative;
       user-select: none;
       border: none;
