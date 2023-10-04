@@ -68,6 +68,7 @@ WiredFab.styles = [
       stroke-width: 1;
     }
     button {
+      line-height: 1;
       position: relative;
       user-select: none;
       border: none;

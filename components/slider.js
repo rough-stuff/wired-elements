@@ -346,15 +346,6 @@ WiredSlider.styles = [
         border-right: 6px solid transparent;
         border-top: 6px solid var(--wired-primary, #0D47A1);
       }
-      #emji {
-        line-height: 20px;
-        position: absolute;
-        top: 0;
-        left: 0;
-        font-size: 20px;
-        letter-spacing: initial;
-        transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-      }
       
       #container.focussed #valueLabel {
         transform: translate3d(1px, -16px, 0px) translate3d(-50%, -100%, 0px) scale(1);
