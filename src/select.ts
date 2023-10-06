@@ -276,11 +276,12 @@ export class WiredSelect extends WiredBase {
       pin="bottom-start"
       .maxHeight="${this.maxPopoverHeight}"
       .direction="${this.direction}"
+      .renderer="${this.renderStyle}"
       @popover-open="${this._popOpen}"
       @popover-close="${this._popClose}"
       @item-click="${this._onSelect}"
       @key-escape="${this._onEscKey}">
-      <wired-list tabindex="-1">
+      <wired-list tabindex="-1" .renderer="${this.renderStyle}">
         ${this._options.map((o) => html`<wired-item name="${o.value || ''}">${(o.textContent || '').trim()}</wired-item>`)}
       </wired-list>
     </wired-menu>
