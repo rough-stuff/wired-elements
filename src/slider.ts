@@ -41,6 +41,10 @@ export class WiredSlider extends WiredBase implements PointerTrackerHandler {
     this.setCurrentValue(v, false);
   }
 
+  get currentValue(): number {
+    return this._currentValue;
+  }
+
   private setCurrentValue(value: number, fire: boolean, force = false) {
     if (force || (value !== this._currentValue)) {
       this._currentValue = value;

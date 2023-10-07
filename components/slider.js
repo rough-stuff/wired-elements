@@ -70,6 +70,9 @@ let WiredSlider = class WiredSlider extends WiredBase {
         this._value = v;
         this.setCurrentValue(v, false);
     }
+    get currentValue() {
+        return this._currentValue;
+    }
     setCurrentValue(value, fire, force = false) {
         if (force || (value !== this._currentValue)) {
             this._currentValue = value;

@@ -22,6 +22,7 @@ export declare class WiredSlider extends WiredBase implements PointerTrackerHand
     private _value;
     get value(): number;
     set value(v: number);
+    get currentValue(): number;
     private setCurrentValue;
     protected _forceRenderOnChange(changed: PropertyValues): boolean;
     static styles: import("lit").CSSResultGroup[];
